@@ -1,69 +1,122 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+````
+# Asset Base Web App
 
-Currently, two official plugins are available:
+A modern web application built with **React 19**, **Vite 7**, **Tailwind CSS 4**, and **Bun**. The app leverages modern UI primitives from **Radix UI**, form handling via **React Hook Form**, and icons from **Lucide**. This project follows best practices for performance, DX, and accessibility.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔧 Tech Stack
 
-## Expanding the ESLint configuration
+- **React 19**
+- **Vite 7**
+- **Tailwind CSS 4**
+- **Radix UI** (Label, Separator, Slot)
+- **Lucide Icons**
+- **React Hook Form**
+- **ShadCN-inspired styling** (`class-variance-authority`, `tailwind-merge`)
+- **Sonner** for toasts
+- **TypeScript** (strict-mode)
+- **Bun** as the package manager
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- [Bun](https://bun.sh/) (Ensure Bun is installed: `bun --version`)
+
+### Installation
+
+```bash
+bun install
+```
+````
+
+### Development
+
+```bash
+bun run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Build for Production
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+bun run build
+```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Preview Production Build
+
+```bash
+bun run preview
+```
+
+### Linting
+
+```bash
+bun run lint
+```
+
+---
+
+## 🗂️ Project Structure
+
+```
+.
+├── src/                  # App source code
+│   ├── components/       # Shared components
+│   ├── pages/            # Route-level components
+│   ├── assets/           # Static assets
+│   ├── hooks/            # Custom hooks
+│   └── lib/              # Utilities and helpers
+├── public/               # Static public files
+├── tailwind.config.js    # Tailwind config
+├── tsconfig.json         # TypeScript config
+└── bun.lockb             # Bun lockfile
+```
+
+---
+
+## ✨ Features
+
+- ⚡ Fast builds with Vite and Bun
+- 🎨 Fully styled using TailwindCSS 4
+- ✅ Forms with validation using `react-hook-form`
+- 💅 Styled with `class-variance-authority` + `tailwind-merge`
+- 🔔 Elegant toast notifications via `sonner`
+- 🧠 Modular architecture inspired by ShadCN UI
+
+---
+
+## 🧪 Testing (Coming Soon)
+
+Unit and integration testing setup will be added soon.
+
+---
+
+## 📜 License
+
+This project is **private** and not licensed for public or commercial use unless otherwise specified.
+
+---
+
+## 📍 Notes
+
+- Using Bun over npm or pnpm means blazing fast installs and script runs.
+- Remember to periodically update dependencies:
+
+  ```bash
+  bun update
+  ```
+
+---
+
+## 🙌 Acknowledgments
+
+- [ShadCN UI](https://ui.shadcn.dev/)
+- [Radix UI](https://www.radix-ui.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Hook Form](https://react-hook-form.com/)
+
+```
+
 ```
