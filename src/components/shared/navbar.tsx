@@ -1,0 +1,181 @@
+import { Badge } from "@/components/ui/badge";
+import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
+import { Button } from "../ui/button";
+import { NavLink } from "react-router";
+import {
+  Bell,
+  Box,
+  BriefcaseBusiness,
+  Grid2X2,
+  Menu,
+  Plus,
+  Search,
+  Timer,
+  User,
+  WalletMinimal,
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+
+const links = [
+  { label: "Dashboard", to: "/dashboard", icon: <Grid2X2 /> },
+  { label: "Wallet", to: "/dashboard/wallet", icon: <WalletMinimal /> },
+  { label: "Markets", to: "/dashboard/markets", icon: <Timer /> },
+  { label: "Liquidity", to: "/dashboard/liquidity", icon: <Box /> },
+  {
+    label: "Portfolio",
+    to: "/dashboard/portfolio",
+    icon: <BriefcaseBusiness />,
+  },
+];
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <nav className="w-full flex items-center justify-between gap-4 bg-black p-4">
+      <div className="flex items-center gap-6">
+        {/* Logo + Title + Beta Badge */}
+        <div className="flex items-end gap-2">
+          <img src={assetBaseLogo} alt="asset base" className="mb-1" />
+          <p className="text-3xl">Assetbase</p>
+          <Badge
+            variant="default"
+            className="bg-custom-green text-white mb-1 rounded-sm"
+          >
+            beta
+          </Badge>
+        </div>
+
+        {/* Navigation Links */}
+        <ul className="hidden lg:flex gap-4">
+          {links.map(({ label, to, icon }) => (
+            <li key={to} className="">
+              <NavLink
+                to={to}
+                end={to === "/dashboard"}
+                className={({ isActive }) => {
+                  return cn(
+                    `w-fit bg-custom-gray-muted py-2 px-4 rounded-lg border-b border-custom-gray-muted transition-all duration-300 flex items-center gap-2 hover:text-orange-500 cursor-pointer`,
+                    {
+                      "border-primary rounded-b-none": isActive,
+                    }
+                  );
+                }}
+              >
+                <span className="flex items-center gap-4 text-xs md:text-sm font-semibold">
+                  <span className="hidden xl:block"> {icon}</span>
+                  {label}
+                </span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="flex items-center gap-4">
+        {/* Connect Button */}
+        <div className="hidden lg:flex items-center gap-4">
+          <Button className="bg-orange-500 px-4 py-2 rounded-full w-fit flex items-center gap-2 font-semibold">
+            <span>
+              <Plus size={20} className="" />
+            </span>
+            Connect
+          </Button>
+
+          <Bell
+            size={34}
+            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+          />
+          <User
+            size={34}
+            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+          />
+          <Search
+            size={34}
+            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+          />
+        </div>
+
+        {/* Hamburger Icon - Mobile Only */}
+        <button
+          className="lg:hidden p-2 text-white cursor-pointer"
+          onClick={() => setIsOpen(true)}
+        >
+          <Menu size={28} />
+        </button>
+      </div>
+
+      {/* Mobile Menu Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-xs z-40"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Mobile Slide-out Menu */}
+      <div
+        className={cn(
+          "fixed top-0 right-0 h-full w-64 bg-custom-gray-muted text-white shadow-lg transform transition-transform duration-300 z-50 ",
+          isOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
+        {/* Close Button */}
+        <div className="flex justify-between items-center p-4 border-b border-gray-700">
+          <Bell
+            size={34}
+            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+          />
+          <User
+            size={34}
+            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+          />
+          <Search
+            size={34}
+            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+          />
+          <Button
+            className="bg-gray-800 hover:bg-gray-800/90 cursor-pointer"
+            onClick={() => setIsOpen(false)}
+          >
+            <X size={28} />
+          </Button>
+        </div>
+
+        {/* Mobile Nav Links */}
+        <ul className="flex flex-col gap-2 p-4">
+          {links.map(({ label, to, icon }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                end={to === "/dashboard"}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  cn(
+                    `py-2 px-3 rounded-lg transition-all duration-300 flex items-center gap-2 hover:text-orange-500`,
+                    {
+                      "bg-gray-800": isActive,
+                    }
+                  )
+                }
+              >
+                {icon}
+                {label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+        {/* Connect Button - Mobile */}
+        <div className="p-4">
+          <Button className="bg-orange-500 px-4 py-2 rounded-full w-full flex items-center gap-2 font-semibold cursor-pointer">
+            <Plus size={20} />
+            Connect
+          </Button>
+        </div>
+      </div>
+    </nav>
+  );
+}

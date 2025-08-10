@@ -142,7 +142,7 @@ export default function CreateAccount() {
         <CardFooter className="flex-col gap-2">
           <p className="mt-4 text-muted-foreground">
             I have an AssetBase account?
-            <Link to="/login" className="text-primary font-semibold pl-1">
+            <Link to="/auth/login" className="text-primary font-semibold pl-1">
               Sign In
             </Link>
           </p>

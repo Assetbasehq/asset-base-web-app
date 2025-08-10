@@ -6,7 +6,11 @@ import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 export default function OnboardingLayout() {
   return (
     <div className="flex min-h-screen font-neue">
-      <img src={gradientLines} alt="" className="absolute h-screen" />
+      <img
+        src={gradientLines}
+        alt=""
+        className="absolute h-screen hidden lg:block"
+      />
       <div
         style={{ backgroundImage: `url(${gradientLines})` }}
         className="hidden lg:flex lg:gap-13 lg:flex-col w-1/2 items-left text-left justify-between items-start bg-black text-white px-12 py-24"

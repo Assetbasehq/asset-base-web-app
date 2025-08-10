@@ -18,6 +18,7 @@ import { Eye, EyeClosed, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
+import KYCModal from "@/components/modals/kyc-modal";
 
 interface FormValues {
   email: string;
@@ -26,12 +27,17 @@ interface FormValues {
 
 export default function Login() {
   const [isPasswordVisible, setPasswordVisible] = useState(true);
+  const [isKYCModalOpen, setKYCModalOpen] = useState(true);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
+
+  const closeKYCModal = () => {
+    setKYCModalOpen(false);
+  };
 
   const onSubmit = async (data: FormValues) => {
     console.log(data);
@@ -131,6 +137,7 @@ export default function Login() {
                 )}
               </div>
               <Button
+                onClick={() => setKYCModalOpen(true)}
                 type="submit"
                 className="w-full btn-primary-2 py-6 font-normal border-2"
               >
@@ -142,12 +149,27 @@ export default function Login() {
         <CardFooter className="flex-col gap-2">
           <p className="mt-4 text-muted-foreground">
             Don't have an AssetBase account?
-            <Link to="/register" className="text-primary font-semibold pl-1">
+            <Link
+              to="/auth/register"
+              className="text-primary font-semibold pl-1"
+            >
               Sign up
+            </Link>
+          </p>
+          <p className="mt-4 text-muted-foreground">
+            Forgot your password?
+            <Link
+              to="/auth/forgot-password"
+              className="text-primary font-semibold pl-1"
+            >
+              Reset
             </Link>
           </p>
         </CardFooter>
       </Card>
+      {isKYCModalOpen && (
+        <KYCModal isOpen={isKYCModalOpen} onClose={closeKYCModal} />
+      )}
     </div>
   );
 }

@@ -73,7 +73,7 @@ export default function AccountType() {
                 key={accountType.id}
                 onClick={() => setSelectedAccountType(accountType.code)}
                 className={cn(
-                  "flex items-center gap-2 border-2 rounded-lg p-4 transition duration-300 ease-in-out cursor-pointer",
+                  "flex items-center gap-2 border rounded-lg p-4 transition duration-300 ease-in-out cursor-pointer",
                   {
                     "border-primary": selectedAccountType === accountType.code,
                   }
