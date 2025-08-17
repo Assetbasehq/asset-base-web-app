@@ -16,10 +16,10 @@ export default function AccountSummary() {
 
   return (
     <div className="text-start flex flex-col gap-4">
-      <div className="flex items-center justify-between bg-card rounded-lg px-6 py-8">
+      <div className="flex items-center justify-between bg-custom-card-background text-white rounded-lg px-6 py-8">
         <div className="flex flex-col gap-10 w-full">
           <Select defaultValue="usd">
-            <SelectTrigger className="w-fit text-white">
+            <SelectTrigger className="w-fit">
               <SelectValue placeholder="USD" className="text-white" />
             </SelectTrigger>
             <SelectContent>

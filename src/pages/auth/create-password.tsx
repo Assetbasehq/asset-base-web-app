@@ -38,7 +38,7 @@ export default function CreatePassword() {
   };
 
   return (
-    <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100">
+    <div className=" w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100 dark:from-black dark:via-black dark:to-black">
       <Card className="w-full max-w-lg shadow-none">
         <CardHeader className="text-start flex flex-col gap-1">
           <CardTitle className="text-lg">Create New Password</CardTitle>
@@ -122,7 +122,7 @@ export default function CreatePassword() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-black py-6 font-normal border-2"
+                className="w-full bg-black dark:bg-white font-semibold py-6 border-2"
               >
                 Submit
               </Button>

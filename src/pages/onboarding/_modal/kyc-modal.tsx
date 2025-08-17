@@ -1,5 +1,4 @@
 import { useState } from "react";
-import MultiStepForm from "../forms/multi-step-form";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +9,8 @@ import {
 import gradientLines from "@/assets/images/gradient-lines.svg";
 import { cn } from "@/lib/utils";
 import { CheckIcon } from "lucide-react";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../../components/ui/separator";
+import MultiStepForm from "../_components/multi-step-form";
 
 interface KYCModalProps {
   isOpen: boolean;
@@ -58,9 +58,9 @@ export default function KYCModal({ isOpen, onClose }: KYCModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="md:max-w-4xl min-h-[80vh] max-h-[90vh] flex rounded-3xl p-0 border-none">
+      <DialogContent className="md:max-w-4xl min-h-[80vh] max-h-[90vh] flex gap-0 rounded-3xl p-0 border-none">
         <KYCSidebar currentStep={currentStep} />
-        <div className="flex flex-col w-2/3 min-h-full px-10 pt-14 relative z-30">
+        <div className="flex flex-col w-2/3 min-h-full px-10 pt-14 relative z-30 bg-white dark:bg-custom-card rounded-r-2xl">
           <DialogHeader>
             <DialogTitle>{stepsInfo[currentStep].title}</DialogTitle>
             <DialogDescription>

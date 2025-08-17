@@ -7,7 +7,7 @@ import TrendingSecurities from "./_components/trending-securities";
 
 export default function DashboardHome() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 text-white">
       <p className="text-3xl font-semibold text-start">Good Morning, Timi</p>
       <div className="flex flex-col-reverse lg:flex-row gap-6 w-full">
         {/* Left Column */}

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Outlet } from "react-router";
 import gradientLines from "@/assets/images/gradient-lines.svg";
+import ThemeSwitcher from "@/components/shared/theme-switcher";
 
 export default function AuthLayout() {
   return (
@@ -18,13 +19,14 @@ export default function AuthLayout() {
           opportunities that were previously only available to institutions and
           the ultra wealthy.
         </p>
-        <Button className="bg-custom-black rounded-sm py-6 px-4 font-neue">
+        <Button className="bg-custom-black text-white rounded-sm py-6 px-4 font-neue">
           Start Investing
         </Button>
       </div>
-      <div className="w-full flex flex-col justify-center items-center">
+      <div className="w-full flex flex-col justify-center items-center z-10">
         <Outlet />
       </div>
+      <ThemeSwitcher />
     </div>
   );
 }

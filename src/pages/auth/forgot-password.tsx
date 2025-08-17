@@ -12,24 +12,30 @@ import { Label } from "@/components/ui/label";
 import { Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import ResetPasswordModal from "./_components/reset-password-modal";
+import { useState } from "react";
 
 interface FormValues {
   email: string;
 }
 
 export default function ForgotPassword() {
+  const [openModal, setOpenModal] = useState(true);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
 
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
   const onSubmit = async (data: FormValues) => {
     console.log(data);
   };
 
   return (
-    <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100">
+    <div className=" w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100">
       <Card className="w-full max-w-lg shadow-none">
         <CardHeader className="text-start flex flex-col gap-1">
           <CardTitle className="text-lg text-bold">Forgot Password</CardTitle>
@@ -82,7 +88,7 @@ export default function ForgotPassword() {
         </CardFooter>
       </Card>
 
-      <ResetPasswordModal isOpen={true} onClose={() => { }} />
+      <ResetPasswordModal isOpen={openModal} onClose={closeModal} />
     </div>
   );
 }

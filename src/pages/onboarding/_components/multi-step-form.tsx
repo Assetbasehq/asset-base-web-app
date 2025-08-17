@@ -1,5 +1,5 @@
-import PersonalDetails from "./steps/personal-details";
-import VerifyIdentity from "./steps/verify-identity";
+import PersonalDetails from "./personal-details";
+import VerifyIdentity from "./verify-identity";
 
 interface MultiStepFormProps {
   totalSteps: number;

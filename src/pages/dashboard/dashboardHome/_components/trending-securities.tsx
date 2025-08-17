@@ -4,7 +4,7 @@ import { Link } from "react-router";
 export default function TrendingSecurities() {
   return (
     <div>
-      <div className="flex items-center justify-between bg-card rounded-lg px-6 py-8">
+      <div className=" bg-custom-card-background text-white flex items-center justify-between rounded-lg px-6 py-8">
         <div className="flex flex-col items-start gap-6 w-full">
           <div className="flex items-center justify-between w-full text-start">
             <div>
@@ -89,7 +89,7 @@ function Securities() {
       {securitiesData.map((item) => (
         <div
           key={item.id}
-          className="flex gap-2 items-center justify-between bg-card-foreground rounded-lg p-2"
+          className=" bg-custom-gray-muted flex gap-2 items-center justify-between rounded-lg p-2"
         >
           <div className="flex items-end text-start gap-12 w-full">
             <div className="flex items-center gap-2">

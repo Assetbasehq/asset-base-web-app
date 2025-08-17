@@ -42,14 +42,20 @@
 
   /* Custom Colors  */
   --color-primary: #f56630;
+  --color-primary-foreground: #1d1512;
   --color-custom-black: #1a1a1a;
   --color-rise: #0e98a0;
   --color-custom-green: #1ea456;
   --color-custom-gray: #525866;
   --color-custom-gray-muted: #222431;
-  --color-card: #161922;
-  --color-card-foreground: #93939417;
+  --color-custom-card: #20232d;
+  --color-custom-card-background: #161922;
+  --color-custom-card-foreground: #93939417;
   --color-custom-blue: #051e3e;
+
+  /* Input  */
+  --color-custom-input-dark: #20232d;
+  --color-custom-input-dark-foreground: ##98a2b3;
 }
 
 :root {
@@ -129,7 +135,7 @@
   body {
     @apply bg-background text-foreground;
   }
-
+  /* 
   @font-face {
     font-family: Oswald;
     font-style: normal;
@@ -137,11 +143,21 @@
     font-display: swap;
     src: url("/src/assets//fonts/NeueMontreal-Regular.otf") format("opentype");
   }
+
+  @font-face {
+    font-family: "Geist";
+    font-weight: 100 200 300 400 500 600 700 800 900;
+    font-display: swap;
+    src: url("/src/assets/fonts/Geist-Regular.ttf") format("truetype");
+  } */
 }
 
 @layer utilities {
   .font-neue {
     font-family: "NeueMontreal", sans-serif;
+  }
+  .font-geist {
+    font-family: "Geist", sans-serif;
   }
 }
 
@@ -150,7 +166,7 @@
 }
 
 .btn-primary-2 {
-  @apply bg-white text-primary hover:bg-primary hover:text-white border-2 border-primary hover:border-primary transition-all ease-in-out duration-300 cursor-pointer;
+  @apply bg-white text-primary dark:bg-primary dark:text-white font-semibold border-2 border-primary hover:border-primary transition-all ease-in-out duration-300 cursor-pointer;
 }
 
 .no-scrollbar {

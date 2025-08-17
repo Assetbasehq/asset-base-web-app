@@ -1,7 +1,5 @@
-import { Badge } from "@/components/ui/badge";
-import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Button } from "../ui/button";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import {
   Bell,
   Box,
@@ -17,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import AssetBaseBeta from "./asset-base-beta";
 
 const links = [
   { label: "Dashboard", to: "/dashboard", icon: <Grid2X2 /> },
@@ -34,19 +33,10 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full flex items-center justify-between gap-4 bg-black p-4">
+    <nav className="w-full flex items-center justify-between gap-4 p-4 text-white">
       <div className="flex items-center gap-6">
         {/* Logo + Title + Beta Badge */}
-        <div className="flex items-end gap-2">
-          <img src={assetBaseLogo} alt="asset base" className="mb-1" />
-          <p className="text-3xl">Assetbase</p>
-          <Badge
-            variant="default"
-            className="bg-custom-green text-white mb-1 rounded-sm"
-          >
-            beta
-          </Badge>
-        </div>
+        <AssetBaseBeta />
 
         {/* Navigation Links */}
         <ul className="hidden lg:flex gap-4">
@@ -88,10 +78,12 @@ export default function Navbar() {
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
-          <User
-            size={34}
-            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
-          />
+          <Link to="/dashboard/profile">
+            <User
+              size={34}
+              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+            />
+          </Link>
           <Search
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
@@ -122,16 +114,17 @@ export default function Navbar() {
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
-        {/* Close Button */}
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
           <Bell
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
-          <User
-            size={34}
-            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
-          />
+          <Link to="/dashboard/profile">
+            <User
+              size={34}
+              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+            />
+          </Link>
           <Search
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
@@ -140,6 +133,7 @@ export default function Navbar() {
             className="bg-gray-800 hover:bg-gray-800/90 cursor-pointer"
             onClick={() => setIsOpen(false)}
           >
+            {/* Close Button */}
             <X size={28} />
           </Button>
         </div>

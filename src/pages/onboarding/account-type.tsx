@@ -10,10 +10,16 @@ import {
 import { cn } from "@/lib/utils";
 import { BriefcaseBusiness, UserRound } from "lucide-react";
 import { useState } from "react";
+import KYCModal from "./_modal/kyc-modal";
 
 export default function AccountType() {
   const [selectedAccountType, setSelectedAccountType] =
     useState<string>("personal");
+
+  const [isKYCModalOpen, setIsKYCModalOpen] = useState(false);
+
+  const openKYCModal = () => setIsKYCModalOpen(true);
+  const closeKYCModal = () => setIsKYCModalOpen(false);
 
   const accountTypes = [
     {
@@ -55,8 +61,8 @@ export default function AccountType() {
   ];
 
   return (
-    <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100">
-      <Card className="w-full max-w-lg shadow-none">
+    <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100 dark:from-black dark:via-black dark:to-black">
+      <Card className="w-full max-w-lg shadow-none text-black bg-white dark:bg-custom-card dark:text-white dark:border-custom-card">
         <CardHeader className="text-start flex flex-col gap-1">
           <CardTitle className="text-lg text-bold">
             Choose an account type
@@ -88,20 +94,16 @@ export default function AccountType() {
                 </div>
               </div>
             ))}
-            <Button className="bg-custom-black cursor-pointer hover:bg-custom-black py-6">
+            <Button
+              onClick={openKYCModal}
+              className="bg-black text-white dark:bg-white dark:text-black font-semibold cursor-pointer hover:bg-custom-black py-6"
+            >
               Submit
             </Button>
           </div>
         </CardContent>
-        <CardFooter className="flex-col gap-2">
-          {/* <p className="mt-4 text-muted-foreground">
-            I have an AssetBase account?
-            <Link to="/login" className="text-primary font-semibold pl-1">
-              Sign In
-            </Link>
-          </p> */}
-        </CardFooter>
       </Card>
+      <KYCModal isOpen={isKYCModalOpen} onClose={closeKYCModal} />
     </div>
   );
 }

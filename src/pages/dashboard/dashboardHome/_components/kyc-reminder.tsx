@@ -1,3 +1,4 @@
+import { Play } from "lucide-react";
 import { useState } from "react";
 
 export default function KYCReminder() {
@@ -5,7 +6,7 @@ export default function KYCReminder() {
   const [progress, _] = useState((userProgress / 6) * 100);
 
   return (
-    <div className="bg-card rounded-3xl p-4 lg:p-8 min-w-[400px] lg:min-w-full md:w-full">
+    <div className="bg-primary-foreground text-white rounded-3xl p-4 lg:p-8 min-w-[400px] lg:min-w-full md:w-full">
       <div className="flex items-center gap-4 text-start">
         <div
           className="relative w-16 h-16 rounded-full flex items-center justify-center bg-white text-white font-bold"
@@ -24,6 +25,7 @@ export default function KYCReminder() {
             Finish setting up your account
           </p>
         </div>
+        <Play />
       </div>
     </div>
   );

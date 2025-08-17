@@ -18,6 +18,7 @@ import { Eye, EyeClosed, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
+import AssetBaseBeta from "@/components/shared/asset-base-beta";
 
 interface FormValues {
   email: string;
@@ -38,20 +39,11 @@ export default function CreateAccount() {
   };
 
   return (
-    <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100">
+    <div className=" w-full min-h-screen px-6 flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white  via-white to-pink-100 dark:from-black dark:via-black dark:to-black transition-all duration-300">
       {/* <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue [background:linear-gradient(to_top_right,_white_0%,_white_60%,_#f9c5d1_100%)]"> */}
-      <div className="flex items-end gap-2">
-        <img src={assetBaseLogo} alt="asset base" className="mb-1" />
-        <p className="text-3xl">Assetbase</p>
-        <Badge
-          variant="default"
-          className="bg-custom-green text-white mb-1 rounded-sm"
-        >
-          beta
-        </Badge>
-      </div>
+      <AssetBaseBeta />
 
-      <Card className="w-full max-w-lg shadow-none">
+      <Card className="w-full font-geist max-w-lg shadow-none bg-white text-black dark:bg-custom-card dark:text-white dark:border-custom-card">
         <CardHeader className="text-start">
           <CardTitle className="text-lg">Create an account</CardTitle>
           <CardDescription className="font-neue">
@@ -67,7 +59,7 @@ export default function CreateAccount() {
           </div>
 
           <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t my-6">
-            <span className="bg-background text-muted-foreground relative z-10 px-2 text-xs">
+            <span className="bg-background dark:bg-custom-card text-muted-foreground relative z-10 px-2 text-xs">
               OR
             </span>
           </div>

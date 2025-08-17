@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 export default function LaunchPad() {
   return (
     <div>
-      <div className="flex items-center justify-between bg-card rounded-lg px-6 py-8">
+      <div className=" bg-custom-card-background text-white flex items-center justify-between rounded-lg px-6 py-8">
         <div className="flex flex-col items-start gap-6 w-full">
           <div className="flex items-center justify-between w-full text-start">
             <div>
@@ -87,7 +87,7 @@ function Securities() {
 
   return (
     <div
-      className="flex gap-2 overflow-scroll w-full no-scrollbar"
+      className="flex gap-4 overflow-scroll w-full no-scrollbar"
       style={{
         backgroundImage: `url(${assetBaseLogo})`,
       }}
@@ -95,10 +95,10 @@ function Securities() {
       {securitiesData.map((item) => (
         <div
           key={item.id}
-          className="flex flex-col gap-4 items-start bg-card-foreground rounded-lg p-2 min-w-96"
+          className=" bg-custom-gray-muted flex flex-col gap-4 items-start rounded-2xl p-2 min-w-96"
         >
           <div
-            className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full bg-card p-4 rounded-lg"
+            className=" bg-custom-card-foreground relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg"
             style={{
               backgroundImage: `url('${assetBaseLogo}')`,
               backgroundRepeat: "no-repeat",
@@ -129,7 +129,7 @@ function Securities() {
             </div>
           </div>
           <div className="flex flex-col gap-2 items-start w-full pb-1">
-            <Progress value={40} className="w-full" />
+            <Progress value={15} className="w-full bg-white"  />
             <div className="flex justify-between items-center w-full">
               <small className="font-semibold text-primary">15% raised</small>
               <small className="font-semibold">2,300,000 available</small>
