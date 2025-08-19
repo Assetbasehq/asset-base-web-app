@@ -1,7 +1,25 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { formatDate } from "@/lib/utils";
+import type { OnboardingProps } from "@/interfaces/onboarding.interface";
+
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+
 import {
   Select,
   SelectContent,
@@ -9,15 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useState } from "react";
-import { CalendarIcon } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 interface FormValues {
   firstName: string;
@@ -25,179 +35,192 @@ interface FormValues {
   phoneNumber: string;
   email: string;
   country: string;
-  dateOfBirth: string;
-}
-
-interface PersonDetailsProps {
-  totalSteps: number;
-  currentStep: number;
-  goTo: (index: number) => void;
-  next: () => void;
-  prev: () => void;
+  dateOfBirth: Date | undefined;
 }
 
 const countries = ["Nigeria", "Ghana", "Kenya", "Tanzania", "Uganda", "Rwanda"];
 
-export default function PersonalDetails({ next }: PersonDetailsProps) {
+export default function PersonalDetails({ userInfo, next }: OnboardingProps) {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
+  const form = useForm<FormValues>({
+    defaultValues: userInfo,
+  });
 
-  const onSubmit = async (data: FormValues) => {
-    console.log(data);
+  const onSubmit = (data: FormValues) => {
+    console.log("Form data:", data);
+    next(data); // ✅ pass form data forward
   };
 
   return (
-    <div className="w-full flex flex-col py-8 gap-18 font-neue ">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col w-full gap-6">
-          {/* FirstName and Lastname  */}
-          <div className="grid grid-cols-2 gap-6">
-            <div className="grid gap-1">
-              <Label htmlFor="firstName" className="text-xs font-semibold">
-                First Name
-              </Label>
-              <div className="flex items-center relative">
-                <Input
-                  {...register("firstName", { required: true })}
-                  id="firstName"
-                  type="text"
-                  placeholder="Enter first name"
-                  className="w-full py-6 pr-3 align-text-bottom"
-                />
-              </div>
-              {errors.firstName && (
-                <small className="text-xs text-destructive text-right">
-                  First name is required
-                </small>
+    <div className="w-full flex flex-col py-8 gap-18 font-neue">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col w-full gap-6"
+        >
+          {/* First + Last Name */}
+          <div className="grid sm:grid-cols-2 gap-6 items-start">
+            <FormField
+              control={form.control}
+              name="firstName"
+              rules={{ required: "First name is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <Label className="text-xs font-semibold">First Name</Label>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter first name"
+                      className="w-full py-6 pr-3 align-text-bottom"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
-            <div className="grid gap-1">
-              <Label htmlFor="lastName" className="text-xs font-semibold">
-                Last Name
-              </Label>
-              <div className="flex items-center relative">
-                <Input
-                  {...register("lastName", { required: true })}
-                  id="lastName"
-                  type="text"
-                  placeholder="Enter last name"
-                  className="w-full py-6 pr-3 align-text-bottom"
-                />
-              </div>
-              {errors.firstName && (
-                <small className="text-xs text-destructive text-right">
-                  Last name is required
-                </small>
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              rules={{ required: "Last name is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <Label className="text-xs font-semibold">Last Name</Label>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter last name"
+                      className="w-full py-6 pr-3 align-text-bottom"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
+            />
           </div>
-          {/* PhoneNumber   */}
-          <div className="grid gap-1">
-            <Label htmlFor="phoneNumber" className="text-xs font-semibold">
-              Phone Number
-            </Label>
-            <div className="flex items-center relative">
-              <Input
-                {...register("phoneNumber", { required: true })}
-                id="phoneNumber"
-                type="text"
-                placeholder="Enter phone number"
-                className="w-full py-6 pr-3 align-text-bottom"
-              />
-            </div>
-          </div>
-          {/* Email  */}
-          <div className="grid gap-1">
-            <Label htmlFor="email" className="text-xs font-semibold">
-              Email
-            </Label>
-            <div className="flex items-center relative">
-              <Input
-                {...register("email", { required: true })}
-                id="email"
-                type="email"
-                placeholder="Enter email"
-                className="w-full py-6 pr-3 align-text-bottom"
-              />
-            </div>
-          </div>
-          {/* Country  */}
-          <div className="grid gap-1">
-            <Label htmlFor="country" className="text-xs font-semibold">
-              Country
-            </Label>
-            <div className="flex items-center relative">
-              <Select>
-                <SelectTrigger className="w-full py-6 pr-3 align-text-bottom cursor-pointer">
-                  <SelectValue placeholder="Select Country" />
-                </SelectTrigger>
-                <SelectContent>
-                  {countries.map((country) => (
-                    <SelectItem key={country} value={country}>
-                      {country}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          {/* Date of birth  */}
-          <div className="grid gap-1">
-            <Label htmlFor="date" className="text-xs font-semibold">
-              Date of birth
-            </Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  id="date"
-                  className="justify-between font-normal w-full py-6 pr-3 align-text-bottom"
-                >
-                  {date ? date.toLocaleDateString() : "Select date"}
-                  <CalendarIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto overflow-hidden p-0"
-                align="start"
-              >
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  captionLayout="dropdown"
-                  onSelect={(date) => {
-                    console.log({ date });
 
-                    const formattedDate = formatDate(date);
+          {/* Phone Number */}
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            rules={{ required: "Phone number is required" }}
+            render={({ field }) => (
+              <FormItem>
+                <Label className="text-xs font-semibold">Phone Number</Label>
+                <FormControl>
+                  <Input
+                    placeholder="Enter phone number"
+                    className="w-full py-6 pr-3 align-text-bottom"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                    console.log({ formattedDate });
+          {/* Email */}
+          <FormField
+            control={form.control}
+            name="email"
+            rules={{
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Invalid email address",
+              },
+            }}
+            render={({ field }) => (
+              <FormItem>
+                <Label className="text-xs font-semibold">Email</Label>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Enter email"
+                    className="w-full py-6 pr-3 align-text-bottom"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                    setDate(date);
-                    setOpen(false);
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+          {/* Country */}
+          <FormField
+            control={form.control}
+            name="country"
+            rules={{ required: "Country is required" }}
+            render={({ field }) => (
+              <FormItem>
+                <Label className="text-xs font-semibold">Country</Label>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full py-6 pr-3 align-text-bottom cursor-pointer">
+                      <SelectValue placeholder="Select Country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((country) => (
+                        <SelectItem key={country} value={country}>
+                          {country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Date of Birth */}
+          <FormField
+            control={form.control}
+            name="dateOfBirth"
+            rules={{ required: "Date of birth is required" }}
+            render={({ field }) => (
+              <FormItem>
+                <Label className="text-xs font-semibold">Date of Birth</Label>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        className="justify-between font-normal w-full py-6 pr-3 align-text-bottom"
+                      >
+                        {field.value ? formatDate(field.value) : "Select date"}
+                        <CalendarIcon />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto overflow-hidden p-0"
+                    align="start"
+                  >
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        field.onChange(date);
+                        setOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <Button
             type="submit"
-            onClick={() => {
-              next();
-              console.log("click");
-            }}
-            className="w-full bg-black py-6 border-2 text-sm font-normal cursor-pointer hover:bg-custom-black/90 hover:text-white"
+            className="w-full font-semibold py-6 border-2 text-sm cursor-pointer hover:bg-custom-black/90 hover:text-white bg-black text-white dark:bg-primary dark:text-white"
           >
             Continue
           </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { AxiosError } from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -10,7 +11,9 @@ export const handleAxiosError = (
   error: any,
   alternateMessage?: string
 ): string => {
-  console.log({ error: error.response?.data?.errors });
+  console.log({
+    error: error.response?.data?.error || error.response?.data?.errors,
+  });
 
   if (!error) {
     throw new Error("An unknown error occurred");
@@ -22,7 +25,6 @@ export const handleAxiosError = (
     );
   }
   if (error instanceof AxiosError) {
-    console.log(error?.response?.data);
     throw new Error(error.response?.data?.message || alternateMessage);
   }
   throw error;
@@ -68,4 +70,13 @@ export function formatPrettyDate(dateString: string) {
   const dayWithSuffix = `${day}${getOrdinalSuffix(day)}`;
 
   return `${dayWithSuffix} ${monthName} ${year}`;
+}
+
+export function getDeviceId() {
+  let deviceId = localStorage.getItem("device_id");
+  if (!deviceId) {
+    deviceId = uuidv4();
+    localStorage.setItem("device_id", deviceId);
+  }
+  return deviceId;
 }

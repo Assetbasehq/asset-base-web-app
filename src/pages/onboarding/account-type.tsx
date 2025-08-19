@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,7 +15,7 @@ export default function AccountType() {
   const [selectedAccountType, setSelectedAccountType] =
     useState<string>("personal");
 
-  const [isKYCModalOpen, setIsKYCModalOpen] = useState(false);
+  const [isKYCModalOpen, setIsKYCModalOpen] = useState(true);
 
   const openKYCModal = () => setIsKYCModalOpen(true);
   const closeKYCModal = () => setIsKYCModalOpen(false);
@@ -103,7 +102,11 @@ export default function AccountType() {
           </div>
         </CardContent>
       </Card>
-      <KYCModal isOpen={isKYCModalOpen} onClose={closeKYCModal} />
+      <KYCModal
+        isOpen={isKYCModalOpen}
+        onClose={closeKYCModal}
+        accountType={selectedAccountType}
+      />
     </div>
   );
 }

@@ -6,12 +6,14 @@ import { useAuthStore } from "@/store/auth-store";
 class AuthService {
   register = async (payload: any) => {
     try {
-      const response = await axiosInstance.post(`/auth/signup`, payload);
+      const response = await axiosInstance.post(`/user/register`, payload);
 
       console.log({ response });
 
       return response.data?.data;
     } catch (error) {
+      console.log({ error });
+
       handleAxiosError(error, "Failed to register");
     }
   };

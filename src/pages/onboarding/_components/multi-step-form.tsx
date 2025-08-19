@@ -1,22 +1,13 @@
 import PersonalDetails from "./personal-details";
 import VerifyIdentity from "./verify-identity";
+import type { OnboardingProps } from "@/interfaces/onboarding.interface";
 
-interface MultiStepFormProps {
-  totalSteps: number;
-  currentStep: number;
-  goTo: (index: number) => void;
-  next: () => void;
-  prev: () => void;
-}
-
-export default function MultiStepForm(props: MultiStepFormProps) {
+export default function MultiStepForm(props: OnboardingProps) {
   const { currentStep } = props;
-  if (currentStep === 0) {
-    return <PersonalDetails {...props} />;
-  }
   if (currentStep === 1) {
     return <PersonalDetails {...props} />;
   }
+
   if (currentStep === 2) {
     return <VerifyIdentity {...props} />;
   }

@@ -1,5 +1,16 @@
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import type { OnboardingProps } from "@/interfaces/onboarding.interface";
+
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+
 import {
   Select,
   SelectContent,
@@ -7,24 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
-interface PersonDetailsProps {
-  totalSteps: number;
-  currentStep: number;
-  goTo: (index: number) => void;
-  next: () => void;
-  prev: () => void;
-}
+import { Label } from "@/components/ui/label";
 
 interface FormValues {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
-  country: string;
-  dateOfBirth: string;
+  verificationType: string;
+  verificationNumber: string;
 }
 
 const verificationOptions = [
@@ -33,67 +31,105 @@ const verificationOptions = [
   "Passport",
 ];
 
-export default function VerifyIdentity({ goTo, prev }: PersonDetailsProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
+export default function VerifyIdentity({ userInfo, prev }: OnboardingProps) {
+  const form = useForm<FormValues>({
+    defaultValues: {
+      verificationType: "",
+      verificationNumber: "",
+    },
+  });
 
-  const onSubmit = async (data: FormValues) => {
-    console.log(data);
+  const verificationType = form.watch("verificationType");
+  const verificationNumber = form.watch("verificationNumber");
+
+  const isContinueDisabled = !verificationType || !verificationNumber.trim();
+
+  const onSubmit = (data: FormValues) => {
+    console.log("Form data:", { ...userInfo, ...data });
+
+    // Handle Submit
   };
-
-  console.log(prev);
 
   return (
     <div className="py-8 h-full">
-      <form className="flex flex-col w-full h-full">
-        <div className="flex flex-col w-full gap-6">
-          {/* Identification Type  */}
-          <div className="grid gap-1">
-            <Label
-              htmlFor="identificationType"
-              className="text-xs font-semibold"
-            >
-              Identification Type
-            </Label>
-            <div className="flex items-center relative">
-              <Select>
-                <SelectTrigger className="w-full py-6 pr-3 align-text-bottom cursor-pointer">
-                  <SelectValue placeholder="National Identification Number" />
-                </SelectTrigger>
-                <SelectContent>
-                  {verificationOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          {/* Verification Number  */}
-          <div className="grid gap-1">
-            <Label>Verification Number</Label>
-            <Input type="text" placeholder="000000000000000" className="py-6" />
-          </div>
-        </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col w-full h-full"
+        >
+          <div className="flex flex-col w-full gap-6">
+            {/* Identification Type */}
+            <FormField
+              control={form.control}
+              name="verificationType"
+              rules={{ required: "Identification type is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <Label className="text-xs font-semibold">
+                    Identification Type
+                  </Label>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full py-6 pr-3 align-text-bottom cursor-pointer">
+                        <SelectValue placeholder="Select identification type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {verificationOptions.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div className="mt-auto flex gap-4">
-          <Button
-            onClick={() => {
-              prev();
-            }}
-            className="flex-1 bg-gray-400 border border-black py-5 cursor-pointer"
-          >
-            Back
-          </Button>
-          <Button className="flex-1 py-5 bg-black cursor-pointer">
-            Continue
-          </Button>
-        </div>
-      </form>
+            {/* Verification Number */}
+            <FormField
+              control={form.control}
+              name="verificationNumber"
+              rules={{ required: "Verification number is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <Label className="text-xs font-semibold">
+                    Verification Number
+                  </Label>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="000000000000000"
+                      className="py-6"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="mt-auto flex gap-4">
+            <Button
+              type="button"
+              onClick={() => prev()}
+              className="flex-1 bg-gray-300 border border-black hover:bg-gray-300 dark:bg-custom-card-background dark:text-white dark:border-white py-5 cursor-pointer"
+            >
+              Back
+            </Button>
+            <Button
+              disabled={isContinueDisabled}
+              type="submit"
+              className="flex-1 py-5 bg-black text-white dark:bg-primary cursor-pointer"
+            >
+              Continue
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

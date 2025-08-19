@@ -1,8 +1,6 @@
-import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import ConnectWalletButton from "@/components/custom/connect-wallet-button";
 import GoogleLoginButton from "@/components/custom/google-login-button";
 import RiseLoginButton from "@/components/custom/rise-login-button";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,9 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeClosed, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import AssetBaseBeta from "@/components/shared/asset-base-beta";
+import { useMutation } from "@tanstack/react-query";
+import { authService } from "@/api/auth.api";
 
 interface FormValues {
   email: string;
@@ -34,8 +34,19 @@ export default function CreateAccount() {
     formState: { errors },
   } = useForm<FormValues>();
 
+  const navigate = useNavigate();
+
+  const registerMutation = useMutation({
+    mutationFn: authService.register,
+    onSuccess: () => {
+      console.log("success");
+    },
+    onError: () => {},
+  });
+
   const onSubmit = async (data: FormValues) => {
     console.log(data);
+    registerMutation.mutateAsync(data);
   };
 
   return (

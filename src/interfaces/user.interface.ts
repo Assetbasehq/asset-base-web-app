@@ -21,3 +21,15 @@ export interface IUpdateUser {
   document?: File[] | null;
   roles?: string[];
 }
+
+export interface UserOnboardingInfo {
+  accountType: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  country: string;
+  dateOfBirth: Date | undefined;
+  verificationType: string;
+  verificationNumber: string;
+}

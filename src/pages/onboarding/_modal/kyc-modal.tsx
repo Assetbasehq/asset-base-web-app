@@ -11,13 +11,15 @@ import { cn } from "@/lib/utils";
 import { CheckIcon } from "lucide-react";
 import { Separator } from "../../../components/ui/separator";
 import MultiStepForm from "../_components/multi-step-form";
+import type { UserOnboardingInfo } from "@/interfaces/user.interface";
 
 interface KYCModalProps {
   isOpen: boolean;
   onClose: () => void;
+  accountType: string;
 }
 
-const totalSteps = 3;
+const totalSteps = 2;
 const stepsInfo = [
   {
     id: "0",
@@ -36,17 +38,38 @@ const stepsInfo = [
   },
 ];
 
-export default function KYCModal({ isOpen, onClose }: KYCModalProps) {
+export default function KYCModal({
+  isOpen,
+  onClose,
+  accountType,
+}: KYCModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
+  const [userInfo, setUserInfo] = useState<UserOnboardingInfo>({
+    accountType: accountType,
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    email: "",
+    country: "",
+    dateOfBirth: undefined,
+    verificationType: "",
+    verificationNumber: "",
+  });
 
-  const next = () => setCurrentStep((s) => s + 1);
+  const next = (data: Partial<UserOnboardingInfo>) => {
+    console.log({ data });
+
+    setCurrentStep((s) => s + 1);
+    setUserInfo((prev) => ({ ...prev, ...data }));
+  };
   const prev = () => setCurrentStep((s) => s - 1);
   const goTo = (index: number) => {
-    if (index >= 0 && index < totalSteps) setCurrentStep(index);
+    if (index >= 0 && index < totalSteps - 1) setCurrentStep(index);
   };
 
   // Pass step helpers to the current child
   const stepProps = {
+    userInfo: userInfo,
     currentStep: currentStep,
     totalSteps: totalSteps,
     next,
@@ -58,9 +81,9 @@ export default function KYCModal({ isOpen, onClose }: KYCModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="md:max-w-4xl min-h-[80vh] max-h-[90vh] flex gap-0 rounded-3xl p-0 border-none">
+      <DialogContent className="w-2xl lg:w-4xl md:max-w-4xl min-h-[80vh] flex gap-0 rounded-3xl p-0 border-none">
         <KYCSidebar currentStep={currentStep} />
-        <div className="flex flex-col w-2/3 min-h-full px-10 pt-14 relative z-30 bg-white dark:bg-custom-card rounded-r-2xl">
+        <div className="flex flex-col w-full lg:w-2/3 min-h-full px-10 pt-14 relative z-30 bg-white dark:bg-custom-card rounded-2xl lg:rounded-r-2xl lg:rounded-l-none">
           <DialogHeader>
             <DialogTitle>{stepsInfo[currentStep].title}</DialogTitle>
             <DialogDescription>
@@ -76,7 +99,7 @@ export default function KYCModal({ isOpen, onClose }: KYCModalProps) {
 
 function KYCSidebar({ currentStep }: { currentStep: number }) {
   return (
-    <div className="w-1/3 min-h-full bg-custom-gray text-white overflow-hidden rounded-l-3xl border-none">
+    <div className="w-1/3 min-h-full bg-custom-gray text-white overflow-hidden rounded-l-3xl border-none hidden lg:flex">
       <img
         src={gradientLines}
         alt=""
