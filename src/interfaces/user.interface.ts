@@ -1,15 +1,28 @@
 export interface IUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  avatar: string;
-  phoneNumber: string;
-  document: { type: string; url: string }[] | null;
-  roles: string[];
-  isVerified: boolean;
-  isActive: boolean;
+  account_id: string;
+  account_type: string;
+  country: string;
+  created_at: string;
+  date_of_birth: string;
+  email_address: string;
+  first_name: string;
+  gender: string;
+  id: string;
+  last_name: string;
+  metadata: {
+    signup_mode: string;
+  };
+  organization_name: null;
+  phone_number: string;
+  profile_photo_url: null;
+  referral_code: string;
+  referral_count: number;
+  referred_by: null;
+  updated_at: string;
 }
+
+
+
 
 export interface IUpdateUser {
   _id?: string;
@@ -22,14 +35,3 @@ export interface IUpdateUser {
   roles?: string[];
 }
 
-export interface UserOnboardingInfo {
-  accountType: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
-  country: string;
-  dateOfBirth: Date | undefined;
-  verificationType: string;
-  verificationNumber: string;
-}

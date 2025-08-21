@@ -36,7 +36,7 @@ export default function DataTable<T>({
   }
 
   return (
-    <div className="mt-8 rounded-xl overflow-x-auto">
+    <div className="mt-4 rounded-xl overflow-x-auto">
       <div className="rounded-xl overflow-x-auto">
         <Table>
           <TableHeader className="bg-black text-white">
@@ -77,7 +77,7 @@ interface DataTableSkeletonProps {
 
 function DataTableSkeleton({ columns = 4, rows = 5 }: DataTableSkeletonProps) {
   return (
-    <div className="mt-8 rounded-xl overflow-x-auto">
+    <div className="mt-4 rounded-xl overflow-x-auto">
       <div className="rounded-xl overflow-x-auto">
         <Table>
           {/* Table Header */}

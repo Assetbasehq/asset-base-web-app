@@ -53,7 +53,7 @@ export default function HotAssets() {
   ];
 
   return (
-    <div className="bg-custom-card-background flex flex-col gap-4 text-start py-2 pl-6 rounded-sm overflow-scroll no-scrollbar">
+    <div className="bg-custom-card flex flex-col gap-4 text-start py-3 pl-6 rounded-sm overflow-scroll no-scrollbar">
       <div className="flex gap-6">
         {marketPairs.map((marketPair) => (
           <div

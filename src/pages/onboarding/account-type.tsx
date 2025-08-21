@@ -7,24 +7,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useOnboardingStore } from "@/store/onboarding-store";
 import { BriefcaseBusiness, UserRound } from "lucide-react";
 import { useState } from "react";
-import KYCModal from "./_modal/kyc-modal";
+import { useNavigate } from "react-router";
 
 export default function AccountType() {
   const [selectedAccountType, setSelectedAccountType] =
     useState<string>("personal");
 
-  const [isKYCModalOpen, setIsKYCModalOpen] = useState(true);
+  const { setOnboardingData } = useOnboardingStore();
 
-  const openKYCModal = () => setIsKYCModalOpen(true);
-  const closeKYCModal = () => setIsKYCModalOpen(false);
+  console.log({ setOnboardingData });
+
+  const navigate = useNavigate();
 
   const accountTypes = [
     {
       id: 1,
       name: "Personal Account",
       code: "personal",
+      value: "individual",
       description:
         "Get started to build your asset portfolio across various asset",
       icon: (
@@ -33,7 +36,8 @@ export default function AccountType() {
           className={cn(
             `px-4 rounded-full bg-custom-black/10 transition duration-300 ease-in-out`,
             {
-              "bg-primary/20 text-primary": selectedAccountType === "personal",
+              "bg-custom-orange/20 text-custom-orange":
+                selectedAccountType === "personal",
             }
           )}
         />
@@ -43,6 +47,7 @@ export default function AccountType() {
       id: 2,
       name: "Business Account",
       code: "business",
+      value: "corporate",
       description:
         "Get started to build your asset portfolio across various asset",
       icon: (
@@ -51,13 +56,19 @@ export default function AccountType() {
           className={cn(
             `px-4 rounded-full bg-custom-black/10 transition duration-300 ease-in-out`,
             {
-              "bg-primary/20 text-primary": selectedAccountType === "business",
+              "bg-custom-orange/20 text-custom-orange":
+                selectedAccountType === "business",
             }
           )}
         />
       ),
     },
   ];
+
+  const handleSelectAccountType = (value: "individual" | "corporate") => {
+    setOnboardingData({ step2: { account_type: value } });
+    setSelectedAccountType(value === "individual" ? "personal" : "business");
+  };
 
   return (
     <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100 dark:from-black dark:via-black dark:to-black">
@@ -76,11 +87,16 @@ export default function AccountType() {
             {accountTypes.map((accountType) => (
               <div
                 key={accountType.id}
-                onClick={() => setSelectedAccountType(accountType.code)}
+                onClick={() =>
+                  handleSelectAccountType(
+                    accountType.value as "individual" | "corporate"
+                  )
+                }
                 className={cn(
                   "flex items-center gap-2 border rounded-lg p-4 transition duration-300 ease-in-out cursor-pointer",
                   {
-                    "border-primary": selectedAccountType === accountType.code,
+                    "border-custom-orange":
+                      selectedAccountType === accountType.code,
                   }
                 )}
               >
@@ -94,7 +110,7 @@ export default function AccountType() {
               </div>
             ))}
             <Button
-              onClick={openKYCModal}
+              onClick={() => navigate("/onboarding/personal-details")}
               className="bg-black text-white dark:bg-white dark:text-black font-semibold cursor-pointer hover:bg-custom-black py-6"
             >
               Submit
@@ -102,11 +118,11 @@ export default function AccountType() {
           </div>
         </CardContent>
       </Card>
-      <KYCModal
+      {/* <KYCModal
         isOpen={isKYCModalOpen}
         onClose={closeKYCModal}
         accountType={selectedAccountType}
-      />
+      /> */}
     </div>
   );
 }

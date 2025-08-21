@@ -1,27 +1,26 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function TrendingSecurities() {
   return (
-    <div>
-      <div className=" bg-custom-card-background text-white flex items-center justify-between rounded-lg px-6 py-8">
-        <div className="flex flex-col items-start gap-6 w-full">
-          <div className="flex items-center justify-between w-full text-start">
-            <div>
-              <h2 className="text-2xl font-semibold">Trending Securities</h2>
-              <p>Top Performing securites on AssetBase</p>
-            </div>
-            <Link
-              to="#"
-              className="text-primary font-semibold cursor-pointer underline text-sm"
-            >
-              View All
-            </Link>
-          </div>
-          <Securities />
+    <Card className="bg-custom-card border-none shadow-none text-start">
+      <CardHeader className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-2xl font-semibold">Trending Securities</h2>
+          <p className="text-sm">Top Performing securites on AssetBase</p>
         </div>
-      </div>
-    </div>
+        <Link
+          to="#"
+          className="text-primary font-semibold cursor-pointer underline text-sm"
+        >
+          View All
+        </Link>
+      </CardHeader>
+      <CardContent>
+        <Securities />
+      </CardContent>
+    </Card>
   );
 }
 
@@ -89,17 +88,17 @@ function Securities() {
       {securitiesData.map((item) => (
         <div
           key={item.id}
-          className=" bg-custom-gray-muted flex gap-2 items-center justify-between rounded-lg p-2"
+          className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2"
         >
-          <div className="flex items-end text-start gap-12 w-full">
+          <div className="flex items-end text-start gap-16 w-full">
             <div className="flex items-center gap-2">
               <img src={item.logo} alt="" className="w-10 h-10" />
               <div>
                 <h2 className="font-semibold">{item.acronym}</h2>
-                <small>{item.price}</small>
+                <small className="text-xs">{item.price}</small>
               </div>
             </div>
-            <p className="text-green-400">{item.price_change_24hrs}</p>
+            <p className="text-green-400 text-xs">{item.price_change_24hrs}</p>
           </div>
         </div>
       ))}

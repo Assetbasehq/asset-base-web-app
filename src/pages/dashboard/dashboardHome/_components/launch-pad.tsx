@@ -1,28 +1,27 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 export default function LaunchPad() {
   return (
-    <div>
-      <div className=" bg-custom-card-background text-white flex items-center justify-between rounded-lg px-6 py-8">
-        <div className="flex flex-col items-start gap-6 w-full">
-          <div className="flex items-center justify-between w-full text-start">
-            <div>
-              <h2 className="text-2xl font-semibold">Launchpad</h2>
-              <p>Acurated list of securities you can fund</p>
-            </div>
-            <Link
-              to="/#"
-              className="text-primary font-semibold cursor-pointer underline text-sm"
-            >
-              View All
-            </Link>
-          </div>
-          <Securities />
+    <Card className="bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
+      <CardHeader className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-2xl font-semibold">Launchpad</h2>
+          <p>Acurated list of securities you can fund</p>
         </div>
-      </div>
-    </div>
+        <Link
+          to="/#"
+          className="text-primary font-semibold cursor-pointer underline text-sm"
+        >
+          View All
+        </Link>
+      </CardHeader>
+      <CardContent>
+        <Securities />
+      </CardContent>
+    </Card>
   );
 }
 
@@ -95,16 +94,9 @@ function Securities() {
       {securitiesData.map((item) => (
         <div
           key={item.id}
-          className=" bg-custom-gray-muted flex flex-col gap-4 items-start rounded-2xl p-2 min-w-96"
+          className=" bg-custom-light-bg flex flex-col gap-4 items-start rounded-2xl p-2 min-w-96"
         >
-          <div
-            className=" bg-custom-card-foreground relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg"
-            style={{
-              backgroundImage: `url('${assetBaseLogo}')`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}
-          >
+          <div className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg">
             <img
               src={assetBaseLogo}
               alt=""
@@ -129,7 +121,7 @@ function Securities() {
             </div>
           </div>
           <div className="flex flex-col gap-2 items-start w-full pb-1">
-            <Progress value={15} className="w-full bg-white"  />
+            <Progress value={15} className="w-full bg-white" />
             <div className="flex justify-between items-center w-full">
               <small className="font-semibold text-primary">15% raised</small>
               <small className="font-semibold">2,300,000 available</small>

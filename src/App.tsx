@@ -33,6 +33,8 @@ import { AuthGuard } from "./guards/auth.guard";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AccountType from "./pages/onboarding/account-type";
+import PersonalDetails from "./pages/onboarding/personal-details";
+import PINSetup from "./pages/onboarding/pin-setup";
 
 const queryClient = new QueryClient();
 
@@ -59,10 +61,6 @@ function App() {
           path: "login",
           element: <Login />,
         },
-        {
-          path: "account-type",
-          element: <AccountType />,
-        },
       ],
     },
     {
@@ -80,6 +78,24 @@ function App() {
         {
           path: "*",
           element: <Public404 />,
+        },
+      ],
+    },
+    {
+      path: "/onboarding",
+      element: <AuthLayout />,
+      children: [
+        {
+          path: "account-type",
+          element: <AccountType />,
+        },
+        {
+          path: "personal-details",
+          element: <PersonalDetails />,
+        },
+        {
+          path: "setup-pin",
+          element: <PINSetup />,
         },
       ],
     },

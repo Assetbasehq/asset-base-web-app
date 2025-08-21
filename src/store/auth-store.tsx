@@ -10,32 +10,21 @@ interface AuthCredentials {
 export interface UserState {
   user: IUser | null;
   authCredentials: AuthCredentials | null;
-  actions: {
-    setUser: (user: IUser | null) => Promise<void>;
-    setAuthCredentials: (creds: AuthCredentials | null) => void;
-  };
+  setUser: (user: IUser | null) => void;
+  setAuthCredentials: (creds: AuthCredentials | null) => void;
 }
-
-const actions = (
-  set: (
-    state: Partial<UserState> | ((state: UserState) => Partial<UserState>)
-  ) => void
-) => ({
-  setUser: async (user: IUser | null) => {
-    if (!user) return;
-    set({ user });
-  },
-  setAuthCredentials: (creds: AuthCredentials | null) => {
-    set({ authCredentials: creds });
-  },
-});
 
 export const useAuthStore = create<UserState>()(
   persist(
     (set) => ({
       user: null,
       authCredentials: null,
-      actions: actions(set),
+      setUser: (user: IUser | null) => {
+        set({ user });
+      },
+      setAuthCredentials: (creds: AuthCredentials | null) => {
+        set({ authCredentials: creds });
+      },
     }),
     {
       name: "auth-store",
@@ -44,7 +33,9 @@ export const useAuthStore = create<UserState>()(
   )
 );
 
+// Updated hooks
 export const useAuthActions = () => {
-  const { actions } = useAuthStore();
-  return actions;
+  const setUser = useAuthStore((state) => state.setUser);
+  const setAuthCredentials = useAuthStore((state) => state.setAuthCredentials);
+  return { setUser, setAuthCredentials };
 };

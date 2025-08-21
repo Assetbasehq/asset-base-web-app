@@ -66,17 +66,19 @@ export default function HottestLaunchpad() {
         {securitiesData.map((item) => (
           <div
             key={item.id}
-            className=" bg-custom-gray-muted flex gap-2 items-center justify-between rounded-lg p-2"
+            className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2"
           >
-            <div className="flex items-end text-start gap-12 w-full">
+            <div className="flex items-end text-start gap-16 w-full">
               <div className="flex items-center gap-2">
                 <img src={item.logo} alt="" className="w-10 h-10" />
                 <div>
                   <h2 className="font-semibold">{item.acronym}</h2>
-                  <small>{item.price}</small>
+                  <small className="text-xs">{item.price}</small>
                 </div>
               </div>
-              <p className="text-green-400">{item.price_change_24hrs}</p>
+              <p className="text-green-400 text-sm">
+                {item.price_change_24hrs}
+              </p>
             </div>
           </div>
         ))}

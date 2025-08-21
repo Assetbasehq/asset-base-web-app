@@ -12,7 +12,7 @@ export const handleAxiosError = (
   alternateMessage?: string
 ): string => {
   console.log({
-    error: error.response?.data?.error || error.response?.data?.errors,
+    error: error.response?.data?.error || error.response?.data?.data,
   });
 
   if (!error) {

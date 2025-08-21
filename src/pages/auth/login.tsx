@@ -12,14 +12,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeClosed, LockKeyhole, Mail } from "lucide-react";
+import { Eye, EyeClosed, Loader2, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import AssetBaseBeta from "@/components/shared/asset-base-beta";
+import { useMutation } from "@tanstack/react-query";
+import { authService } from "@/api/auth.api";
 
 interface FormValues {
-  email: string;
+  email_address: string;
   password: string;
 }
 
@@ -34,16 +36,28 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const loginMutation = useMutation({
+    mutationFn: authService.signIn,
+    onSuccess: () => {
+      console.log("success");
+      navigate("/dashboard");
+    },
+    onError: (error) => {
+      console.log({ error });
+    },
+  });
+
   const onSubmit = async (data: FormValues) => {
     console.log(data);
+    loginMutation.mutateAsync(data);
   };
 
   return (
-    <div className=" w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100 dark:from-black dark:via-black dark:to-black">
+    <div className=" w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-pink-50 to-pink-100 dark:from-black dark:via-black dark:to-black">
       {/* <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue [background:linear-gradient(to_top_right,_white_0%,_white_60%,_#f9c5d1_100%)]"> */}
       <AssetBaseBeta />
 
-      <Card className="w-full max-w-lg shadow-none text-black bg-white dark:bg-custom-card dark:text-white dark:border-custom-card">
+      <Card className="w-full max-w-lg border text-black bg-white dark:bg-custom-card dark:text-white">
         <CardHeader className="text-start flex flex-col gap-1">
           <CardTitle className="text-lg">Login to your account</CardTitle>
           <CardDescription className="font-neue">
@@ -76,14 +90,14 @@ export default function Login() {
                     className="text-muted-foreground absolute left-3"
                   />
                   <Input
-                    {...register("email", { required: true })}
+                    {...register("email_address", { required: true })}
                     id="email"
                     type="email"
                     placeholder="johnmercy03@gmail.com"
                     className="w-full py-6 pl-10 pr-3 "
                   />
                 </div>
-                {errors.email && (
+                {errors.email_address && (
                   <p className="text-sm text-destructive text-right">
                     Email is required
                   </p>
@@ -121,15 +135,26 @@ export default function Login() {
                     Password is required
                   </p>
                 )}
+                <Link
+                  to="/auth/forgot-password"
+                  className="text-sm underline text-muted-foreground text-left"
+                >
+                  Forgot password?
+                </Link>
               </div>
               <Button
-                onClick={() => {
-                  navigate("/auth/account-type");
-                }}
                 type="submit"
-                className="w-full btn-primary-2 py-6 font-normal border-2"
+                disabled={loginMutation.isPending}
+                className="w-full btn-primary py-6 font-semibold"
               >
-                Continue
+                {loginMutation.isPending ? (
+                  <span className="flex items-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading
+                  </span>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </div>
           </form>
@@ -139,7 +164,7 @@ export default function Login() {
             Don't have an AssetBase account?
             <Link
               to="/auth/register"
-              className="text-primary font-semibold pl-1"
+              className="text-custom-orange font-medium pl-1"
             >
               Sign up
             </Link>

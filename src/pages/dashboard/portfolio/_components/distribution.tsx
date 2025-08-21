@@ -64,7 +64,7 @@ export default function Distribution() {
   return (
     <Card
       data-chart={id}
-      className="flex flex-col lg:col-span-2 xl:col-span-1  bg-custom-card-background"
+      className="flex flex-col lg:col-span-2 xl:col-span-1 bg-custom-card border-none shadow-none"
     >
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">

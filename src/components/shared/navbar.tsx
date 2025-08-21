@@ -33,7 +33,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full flex items-center justify-between gap-4 p-4 text-white">
+    <nav className="w-full flex items-center justify-between gap-4 p-4 md:p-8 bg-fixed-base text-white">
       <div className="flex items-center gap-6">
         {/* Logo + Title + Beta Badge */}
         <AssetBaseBeta />
@@ -47,9 +47,10 @@ export default function Navbar() {
                 end={to === "/dashboard"}
                 className={({ isActive }) => {
                   return cn(
-                    `w-fit bg-custom-gray-muted py-2 px-4 rounded-lg border-b border-custom-gray-muted transition-all duration-300 flex items-center gap-2 hover:text-orange-500 cursor-pointer`,
+                    `w-fit  py-2 px-4 rounded-t-lg border-b border-fixed-card bg-fixed-card transition-all duration-300 flex items-center gap-2 hover:text-orange-500 cursor-pointer`,
                     {
-                      "border-primary rounded-b-none": isActive,
+                      "border-custom-orange rounded-b-none text-custom-orange":
+                        isActive,
                     }
                   );
                 }}

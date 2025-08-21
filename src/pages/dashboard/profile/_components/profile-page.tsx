@@ -12,8 +12,11 @@ import { ImagePlus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import assestBaseLogo from "@/assets/images/asset-base-logo.svg";
 import gridLine from "@/assets/images/gradient-lines.svg";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function ProfilePage() {
+  const { user } = useAuthStore();
+
   const personalInformationForm = useForm({
     defaultValues: {
       firstName: "",
@@ -38,8 +41,10 @@ export default function ProfilePage() {
 
   return (
     <div className="text-start">
-      <div className="relative bg-custom-card-background text-white px-6 py-8 text-start overflow-hidden">
-        <h2 className="text-lg md:text-2xl font-semibold">Hi Ukanigbe</h2>
+      <div className="relative bg-custom-light-bg px-6 py-8 text-start overflow-hidden">
+        <h2 className="text-lg md:text-2xl font-semibold">
+          Hi, <span className="capitalize">{user?.first_name || "..."}</span>
+        </h2>
         <p className="text-muted-foreground">
           Manage your account details below
         </p>
@@ -60,7 +65,7 @@ export default function ProfilePage() {
           <ProfileSkeleton />
         </div>
       </div>
-      <div className="bg-custom-card-foreground rounded-b-lg px-6 py-8 flex flex-col gap-16">
+      <div className="bg-custom-card rounded-b-lg px-6 py-8 flex flex-col gap-16">
         <div className="flex flex-col lg:flex-row gap-4 text-start">
           <div className="text-start flex flex-col lg:w-2/5">
             <h2 className="font-semibold">Profile photo</h2>
@@ -96,7 +101,7 @@ export default function ProfilePage() {
               <p className="text-muted-foreground">
                 Update your personal details here
               </p>
-              <Button className="mt-4 text-muted-foreground bg-custom-card-foreground cursor-pointer">
+              <Button className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer">
                 Save Chanages
               </Button>
             </div>
@@ -165,14 +170,14 @@ export default function ProfilePage() {
             <div className="flex flex-col items-start lg:w-2/5">
               <h2 className="flex items-center gap-2 text-lg font-semibold">
                 Next Of Kin Information{" "}
-                <small className="text-primary bg-primary/10 px-3 py-1 rounded-full">
+                <small className="text-custom-orange bg-custom-orange/10 px-3 py-1 rounded-full">
                   Optional
                 </small>
               </h2>
               <p className="text-muted-foreground">
                 Update your personal details here
               </p>
-              <Button className="mt-4 text-muted-foreground bg-custom-card-foreground cursor-pointer">
+              <Button className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer">
                 Save Chanages
               </Button>
             </div>
@@ -239,7 +244,7 @@ export default function ProfilePage() {
 
 function ProfileSkeleton() {
   return (
-    <div className="flex items-center gap-2 p-4 bg-custom-card-foreground rounded-3xl">
+    <div className="flex items-center gap-2 p-4 bg-custom-base rounded-3xl">
       <Skeleton className="h-11 w-11 rounded-none" />
       <div className="flex flex-col gap-2">
         <Skeleton className="h-3 w-56 rounded-none" />

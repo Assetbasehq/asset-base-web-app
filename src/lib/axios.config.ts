@@ -1,22 +1,22 @@
 import axios from "axios";
-import { getDeviceId } from "./utils";
 
 const apiUrl: string = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const axiosInstance = axios.create({
   baseURL: `${apiUrl}`,
-  withCredentials: true,
 });
 
-// Request interceptor → attach token
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  config.headers["x-device-id"] = getDeviceId();
-  return config;
-});
+// Request interceptor → attach accessToken
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Response interceptor → handle expired token
 axiosInstance.interceptors.response.use(
@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (err) {
         localStorage.clear(); // force logout
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     }
     return Promise.reject(error);

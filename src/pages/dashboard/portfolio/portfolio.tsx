@@ -28,22 +28,23 @@ export default function Portfolio() {
 
   return (
     <div>
-      <h2 className="text-3xl font-semibold text-left mb-4">Portfolio</h2>
+      <h2 className="text-3xl font-semibold text-left mb-4 text-custom-white-text">
+        Portfolio
+      </h2>
       <div className="flex flex-col gap-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
           <TotalAssets />
           <Statistics />
           <Distribution />
         </div>
-        <div className="bg-custom-card-background text-white flex flex-col items-center rounded-lg px-6 py-8">
-          <div className=" flex gap-4 border-b w-full px-2">
+        <div className="bg-custom-card text-custom-white-text flex flex-col items-center rounded-lg px-6 py-8">
+          <div className=" flex gap-8 border-b w-full px-2">
             {Links.map((link) => (
               <Link
                 key={link.path}
                 className={cn(`text-lg font-semibold pb-2`, {
-                  "text-primary border-b border-primary ": isActiveLink(
-                    link.path
-                  ),
+                  "text-custom-orange border-b border-custom-orange ":
+                    isActiveLink(link.path),
                 })}
                 to={link.path}
               >

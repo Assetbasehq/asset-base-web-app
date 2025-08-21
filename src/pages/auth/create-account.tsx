@@ -17,16 +17,17 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import AssetBaseBeta from "@/components/shared/asset-base-beta";
-import { useMutation } from "@tanstack/react-query";
-import { authService } from "@/api/auth.api";
+import { useOnboardingStore } from "@/store/onboarding-store";
 
 interface FormValues {
-  email: string;
+  email_address: string;
   password: string;
 }
 
 export default function CreateAccount() {
   const [isPasswordVisible, setPasswordVisible] = useState(true);
+
+  const { setOnboardingData } = useOnboardingStore();
 
   const {
     register,
@@ -36,28 +37,19 @@ export default function CreateAccount() {
 
   const navigate = useNavigate();
 
-  const registerMutation = useMutation({
-    mutationFn: authService.register,
-    onSuccess: () => {
-      console.log("success");
-    },
-    onError: () => {},
-  });
-
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
-    registerMutation.mutateAsync(data);
+    setOnboardingData({ step1: data });
+    navigate("/onboarding/account-type");
   };
 
   return (
-    <div className=" w-full min-h-screen px-6 flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white  via-white to-pink-100 dark:from-black dark:via-black dark:to-black transition-all duration-300">
-      {/* <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue [background:linear-gradient(to_top_right,_white_0%,_white_60%,_#f9c5d1_100%)]"> */}
+    <div className="w-full min-h-screen px-6 flex flex-col items-center justify-center gap-18 bg-custom-gradient">
       <AssetBaseBeta />
 
-      <Card className="w-full font-geist max-w-lg shadow-none bg-white text-black dark:bg-custom-card dark:text-white dark:border-custom-card">
+      <Card className=" font-neue w-full max-w-lg border ">
         <CardHeader className="text-start">
           <CardTitle className="text-lg">Create an account</CardTitle>
-          <CardDescription className="font-neue">
+          <CardDescription className="">
             Get started to build your asset portfolio across various asset
           </CardDescription>
         </CardHeader>
@@ -87,14 +79,14 @@ export default function CreateAccount() {
                     className="text-muted-foreground absolute left-3"
                   />
                   <Input
-                    {...register("email", { required: true })}
+                    {...register("email_address", { required: true })}
                     id="email"
                     type="email"
                     placeholder="johnmercy03@gmail.com"
                     className="w-full py-6 pl-10 pr-3 "
                   />
                 </div>
-                {errors.email && (
+                {errors.email_address && (
                   <p className="text-sm text-destructive text-right">
                     Email is required
                   </p>
@@ -107,7 +99,16 @@ export default function CreateAccount() {
                 <div className="flex items-center relative">
                   <LockKeyhole className="text-muted-foreground absolute left-3" />
                   <Input
-                    {...register("password", { required: true })}
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Password is required",
+                      },
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                    })}
                     id="password"
                     type={isPasswordVisible ? "password" : "text"}
                     placeholder="**********"
@@ -129,13 +130,13 @@ export default function CreateAccount() {
                 </div>
                 {errors.password && (
                   <p className="text-sm text-destructive text-right">
-                    Password is required
+                    {errors.password.message}
                   </p>
                 )}
               </div>
               <Button
                 type="submit"
-                className="w-full btn-primary-2 py-6 font-normal border-2"
+                className="w-full btn-primary py-6 font-normal border-2"
               >
                 Continue
               </Button>

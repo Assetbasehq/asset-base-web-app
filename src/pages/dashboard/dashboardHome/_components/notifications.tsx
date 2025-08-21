@@ -1,14 +1,15 @@
+import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Notifications() {
   return (
-    <div className=" bg-custom-card-background flex-col gap-4 text-start p-8 rounded-3xl hidden lg:flex w-full">
+    <Card className="flex-col gap-4 text-start p-8 rounded-3xl hidden lg:flex w-full border-none shadow-none bg-custom-card">
       <div>
         <p className="text-2xl font-semibold">Notifications</p>
         <p className="text-">Catch up on notifications</p>
       </div>
       <NotificationsList />
-    </div>
+    </Card>
   );
 }
 
@@ -30,12 +31,11 @@ function NotificationsList() {
 
 function NotificationsSkeleton() {
   return (
-    <div className="flex flex-col gap-4 text-start rounded-3xl bg-custom-card-background">
+    <div className="flex flex-col gap-4 text-start rounded-3xl">
       <div className="flex flex-col gap-3">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="flex flex-col gap-1 ">
-            <Skeleton className="h-8 w-full bg-custom-gray-muted" />{" "}
-            {/* main line */}
+            <Skeleton className="h-8 w-full bg-gray-200" /> {/* main line */}
             {/* <Skeleton className="h-3 w-36" /> sub line */}
           </div>
         ))}

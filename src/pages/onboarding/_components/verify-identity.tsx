@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { OnboardingProps } from "@/interfaces/onboarding.interface";
 
 import {
   Form,
@@ -31,7 +30,7 @@ const verificationOptions = [
   "Passport",
 ];
 
-export default function VerifyIdentity({ userInfo, prev }: OnboardingProps) {
+export default function VerifyIdentity() {
   const form = useForm<FormValues>({
     defaultValues: {
       verificationType: "",
@@ -45,7 +44,7 @@ export default function VerifyIdentity({ userInfo, prev }: OnboardingProps) {
   const isContinueDisabled = !verificationType || !verificationNumber.trim();
 
   const onSubmit = (data: FormValues) => {
-    console.log("Form data:", { ...userInfo, ...data });
+    console.log("Form data:", { ...data });
 
     // Handle Submit
   };
@@ -115,7 +114,6 @@ export default function VerifyIdentity({ userInfo, prev }: OnboardingProps) {
           <div className="mt-auto flex gap-4">
             <Button
               type="button"
-              onClick={() => prev()}
               className="flex-1 bg-gray-300 border border-black hover:bg-gray-300 dark:bg-custom-card-background dark:text-white dark:border-white py-5 cursor-pointer"
             >
               Back

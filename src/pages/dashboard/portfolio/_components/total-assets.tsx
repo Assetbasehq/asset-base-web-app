@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -15,67 +16,69 @@ export default function TotalAssets() {
   // }
 
   return (
-    <div className="flex flex-col gap-1 items-start bg-custom-card-background text-white rounded-lg p-4">
-      <p className="text-muted-foreground font-semibold text-lg">
-        Total Assets
-      </p>
-      <div className="flex items-center justify-between gap-6 w-full">
-        <p className="text-lg md:text-2xl font-bold">
-          {Number(balance).toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })}
-        </p>
-        <Select defaultValue="usd">
-          <SelectTrigger className="w-fit ">
-            <SelectValue placeholder="USD" className="text-white" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="usd">USD</SelectItem>
-            <SelectItem value="cad">CAD</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="flex gap-2 text-sm md:text-lg font-semibold">
-        <p className="text-green-400">+1.25%</p>
-        <p>+34,000 this week</p>
-      </div>
+    <Card className="flex flex-col gap-1 bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
+      <CardHeader>
+        <CardTitle className="text-lg">Total Assets</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center justify-between gap-6 w-full">
+          <p className="text-lg md:text-2xl font-bold">
+            {Number(balance).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}
+          </p>
+          <Select defaultValue="usd">
+            <SelectTrigger className="w-fit">
+              <SelectValue placeholder="USD" className="text-white" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="usd">USD</SelectItem>
+              <SelectItem value="cad">CAD</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-2 text-sm md:text-lg font-semibold">
+          <p className="text-green-400">+1.25%</p>
+          <p>+34,000 this week</p>
+        </div>
 
-      <div className="text-start grid grid-cols-2 gap-2 w-full mt-4">
-        <div className=" bg-custom-card-foreground p-4 rounded-xl">
-          <small className="text-xs font-semibold text-muted-foreground">
-            Holdings
-          </small>
-          <p className="text-lg md:text-xl font-bold">$150,000.45</p>
-          <small className="text-xs text-green-400">+1.25% (24h)</small>
+        <div className="text-start grid grid-cols-2 gap-2 w-full mt-4">
+          <div className=" bg-custom-light-bg p-4 rounded-xl">
+            <small className="text-xs font-semibold text-muted-foreground">
+              Holdings
+            </small>
+            <p className="text-lg md:text-xl font-bold">$150,000.45</p>
+            <small className="text-xs text-green-400">+1.25% (24h)</small>
+          </div>
+          <div className="bg-custom-light-bg p-4 rounded-xl">
+            <small className="text-xs font-semibold text-muted-foreground">
+              All-Time Profit
+            </small>
+            <p className="text-lg md:text-xl font-bold">+$150,000.45</p>
+            <small className="text-xs text-green-400">+100.25% (24h)</small>
+          </div>
+          <div className=" bg-custom-light-bg p-4 rounded-xl">
+            <small className="text-xs font-semibold text-muted-foreground">
+              Avg. Buy Price
+            </small>
+            <p className="text-lg md:text-xl font-bold">$9,100.45</p>
+          </div>
+          <div className=" bg-custom-light-bg p-4 rounded-xl">
+            <small className="text-xs font-semibold text-muted-foreground">
+              Cost Basis
+            </small>
+            <p className="text-lg md:text-xl font-bold">$50,000.45</p>
+          </div>
         </div>
-        <div className=" bg-custom-card-foreground p-4 rounded-xl">
-          <small className="text-xs font-semibold text-muted-foreground">
-            All-Time Profit
-          </small>
-          <p className="text-lg md:text-xl font-bold">+$150,000.45</p>
-          <small className="text-xs text-green-400">+100.25% (24h)</small>
-        </div>
-        <div className=" bg-custom-card-foreground p-4 rounded-xl">
-          <small className="text-xs font-semibold text-muted-foreground">
-            Avg. Buy Price
-          </small>
-          <p className="text-lg md:text-xl font-bold">$9,100.45</p>
-        </div>
-        <div className=" bg-custom-card-foreground p-4 rounded-xl">
-          <small className="text-xs font-semibold text-muted-foreground">
-            Cost Basis
-          </small>
-          <p className="text-lg md:text-xl font-bold">$50,000.45</p>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
 function TotalAssetsSkeleton() {
   return (
-    <div className="flex flex-col gap-2 items-start bg-custom-card-background text-white rounded-lg p-4">
+    <div className="flex flex-col gap-2 items-start bg-custom-card text-white rounded-xl p-4">
       {/* Title */}
       <Skeleton className="h-5 w-28" />
 

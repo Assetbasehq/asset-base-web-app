@@ -16,13 +16,16 @@ export const AuthGuard = () => {
     retry: false,
   });
 
-  // if (isLoading) {
-  //   return <AuthLoader />;
-  // }
+  if (isLoading) {
+    return <AuthLoader />;
+  }
 
-  // if (isError || !user) {
-  //   return <Navigate to="/auth/login" state={{ from: location }} replace />;
-  // }
+  console.log({ user });
+  
+
+  if (isError || !user) {
+    return <Navigate to="/auth/login" state={{ from: location }} replace />;
+  }
 
   return <Outlet />;
 };
