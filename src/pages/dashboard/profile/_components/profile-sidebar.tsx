@@ -1,25 +1,25 @@
-import { Link, useLocation } from "react-router";
-import {
-  BriefcaseBusiness,
-  ChartBar,
-  ClipboardList,
-  Cog,
-  Download,
-  Folder,
-  Globe,
-  LogOut,
-  Trash,
-  User,
-} from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth-store";
+import profileIcon from "@/assets/icons/profile-icon.svg";
+import leaderboardIcon from "@/assets/icons/leaderboard-icon.svg";
+import kycIcon from "@/assets/icons/kyc-icon.svg";
+import securityIcon from "@/assets/icons/security-icon.svg";
+import referralsIcon from "@/assets/icons/referrals-icon.svg";
+import accountStatementIcon from "@/assets/icons/account-statement-icon.svg";
+import investmentCertificateIcon from "@/assets/icons/investment-certificate-icon.svg";
+import contactUsIcon from "@/assets/icons/contact-us-icon.svg";
+import deleteMyAccountIcon from "@/assets/icons/delete-my-account-icon.svg";
+import logoutIcon from "@/assets/icons/logout-icon.svg";
 
 const sideBarLinks = [
   {
     name: "Profile",
     icon: (
-      <User
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={profileIcon}
+        alt="profile"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile",
@@ -27,9 +27,10 @@ const sideBarLinks = [
   {
     name: "Leaderboard",
     icon: (
-      <ChartBar
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={leaderboardIcon}
+        alt="leaderboard"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/leaderboard",
@@ -37,9 +38,10 @@ const sideBarLinks = [
   {
     name: "KYC",
     icon: (
-      <ClipboardList
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={kycIcon}
+        alt="kyc"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/kyc",
@@ -47,9 +49,10 @@ const sideBarLinks = [
   {
     name: "Security",
     icon: (
-      <Cog
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={securityIcon}
+        alt="security"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/security",
@@ -57,9 +60,10 @@ const sideBarLinks = [
   {
     name: "Referrals",
     icon: (
-      <BriefcaseBusiness
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={referralsIcon}
+        alt="referrals"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/referrals",
@@ -67,9 +71,10 @@ const sideBarLinks = [
   {
     name: "Account Statment",
     icon: (
-      <Download
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={accountStatementIcon}
+        alt="account-statement"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/account-statement",
@@ -77,9 +82,10 @@ const sideBarLinks = [
   {
     name: "Investment Certificate",
     icon: (
-      <Folder
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={investmentCertificateIcon}
+        alt="investment-certificate"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/investment-certificate",
@@ -87,9 +93,10 @@ const sideBarLinks = [
   {
     name: "Contact Us",
     icon: (
-      <Globe
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={contactUsIcon}
+        alt="contact-us"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/contact-us",
@@ -97,9 +104,10 @@ const sideBarLinks = [
   {
     name: "Delete My Account",
     icon: (
-      <Trash
-        size={38}
-        className="border p-2 rounded-full text-custom-black-text"
+      <img
+        src={deleteMyAccountIcon}
+        alt="delete-my-account"
+        className="border p-2 rounded-full w-10 h-10 object-contain"
       />
     ),
     path: "/dashboard/profile/delete-account",
@@ -107,13 +115,18 @@ const sideBarLinks = [
 ];
 
 export default function ProfileSideBar() {
+  const { logout } = useAuthStore();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActiveLink = (path: string) => {
     return location.pathname === path;
   };
 
-  const logOut = () => {};
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <div className="bg-custom-card rounded-lg px-6 py-6 min-w-72 w-fit hidden md:block h-fit max-h-[80-vh]">
@@ -131,15 +144,19 @@ export default function ProfileSideBar() {
           </span>
         </Link>
       ))}
-      <div className="text-lg font-semibold py-2 block text-red-700">
+      <button
+        onClick={handleLogout}
+        className="text-lg font-semibold py-2 block text-red-700 cursor-pointer bg-transparent"
+      >
         <span className="flex items-center gap-3 ">
-          <LogOut
-            size={38}
-            className="border p-2 rounded-full border-red-700"
+          <img
+            src={logoutIcon}
+            alt="logout"
+            className="border p-2 rounded-full border-red-700 w-10 h-10 object-contain"
           />
           LogOut
         </span>
-      </div>
+      </button>
     </div>
   );
 }

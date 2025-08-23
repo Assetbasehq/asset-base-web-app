@@ -1,6 +1,6 @@
-import ConnectWalletButton from "@/components/custom/connect-wallet-button";
-import GoogleLoginButton from "@/components/custom/google-login-button";
-import RiseLoginButton from "@/components/custom/rise-login-button";
+import ConnectWalletButton from "@/components/buttons/connect-wallet-button";
+import GoogleLoginButton from "@/components/buttons/google-login-button";
+import RiseLoginButton from "@/components/buttons/rise-login-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeClosed, Loader2, LockKeyhole, Mail } from "lucide-react";
+import { Eye, EyeClosed, Loader, Loader2, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import AssetBaseBeta from "@/components/shared/asset-base-beta";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api/auth.api";
+import { CustomAlert } from "@/components/custom/custom-alert";
 
 interface FormValues {
   email_address: string;
@@ -27,6 +28,7 @@ interface FormValues {
 
 export default function Login() {
   const [isPasswordVisible, setPasswordVisible] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -43,11 +45,13 @@ export default function Login() {
       navigate("/dashboard");
     },
     onError: (error) => {
-      console.log({ error });
+      console.log({ message: error.message });
+      setError(error.message);
     },
   });
 
   const onSubmit = async (data: FormValues) => {
+    setError(null);
     console.log(data);
     loginMutation.mutateAsync(data);
   };
@@ -135,6 +139,9 @@ export default function Login() {
                     Password is required
                   </p>
                 )}
+
+                {error && <CustomAlert variant="destructive" message={error} />}
+
                 <Link
                   to="/auth/forgot-password"
                   className="text-sm underline text-muted-foreground text-left"
@@ -145,11 +152,11 @@ export default function Login() {
               <Button
                 type="submit"
                 disabled={loginMutation.isPending}
-                className="w-full btn-primary py-6 font-semibold"
+                className="w-full btn-primary py-6 font-semibold cursor-pointer"
               >
                 {loginMutation.isPending ? (
                   <span className="flex items-center">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader className="mr-2 h-4 w-4 animate-spin" />
                     Loading
                   </span>
                 ) : (

@@ -12,6 +12,7 @@ export interface UserState {
   authCredentials: AuthCredentials | null;
   setUser: (user: IUser | null) => void;
   setAuthCredentials: (creds: AuthCredentials | null) => void;
+  logout: () => void;
 }
 
 export const useAuthStore = create<UserState>()(
@@ -24,6 +25,10 @@ export const useAuthStore = create<UserState>()(
       },
       setAuthCredentials: (creds: AuthCredentials | null) => {
         set({ authCredentials: creds });
+      },
+      logout: () => {
+        localStorage.removeItem("accessToken");
+        set({ user: null, authCredentials: null });
       },
     }),
     {

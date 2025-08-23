@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
 import {
   Card,
@@ -38,6 +38,9 @@ import { useNavigate } from "react-router";
 import { useOnboardingStore } from "@/store/onboarding-store";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api/auth.api";
+import { CustomAlert } from "@/components/custom/custom-alert";
+import type { IUser } from "@/interfaces/user.interface";
+import { format } from "date-fns";
 
 interface FormValues {
   first_name: string;
@@ -54,6 +57,7 @@ const countries = ["Nigeria", "Ghana", "Kenya", "Tanzania", "Uganda", "Rwanda"];
 
 export default function PersonalDetails() {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -76,9 +80,10 @@ export default function PersonalDetails() {
     mutationFn: authService.register,
     onSuccess: () => {
       console.log("success");
+      navigate("/onboarding/pin-setup");
     },
     onError: (error) => {
-      console.log({ error });
+      setError(error.message);
     },
   });
 
@@ -205,7 +210,7 @@ export default function PersonalDetails() {
                                 )}
                               >
                                 {field.value
-                                  ? formatDate(field.value)
+                                  ? format(field.value, "PPP")
                                   : "Select date"}
                                 <CalendarIcon />
                               </Button>
@@ -254,33 +259,6 @@ export default function PersonalDetails() {
                   </FormItem>
                 )}
               />
-
-              {/* Email */}
-              {/* <FormField
-                control={form.control}
-                name="email"
-                rules={{
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Invalid email address",
-                  },
-                }}
-                render={({ field }) => (
-                  <FormItem>
-                    <Label className="text-xs font-semibold">Email</Label>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="Enter email"
-                        className="w-full py-6 pr-3 align-text-bottom"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
 
               {/* Country */}
               <FormField
@@ -344,11 +322,21 @@ export default function PersonalDetails() {
                 )}
               />
 
+              {error && <CustomAlert variant="destructive" message={error} />}
+
               <Button
+                disabled={registerMutation.isPending}
                 type="submit"
                 className="w-full font-semibold py-6 border-2 text-sm cursor-pointer btn-secondary"
               >
-                Continue
+                {registerMutation.isPending ? (
+                  <span className="flex items-center">
+                    <Loader className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </span>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </form>
           </Form>

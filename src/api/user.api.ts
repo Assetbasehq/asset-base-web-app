@@ -1,0 +1,82 @@
+import axiosInstance from "@/lib/axios.config";
+import { handleAxiosError } from "@/lib/utils";
+
+class UserService {
+  createSecurityPin = async (payload: any) => {
+    try {
+      const response = await axiosInstance.post(`/users/create-pin`, payload);
+
+      console.log({ response });
+
+      return response.data?.data;
+    } catch (error) {
+      handleAxiosError(error, "failed to create security pin");
+    }
+  };
+  checkIfUserExists = async (payload: any) => {
+    try {
+      const response = await axiosInstance.post(
+        `/users/validate-email`,
+        payload
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  uploadProfilePhoto = async (payload: any) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/users/profile-photo`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  updateUserInformation = async (userId: string, payload: any) => {
+    try {
+      const response = await axiosInstance.patch(`/users/${userId}`, payload);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  getUserNextOfKin = async (userId: string) => {
+    try {
+      const response = await axiosInstance.get(`/next-of-kins/${userId}`);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  updateUserNextOfKin = async (userId: string, payload: any) => {
+    try {
+      const response = await axiosInstance.put(
+        `/next-of-kins/${userId}`,
+        payload
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+}
+
+export const userService = new UserService();

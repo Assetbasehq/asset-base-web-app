@@ -1,31 +1,47 @@
 import { Button } from "../ui/button";
 import { Link, NavLink } from "react-router";
-import {
-  Bell,
-  Box,
-  BriefcaseBusiness,
-  Grid2X2,
-  Menu,
-  Plus,
-  Search,
-  Timer,
-  User,
-  WalletMinimal,
-  X,
-} from "lucide-react";
+import { Bell, Menu, Plus, Search, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import AssetBaseBeta from "./asset-base-beta";
+import { AssetBaseBetaWhite } from "./asset-base-beta";
+
+import dashboardIcon from "@/assets/icons/dashboard-icon.png";
+import walletIcon from "@/assets/icons/wallet-icon.png";
+import marketsIcon from "@/assets/icons/markets-icon.png";
+import liquidityIcon from "@/assets/icons/liquidity-icon.png";
+import portfolioIcon from "@/assets/icons/portfolio-icon.png";
 
 const links = [
-  { label: "Dashboard", to: "/dashboard", icon: <Grid2X2 /> },
-  { label: "Wallet", to: "/dashboard/wallet", icon: <WalletMinimal /> },
-  { label: "Markets", to: "/dashboard/markets", icon: <Timer /> },
-  { label: "Liquidity", to: "/dashboard/liquidity", icon: <Box /> },
+  {
+    label: "Dashboard",
+    to: "/dashboard",
+    icon: (
+      <img
+        src={dashboardIcon}
+        alt="dashboard"
+        className="w-6 h-6 text-custom-orange"
+      />
+    ),
+  },
+  {
+    label: "Wallet",
+    to: "/dashboard/wallet",
+    icon: <img src={walletIcon} alt="wallet" className="w-6 h-6" />,
+  },
+  {
+    label: "Markets",
+    to: "/dashboard/markets",
+    icon: <img src={marketsIcon} alt="markets" className="w-6 h-6" />,
+  },
+  {
+    label: "Liquidity",
+    to: "/dashboard/liquidity",
+    icon: <img src={liquidityIcon} alt="liquidity" className="w-6 h-6" />,
+  },
   {
     label: "Portfolio",
     to: "/dashboard/portfolio",
-    icon: <BriefcaseBusiness />,
+    icon: <img src={portfolioIcon} alt="portfolio" className="w-6 h-6" />,
   },
 ];
 
@@ -36,7 +52,7 @@ export default function Navbar() {
     <nav className="w-full flex items-center justify-between gap-4 p-4 md:p-8 bg-fixed-base text-white">
       <div className="flex items-center gap-6">
         {/* Logo + Title + Beta Badge */}
-        <AssetBaseBeta />
+        <AssetBaseBetaWhite />
 
         {/* Navigation Links */}
         <ul className="hidden lg:flex gap-4">

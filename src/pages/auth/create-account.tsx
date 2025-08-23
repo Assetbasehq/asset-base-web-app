@@ -1,6 +1,6 @@
-import ConnectWalletButton from "@/components/custom/connect-wallet-button";
-import GoogleLoginButton from "@/components/custom/google-login-button";
-import RiseLoginButton from "@/components/custom/rise-login-button";
+import ConnectWalletButton from "@/components/buttons/connect-wallet-button";
+import GoogleLoginButton from "@/components/buttons/google-login-button";
+import RiseLoginButton from "@/components/buttons/rise-login-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,12 +12,15 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeClosed, LockKeyhole, Mail } from "lucide-react";
+import { Eye, EyeClosed, Loader, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import AssetBaseBeta from "@/components/shared/asset-base-beta";
 import { useOnboardingStore } from "@/store/onboarding-store";
+import { CustomAlert } from "@/components/custom/custom-alert";
+import { useMutation } from "@tanstack/react-query";
+import { userService } from "@/api/user.api";
 
 interface FormValues {
   email_address: string;
@@ -26,6 +29,7 @@ interface FormValues {
 
 export default function CreateAccount() {
   const [isPasswordVisible, setPasswordVisible] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const { setOnboardingData } = useOnboardingStore();
 
@@ -37,10 +41,31 @@ export default function CreateAccount() {
 
   const navigate = useNavigate();
 
+  const registerMutation = useMutation({
+    mutationFn: userService.checkIfUserExists,
+    onSuccess: (data, variables) => {
+      setOnboardingData({ step1: variables });
+      navigate("/onboarding/account-type");
+    },
+    onError: (error) => {
+      console.log({ error });
+      setError(error.message);
+    },
+  });
+
   const onSubmit = async (data: FormValues) => {
-    setOnboardingData({ step1: data });
-    navigate("/onboarding/account-type");
+    setError(null);
+    registerMutation.mutateAsync(data);
   };
+
+  const btnText = registerMutation.isPending ? (
+    <span className="flex items-center">
+      <Loader className="mr-2 h-4 w-4 animate-spin" />
+      Please wait...
+    </span>
+  ) : (
+    "Continue"
+  );
 
   return (
     <div className="w-full min-h-screen px-6 flex flex-col items-center justify-center gap-18 bg-custom-gradient">
@@ -134,11 +159,13 @@ export default function CreateAccount() {
                   </p>
                 )}
               </div>
+              {error && <CustomAlert variant="destructive" message={error} />}
               <Button
+                disabled={registerMutation.isPending}
                 type="submit"
                 className="w-full btn-primary py-6 font-normal border-2"
               >
-                Continue
+                {btnText}
               </Button>
             </div>
           </form>

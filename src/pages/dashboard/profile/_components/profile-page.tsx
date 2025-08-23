@@ -1,43 +1,45 @@
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import assestBaseLogo from "@/assets/images/asset-base-logo.svg";
 import gridLine from "@/assets/images/gradient-lines.svg";
 import { useAuthStore } from "@/store/auth-store";
+import { useMutation } from "@tanstack/react-query";
+import { userService } from "@/api/user.api";
+import { useState } from "react";
+import { CustomAlert } from "@/components/custom/custom-alert";
+import PersonalInformation from "./personal-information";
+import NextOfKin from "./next-of-kin";
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const personalInformationForm = useForm({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      dateOfBirth: "",
+  const uploadProfilePhotoMutation = useMutation({
+    mutationFn: userService.uploadProfilePhoto,
+    onSuccess: (data) => {
+      console.log({ data });
+      setError(null);
+      setTimeout(() => setSuccess(data.message), 3000);
+    },
+    onError: (error) => {
+      console.log({ error });
+      setError(error.message);
+      setSuccess(null);
     },
   });
 
-  const nextOfKinInformation = useForm({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      relationship: "",
-    },
-  });
-
-  const onSubmit = (data: any) => {
-    console.log({ data });
-  };
+  const btnText = uploadProfilePhotoMutation.isPending ? (
+    <span className="flex items-center">
+      <Loader className="mr-2 h-4 w-4 animate-spin" />
+      Please wait...
+    </span>
+  ) : (
+    "Continue"
+  );
 
   return (
     <div className="text-start">
@@ -73,170 +75,48 @@ export default function ProfilePage() {
               This image will be displayed on your profile
             </p>
 
-            <div className="relative flex items-center gap-2 border p-2 rounded-sm w-fit border-primary text-primary mt-6 cursor-pointer">
-              <ImagePlus className=" cursor-pointer" />
-              <p>Change Photo</p>
-              <input
-                title="Please select a file"
-                type="file"
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            {error && (
+              <CustomAlert
+                variant="destructive"
+                message={error}
+                className="w-fit"
               />
-            </div>
+            )}
+
+            {success && (
+              <CustomAlert
+                variant="success"
+                message={success}
+                className="w-fit"
+              />
+            )}
+
+            <Button
+              disabled={uploadProfilePhotoMutation.isPending}
+              variant={"outline"}
+              className="relative flex items-center gap-2 border p-2 rounded-sm w-fit border-primary text-primary mt-6 cursor-pointer"
+            >
+              <ImagePlus className="cursor-pointer" />
+              <p>Change Photo</p>
+              <Input
+                onChange={(e) =>
+                  uploadProfilePhotoMutation.mutate(e.target.files![0])
+                }
+                type="file"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+              />
+            </Button>
           </div>
 
           <img
-            src="https://github.com/shadcn.png"
+            src={user?.profile_photo_url || "https://github.com/shadcn.png"}
             alt="profile image"
             className="w-30 h-30 rounded-full"
           />
         </div>
 
-        <Form {...personalInformationForm}>
-          <form
-            onSubmit={personalInformationForm.handleSubmit(onSubmit)}
-            className="flex flex-col lg:flex-row gap-4"
-          >
-            <div className="flex flex-col items-start lg:w-2/5">
-              <h2 className="text-lg font-semibold">Personal Information</h2>
-              <p className="text-muted-foreground">
-                Update your personal details here
-              </p>
-              <Button className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer">
-                Save Chanages
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-3/5">
-              <FormField
-                control={personalInformationForm.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input className="py-6" placeholder="John" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={personalInformationForm.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input className="py-6" placeholder="Doe" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={personalInformationForm.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="py-6"
-                        placeholder="+2345678901"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={personalInformationForm.control}
-                name="dateOfBirth"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date Of Birth</FormLabel>
-                    <FormControl>
-                      <Input className="py-6" placeholder="" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </form>
-        </Form>
-
-        <Form {...nextOfKinInformation}>
-          <form
-            onSubmit={nextOfKinInformation.handleSubmit(onSubmit)}
-            className="flex flex-col lg:flex-row gap-4"
-          >
-            <div className="flex flex-col items-start lg:w-2/5">
-              <h2 className="flex items-center gap-2 text-lg font-semibold">
-                Next Of Kin Information{" "}
-                <small className="text-custom-orange bg-custom-orange/10 px-3 py-1 rounded-full">
-                  Optional
-                </small>
-              </h2>
-              <p className="text-muted-foreground">
-                Update your personal details here
-              </p>
-              <Button className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer">
-                Save Chanages
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-3/5">
-              <FormField
-                control={nextOfKinInformation.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input className="py-6" placeholder="John" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={nextOfKinInformation.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input className="py-6" placeholder="Doe" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={nextOfKinInformation.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="py-6"
-                        placeholder="+2345678901"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={nextOfKinInformation.control}
-                name="relationship"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Relationship</FormLabel>
-                    <FormControl>
-                      <Input className="py-6" placeholder="John" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </form>
-        </Form>
+        <PersonalInformation />
+        <NextOfKin />
       </div>
     </div>
   );

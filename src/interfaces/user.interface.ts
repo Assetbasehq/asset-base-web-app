@@ -21,8 +21,15 @@ export interface IUser {
   updated_at: string;
 }
 
-
-
+export interface NextOfKin {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+  relationship: string;
+  bank_name: string;
+  bank_account_number: string;
+}
 
 export interface IUpdateUser {
   _id?: string;
@@ -34,4 +41,3 @@ export interface IUpdateUser {
   document?: File[] | null;
   roles?: string[];
 }
-

@@ -94,8 +94,13 @@ function App() {
           element: <PersonalDetails />,
         },
         {
-          path: "setup-pin",
-          element: <PINSetup />,
+          element: <AuthGuard />,
+          children: [
+            {
+              path: "pin-setup",
+              element: <PINSetup />,
+            },
+          ],
         },
       ],
     },

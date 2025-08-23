@@ -5,23 +5,26 @@ import { useAuthStore } from "@/store/auth-store";
 
 class AuthService {
   register = async (payload: any) => {
+    
+    console.log({ payload });
+
     try {
       const response = await axiosInstance.post(`/users`, payload);
+      const { email_address, password } = payload;
 
-      console.log({ response });
+      await this.signIn({ email_address, password });
 
-      return response.data?.data;
+      return response.data;
     } catch (error) {
       handleAxiosError(error, "Failed to register");
     }
   };
+
   signIn = async (payload: any) => {
     try {
       const response = await axiosInstance.post(`/sessions`, payload);
       const user = response.data;
-      console.log({ user });
 
-      // Debug the store state
       const storeState = useAuthStore.getState();
       storeState.setUser(user);
 
@@ -31,15 +34,7 @@ class AuthService {
       handleAxiosError(error, "Failed to sign in");
     }
   };
-  logOut = async () => {
-    try {
-      const response = await axiosInstance.get(`/auth/logout`);
-      console.log({ response });
-      return response.data;
-    } catch (error) {
-      handleAxiosError(error, "Failed to logout");
-    }
-  };
+
   getUser = async () => {
     try {
       const response = await axiosInstance.get(`/sessions`);
@@ -54,6 +49,7 @@ class AuthService {
       handleAxiosError(error, "Failed to get user");
     }
   };
+
   updateUser = async (payload: Partial<IUser>) => {
     try {
       const response = await axiosInstance.patch(`/auth`, payload);

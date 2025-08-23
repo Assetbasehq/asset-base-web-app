@@ -12,7 +12,8 @@ export const handleAxiosError = (
   alternateMessage?: string
 ): string => {
   console.log({
-    error: error.response?.data?.error || error.response?.data?.data,
+    message: error.response?.data?.message,
+    response: error.response?.data,
   });
 
   if (!error) {
@@ -20,10 +21,13 @@ export const handleAxiosError = (
   }
 
   if (error instanceof AxiosError && error.response?.status === 422) {
-    throw new Error(
-      error.response?.data?.errors[0].message || alternateMessage
-    );
+    throw new Error(error.response?.data?.message || alternateMessage);
   }
+
+  if (error instanceof AxiosError && error.response?.status === 409) {
+    throw new Error(error.response?.data?.message || alternateMessage);
+  }
+
   if (error instanceof AxiosError) {
     throw new Error(error.response?.data?.message || alternateMessage);
   }

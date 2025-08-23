@@ -19,33 +19,33 @@ axiosInstance.interceptors.request.use(
 );
 
 // Response interceptor → handle expired token
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+// axiosInstance.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const originalRequest = error.config;
 
-    // if token expired
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+//     // if token expired
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
 
-      try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        const res = await axios.post(`${apiUrl}/refresh`, { refreshToken });
+//       try {
+//         const refreshToken = localStorage.getItem("refreshToken");
+//         const res = await axios.post(`${apiUrl}/refresh`, { refreshToken });
 
-        localStorage.setItem("accessToken", res.data.accessToken);
+//         localStorage.setItem("accessToken", res.data.accessToken);
 
-        // retry original request with new token
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res.data.accessToken}`;
-        return axiosInstance(originalRequest);
-      } catch (err) {
-        localStorage.clear(); // force logout
-        window.location.href = "/";
-      }
-    }
-    return Promise.reject(error);
-  }
-);
+//         // retry original request with new token
+//         axiosInstance.defaults.headers.common[
+//           "Authorization"
+//         ] = `Bearer ${res.data.accessToken}`;
+//         return axiosInstance(originalRequest);
+//       } catch (err) {
+//         localStorage.clear(); // force logout
+//         window.location.href = "/";
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 export default axiosInstance;
