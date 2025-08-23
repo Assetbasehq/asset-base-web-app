@@ -77,6 +77,44 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+  makeEmailVerificationRequest = async () => {
+    try {
+      const response = await axiosInstance.post(`verification-requests`, {
+        request_type: "email",
+      });
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  finalizeEmailVerificationRequest = async (payload: {
+    token: string;
+    verification_code: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        `verification-requests/verify`,
+        payload
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  getUserVerificationStatus = async () => {
+    try {
+      const response = await axiosInstance.get(`verifications`);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
 }
 
 export const userService = new UserService();

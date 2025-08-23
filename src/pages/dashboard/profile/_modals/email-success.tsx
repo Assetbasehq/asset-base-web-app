@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import doubleCheckImage from "@/assets/images//check-double-line.svg";
 
-export function PinSuccessDialog({
+export function EmailSuccessDialog({
   open,
   onClose,
 }: {
@@ -20,7 +20,7 @@ export function PinSuccessDialog({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-sm rounded-lg p-6 text-center"
+        className="max-w-md rounded-lg p-6 text-center"
       >
         <div className="flex justify-center">
           <div className="rounded-full bg-green-50 p-4">
@@ -29,10 +29,10 @@ export function PinSuccessDialog({
         </div>
         <DialogHeader className="pb-8 flex flex-col gap-0">
           <DialogTitle className="text-lg font-bold text-center">
-            PIN setup successfully
+            Email Verified
           </DialogTitle>
           <DialogDescription className="text-gray-500 text-center">
-            Please keep your PIN safe, and do not share with anyone
+            Your email has been verified successfully
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-center">
@@ -40,7 +40,7 @@ export function PinSuccessDialog({
             onClick={onClose}
             className="w-full font-medium py-5 rounded-lg btn-secondary"
           >
-            Okay, continue
+            Okay
           </Button>
         </DialogFooter>
       </DialogContent>
