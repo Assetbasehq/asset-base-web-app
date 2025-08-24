@@ -15,11 +15,13 @@ export default function KYCReminder() {
     (data?.email_status === "verified" ? 1 : 0) +
     (data?.id_status === "verified" ? 1 : 0);
 
+  console.log({ completedSteps });
+
   // progress percentage
   const progress = (completedSteps / totalSteps) * 100;
 
   if (isLoading) return <KYCReminderSkeleton />;
-  if (isError) return <KYCReminderError />;
+  // if (isError) return <KYCReminderError />;
 
   return (
     <Link to="/dashboard/profile/kyc">

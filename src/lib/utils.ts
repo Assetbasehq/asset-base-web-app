@@ -13,7 +13,7 @@ export const handleAxiosError = (
 ): string => {
   console.log({
     message: error.response?.data?.message,
-    response: error.response?.data,
+    responseData: error.response?.data,
   });
 
   if (!error) {

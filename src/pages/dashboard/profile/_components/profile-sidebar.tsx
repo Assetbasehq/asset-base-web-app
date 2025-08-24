@@ -125,7 +125,7 @@ export default function ProfileSideBar() {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/auth/login");
   };
 
   return (

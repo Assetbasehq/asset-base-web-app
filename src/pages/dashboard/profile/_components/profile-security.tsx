@@ -75,7 +75,7 @@ export default function ProfileSecurity() {
               <p className="font-medium text-lg">Password Reset</p>
             </div>
           </div>
-          <ChevronRight size={20} className="text-white" />
+          <ChevronRight size={20} className="text-custom-white-text" />
         </Button>
 
         <Button
@@ -89,7 +89,7 @@ export default function ProfileSecurity() {
               <p className="font-medium text-lg">Change PIN</p>
             </div>
           </div>
-          <ChevronRight size={20} className="text-white" />
+          <ChevronRight size={20} className="text-custom-white-text" />
         </Button>
       </div>
 

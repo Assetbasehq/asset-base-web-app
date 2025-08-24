@@ -35,6 +35,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AccountType from "./pages/onboarding/account-type";
 import PersonalDetails from "./pages/onboarding/personal-details";
 import PINSetup from "./pages/onboarding/pin-setup";
+import AssetDetails from "./pages/dashboard/markets/_components/asset-details";
 
 const queryClient = new QueryClient();
 
@@ -121,11 +122,14 @@ function App() {
             },
             {
               path: "markets",
-              element: <Markets />,
               children: [
                 {
-                  path: ":assetId",
+                  index: true,
                   element: <Markets />,
+                },
+                {
+                  path: ":assetId",
+                  element: <AssetDetails />,
                 },
               ],
             },
