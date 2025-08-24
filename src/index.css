@@ -226,7 +226,6 @@
 .btn-secondary {
   @apply border border-custom-black bg-custom-black text-white 
    dark:bg-custom-orange dark:text-custom-white 
-   dark:hover:bg-custom-white dark:hover:text-custom-black 
    dark:border-custom-orange
    cursor-pointer
    transition-all ease-in-out duration-300;
@@ -235,6 +234,10 @@
 .bg-custom-gradient {
   @apply bg-gradient-to-tr from-white via-white to-pink-100 
   dark:bg-custom-black dark:from-custom-black dark:via-custom-black dark:to-custom-black;
+}
+
+.checkbox-orange {
+  @apply data-[state=checked]:bg-custom-orange data-[state=checked]:border-custom-orange dark:data-[state=checked]:border-custom-orange dark:data-[state=checked]:bg-custom-orange;
 }
 
 .no-scrollbar {

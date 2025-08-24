@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -20,13 +21,14 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { useAuthStore } from "@/store/auth-store";
 
-interface ConfirmEmailModalProps {
+interface PasswordResetModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
   token?: string | null;
   resendOTP: () => void;
   isSendingOTP: boolean;
+  setToken: (token: string) => void;
 }
 
 interface FormValues {
@@ -34,13 +36,15 @@ interface FormValues {
   verification_code: string;
 }
 
-export default function ConfirmEmailModal({
+export default function PasswordResetModal({
   isOpen,
   onClose,
   onSuccess,
   token,
   resendOTP,
-}: ConfirmEmailModalProps) {
+  isSendingOTP,
+  setToken,
+}: PasswordResetModalProps) {
   const { user } = useAuthStore();
 
   const [error, setError] = useState<string | null>(null);
@@ -55,8 +59,10 @@ export default function ConfirmEmailModal({
   const verificationCode = form.watch("verification_code");
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: userService.finalizeEmailVerificationRequest,
-    onSuccess: () => {
+    mutationFn: userService.authorizePasswordReset,
+    onSuccess: (data) => {
+      console.log({ newToken: data?.token });
+      setToken(data?.token);
       onSuccess();
     },
     onError: (error) => {
@@ -96,7 +102,14 @@ export default function ConfirmEmailModal({
                   <FormControl>
                     <InputOTP
                       onComplete={() => {
-                        console.log({ verificationCode });
+                        console.log({ verificationCode, token });
+
+                        if (!token) {
+                          setError("Somehing went wrong");
+                          return setTimeout(() => {
+                            setError(null);
+                          }, 2000);
+                        }
 
                         mutateAsync({
                           verification_code: verificationCode,
@@ -106,7 +119,10 @@ export default function ConfirmEmailModal({
                       disabled={isPending}
                       maxLength={6}
                       value={field.value}
-                      onChange={field.onChange}
+                      onChange={(value) => {
+                        setError(null);
+                        field.onChange(value);
+                      }}
                       pattern={REGEXP_ONLY_DIGITS}
                     >
                       <InputOTPGroup className="gap-2 md:gap-4">
@@ -131,10 +147,11 @@ export default function ConfirmEmailModal({
               <Button
                 variant="link"
                 type="button"
+                disabled={isSendingOTP}
                 onClick={() => resendOTP()}
                 className="text-custom-orange underline cursor-pointer px-1"
               >
-                Resend OTP
+                {isSendingOTP ? "Sending..." : "Resend"}
               </Button>
             </p>
           </form>

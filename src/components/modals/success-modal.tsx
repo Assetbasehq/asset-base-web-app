@@ -9,30 +9,46 @@ import {
 import { Button } from "@/components/ui/button";
 import doubleCheckImage from "@/assets/images/check-double-line.svg";
 
-export function EmailSuccessDialog({
-  open,
-  onClose,
-}: {
-  open: boolean;
+interface SuccessModalProps {
+  isOpen: boolean;
   onClose: () => void;
-}) {
+  title: string;
+  description: string;
+  buttonText: string;
+  iconImage?: string;
+}
+
+export default function SuccessModal({
+  isOpen,
+  onClose,
+  iconImage,
+  title,
+  description,
+  buttonText,
+}: SuccessModalProps) {
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         showCloseButton={false}
         className="max-w-md rounded-lg p-6 text-center"
       >
         <div className="flex justify-center">
           <div className="rounded-full bg-green-50 p-4">
-            <img src={doubleCheckImage} className="h-10 w-10" alt="" />{" "}
+            <img
+              src={iconImage || doubleCheckImage}
+              className="h-10 w-10"
+              alt=""
+            />
           </div>
         </div>
         <DialogHeader className="pb-8 flex flex-col gap-0">
           <DialogTitle className="text-lg font-bold text-center">
-            Email Verified
+            {title}
           </DialogTitle>
           <DialogDescription className="text-gray-500 text-center">
-            Your email has been verified successfully
+            {description}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-center">
@@ -40,7 +56,7 @@ export function EmailSuccessDialog({
             onClick={onClose}
             className="w-full font-medium py-5 rounded-full btn-secondary"
           >
-            Okay
+            {buttonText}
           </Button>
         </DialogFooter>
       </DialogContent>

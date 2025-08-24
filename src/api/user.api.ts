@@ -54,6 +54,44 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+  RequestPasswordReset = async () => {
+    try {
+      const response = await axiosInstance.post(`/users/change-password`);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  authorizePasswordReset = async (payload: {
+    token: string;
+    verification_code: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/users/change-password/authorize`,
+        payload
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  changePassword = async (payload: { token: string; password: string }) => {
+    try {
+      const response = await axiosInstance.post(`/users/password`, payload);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+
+  // Others
   getUserNextOfKin = async (userId: string) => {
     try {
       const response = await axiosInstance.get(`/next-of-kins/${userId}`);

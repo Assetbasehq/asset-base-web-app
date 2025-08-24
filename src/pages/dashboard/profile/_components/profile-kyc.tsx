@@ -5,49 +5,51 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { userService } from "@/api/user.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { EmailSuccessDialog } from "../_modals/email-success";
-import { getUserVerificationStatus } from "@/hooks/useVerification";
+import { useUserVerificationStatus } from "@/hooks/useVerification";
 import { cn } from "@/lib/utils";
+import IDVerification from "../_modals/id-verification";
+import ManualVerification from "../_modals/manual-verification";
+import SuccessModal from "@/components/modals/success-modal";
 
 export default function ProfileKYC() {
-  const [showConfirmEmailModal, setShowConfirmEmailModal] = useState(false);
-  const [showEmailSuccessModal, setShowEmailSuccessModal] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
-
   const queryClient = useQueryClient();
-  const { data, isLoading, isError } = getUserVerificationStatus();
+  const { data, isLoading, isError } = useUserVerificationStatus();
 
-  const openConfirmModal = () => setShowConfirmEmailModal(true);
-  const closeConfirmModal = () => setShowConfirmEmailModal(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [modals, setModals] = useState({
+    confirmEmail: false,
+    emailSuccess: false,
+    idVerification: false,
+    manualVerification: false,
+    emailVerified: false,
+    manualSuccess: false,
+  });
 
-  const openEmailSuccessModal = () => setShowEmailSuccessModal(true);
-  const closeEmailSuccessModal = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["email-verification-status"],
-    });
-    setShowEmailSuccessModal(false);
-    closeConfirmModal();
-  };
-
-  const swapModal = () => {
-    setShowConfirmEmailModal(false);
-    setShowEmailSuccessModal(true);
-  };
+  const toggleModal = (key: keyof typeof modals, value: boolean) =>
+    setModals((prev) => ({ ...prev, [key]: value }));
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.makeEmailVerificationRequest,
-    onSuccess: (data) => {
-      console.log({ data });
-      setToken(data?.metadata?.token);
-      openConfirmModal();
+    onSuccess: (res) => {
+      console.log({ res });
+      setToken(res?.metadata?.token ?? "");
+      toggleModal("confirmEmail", true);
     },
     onError: (error) => {
       console.log({ error });
     },
   });
 
-  const emailVerificationStatus = "completed";
-  const IDVerificationStatus = "pending";
+  const handleEmailSuccess = () => {
+    toggleModal("confirmEmail", false);
+    toggleModal("emailSuccess", true);
+    queryClient.invalidateQueries({ queryKey: ["email-verification-status"] });
+  };
+
+  const handleManualSuccess = () => {
+    toggleModal("manualVerification", false);
+    toggleModal("manualSuccess", true);
+  };
 
   return (
     <div className="flex flex-col text-start p-8">
@@ -84,6 +86,7 @@ export default function ProfileKYC() {
 
         <Button
           disabled={isPending || data?.id_status === "verified" || isError}
+          onClick={() => toggleModal("idVerification", true)}
           variant="outline"
           className="border rounded-3xl flex items-center justify-between cursor-pointer h-full w-full"
         >
@@ -108,17 +111,43 @@ export default function ProfileKYC() {
       </div>
 
       <ConfirmEmailModal
-        isOpen={showConfirmEmailModal}
-        onClose={closeConfirmModal}
-        onSuccess={swapModal}
+        isOpen={modals.confirmEmail}
+        onClose={() => toggleModal("confirmEmail", false)}
+        onSuccess={handleEmailSuccess}
         isSendingOTP={isPending}
         resendOTP={() => mutateAsync()}
-        token={token ? token : ""}
+        token={token}
       />
 
-      <EmailSuccessDialog
-        open={showEmailSuccessModal}
-        onClose={() => closeEmailSuccessModal()}
+      <IDVerification
+        isOpen={modals.idVerification}
+        onClose={() => toggleModal("idVerification", false)}
+        switchToManual={() => {
+          toggleModal("idVerification", false);
+          toggleModal("manualVerification", true);
+        }}
+      />
+
+      <ManualVerification
+        isOpen={modals.manualVerification}
+        onClose={() => toggleModal("manualVerification", false)}
+        onSuccess={handleManualSuccess}
+      />
+
+      <SuccessModal
+        isOpen={modals.emailVerified}
+        onClose={() => toggleModal("emailVerified", false)}
+        title="Email Verified"
+        description="Your email has been verified successfully"
+        buttonText="Okay"
+      />
+
+      <SuccessModal
+        isOpen={modals.manualSuccess}
+        onClose={() => toggleModal("manualSuccess", false)}
+        title="Document Upload Successful"
+        description="Your documents will be verified and your status updated soon"
+        buttonText="Close"
       />
     </div>
   );

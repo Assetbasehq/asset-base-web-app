@@ -122,6 +122,12 @@ function App() {
             {
               path: "markets",
               element: <Markets />,
+              children: [
+                {
+                  path: ":assetId",
+                  element: <Markets />,
+                },
+              ],
             },
             {
               path: "liquidity",

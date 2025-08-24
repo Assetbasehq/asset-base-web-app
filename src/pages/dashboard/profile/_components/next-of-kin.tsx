@@ -31,7 +31,7 @@ export default function NextOfKin() {
   const nextOfKinInformation = useForm({
     mode: "onChange",
     defaultValues: {
-      first_name: isLoading ? "" : data?.first_name,
+      first_name: "",
       last_name: "",
       email_address: "",
       phone_number: "",
@@ -39,17 +39,17 @@ export default function NextOfKin() {
     },
   });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     nextOfKinInformation.reset({
-  //       first_name: data?.first_name || "",
-  //       last_name: data?.last_name || "",
-  //       email_address: data?.email_address || "",
-  //       phone_number: data?.phone_number || "",
-  //       relationship: data?.relationship || "",
-  //     });
-  //   }
-  // }, [data, nextOfKinInformation.reset]);
+  useEffect(() => {
+    if (data) {
+      nextOfKinInformation.reset({
+        first_name: data?.first_name || "",
+        last_name: data?.last_name || "",
+        email_address: data?.email_address || "",
+        phone_number: data?.phone_number || "",
+        relationship: data?.relationship || "",
+      });
+    }
+  }, [data, nextOfKinInformation.reset]);
 
   const nextOfKinMutation = useMutation({
     mutationFn: (data: any) =>
@@ -79,7 +79,7 @@ export default function NextOfKin() {
   const btnText = nextOfKinMutation.isPending ? (
     <span className="flex items-center">
       <Loader className="mr-2 h-4 w-4 animate-spin" />
-      Please wait...
+      Saving...
     </span>
   ) : (
     "Save Changes"
@@ -137,7 +137,7 @@ export default function NextOfKin() {
               rules={{
                 required: "Email is required",
                 pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,6}$/,
+                  value: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,3}$/,
                   message: "Please enter a valid email address",
                 },
               }}

@@ -7,9 +7,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import doubleCheckImage from "@/assets/images/check-double-line.svg";
-
-export function EmailSuccessDialog({
+import doubleCheckImage from "@/assets/icons/check-double-line.png";
+export default function DocumentUploadSuccessDialog({
   open,
   onClose,
 }: {
@@ -29,10 +28,10 @@ export function EmailSuccessDialog({
         </div>
         <DialogHeader className="pb-8 flex flex-col gap-0">
           <DialogTitle className="text-lg font-bold text-center">
-            Email Verified
+            Document Upload was successful
           </DialogTitle>
           <DialogDescription className="text-gray-500 text-center">
-            Your email has been verified successfully
+            Your documents will be verified and status updated soon
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-center">
@@ -40,7 +39,7 @@ export function EmailSuccessDialog({
             onClick={onClose}
             className="w-full font-medium py-5 rounded-full btn-secondary"
           >
-            Okay
+            BACK TO ACCOUNT
           </Button>
         </DialogFooter>
       </DialogContent>

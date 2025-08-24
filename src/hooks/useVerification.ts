@@ -1,7 +1,7 @@
 import { userService } from "@/api/user.api";
 import { useQuery } from "@tanstack/react-query";
 
-export const getUserVerificationStatus = () => {
+export const useUserVerificationStatus = () => {
   return useQuery<
     {
       account_id: string;
