@@ -1,3 +1,5 @@
+import { userService } from "@/api/user.api";
+import { CustomAlert } from "@/components/custom/custom-alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,31 +16,49 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { useAuthStore } from "@/store/auth-store";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
 interface PasswordResetModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
+  token?: string | null;
+  resendOTP: () => void;
+  isSendingOTP: boolean;
+  setToken: (token: string) => void;
 }
 
 interface FormValues {
   otp: string[];
 }
 
-export default function ResetPasswordModal({
+export default function PublicResetPasswordModal({
   isOpen,
   onClose,
+  onSuccess,
+  token,
+  resendOTP,
+  isSendingOTP,
+  setToken,
 }: PasswordResetModalProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
+  const { user } = useAuthStore();
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
-  };
+  const [error, setError] = useState<string | null>(null);
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: userService.authorizePasswordReset,
+    onSuccess: (data) => {
+      console.log({ newToken: data?.token });
+      setToken(data?.token);
+      onSuccess();
+    },
+    onError: (error) => {
+      console.log({ error });
+      setError(error.message);
+    },
+  });
 
   if (!isOpen) {
     return null;
@@ -46,65 +66,68 @@ export default function ResetPasswordModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Reset Password</DialogTitle>
-            <DialogDescription>
-              A reset code has been sent to email. Provide the code read out to
-              complete your password reset.
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Reset Password</DialogTitle>
+          <DialogDescription>
+            A reset code has been sent to email. Provide the code read out to
+            complete your password reset.
+          </DialogDescription>
+        </DialogHeader>
 
-          <div className="grid gap-4 w-full">
-            <InputOTP maxLength={6}>
-              {[...Array(6)].map((_, index) => (
-                <InputOTPGroup key={index} className="w-full ">
-                  <InputOTPSlot
-                    index={index}
-                    className={cn(
-                      `w-full p-2 sm:p-6 data-[active=true]:border-primary data-[active=true]:ring-primary data-[active=true]:ring-0.5`,
-                      {
-                        "border-primary": !!errors.otp?.[index],
-                      }
-                    )}
-                    {...register(`otp.${index}`, { required: true })}
-                  />
-                </InputOTPGroup>
-              ))}
-            </InputOTP>
-            {errors.otp && (
-              <p className="text-sm text-destructive">
-                All fields are required
-              </p>
-            )}
-          </div>
+        <div className="grid gap-4 w-full">
+          <InputOTP
+            onComplete={() => {
+              if (!token) {
+                setError("Somehing went wrong");
+                return setTimeout(() => {
+                  setError(null);
+                }, 2000);
+              }
 
-          <div className="">
-            <small className="text-muted-foreground">
-              This code is valid for 60 seconds
-            </small>
-          </div>
+              // mutateAsync({
+              //   verification_code: verificationCode,
+              //   token: token as string,
+              // });
+            }}
+            disabled={isPending}
+            maxLength={6}
+          >
+            {[...Array(6)].map((_, index) => (
+              <InputOTPGroup key={index} className="w-full ">
+                <InputOTPSlot
+                  index={index}
+                  className={cn(
+                    `w-full p-2 sm:p-6 data-[active=true]:border-primary data-[active=true]:ring-primary data-[active=true]:ring-0.5`
+                  )}
+                />
+              </InputOTPGroup>
+            ))}
+          </InputOTP>
+        </div>
 
-          <DialogFooter>
-            <div className="flex flex-col items-center gap-4 w-full">
-              <Button type="submit" className="w-full py-5 bg-black">
-                Submit
+        {error && <CustomAlert message={error} variant="destructive" />}
+
+        <small className="text-muted-foreground">
+          This code is valid for 60 seconds
+        </small>
+
+        <DialogFooter>
+          <div className="flex flex-col items-center justify-center gap-4 w-full">
+            <p>
+              Not received OTP?
+              <Button
+                variant="link"
+                className="text-custom-orange cursor-pointer underline font-semibold px-0"
+                onClick={() => resendOTP()}
+                disabled={isSendingOTP}
+              >
+                {isSendingOTP ? "Resending OTP..." : "Resend OTP"}
               </Button>
-
-              <p>
-                Not received OTP?{" "}
-                <Link
-                  className="text-primary underline font-semibold"
-                  to="/auth/create-password"
-                >
-                  Resend OTP
-                </Link>
-              </p>
-            </div>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+            </p>
+          </div>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }

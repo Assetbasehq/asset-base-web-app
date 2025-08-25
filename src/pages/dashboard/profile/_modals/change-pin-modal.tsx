@@ -4,7 +4,6 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -19,15 +18,13 @@ import { useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { useAuthStore } from "@/store/auth-store";
+import ButtonLoader from "@/components/custom/button-loader";
 
 interface PasswordResetModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
   token?: string | null;
-  resendOTP: () => void;
-  isSendingOTP: boolean;
-  setToken: (token: string) => void;
 }
 
 interface FormValues {
@@ -35,14 +32,11 @@ interface FormValues {
   verification_code: string;
 }
 
-export default function PasswordResetModal({
+export default function ChangePinModal({
   isOpen,
   onClose,
   onSuccess,
   token,
-  resendOTP,
-  isSendingOTP,
-  setToken,
 }: PasswordResetModalProps) {
   const { user } = useAuthStore();
 
@@ -55,13 +49,10 @@ export default function PasswordResetModal({
     },
   });
 
-  const verificationCode = form.watch("verification_code");
-
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.authorizePasswordReset,
     onSuccess: (data) => {
-      console.log({ newToken: data?.token });
-      setToken(data?.token);
+      console.log(data);
       onSuccess();
     },
     onError: (error) => {
@@ -100,21 +91,21 @@ export default function PasswordResetModal({
                 <FormItem>
                   <FormControl>
                     <InputOTP
-                      onComplete={() => {
-                        console.log({ verificationCode, token });
+                      //   onComplete={() => {
+                      //     console.log({ verificationCode, token });
 
-                        if (!token) {
-                          setError("Somehing went wrong");
-                          return setTimeout(() => {
-                            setError(null);
-                          }, 2000);
-                        }
+                      //     if (!token) {
+                      //       setError("Somehing went wrong");
+                      //       return setTimeout(() => {
+                      //         setError(null);
+                      //       }, 2000);
+                      //     }
 
-                        mutateAsync({
-                          verification_code: verificationCode,
-                          token: token as string,
-                        });
-                      }}
+                      //     mutateAsync({
+                      //       verification_code: verificationCode,
+                      //       token: token as string,
+                      //     });
+                      //   }}
                       disabled={isPending}
                       maxLength={6}
                       value={field.value}
@@ -141,18 +132,15 @@ export default function PasswordResetModal({
 
             {error && <CustomAlert message={error} variant="destructive" />}
 
-            <p>
-              Not received the OTP?
-              <Button
-                variant="link"
-                type="button"
-                disabled={isSendingOTP}
-                onClick={() => resendOTP()}
-                className="text-custom-orange underline cursor-pointer px-1"
-              >
-                {isSendingOTP ? "Sending..." : "Resend"}
-              </Button>
-            </p>
+            <ButtonLoader
+              type="submit"
+              disabled={isPending}
+              isLoading={isPending}
+              className="w-full"
+              loadingText="Please wait..."
+            >
+              Confirm
+            </ButtonLoader>
           </form>
         </Form>
       </DialogContent>

@@ -90,6 +90,42 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+  RequestPinChange = async () => {
+    try {
+      const response = await axiosInstance.post(`/users/pin-reset/otp`);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  authorizePinChange = async (payload: {
+    token: string;
+    verification_code: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/users/pin-reset/authorize`,
+        payload
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  changePin = async (payload: { token: string; password: string }) => {
+    try {
+      const response = await axiosInstance.post(`/users/pin`, payload);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
 
   // Others
   getUserNextOfKin = async (userId: string) => {

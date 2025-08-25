@@ -10,9 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeClosed, Loader, Loader2, LockKeyhole, Mail } from "lucide-react";
+import { Eye, EyeClosed, Loader, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
@@ -20,6 +27,8 @@ import AssetBaseBeta from "@/components/shared/asset-base-beta";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api/auth.api";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import ButtonLoader from "@/components/custom/button-loader";
+import { Label } from "@/components/ui/label";
 
 interface FormValues {
   email_address: string;
@@ -30,13 +39,15 @@ export default function Login() {
   const [isPasswordVisible, setPasswordVisible] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
-
   const navigate = useNavigate();
+
+  const form = useForm<FormValues>({
+    mode: "onChange",
+    defaultValues: {
+      email_address: "",
+      password: "",
+    },
+  });
 
   const loginMutation = useMutation({
     mutationFn: authService.signIn,
@@ -50,15 +61,13 @@ export default function Login() {
     },
   });
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = (data: FormValues) => {
     setError(null);
-    console.log(data);
     loginMutation.mutateAsync(data);
   };
 
   return (
-    <div className=" w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-pink-50 to-pink-100 dark:from-black dark:via-black dark:to-black">
-      {/* <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue [background:linear-gradient(to_top_right,_white_0%,_white_60%,_#f9c5d1_100%)]"> */}
+    <div className="w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-pink-50 to-pink-100 dark:from-black dark:via-black dark:to-black">
       <AssetBaseBeta />
 
       <Card className="w-full max-w-lg border text-black bg-white dark:bg-custom-card dark:text-white">
@@ -70,102 +79,130 @@ export default function Login() {
         </CardHeader>
 
         <CardContent>
+          {/* Social login buttons */}
           <div className="flex flex-col gap-4">
             <RiseLoginButton />
             <ConnectWalletButton />
             <GoogleLoginButton />
           </div>
 
+          {/* Divider */}
           <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t my-6">
             <span className="bg-background dark:bg-custom-card text-muted-foreground relative z-10 px-2 text-xs">
               OR
             </span>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="">
-                  Email
-                </Label>
-                <div className="flex items-center relative">
-                  <Mail
-                    size={22}
-                    className="text-muted-foreground absolute left-3"
-                  />
-                  <Input
-                    {...register("email_address", { required: true })}
-                    id="email"
-                    type="email"
-                    placeholder="johnmercy03@gmail.com"
-                    className="w-full py-6 pl-10 pr-3 "
-                  />
-                </div>
-                {errors.email_address && (
-                  <p className="text-sm text-destructive text-right">
-                    Email is required
-                  </p>
+          {/* Form */}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-6"
+            >
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email_address"
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,3}$/,
+                    message: "Please enter a valid email address",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Email</Label>
+                    <FormControl>
+                      <div className="flex items-center relative">
+                        <Mail
+                          size={22}
+                          className="text-muted-foreground absolute left-3"
+                        />
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="johnmercy03@gmail.com"
+                          className="w-full py-6 pl-10 pr-3"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-end" />
+                  </FormItem>
                 )}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password" className="">
-                  Password
-                </Label>
-                <div className="flex items-center relative">
-                  <LockKeyhole className="text-muted-foreground absolute left-3" />
-                  <Input
-                    {...register("password", { required: true })}
-                    id="password"
-                    type={isPasswordVisible ? "password" : "text"}
-                    placeholder="**********"
-                    className="w-full py-6 pl-10 pr-3 align-text-bottom"
-                  />
-                  {isPasswordVisible ? (
-                    <Eye
-                      size={22}
-                      className="absolute right-3 cursor-pointer"
-                      onClick={() => setPasswordVisible(!isPasswordVisible)}
-                    />
-                  ) : (
-                    <EyeClosed
-                      size={22}
-                      className="absolute right-3 cursor-pointer"
-                      onClick={() => setPasswordVisible(!isPasswordVisible)}
-                    />
-                  )}
-                </div>
-                {errors.password && (
-                  <p className="text-sm text-destructive text-right">
-                    Password is required
-                  </p>
+              />
+
+              {/* Password */}
+              <FormField
+                control={form.control}
+                name="password"
+                rules={{
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Password</Label>
+                    <FormControl>
+                      <div className="flex items-center relative">
+                        <LockKeyhole className="text-muted-foreground absolute left-3" />
+                        <Input
+                          {...field}
+                          type={isPasswordVisible ? "password" : "text"}
+                          placeholder="**********"
+                          className="w-full py-6 pl-10 pr-3 align-text-bottom"
+                        />
+                        {isPasswordVisible ? (
+                          <Eye
+                            size={22}
+                            className="absolute right-3 cursor-pointer"
+                            onClick={() =>
+                              setPasswordVisible(!isPasswordVisible)
+                            }
+                          />
+                        ) : (
+                          <EyeClosed
+                            size={22}
+                            className="absolute right-3 cursor-pointer"
+                            onClick={() =>
+                              setPasswordVisible(!isPasswordVisible)
+                            }
+                          />
+                        )}
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-end" />
+                  </FormItem>
                 )}
+              />
 
-                {error && <CustomAlert variant="destructive" message={error} />}
+              {/* Error Alert */}
+              {error && <CustomAlert variant="destructive" message={error} />}
 
-                <Link
-                  to="/auth/forgot-password"
-                  className="text-sm underline text-muted-foreground text-left"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <Button
-                type="submit"
-                disabled={loginMutation.isPending}
-                className="w-full btn-primary py-6 font-semibold cursor-pointer"
+              {/* Forgot password link */}
+              <Link
+                to="/auth/forgot-password"
+                className="text-sm underline text-muted-foreground text-left"
               >
-                {loginMutation.isPending ? (
-                  <span className="flex items-center">
-                    <Loader className="mr-2 h-4 w-4 animate-spin" />
-                    Loading
-                  </span>
-                ) : (
-                  "Login"
-                )}
-              </Button>
-            </div>
-          </form>
+                Forgot password?
+              </Link>
+
+              <ButtonLoader
+                isLoading={loginMutation.isPending}
+                disabled={loginMutation.isPending || !form.formState.isValid}
+                type="submit"
+                className="w-full btn-primary py-6 font-semibold cursor-pointer"
+                loadingText="Please wait..."
+              >
+                Login
+              </ButtonLoader>
+            </form>
+          </Form>
         </CardContent>
+
         <CardFooter className="flex-col gap-2">
           <p className="mt-4 text-muted-foreground">
             Don't have an AssetBase account?

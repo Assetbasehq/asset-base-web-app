@@ -34,7 +34,7 @@ interface FormValues {
   confirm_password: string;
 }
 
-export default function PasswordChangeModal({
+export default function PublicPasswordChangeModal({
   isOpen,
   onClose,
   token,
@@ -77,7 +77,6 @@ export default function PasswordChangeModal({
   if (!isOpen) {
     return null;
   }
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent

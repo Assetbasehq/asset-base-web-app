@@ -35,7 +35,7 @@ interface FormValues {
   verification_code: string;
 }
 
-export default function PasswordResetModal({
+export default function ChangePinRequestModal({
   isOpen,
   onClose,
   onSuccess,
@@ -58,7 +58,7 @@ export default function PasswordResetModal({
   const verificationCode = form.watch("verification_code");
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: userService.authorizePasswordReset,
+    mutationFn: userService.authorizePinChange,
     onSuccess: (data) => {
       console.log({ newToken: data?.token });
       setToken(data?.token);

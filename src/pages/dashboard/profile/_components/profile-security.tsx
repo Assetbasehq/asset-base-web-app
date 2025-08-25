@@ -6,51 +6,67 @@ import PasswordResetModal from "../_modals/password-reset-modal";
 import { useState } from "react";
 import PasswordChangeModal from "../_modals/password-change-modal";
 import SuccessModal from "@/components/modals/success-modal";
+import ChangePinRequestModal from "../_modals/change-pin-request-modal";
+import ChangePinModal from "../_modals/change-pin-modal";
+import { CustomAlert } from "@/components/custom/custom-alert";
+
+interface ModalState {
+  passwordReset: boolean;
+  passwordChange: boolean;
+  passwordSuccess: boolean;
+  pinRequest: boolean;
+  pinChange: boolean;
+  pinSuccess: boolean;
+}
 
 export default function ProfileSecurity() {
-  const [isPasswordResetModalOpen, setIsPasswordResetModalOpen] =
-    useState(false);
-  const [isPasswordChangeModalOpen, setIsPasswordChangeModalOpen] =
-    useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [modals, setModals] = useState<ModalState>({
+    passwordReset: false,
+    passwordChange: false,
+    passwordSuccess: false,
+    pinRequest: false,
+    pinChange: false,
+    pinSuccess: false,
+  });
   const [token, setToken] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const openPasswordResetModal = () => {
-    setIsPasswordResetModalOpen(true);
-  };
+  const openModal = (key: keyof ModalState) =>
+    setModals((prev) => ({ ...prev, [key]: true }));
 
-  const closePasswordResetModal = () => {
-    setIsPasswordResetModalOpen(false);
-  };
+  const closeModal = (key: keyof ModalState) =>
+    setModals((prev) => ({ ...prev, [key]: false }));
 
-  const openPasswordChangeModal = () => {
-    closePasswordResetModal();
-    setIsPasswordChangeModalOpen(true);
-  };
+  const closeAllModals = () =>
+    setModals({
+      passwordReset: false,
+      passwordChange: false,
+      passwordSuccess: false,
+      pinRequest: false,
+      pinChange: false,
+      pinSuccess: false,
+    });
 
-  const closePasswordChangeModal = () => {
-    setIsPasswordChangeModalOpen(false);
-  };
-
-  const openSuccessModal = () => {
-    closePasswordChangeModal();
-    setShowSuccessModal(true);
-  };
-
-  const closeSuccessModal = () => {
-    setShowSuccessModal(false);
-  };
-
-  const { mutateAsync: sendOTP, isPending } = useMutation({
+  const passwordResetMutation = useMutation({
     mutationFn: userService.RequestPasswordReset,
     onSuccess: (data) => {
-      console.log({ data });
-      openPasswordResetModal();
       setToken(data?.token);
-      // setToken(data?.metadata?.token);
-      // openConfirmModal();
+      openModal("passwordReset");
     },
     onError: (error) => {
+      setError(error.message);
+      console.log({ error });
+    },
+  });
+
+  const pinChangeMutation = useMutation({
+    mutationFn: userService.RequestPinChange,
+    onSuccess: (data) => {
+      setToken(data?.token);
+      openModal("passwordReset");
+    },
+    onError: (error) => {
+      setError(error.message);
       console.log({ error });
     },
   });
@@ -64,13 +80,13 @@ export default function ProfileSecurity() {
 
       <div className="flex flex-col gap-4 mt-8">
         <Button
-          disabled={isPending}
-          onClick={() => sendOTP()}
+          disabled={passwordResetMutation.isPending}
+          onClick={() => passwordResetMutation.mutateAsync()}
           variant="outline"
           className="border rounded-3xl flex items-center justify-between cursor-pointer h-full w-full"
         >
           <div className="flex items-center gap-4 w-full p-4">
-            <LockKeyhole className=" " />
+            <LockKeyhole />
             <div className="flex items-center gap-4">
               <p className="font-medium text-lg">Password Reset</p>
             </div>
@@ -79,7 +95,8 @@ export default function ProfileSecurity() {
         </Button>
 
         <Button
-          disabled={isPending}
+          disabled={pinChangeMutation.isPending}
+          onClick={() => pinChangeMutation.mutateAsync()}
           variant="outline"
           className="border rounded-3xl flex items-center justify-between cursor-pointer h-full w-full"
         >
@@ -93,28 +110,73 @@ export default function ProfileSecurity() {
         </Button>
       </div>
 
+      {error && <CustomAlert variant="destructive" message={error} />}
+
+      {/* Password Reset Modal */}
       <PasswordResetModal
-        isOpen={isPasswordResetModalOpen}
-        onClose={closePasswordResetModal}
-        resendOTP={() => sendOTP()}
-        isSendingOTP={isPending}
+        isOpen={modals.passwordReset}
+        onClose={() => closeModal("passwordReset")}
+        resendOTP={() => passwordResetMutation.mutateAsync()}
+        isSendingOTP={passwordResetMutation.isPending}
         setToken={setToken}
-        onSuccess={openPasswordChangeModal}
+        onSuccess={() => {
+          closeModal("passwordReset");
+          openModal("passwordChange");
+        }}
         token={token}
       />
 
+      {/* Password Change Modal */}
       <PasswordChangeModal
-        isOpen={isPasswordChangeModalOpen}
-        onClose={() => setIsPasswordChangeModalOpen(false)}
+        isOpen={modals.passwordChange}
+        onClose={() => closeModal("passwordChange")}
         token={token}
-        OnSuccess={openSuccessModal}
+        onSuccess={() => {
+          closeModal("passwordChange");
+          openModal("passwordSuccess");
+        }}
       />
 
+      {/* Success Modal */}
       <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={closeSuccessModal}
+        isOpen={modals.passwordSuccess}
+        onClose={() => closeModal("passwordSuccess")}
         title="Your password has been changed successfully"
         description="You have successfully changed your password. Remember to store your new password safely to avoid any unauthorized access to your account."
+        buttonText="BACK TO MY ACCOUNT"
+      />
+
+      {/* Change Pin Request Modal */}
+      <ChangePinRequestModal
+        isOpen={modals.pinRequest}
+        onClose={() => closeModal("pinRequest")}
+        resendOTP={() => pinChangeMutation.mutateAsync()}
+        isSendingOTP={pinChangeMutation.isPending}
+        setToken={setToken}
+        onSuccess={() => {
+          closeModal("pinRequest");
+          openModal("pinChange");
+        }}
+        token={token}
+      />
+
+      {/* Change Pin Modal */}
+      <ChangePinModal
+        isOpen={modals.pinChange}
+        onClose={() => closeModal("pinChange")}
+        token={token}
+        onSuccess={() => {
+          closeModal("pinChange");
+          openModal("pinSuccess");
+        }}
+      />
+
+      {/* Success Modal */}
+      <SuccessModal
+        isOpen={modals.pinSuccess}
+        onClose={() => closeModal("pinSuccess")}
+        title="Your PIN has been changed successfully"
+        description="You have successfully changed your PIN. Remember to store your new PIN safely to avoid any unauthorized actions on your account."
         buttonText="BACK TO MY ACCOUNT"
       />
     </div>
