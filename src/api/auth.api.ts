@@ -5,7 +5,6 @@ import { useAuthStore } from "@/store/auth-store";
 
 class AuthService {
   register = async (payload: any) => {
-    
     console.log({ payload });
 
     try {

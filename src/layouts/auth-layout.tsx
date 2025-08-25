@@ -10,7 +10,7 @@ export default function AuthLayout() {
         <img
           src={gradientLines}
           alt=""
-          className="absolute h-screen top-5 right-30"
+          className="absolute min-h-[95%] top-5 right-30"
         />
         <div className="flex flex-col gap-13 items-start">
           <h1 className="text-6xl max-w-lg">
