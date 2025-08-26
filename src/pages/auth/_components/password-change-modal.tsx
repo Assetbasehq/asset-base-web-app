@@ -34,7 +34,7 @@ interface FormValues {
   confirm_password: string;
 }
 
-export default function PublicPasswordChangeModal({
+export default function UnauthorizedPasswordChangeModal({
   isOpen,
   onClose,
   token,

@@ -34,7 +34,7 @@ interface FormValues {
   otp: string[];
 }
 
-export default function PublicResetPasswordModal({
+export default function UnauthorizedResetPasswordModal({
   isOpen,
   onClose,
   onSuccess,

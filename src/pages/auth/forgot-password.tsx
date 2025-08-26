@@ -17,17 +17,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
-import ResetPasswordModal from "./_components/reset-password-modal";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { useMutation } from "@tanstack/react-query";
 import { userService } from "@/api/user.api";
 import { CustomAlert } from "@/components/custom/custom-alert";
-import PublicResetPasswordModal from "./_components/reset-password-modal";
-import PublicPasswordChangeModal from "./_components/password-change-modal";
+import UnauthorizedResetPasswordModal from "./_components/reset-password-modal";
+import UnauthorizedPasswordChangeModal from "./_components/password-change-modal";
 
 interface FormValues {
-  email: string;
+  email_address: string;
 }
 
 export default function ForgotPassword() {
@@ -42,7 +41,7 @@ export default function ForgotPassword() {
   const form = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
-      email: "",
+      email_address: "",
     },
   });
 
@@ -50,9 +49,10 @@ export default function ForgotPassword() {
     setModals((prev) => ({ ...prev, [key]: value }));
 
   const forgotPasswordMutation = useMutation({
-    mutationFn: userService.checkIfUserExists,
+    mutationFn: userService.unauthorizedForgotPasswordRequest,
     onSuccess: (data) => {
       console.log({ data });
+      setToken(data?.metadata?.token ?? "");
       toggleModal("resetPassword", true);
     },
     onError: (error) => {
@@ -64,7 +64,7 @@ export default function ForgotPassword() {
   const onSubmit = async (data: FormValues) => {
     console.log({ data });
 
-    // forgotPasswordMutation.mutateAsync(data.email);
+    forgotPasswordMutation.mutateAsync({ email_address: data.email_address });
   };
 
   return (
@@ -87,7 +87,7 @@ export default function ForgotPassword() {
               {/* Email */}
               <FormField
                 control={form.control}
-                name="email"
+                name="email_address"
                 rules={{
                   required: "Email is required",
                   pattern: {
@@ -138,7 +138,7 @@ export default function ForgotPassword() {
         </CardFooter>
       </Card>
 
-      <PublicResetPasswordModal
+      <UnauthorizedResetPasswordModal
         isOpen={modals.resetPassword}
         onClose={() => toggleModal("resetPassword", false)}
         token={token}
@@ -149,11 +149,13 @@ export default function ForgotPassword() {
         setToken={setToken}
         isSendingOTP={forgotPasswordMutation.isPending}
         resendOTP={() =>
-          forgotPasswordMutation.mutateAsync(form.getValues().email)
+          forgotPasswordMutation.mutateAsync({
+            email_address: form.getValues("email_address"),
+          })
         }
       />
 
-      <PublicPasswordChangeModal
+      <UnauthorizedPasswordChangeModal
         isOpen={modals.changePassword}
         onClose={() => toggleModal("changePassword", false)}
         onSuccess={() => toggleModal("success", true)}

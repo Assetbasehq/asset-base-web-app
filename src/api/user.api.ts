@@ -126,6 +126,34 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+  unauthorizedForgotPasswordRequest = async (payload: {
+    email_address: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/users/forgot-password`,
+        payload
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
+  unauthorizedPasswordReset = async (payload: {
+    token: string;
+    password: string;
+  }) => {
+    try {
+      const response = await axiosInstance.patch(`/users/password`, payload);
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
 
   // Others
   getUserNextOfKin = async (userId: string) => {
