@@ -12,18 +12,24 @@ import { useMutation } from "@tanstack/react-query";
 interface IDVerificationProps {
   isOpen: boolean;
   onClose: () => void;
+  setUserData: (data: any) => void;
   switchToManual: () => void;
+  switchToDojah: () => void;
 }
 
 export default function IDVerification({
   isOpen,
   onClose,
+  setUserData,
   switchToManual,
+  switchToDojah,
 }: IDVerificationProps) {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: verificationService.initiateDojahVerification,
     onSuccess: (data) => {
       console.log({ data });
+      setUserData(data);
+      switchToDojah();
     },
     onError: (error) => {
       console.log({ error });

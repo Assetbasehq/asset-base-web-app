@@ -12,7 +12,7 @@ export default function TrendingSecurities() {
         </div>
         <Link
           to="#"
-          className="text-primary font-semibold cursor-pointer underline text-sm"
+          className="text-custom-orange font-semibold cursor-pointer underline text-sm"
         >
           View All
         </Link>

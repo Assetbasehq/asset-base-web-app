@@ -61,7 +61,7 @@ export default function ProfilePage() {
           className="absolute -top-20 right-0 opacity-40 w-150 hidden lg:block"
         />
 
-        <div className="flex gap-4 mt-6 relative z-30">
+        <div className="flex gap-4 mt-6 relative z-30 overflow-x-scroll no-scrollbar">
           <ProfileSkeleton />
           <ProfileSkeleton />
           <ProfileSkeleton />

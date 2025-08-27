@@ -11,72 +11,44 @@ import investmentCertificateIcon from "@/assets/icons/investment-certificate-ico
 import contactUsIcon from "@/assets/icons/contact-us-icon.svg";
 import deleteMyAccountIcon from "@/assets/icons/delete-my-account-icon.svg";
 import logoutIcon from "@/assets/icons/logout-icon.svg";
+import {
+  RiUser2Fill,
+  RiListOrdered,
+  RiCheckboxLine,
+  RiShieldUserLine,
+  RiGroupLine,
+  RiBookletLine,
+} from "react-icons/ri";
 
 const sideBarLinks = [
   {
     name: "Profile",
-    icon: (
-      <img
-        src={profileIcon}
-        alt="profile"
-        className="border p-2 rounded-full w-10 h-10 object-contain"
-      />
-    ),
+    icon: <RiUser2Fill className="w-6 h-6" />,
     path: "/dashboard/profile",
   },
   {
     name: "Leaderboard",
-    icon: (
-      <img
-        src={leaderboardIcon}
-        alt="leaderboard"
-        className="border p-2 rounded-full w-10 h-10 object-contain"
-      />
-    ),
+    icon: <RiListOrdered className="w-6 h-6" />,
     path: "/dashboard/profile/leaderboard",
   },
   {
     name: "KYC",
-    icon: (
-      <img
-        src={kycIcon}
-        alt="kyc"
-        className="border p-2 rounded-full w-10 h-10 object-contain"
-      />
-    ),
+    icon: <RiCheckboxLine className="w-6 h-6" />,
     path: "/dashboard/profile/kyc",
   },
   {
     name: "Security",
-    icon: (
-      <img
-        src={securityIcon}
-        alt="security"
-        className="border p-2 rounded-full w-10 h-10 object-contain"
-      />
-    ),
+    icon: <RiShieldUserLine className="w-6 h-6" />,
     path: "/dashboard/profile/security",
   },
   {
     name: "Referrals",
-    icon: (
-      <img
-        src={referralsIcon}
-        alt="referrals"
-        className="border p-2 rounded-full w-10 h-10 object-contain"
-      />
-    ),
+    icon: <RiGroupLine className="w-6 h-6" />,
     path: "/dashboard/profile/referrals",
   },
   {
     name: "Account Statment",
-    icon: (
-      <img
-        src={accountStatementIcon}
-        alt="account-statement"
-        className="border p-2 rounded-full w-10 h-10 object-contain"
-      />
-    ),
+    icon: <RiBookletLine className="w-6 h-6" />,
     path: "/dashboard/profile/account-statement",
   },
   {
@@ -134,12 +106,18 @@ export default function ProfileSideBar() {
         <Link
           key={link.path}
           className={cn(`text-lg font-semibold py-2 block`, {
-            "text-primary": isActiveLink(link.path),
+            "text-custom-orange": isActiveLink(link.path),
           })}
           to={link.path}
         >
           <span className="flex items-center gap-2">
-            {link.icon}
+            <span
+              className={cn("border p-2 rounded-full", {
+                "border-custom-orange": isActiveLink(link.path),
+              })}
+            >
+              {link.icon}
+            </span>
             {link.name}
           </span>
         </Link>

@@ -4,44 +4,33 @@ import { Bell, Menu, Plus, Search, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { AssetBaseBetaWhite } from "./asset-base-beta";
-
-import dashboardIcon from "@/assets/icons/dashboard-icon.png";
-import walletIcon from "@/assets/icons/wallet-icon.png";
-import marketsIcon from "@/assets/icons/markets-icon.png";
-import liquidityIcon from "@/assets/icons/liquidity-icon.png";
-import portfolioIcon from "@/assets/icons/portfolio-icon.png";
+import { RiWalletLine, RiBriefcaseLine, RiDashboardLine, RiStockLine, RiBox2Fill } from "react-icons/ri";
 
 const links = [
   {
     label: "Dashboard",
     to: "/dashboard",
-    icon: (
-      <img
-        src={dashboardIcon}
-        alt="dashboard"
-        className="w-6 h-6 text-custom-orange"
-      />
-    ),
+    icon: <RiDashboardLine className="w-6 h-6" />,
   },
   {
     label: "Wallet",
     to: "/dashboard/wallet",
-    icon: <img src={walletIcon} alt="wallet" className="w-6 h-6" />,
+    icon: <RiWalletLine className="w-6 h-6" />,
   },
   {
     label: "Markets",
     to: "/dashboard/markets",
-    icon: <img src={marketsIcon} alt="markets" className="w-6 h-6" />,
+    icon: <RiStockLine className="w-6 h-6" />,
   },
   {
     label: "Liquidity",
     to: "/dashboard/liquidity",
-    icon: <img src={liquidityIcon} alt="liquidity" className="w-6 h-6" />,
+    icon: <RiBox2Fill className="w-6 h-6" />,
   },
   {
     label: "Portfolio",
     to: "/dashboard/portfolio",
-    icon: <img src={portfolioIcon} alt="portfolio" className="w-6 h-6" />,
+    icon: <RiBriefcaseLine className="w-6 h-6" />,
   },
 ];
 

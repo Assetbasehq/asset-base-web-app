@@ -2,6 +2,7 @@ import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { RiFlashlightFill } from "react-icons/ri";
 
 export default function LaunchPad() {
   return (
@@ -13,7 +14,7 @@ export default function LaunchPad() {
         </div>
         <Link
           to="/#"
-          className="text-primary font-semibold cursor-pointer underline text-sm"
+          className="text-custom-orange font-semibold cursor-pointer underline text-sm"
         >
           View All
         </Link>
@@ -96,7 +97,7 @@ function Securities() {
           key={item.id}
           className=" bg-custom-light-bg flex flex-col gap-4 items-start rounded-2xl p-2 min-w-96"
         >
-          <div className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg">
+          <div className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg bg-[#93939417]">
             <img
               src={assetBaseLogo}
               alt=""
@@ -121,9 +122,17 @@ function Securities() {
             </div>
           </div>
           <div className="flex flex-col gap-2 items-start w-full pb-1">
-            <Progress value={15} className="w-full bg-white" />
+            <Progress
+              value={15}
+              className="w-full bg-white [&>div]:bg-custom-orange"
+            />
             <div className="flex justify-between items-center w-full">
-              <small className="font-semibold text-primary">15% raised</small>
+              <div className="flex gap-1 items-center">
+                <RiFlashlightFill className="text-custom-orange" />
+                <small className="font-semibold text-custom-orange">
+                  15% raised
+                </small>
+              </div>
               <small className="font-semibold">2,300,000 available</small>
             </div>
           </div>

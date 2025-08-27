@@ -11,14 +11,14 @@ import IDVerification from "../_modals/id-verification";
 import ManualVerification from "../_modals/manual-verification";
 import SuccessModal from "@/components/modals/success-modal";
 import { Skeleton } from "@/components/ui/skeleton";
+import DojahKycModal from "../_modals/dojah-kyc-modal";
 
 export default function ProfileKYC() {
   const queryClient = useQueryClient();
   const { data, isLoading, isError, refetch } = useUserVerificationStatus();
 
-  console.log({ newww: data, isError });
-
   const [token, setToken] = useState<string | null>(null);
+  const [userData, setUserData] = useState<Record<string, any> | null>(null);
   const [modals, setModals] = useState({
     confirmEmail: false,
     emailSuccess: false,
@@ -26,6 +26,8 @@ export default function ProfileKYC() {
     manualVerification: false,
     emailVerified: false,
     manualSuccess: false,
+    dojah: false,
+    dojahSuccess: false,
   });
 
   const toggleModal = (key: keyof typeof modals, value: boolean) =>
@@ -53,10 +55,6 @@ export default function ProfileKYC() {
     toggleModal("manualVerification", false);
     toggleModal("manualSuccess", true);
   };
-
-  if (isLoading) {
-    return <EmailVerificationSkeleton />;
-  }
 
   return (
     <div className="flex flex-col text-start p-8">
@@ -119,6 +117,12 @@ export default function ProfileKYC() {
         </Button>
       </div>
 
+      <DojahKycModal
+        isOpen={modals.dojah}
+        onClose={() => toggleModal("dojah", false)}
+        userData={userData}
+      />
+
       <ConfirmEmailModal
         isOpen={modals.confirmEmail}
         onClose={() => toggleModal("confirmEmail", false)}
@@ -131,9 +135,14 @@ export default function ProfileKYC() {
       <IDVerification
         isOpen={modals.idVerification}
         onClose={() => toggleModal("idVerification", false)}
+        setUserData={setUserData}
         switchToManual={() => {
           toggleModal("idVerification", false);
           toggleModal("manualVerification", true);
+        }}
+        switchToDojah={() => {
+          // toggleModal("idVerification", false);
+          toggleModal("dojah", true);
         }}
       />
 
@@ -162,7 +171,7 @@ export default function ProfileKYC() {
   );
 }
 
-function EmailVerificationSkeleton() {
+function ProfileKYCSkeleton() {
   return (
     <div className="flex flex-col text-start p-8">
       <div className="flex flex-col gap-1">

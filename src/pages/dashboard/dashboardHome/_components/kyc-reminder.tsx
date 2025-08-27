@@ -29,19 +29,21 @@ export default function KYCReminder() {
         <CardContent>
           <div className="flex items-center justify-between gap-4 text-start">
             <div className="flex items-center gap-4">
-              <div
-                className="relative w-16 h-16 rounded-full flex items-center justify-center bg-white text-white font-bold"
-                style={{
-                  background: `conic-gradient(#f97316 ${progress}%, #1f2937 ${progress}%)`,
-                }}
-              >
-                <span className="absolute inset-1 bg-white text-muted-foreground rounded-full flex items-center justify-center text-sm">
-                  {completedSteps}/{totalSteps}
-                </span>
+              <div className="p-2 bg-white rounded-full">
+                <div
+                  className="relative w-12 h-12 rounded-full flex items-center justify-center bg-white text-white font-bold"
+                  style={{
+                    background: `conic-gradient(#f46c31 ${progress}%, #1d1512 ${progress}%)`,
+                  }}
+                >
+                  <p className="absolute inset-1 bg-white text-muted-foreground rounded-full flex items-center justify-center text-sm">
+                    {completedSteps}/{totalSteps}
+                  </p>
+                </div>
               </div>
 
               <div>
-                <h2 className="text-custom-black-text">Complete KYC</h2>
+                <h2 className="text-custom-black-text text-lg font-semibold">Complete KYC</h2>
                 <p className="text-muted-foreground">
                   Finish setting up your account
                 </p>

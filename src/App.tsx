@@ -46,7 +46,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <CreateAccount />,
+          element: <Login />,
         },
       ],
     },
