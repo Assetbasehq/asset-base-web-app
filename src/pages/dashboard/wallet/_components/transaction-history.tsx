@@ -40,8 +40,8 @@ export default function TransactionHistory() {
   // }
 
   return (
-    <Card className="bg-custom-card border-none text-start shadow-none">
-      <CardContent className=" text-white">
+    <Card className="bg-custom-card border-none text-start shadow-none w-full md:w-2/5">
+      <CardContent className=" text-custom-white-text">
         <CardTitle className="text-lg">Transaction History</CardTitle>
 
         <div className="flex flex-col gap-4">

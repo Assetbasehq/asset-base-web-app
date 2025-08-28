@@ -34,7 +34,7 @@ export default function TotalAssets() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="usd">USD</SelectItem>
-              <SelectItem value="cad">CAD</SelectItem>
+              <SelectItem value="cad">NGN</SelectItem>
             </SelectContent>
           </Select>
         </div>

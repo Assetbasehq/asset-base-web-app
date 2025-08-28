@@ -4,13 +4,19 @@ import { Bell, Menu, Plus, Search, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { AssetBaseBetaWhite } from "./asset-base-beta";
-import { RiWalletLine, RiBriefcaseLine, RiDashboardLine, RiStockLine, RiBox2Fill } from "react-icons/ri";
+import {
+  RiWalletLine,
+  RiBriefcaseLine,
+  RiStockLine,
+  RiBox3Line,
+  RiLayoutGridLine,
+} from "react-icons/ri";
 
 const links = [
   {
     label: "Dashboard",
     to: "/dashboard",
-    icon: <RiDashboardLine className="w-6 h-6" />,
+    icon: <RiLayoutGridLine className="w-6 h-6" />,
   },
   {
     label: "Wallet",
@@ -25,7 +31,7 @@ const links = [
   {
     label: "Liquidity",
     to: "/dashboard/liquidity",
-    icon: <RiBox2Fill className="w-6 h-6" />,
+    icon: <RiBox3Line className="w-6 h-6" />,
   },
   {
     label: "Portfolio",
