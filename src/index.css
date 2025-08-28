@@ -1,8 +1,77 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+/* Geist font family with all weights */
+/* @font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist/Geist-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+} */
+
+/* Register font with Tailwind */
+@theme {
+  --font-geist: "Geist", sans-serif;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -188,7 +257,7 @@
   /* --custom-card-inner: #222431; */
   --custom-input-stroke: #9ab404;
   --custom-input-fill: #1e1e1e;
-  --custom-input-mute: #2a2a2a;
+  --custom-input-mute: #31353f;
   --custom-input-label: #e6e6e6;
   --custom-light-stroke: #9ab404;
   --custom-light-bg: #222431;

@@ -335,10 +335,16 @@ export default function PersonalDetails() {
                     Please wait
                   </span>
                 ) : (
-                  "Login"
+                  "Continue"
                 )}
               </Button>
             </form>
+
+            <p className="mt-6 text-xs text-muted-foreground font-medium ">
+              By clicking continue, you agree to our{" "}
+              <span className="text-custom-orange">Terms of Service</span> and{" "}
+              <span className="text-custom-orange">Privacy Policy </span>
+            </p>
           </Form>
         </CardContent>
       </Card>

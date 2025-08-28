@@ -1,42 +1,50 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ArrowDownToLine, ArrowRightLeft, Box, Plus } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  RiArrowDownLine,
+  RiArrowUpDownLine,
+  RiArrowUpLine,
+} from "react-icons/ri";
 // import { Skeleton } from "@/components/ui/skeleton";
 
 const transactions = [
   {
-    icon: <ArrowRightLeft />,
+    icon: <RiArrowUpDownLine className="w-6 h-6" />,
     ticker: "BTC",
     transactionType: "Swap",
     amount: 0.0025,
+    type: "SWAP",
     value: "557,000.00",
   },
   {
-    icon: <Box />,
+    icon: <RiArrowDownLine className="w-6 h-6" />,
     ticker: "ETH",
     transactionType: "Buy",
     amount: 1.0,
+    type: "BUY",
     value: "200,000.00",
   },
   {
-    icon: <Plus />,
+    icon: <RiArrowUpLine className="w-6 h-6" />,
     ticker: "USDT",
     transactionType: "Sell",
     amount: 2000.0,
+    type: "SELL",
     value: "2,000,000.00",
+  },
+  {
+    icon: <RiArrowDownLine className="w-6 h-6" />,
+    ticker: "ETH",
+    transactionType: "Buy",
+    amount: 1.0,
+    type: "BUY",
+    value: "200,000.00",
   },
 ];
 
 export default function TransactionHistory() {
   // if (true) {
-  //   return <AccountSummarySkeleton />;
+  //   return <TransactionHistorySkeleton />;
   // }
 
   return (
@@ -44,24 +52,27 @@ export default function TransactionHistory() {
       <CardContent className=" text-custom-white-text">
         <CardTitle className="text-lg">Transaction History</CardTitle>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 my-4">
           {transactions.map((transaction) => (
             <div
               key={transaction.ticker}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between border p-3 rounded-lg"
             >
-              <div className="flex items-center gap-2">
-                {transaction.icon}
-                <span className="font-semibold">{transaction.ticker}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">
-                  {transaction.transactionType}
+              <div className="flex items-center gap-4">
+                <span className="border p-2 rounded-full border-custom-white-text">
+                  {transaction.icon}
                 </span>
-                <span className="font-semibold">{transaction.amount}</span>
+                <div className="flex flex-col items-center">
+                  <span className="font-semibold">{transaction.ticker}</span>
+                  {transaction.transactionType}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+
+              <div className="flex flex-col items-end gap-2">
                 <span className="font-semibold">{transaction.value}</span>
+                <span className="font-semibold">
+                  {transaction.value.slice(0, 2)}k
+                </span>
               </div>
             </div>
           ))}
@@ -71,37 +82,36 @@ export default function TransactionHistory() {
   );
 }
 
-function AccountSummarySkeleton() {
+function TransactionHistorySkeleton() {
   return (
-    <Card className="border-none">
+    <Card className="bg-custom-card border-none shadow-none w-full md:w-2/5">
       <CardContent>
-        <div className="text-start flex flex-col gap-4">
-          {/* Main Card */}
-          <div className="flex items-center justify-between bg-custom-gray-muted rounded-lg">
-            <div className="flex flex-col gap-6 w-full">
-              {/* Currency Select */}
-              <Skeleton className="h-10 w-20 rounded-md" />
+        <CardTitle className="text-lg mb-4 text-start">
+          Transaction History
+        </CardTitle>
 
-              {/* Balance + Actions */}
-              <div className="w-full flex items-center justify-between">
-                {/* Balance Info */}
-                <div>
-                  <Skeleton className="h-8 w-32" />
-                  <Skeleton className="h-4 w-20 mt-2" />
-                </div>
+        <div className="flex flex-col gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between border p-3 rounded-lg"
+            >
+              <div className="flex items-center gap-4">
+                {/* Circle Icon */}
+                <Skeleton className="h-12 w-12 rounded-full" />
 
-                {/* Action Buttons */}
-                <div className="flex gap-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="flex flex-col gap-2 items-center">
-                      <Skeleton className="h-12 w-12 rounded-full" />
-                      <Skeleton className="h-5 w-16" />
-                    </div>
-                  ))}
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-5 w-16" />
+                  <Skeleton className="h-4 w-12" />
                 </div>
               </div>
+
+              <div className="flex flex-col items-end gap-2">
+                <Skeleton className="h-5 w-20" />
+                <Skeleton className="h-4 w-12" />
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </CardContent>
     </Card>

@@ -14,7 +14,7 @@ export default function Options() {
 
   return (
     <Card className="bg-custom-card border-none text-start shadow-none w-full md:w-3/5">
-      <CardContent className="p-6">
+      <CardContent className="px-6">
         <div className="border-b relative">
           <div className="flex items-center justify-start">
             {tabs.map((tab) => (
@@ -54,7 +54,7 @@ function FiatTab() {
 }
 
 function StableTab() {
-  return <div>Crypto</div>;
+  return <div></div>;
 }
 
 function StocksTab() {

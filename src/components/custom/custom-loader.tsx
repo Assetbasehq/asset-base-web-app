@@ -1,5 +1,6 @@
 import { Shield } from "lucide-react";
 import React from "react";
+import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 
 interface LoaderProps {
   color?: string;
@@ -29,18 +30,19 @@ const AuthLoader = ({ isLoading = true }) => {
       {/* Rolling ring around shield */}
       <div className="relative flex items-center justify-center">
         {/* animated ring */}
-        <div className="absolute w-32 h-32 border-4 border-t-transparent border-b-transparent border-primary rounded-full animate-spin" />
+        <div className="absolute w-32 h-32 border-4 border-t-transparent border-b-transparent border-custom-orange rounded-full animate-spin" />
         {/* shield icon */}
-        <Shield
-          className="w-16 h-16 text-primary relative z-10"
-          strokeWidth={1.5}
+        <img
+          src={assetBaseLogo}
+          className="w-16 animate-pulse"
+          alt="asset base"
         />
       </div>
 
       {/* text */}
-      <p className="mt-6 text-lg font-medium text-muted-foreground animate-pulse">
+      {/* <p className="mt-6 text-lg font-medium animate-pulse text-custom-orange/90">
         Please wait
-      </p>
+      </p> */}
     </div>
   );
 };

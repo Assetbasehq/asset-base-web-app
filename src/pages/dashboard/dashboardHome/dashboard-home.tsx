@@ -11,7 +11,7 @@ export default function DashboardHome() {
 
   return (
     <div className="flex flex-col gap-4 text-custom-white-text">
-      <p className="text-3xl font-semibold text-start">
+      <p className="text-3xl font-semibold text-start font-geis">
         Good Morning,
         <span className="capitalize"> {user?.first_name || "..."}</span>
       </p>

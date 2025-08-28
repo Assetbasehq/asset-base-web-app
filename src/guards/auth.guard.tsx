@@ -20,9 +20,6 @@ export const AuthGuard = () => {
     return <AuthLoader />;
   }
 
-  console.log({ user });
-  
-
   if (isError || !user) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Box } from "lucide-react";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import gridLines from "@/assets/images/gradient-lines.svg";
+import { RiBox3Line } from "react-icons/ri";
 
 export default function AddLiquidity() {
   return (
@@ -26,9 +26,10 @@ export default function AddLiquidity() {
           opportunites. Professional fun management meets accesible investing.
         </p>
       </div>
-      <Button className="flex items-center gap-4 bg-black text-white rounded-full py-6 px-8 cursor-pointer transition-all duration-300 ease-in-out hover:bg-black/80">
-        <div className="flex items-center gap-4">
-          <Box /> <span className="text-lg">Add Liquidity</span>
+      <Button className="flex items-center gap-4 bg-black text-white rounded-full py-6 px-6 cursor-pointer transition-all duration-300 ease-in-out hover:bg-black/80">
+        <div className="flex items-center gap-4 cursor-pointer">
+          <RiBox3Line className="!w-6 !h-6 cursor-pointer" />
+          <span className="text-lg cursor-pointer">Add Liquidity</span>
         </div>
       </Button>
     </div>

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function TrendingSecurities() {
   return (
-    <Card className="bg-custom-card border-none shadow-none text-start">
+    <Card className="bg-custom-card border-none shadow-none text-start ">
       <CardHeader className="flex items-center justify-between">
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-semibold">Trending Securities</h2>
