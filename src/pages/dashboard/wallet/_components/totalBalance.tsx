@@ -21,12 +21,31 @@ export default function TotalBalance() {
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-10 w-full">
             <Select defaultValue="usd">
-              <SelectTrigger className="w-fit shadow-none border-none bg-gray-100">
-                <SelectValue placeholder="USD" className="text-white" />
+              <SelectTrigger className="w-fit shadow-none border-none bg-gray-100 px-3">
+                <SelectValue placeholder="Currency" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="usd">USD</SelectItem>
-                <SelectItem value="cad">CAD</SelectItem>
+                <SelectItem value="usd">
+                  <span className="flex items-center gap-2">
+                    <img
+                      src="https://flagcdn.com/us.svg"
+                      alt="US Flag"
+                      className="h-6 w-6 rounded-full"
+                    />
+                    <span>USD</span>
+                  </span>
+                </SelectItem>
+
+                <SelectItem value="ngn">
+                  <span className="flex items-center gap-2">
+                    <img
+                      src="https://flagcdn.com/ng.svg"
+                      alt="Nigeria Flag"
+                      className="h-3 w-9 rounded-full"
+                    />
+                    <span>NGN</span>
+                  </span>
+                </SelectItem>
               </SelectContent>
             </Select>
 
