@@ -14,6 +14,7 @@ import {
   RiEyeOffLine,
 } from "react-icons/ri";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router";
 
 export default function TotalBalance() {
   // if (true) {
@@ -21,8 +22,8 @@ export default function TotalBalance() {
   // }
 
   return (
-    <Card className=" bg-transparent md:bg-custom-card border-none text-start shadow-none">
-      <CardContent className=" text-white flex flex-col gap-4 px-0 md:px-6">
+    <Card className=" bg-transparent py-0 md:py-6 md:bg-custom-card border-none text-start shadow-none">
+      <CardContent className="flex flex-col gap-4 px-0 md:px-6">
         <CardTitle className="text-lg font-medium">Total Balance</CardTitle>
 
         <div className="flex justify-between items-start">
@@ -89,12 +90,14 @@ export default function TotalBalance() {
           </div>
 
           <div className="flex justify-between md:justify-end w-fit gap-4 md:gap-12">
-            <div className="flex flex-col gap-2 text-primary items-center">
-              <RiAddLine className="w-12 h-12 p-3 rounded-full text-white bg-custom-orange border border-custom-orange" />
-              <span className="font-semibold text-xs text-custom-orange">
-                Deposit
-              </span>
-            </div>
+            <Link to="/dashboard/wallet/deposit">
+              <div className="flex flex-col gap-2 text-primary items-center">
+                <RiAddLine className="w-12 h-12 p-3 rounded-full text-white bg-custom-orange border border-custom-orange" />
+                <span className="font-semibold text-xs text-custom-orange">
+                  Deposit
+                </span>
+              </div>
+            </Link>
             <div className="flex flex-col gap-2 text-primary items-center cursor-pointer">
               <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border border-custom-orange" />{" "}
               <span className="font-semibold text-xs text-custom-orange ">

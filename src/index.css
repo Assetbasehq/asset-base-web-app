@@ -250,7 +250,7 @@
   --sidebar-ring: oklch(0.556 0 0);
 
   /* Custom Colors Dark Mode  */
-  --custom-white: #fdfdfd;
+  --custom-white: #ffffff;
   --custom-black: #000000;
   --custom-base: #0a0d14;
   --custom-card: #161922;
@@ -264,7 +264,7 @@
   --custom-grey-text: #cccccc;
   --custom-blue-shade: #102040;
   --custom-blue-text: #4da6ff;
-  --custom-white-text: #f5f5f5;
+  --custom-white-text: #ffffff;
   --custom-ticker-green: #2ea678;
   --custom-ticker-red: #b31533;
   --custom-orange-10: #fdddc4;

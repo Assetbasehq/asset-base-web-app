@@ -32,7 +32,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { countryCodes } from "@/constants/countries";
 export default function PersonalInformation() {
-  const [open, setOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const { user } = useAuthStore();
@@ -174,7 +175,7 @@ export default function PersonalInformation() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Date of Birth</FormLabel>
-                  <Popover open={open} onOpenChange={setOpen}>
+                  <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -194,23 +195,20 @@ export default function PersonalInformation() {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value as Date}
-                        captionLayout="dropdown"
-                        onSelect={(date) => {
-                          const formattedDate = format(date as Date, "PPP");
-
-                          console.log({ formattedDate });
-
-                          field.onChange(date);
-                          setOpen(false);
-                        }}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        autoFocus
-                      />
+                      {calendarOpen && (
+                        <Calendar
+                          mode="single"
+                          selected={field.value as Date}
+                          captionLayout="dropdown"
+                          onSelect={(date) => {
+                            field.onChange(date);
+                            setCalendarOpen(false);
+                          }}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                        />
+                      )}
                     </PopoverContent>
                   </Popover>
                 </FormItem>
@@ -229,6 +227,7 @@ export default function PersonalInformation() {
                     <FormLabel>Country Of Residence</FormLabel>
                     <FormControl>
                       <Select
+                        onOpenChange={(open) => setCountryOpen(open)}
                         onValueChange={field.onChange}
                         value={field.value}
                       >
@@ -238,18 +237,21 @@ export default function PersonalInformation() {
                             error && "border-red-500 text-red-500" // 👈 highlight when invalid
                           )}
                         >
-                          <SelectValue placeholder="Select Country" />
+                          <SelectValue placeholder="Select Country">
+                            {field.value}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
-                          {countryCodes.map((country) => (
-                            <SelectItem
-                              key={country.name}
-                              value={country.name}
-                              className="capitalize"
-                            >
-                              {country.name}
-                            </SelectItem>
-                          ))}
+                          {countryOpen &&
+                            countryCodes.map((country) => (
+                              <SelectItem
+                                key={country.name}
+                                value={country.name}
+                                className="capitalize"
+                              >
+                                {country.name}
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                     </FormControl>

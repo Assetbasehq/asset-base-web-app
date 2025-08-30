@@ -8,7 +8,7 @@ export default function ThemeSwitcher() {
   return (
     <Button
       onClick={toggleTheme}
-      className="px-3 py-2 rounded bg-gray-500 dark:bg-gray-800 dark:text-white fixed top-15 right-0 z-50 cursor-pointer"
+      className="px-3 py-2 rounded bg-gray-500 dark:bg-gray-800 dark:text-white fixed bottom-30 right-5 z-50 cursor-pointer"
     >
       {theme === "light" ? <Moon /> : <Sun />}
     </Button>

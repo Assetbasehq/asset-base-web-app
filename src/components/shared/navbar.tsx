@@ -49,7 +49,7 @@ export default function Navbar() {
         {/* Logo + Title + Beta Badge */}
         <AssetBaseBetaWhite />
 
-        {/* Navigation Links */}
+        {/* Desktop Navigation Links */}
         <ul className="hidden lg:flex gap-4">
           {links.map(({ label, to, icon }) => (
             <li key={to} className="">
@@ -76,8 +76,8 @@ export default function Navbar() {
         </ul>
       </div>
 
+      {/* Desktop Right Section */}
       <div className="flex items-center gap-4">
-        {/* Connect Button */}
         <div className="hidden lg:flex items-center gap-4">
           <Button className="bg-orange-500 px-4 py-2 rounded-full w-fit flex items-center gap-2 font-semibold">
             <span>
@@ -90,7 +90,7 @@ export default function Navbar() {
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
-          <Link to="/dashboard/profile">
+          <Link to="/dashboard/account">
             <User
               size={34}
               className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
@@ -131,8 +131,16 @@ export default function Navbar() {
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
-          <Link to="/dashboard/profile">
+          <Link to="/dashboard/account" className="md:hidden">
             <User
+              onClick={() => setIsOpen(false)}
+              size={34}
+              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+            />
+          </Link>
+          <Link to="/dashboard/account/profile" className="hidden md:block">
+            <User
+              onClick={() => setIsOpen(false)}
               size={34}
               className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
@@ -142,16 +150,15 @@ export default function Navbar() {
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
           <Button
-            className="bg-gray-800 hover:bg-gray-800/90 cursor-pointer"
+            className="bg-custom-base text-custom-white cursor-pointer"
             onClick={() => setIsOpen(false)}
           >
-            {/* Close Button */}
             <X size={28} />
           </Button>
         </div>
 
         {/* Mobile Nav Links */}
-        <ul className="flex flex-col gap-2 p-4">
+        {/* <ul className="flex flex-col gap-2 p-4">
           {links.map(({ label, to, icon }) => (
             <li key={to}>
               <NavLink
@@ -172,7 +179,7 @@ export default function Navbar() {
               </NavLink>
             </li>
           ))}
-        </ul>
+        </ul> */}
 
         {/* Connect Button - Mobile */}
         <div className="p-4">
@@ -193,7 +200,7 @@ export default function Navbar() {
                 end={to === "/dashboard"}
                 className={({ isActive }) =>
                   cn(
-                    `flex flex-col items-center min-w-[70px] sm:min-w-[100px] bg-custom-light-bg p-2 sm:p-4 rounded-lg text-xs sm:text-sm md:text-sm gap-2 transition-colors duration-300 hover:text-orange-500`,
+                    `flex flex-col items-center min-w-[70px] sm:min-w-[100px] bg-custom-card p-2 sm:p-4 rounded-lg text-xs sm:text-sm md:text-sm gap-2 transition-colors duration-300 hover:text-orange-500 text-custom-white`,
                     {
                       "text-custom-orange rounded-b-none border-b-2 border-custom-orange":
                         isActive,

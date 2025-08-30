@@ -5,9 +5,6 @@ class UserService {
   createSecurityPin = async (payload: any) => {
     try {
       const response = await axiosInstance.post(`/users/create-pin`, payload);
-
-      console.log({ response });
-
       return response.data?.data;
     } catch (error) {
       handleAxiosError(error, "failed to create security pin");
@@ -19,8 +16,6 @@ class UserService {
         `/users/validate-email`,
         payload
       );
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -37,8 +32,6 @@ class UserService {
           },
         }
       );
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -47,8 +40,6 @@ class UserService {
   updateUserInformation = async (userId: string, payload: any) => {
     try {
       const response = await axiosInstance.patch(`/users/${userId}`, payload);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -57,8 +48,6 @@ class UserService {
   RequestPasswordReset = async () => {
     try {
       const response = await axiosInstance.post(`/users/change-password`);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -73,8 +62,6 @@ class UserService {
         `/users/change-password/authorize`,
         payload
       );
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -83,8 +70,6 @@ class UserService {
   changePassword = async (payload: { token: string; password: string }) => {
     try {
       const response = await axiosInstance.post(`/users/password`, payload);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -93,8 +78,6 @@ class UserService {
   RequestPinChange = async () => {
     try {
       const response = await axiosInstance.post(`/users/pin-reset/otp`);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -109,8 +92,6 @@ class UserService {
         `/users/pin-reset/authorize`,
         payload
       );
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -119,8 +100,6 @@ class UserService {
   changePin = async (payload: { token: string; password: string }) => {
     try {
       const response = await axiosInstance.post(`/users/pin`, payload);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -134,8 +113,6 @@ class UserService {
         `/users/forgot-password`,
         payload
       );
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -147,8 +124,6 @@ class UserService {
   }) => {
     try {
       const response = await axiosInstance.patch(`/users/password`, payload);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -159,8 +134,6 @@ class UserService {
   getUserNextOfKin = async (userId: string) => {
     try {
       const response = await axiosInstance.get(`/next-of-kins/${userId}`);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -172,8 +145,6 @@ class UserService {
         `/next-of-kins/${userId}`,
         payload
       );
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -184,8 +155,6 @@ class UserService {
       const response = await axiosInstance.post(`verification-requests`, {
         request_type: "email",
       });
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -200,7 +169,6 @@ class UserService {
         `verification-requests/verify`,
         payload
       );
-      console.log({ response });
 
       return response.data;
     } catch (error) {
@@ -210,8 +178,6 @@ class UserService {
   getUserVerificationStatus = async () => {
     try {
       const response = await axiosInstance.get(`verifications`);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ImagePlus, Loader } from "lucide-react";
-import { useForm } from "react-hook-form";
 import assestBaseLogo from "@/assets/images/asset-base-logo.svg";
 import gridLine from "@/assets/images/gradient-lines.svg";
 import { useAuthStore } from "@/store/auth-store";
@@ -12,6 +11,7 @@ import { useState } from "react";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import PersonalInformation from "./personal-information";
 import NextOfKin from "./next-of-kin";
+import { cn } from "@/lib/utils";
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
@@ -42,10 +42,10 @@ export default function ProfilePage() {
   );
 
   return (
-    <div className="text-start">
-      <div className="relative bg-custom-light-bg px-6 py-8 text-start overflow-hidden">
+    <div className={cn("flex flex-col gap-8 ")}>
+      <div className="relative bg-custom-light-bg px-8 py-8 text-start overflow-hidden">
         <h2 className="text-lg md:text-2xl font-semibold">
-          Hi, <span className="capitalize">{user?.first_name || "..."}</span>
+          {/* Hi, <span className="capitalize">{user?.first_name || "..."}</span> */}
         </h2>
         <p className="text-muted-foreground">
           Manage your account details below
@@ -67,7 +67,7 @@ export default function ProfilePage() {
           <ProfileSkeleton />
         </div>
       </div>
-      <div className="bg-custom-card rounded-b-lg px-6 py-8 flex flex-col gap-16">
+      <div className="bg-custom-card rounded-b-lg px-8 py-8 flex flex-col gap-16">
         <div className="flex flex-col lg:flex-row gap-4 text-start">
           <div className="text-start flex flex-col lg:w-2/5">
             <h2 className="font-semibold">Profile photo</h2>

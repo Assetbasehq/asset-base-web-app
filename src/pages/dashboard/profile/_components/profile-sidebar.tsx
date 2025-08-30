@@ -18,47 +18,47 @@ const sideBarLinks = [
   {
     name: "Profile",
     icon: <RiUser2Fill className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile",
+    path: "/dashboard/account/profile",
   },
   {
     name: "Leaderboard",
     icon: <RiListOrdered className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/leaderboard",
+    path: "/dashboard/account/leaderboard",
   },
   {
     name: "KYC",
     icon: <RiCheckboxLine className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/kyc",
+    path: "/dashboard/account/kyc",
   },
   {
     name: "Security",
     icon: <RiShieldUserLine className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/security",
+    path: "/dashboard/account/security",
   },
   {
     name: "Referrals",
     icon: <RiGroupLine className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/referrals",
+    path: "/dashboard/account/referrals",
   },
   {
     name: "Account Statment",
     icon: <RiBookletLine className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/account-statement",
+    path: "/dashboard/account/account-statement",
   },
   {
     name: "Investment Certificate",
     icon: <RiAwardLine className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/investment-certificate",
+    path: "/dashboard/account/investment-certificate",
   },
   {
     name: "Contact Us",
     icon: <RiPhoneLine className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/contact-us",
+    path: "/dashboard/account/contact-us",
   },
   {
     name: "Delete My Account",
     icon: <RiDeleteBinLine className="w-4 h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/profile/delete-account",
+    path: "/dashboard/account/delete-account",
   },
 ];
 
@@ -67,9 +67,13 @@ export default function ProfileSideBar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isActiveLink = (path: string) => {
-    return location.pathname === path;
+  const isActiveLink = (path: string | undefined) => {
+    if (!path) return false;
+    if (location.pathname === path) return true;
+    return false;
   };
+
+  const shouldShowOnMobile = location.pathname.endsWith("/account");
 
   const handleLogout = () => {
     logout();
@@ -77,12 +81,18 @@ export default function ProfileSideBar() {
   };
 
   return (
-    <div className="bg-custom-card rounded-lg px-6 py-6 min-w-80 w-fit hidden md:flex flex-col items-start h-fit max-h-[80-vh]">
+    <div
+      className={cn(
+        "bg-custom-card rounded-lg px-6 py-6 min-w-80 flex-col items-start h-fit w-full md:max-w-[300px] md:max-h-[80-vh]",
+        // hidden by default on mobile, only show if ends with /account
+        shouldShowOnMobile ? "flex md:flex" : "hidden md:flex"
+      )}
+    >
       {sideBarLinks.map((link) => (
         <Link
           key={link.path}
           className={cn(`text-lg font-semibold py-2 block`, {
-            "text-custom-orange": isActiveLink(link.path),
+            "border-custom-orange text-custom-orange": isActiveLink(link.path),
           })}
           to={link.path}
         >

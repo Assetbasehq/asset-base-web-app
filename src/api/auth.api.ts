@@ -5,8 +5,6 @@ import { useAuthStore } from "@/store/auth-store";
 
 class AuthService {
   register = async (payload: any) => {
-    console.log({ payload });
-
     try {
       const response = await axiosInstance.post(`/users`, payload);
       const { email_address, password } = payload;
@@ -38,8 +36,6 @@ class AuthService {
     try {
       const response = await axiosInstance.get(`/sessions`);
       const user = response.data;
-      console.log({ user });
-
       const storeState = useAuthStore.getState();
       storeState.setUser(user);
 

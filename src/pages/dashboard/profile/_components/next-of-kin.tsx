@@ -26,8 +26,6 @@ export default function NextOfKin() {
     enabled: !!user?.id,
   });
 
-  console.log({ next: data });
-
   const nextOfKinInformation = useForm({
     mode: "onChange",
     defaultValues: {

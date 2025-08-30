@@ -102,12 +102,14 @@ const leaderboardData = [
 
 export default function ProfileLeaderboard() {
   return (
-    <div className="flex flex-col gap-6 text-start p-8">
-      <Tasks />
-      <YourPerformance />
-      <div>
-        <h2 className="text-sm md:text-xl font-semibold">Leaderboard</h2>
-        <DataTable columns={columns} data={leaderboardData} isLoading />
+    <div>
+      <div className="flex flex-col gap-6 text-start p-8">
+        <Tasks />
+        <YourPerformance />
+        <div>
+          <h2 className="text-sm md:text-xl font-semibold">Leaderboard</h2>
+          <DataTable columns={columns} data={leaderboardData} isLoading />
+        </div>
       </div>
     </div>
   );
