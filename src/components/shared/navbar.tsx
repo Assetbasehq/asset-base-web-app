@@ -16,27 +16,27 @@ const links = [
   {
     label: "Dashboard",
     to: "/dashboard",
-    icon: <RiLayoutGridLine className="w-6 h-6" />,
+    icon: <RiLayoutGridLine className="w-4 h-4 md:w-6 md:h-6" />,
   },
   {
     label: "Wallet",
     to: "/dashboard/wallet",
-    icon: <RiWalletLine className="w-6 h-6" />,
+    icon: <RiWalletLine className="w-4 h-4 md:w-6 md:h-6" />,
   },
   {
     label: "Markets",
     to: "/dashboard/markets",
-    icon: <RiStockLine className="w-6 h-6" />,
+    icon: <RiStockLine className="w-4 h-4 md:w-6 md:h-6" />,
   },
   {
     label: "Liquidity",
     to: "/dashboard/liquidity",
-    icon: <RiBox3Line className="w-6 h-6" />,
+    icon: <RiBox3Line className="w-4 h-4 md:w-6 md:h-6" />,
   },
   {
     label: "Portfolio",
     to: "/dashboard/portfolio",
-    icon: <RiBriefcaseLine className="w-6 h-6" />,
+    icon: <RiBriefcaseLine className="w-4 h-4 md:w-6 md:h-6" />,
   },
 ];
 
@@ -181,6 +181,32 @@ export default function Navbar() {
             Connect
           </Button>
         </div>
+      </div>
+
+      {/* 👇 Fixed Bottom Navigation Links */}
+      <div className="fixed bottom-3 left-0 w-full z-50 lg:hidden">
+        <ul className="flex justify-around items-center p-2">
+          {links.map(({ label, to, icon }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                end={to === "/dashboard"}
+                className={({ isActive }) =>
+                  cn(
+                    `flex flex-col items-center min-w-[70px] sm:min-w-[100px] bg-custom-light-bg p-2 sm:p-4 rounded-lg text-xs sm:text-sm md:text-sm gap-2 transition-colors duration-300 hover:text-orange-500`,
+                    {
+                      "text-custom-orange rounded-b-none border-b-2 border-custom-orange":
+                        isActive,
+                    }
+                  )
+                }
+              >
+                {icon}
+                <small> {label}</small>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
     </nav>
   );

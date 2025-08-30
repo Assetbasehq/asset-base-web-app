@@ -16,7 +16,7 @@ export default function ProfileAccountStatement() {
     <div className="flex flex-col text-start p-8">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg md:text-2xl font-semibold">Account Statement</h2>
-        <p>Generate your account statement</p>
+        <p className="text-muted-foreground">Generate your account statement</p>
       </div>
 
       <div className="flex flex-col gap-4 mt-8">

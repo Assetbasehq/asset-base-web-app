@@ -60,7 +60,7 @@ export default function ProfileKYC() {
     <div className="flex flex-col text-start p-8">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg md:text-2xl font-semibold">KYC</h2>
-        <p>The SEC requires that we verify a valid means of ID</p>
+        <p className="text-muted-foreground">The SEC requires that we verify a valid means of ID</p>
       </div>
 
       <div className="flex flex-col gap-4 mt-8">

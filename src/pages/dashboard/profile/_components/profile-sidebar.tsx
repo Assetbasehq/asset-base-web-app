@@ -77,7 +77,7 @@ export default function ProfileSideBar() {
   };
 
   return (
-    <div className="bg-custom-card rounded-lg px-6 py-6 min-w-72 w-fit hidden md:flex flex-col items-start h-fit max-h-[80-vh]">
+    <div className="bg-custom-card rounded-lg px-6 py-6 min-w-80 w-fit hidden md:flex flex-col items-start h-fit max-h-[80-vh]">
       {sideBarLinks.map((link) => (
         <Link
           key={link.path}

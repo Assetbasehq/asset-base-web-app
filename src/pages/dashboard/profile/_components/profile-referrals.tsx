@@ -105,7 +105,7 @@ export default function ProfileReferrals() {
     <div className="flex flex-col text-start p-8">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg md:text-2xl font-semibold">Referrals</h2>
-        <p>
+        <p className="text-muted-foreground">
           Share your referral link to earn rewards. Earn 5 points when friend
           purchases an assets
         </p>

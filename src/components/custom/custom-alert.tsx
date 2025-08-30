@@ -36,12 +36,12 @@ export function CustomAlert({
   return (
     <Alert
       className={cn(
-        "mb-4 mt-3 rounded flex items-center gap-1 w-full",
+        "mb-4 mt-3 rounded flex items-center gap-1 w-full py-2",
         className,
         variantStyles[variant]
       )}
     >
-      <Icon className="h-4 w-4 shrink-0 mb-1" />
+      <Icon className="!h-4 !w-4 shrink-0 mb-1" />
       <div className="flex flex-col">
         <AlertTitle className="text-sm font-medium tracking-wide">
           {message}

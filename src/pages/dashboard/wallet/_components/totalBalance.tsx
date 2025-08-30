@@ -6,13 +6,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowRightLeft, Box } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   RiAddLine,
   RiArrowLeftRightLine,
   RiDownloadFill,
-  RiEyeCloseLine,
   RiEyeOffLine,
 } from "react-icons/ri";
 import { Separator } from "@/components/ui/separator";
@@ -98,7 +96,7 @@ export default function TotalBalance() {
               </span>
             </div>
             <div className="flex flex-col gap-2 text-primary items-center cursor-pointer">
-              <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border-2 border-custom-orange" />{" "}
+              <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border border-custom-orange" />{" "}
               <span className="font-semibold text-xs text-custom-orange ">
                 Withdraw
               </span>

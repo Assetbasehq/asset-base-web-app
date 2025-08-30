@@ -6,7 +6,7 @@ export default function DashboardLayout() {
   return (
     <div className="flex flex-col min-h-screen bg-custom-white text-white w-full">
       <Navbar />
-      <main className="flex-1 p-4 md:p-8 bg-custom-base">
+      <main className="flex-1 p-4 md:p-8 bg-custom-base pb-16">
         <Outlet />
       </main>
       <ThemeSwitcher />

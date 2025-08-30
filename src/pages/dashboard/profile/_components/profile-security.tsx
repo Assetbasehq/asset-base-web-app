@@ -75,7 +75,7 @@ export default function ProfileSecurity() {
     <div className="flex flex-col text-start p-8">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg md:text-2xl font-semibold">Security</h2>
-        <p>Manage your account security</p>
+        <p className="text-muted-foreground">Manage your account security</p>
       </div>
 
       <div className="flex flex-col gap-4 mt-8">
