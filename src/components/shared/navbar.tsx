@@ -23,24 +23,24 @@ const links = [
     icon: <RiLayoutGridLine className="w-4 h-4 md:w-4 md:h-4" />,
   },
   {
-    label: "Wallet",
-    to: "/dashboard/wallet",
-    icon: <RiWalletLine className="w-4 h-4 md:w-4 md:h-4" />,
-  },
-  {
     label: "Markets",
     to: "/dashboard/markets",
     icon: <RiStockLine className="w-4 h-4 md:w-4 md:h-4" />,
   },
   {
-    label: "Liquidity",
-    to: "/dashboard/liquidity",
-    icon: <RiBox3Line className="w-4 h-4 md:w-4 md:h-4" />,
+    label: "Wallet",
+    to: "/dashboard/wallet",
+    icon: <RiWalletLine className="w-4 h-4 md:w-4 md:h-4" />,
   },
   {
     label: "Portfolio",
     to: "/dashboard/portfolio",
     icon: <RiBriefcaseLine className="w-4 h-4 md:w-4 md:h-4" />,
+  },
+  {
+    label: "Liquidity",
+    to: "/dashboard/liquidity",
+    icon: <RiBox3Line className="w-4 h-4 md:w-4 md:h-4" />,
   },
 ];
 

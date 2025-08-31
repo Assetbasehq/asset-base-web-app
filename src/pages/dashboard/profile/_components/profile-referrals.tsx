@@ -149,7 +149,7 @@ function ReferralsTable({
     return <DataTable columns={columns} data={data} isLoading />;
   }
 
-  if (!data?.length) {
+  if (!data || data.length === 0) {
     return (
       <div className="flex flex-col gap-8 my-16 items-center justify-center h-full">
         <img src={noReferralImage} alt="No referrals" />
