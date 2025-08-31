@@ -74,7 +74,7 @@ export default function ProfileReferrals() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["referrals"],
-    queryFn: userService.getUserReferrals,
+    queryFn: () => userService.getUserReferrals(),
   });
 
   console.log({ data });
@@ -132,7 +132,7 @@ export default function ProfileReferrals() {
 
       <div>
         <h2 className="text-sm md:text-xl font-semibold">Your Referrals</h2>
-        <ReferralsTable data={[]} isLoading={isLoading} />
+        <ReferralsTable data={data || []} isLoading={isLoading} />
       </div>
     </div>
   );

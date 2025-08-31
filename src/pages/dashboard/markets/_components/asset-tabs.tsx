@@ -8,7 +8,6 @@ import AssetTerms from "./asset-tabs/asset-terms";
 
 const tabs = [
   { key: "about", label: "About", component: <AssetAbout /> },
-  { key: "chart", label: "Chart", component: <AssetChart /> },
   { key: "images", label: "Images", component: <AssetImages /> },
   { key: "terms", label: "Terms", component: <AssetTerms /> },
 ];
@@ -35,7 +34,7 @@ export default function AssetTabs() {
                 <span className="text-lg">{tab.label}</span>
                 {active === tab.key && (
                   <motion.div
-                    layoutId="underline"
+                    layoutId="underline-2"
                     className="absolute bottom-0 left-0 right-0 h-[2px] bg-orange-500"
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />

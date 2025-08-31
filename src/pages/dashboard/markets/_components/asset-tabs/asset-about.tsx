@@ -1,6 +1,6 @@
 export default function AssetAbout() {
   return (
-    <div className="p-4 text-sm leading-relaxed text-muted-foreground">
+    <div className="p-4 text-sm text-start leading-relaxed text-muted-foreground">
       <p>
         Founded in 1997 and headquartered in Lagos, Landmark Africa has
         transformed the hospitality landscape in Nigeria through its mixed-use

@@ -2,6 +2,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { AlertCircle, ArrowDown, Clock, Share, Share2 } from "lucide-react";
+import {
+  RiArrowDownLine,
+  RiArrowUpLine,
+  RiErrorWarningLine,
+  RiShareForwardLine,
+  RiTimeLine,
+} from "react-icons/ri";
 
 interface Asset {
   id: string;
@@ -32,7 +39,7 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
                 <p className="text-muted-foreground">{asset.name}</p>
               </div>
             </div>
-            <Share className="h-10 w-10" />
+            <RiShareForwardLine className="h-14 w-14 bg-custom-light-bg p-4 rounded-full" />
           </div>
 
           <div className="flex items-center justify-between">
@@ -82,8 +89,8 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
 
           <div className="border p-6 rounded-lg flex gap-8 text-custom-white-text">
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <Clock />
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <RiTimeLine className="h-5 w-5 " />
                 <p>24h Open</p>
               </div>
               <div className="flex gap-2">
@@ -100,8 +107,8 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <ArrowDown />
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <RiArrowDownLine className="h-5 w-5 text-red-500 " />
                 <p>24h Close</p>
               </div>
               <div className="flex gap-2">
@@ -117,8 +124,8 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <Clock />
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <RiTimeLine className="h-5 w-5 " />
                 <p>24h High</p>
               </div>
               <div className="flex gap-2">
@@ -134,8 +141,8 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <Clock />
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <RiArrowUpLine className="h-5 w-5 text-green-500   " />
                 <p>24h Low</p>
               </div>
               <div className="flex gap-2">
@@ -154,7 +161,7 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
 
           <div className="bg-custom-blue-shade text-custom-white-text p-6 rounded-lg flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <AlertCircle />
+              <RiErrorWarningLine className="h-6 w-6 " />
               <div>
                 <h2 className="text-lg">Looking for more insights?</h2>
                 <p>

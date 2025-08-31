@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { ArrowLeft } from "lucide-react";
 import AssetInfo from "./asset-info";
 import AssetTabs from "./asset-tabs";
 import AssetTradePanel from "./asset-trade-panel";
+import AssetOrders from "./asset-orders";
 
 interface Asset {
   id: string;
@@ -33,6 +34,13 @@ export default function AssetDetails() {
   const { assetId } = useParams<{ assetId: string }>();
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const segments = location.pathname.split("/").filter(Boolean);
+
+  const formattedSegments = segments.map((seg) =>
+    seg.toLowerCase() === "dashboard" ? "home" : seg
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -44,12 +52,35 @@ export default function AssetDetails() {
           Back
         </Button>
 
-        <div className=" bg-custom-light-bg text-shadow-custom-white-text px-4 py-2 rounded-sm font-semibold">
+        {/* <div className=" bg-custom-light-bg text-custom-white px-4 py-2 rounded-sm font-semibold">
           Home / Markets /{" "}
           <span className="text-custom-orange">
             {assetId?.toUpperCase() || "LARL"}
           </span>
-        </div>
+        </div> */}
+
+      <div className="flex items-center px-2 py-1 bg-custom-light-bg text-custom-white rounded-sm">
+        {formattedSegments.map((seg, idx) => {
+          const isLast = idx === formattedSegments.length - 1;
+          const to = "/" + segments.slice(0, idx + 1).join("/");
+
+          return (
+            <div key={idx} className="flex items-center gap-2 ">
+              <Link
+                to={to}
+                className={`capitalize px-1 py-1 rounded ${
+                  isLast
+                    ? "text-custom-orange font-medium uppercase"
+                    : "hover:text-custom-white-text"
+                }`}
+              >
+                {seg}
+              </Link>
+              {!isLast && <span className="text-muted-foreground">/</span>}
+            </div>
+          );
+        })}
+      </div>
       </div>
 
       <div className="flex flex-col gap-4 lg:flex-row">
@@ -57,8 +88,9 @@ export default function AssetDetails() {
           <AssetInfo asset={demoAsset} />
           <AssetTabs />
         </div>
-        <div className="flex flex-col gap-4 lg:w-2/5">
+        <div className="flex flex-col gap-4 lg:w-2/5 bg-custom-card rounded-xl p-6">
           <AssetTradePanel />
+          <AssetOrders />
         </div>
       </div>
     </div>
