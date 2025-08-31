@@ -19,8 +19,8 @@ export default function DashboardHome() {
         {/* Left Column */}
         <div className="w-full lg:w-3/5 flex flex-col space-y-4 ">
           <LaunchPad />
-          <TrendingSecurities />
           <AccountSummary />
+          <TrendingSecurities />
         </div>
 
         {/* Right Column */}
