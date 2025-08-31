@@ -155,6 +155,10 @@
   --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
   --font-neue: "NeueMontreal", sans-serif;
+
+  /* Breakpoints  */
+  --breakpoint-xs: 30rem;
+  /* --breakpoint-2xs: 28rem; */
 }
 
 :root {

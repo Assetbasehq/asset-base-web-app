@@ -14,9 +14,34 @@ import {
   RiEyeOffLine,
 } from "react-icons/ri";
 import { Separator } from "@/components/ui/separator";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { walletService } from "@/api/wallet.api";
+import { formatNaira, formatUSD } from "@/lib/utils";
+
+interface WalletResponse {
+  account_id: string;
+  balance: number;
+  created_at: string;
+  id: string;
+  status: string;
+  updated_at: string;
+}
 
 export default function TotalBalance() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currency = (searchParams.get("currency") as "usd" | "ngn") || "usd";
+
+  const { data, isLoading, isError } = useQuery<WalletResponse, Error>({
+    queryKey: ["wallet-balance", currency],
+    queryFn: () => walletService.getWalletBalance({ currency: "ngn" }),
+  });
+
+  const handleCurrencyChange = (value: string) => {
+    setSearchParams({ currency: value });
+  };
+
   // if (true) {
   //   return <AccountSummarySkeleton />;
   // }
@@ -32,7 +57,9 @@ export default function TotalBalance() {
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <h2 className="text-3xl md:text-4xl font-semibold">
-                    $30,000.00
+                    {currency === "usd"
+                      ? formatUSD(data?.balance)
+                      : formatNaira(data?.balance)}
                   </h2>
                   <RiEyeOffLine />
                 </div>
@@ -40,7 +67,7 @@ export default function TotalBalance() {
               </div>
             </div>
           </div>
-          <Select defaultValue="usd">
+          <Select defaultValue={currency} onValueChange={handleCurrencyChange}>
             <SelectTrigger className="w-fit min-w-[110px] shadow-none border-none bg-gray-100 px-3">
               <SelectValue placeholder="Currency" />
             </SelectTrigger>
@@ -71,19 +98,25 @@ export default function TotalBalance() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between mt-6">
-          <div className="flex gap-10 h-22">
+          <div className="flex gap-5 sm:gap-10 items-center my-6 md:my-0 md:h-14">
             <div className="flex flex-col gap-1">
-              <h2 className=" text-muted-foreground">Wallet Balance</h2>
+              <h2 className=" text-sm">Wallet Balance</h2>
               <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-semibold">$30,000.00</h2>
+                <h2 className="text-lg md:text-2xl font-semibold">
+                  {currency === "usd"
+                    ? formatUSD(data?.balance)
+                    : formatNaira(data?.balance)}
+                </h2>
                 <small className="text-green-400">+0.4%</small>
               </div>
             </div>
             <Separator orientation="vertical" className="hidden md:block" />
             <div className="flex flex-col gap-1">
-              <h2 className=" text-muted-foreground">Investment Balance</h2>
+              <h2 className="text-sm">Investment Balance</h2>
               <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-semibold">$30,000.00</h2>
+                <h2 className=" text-lg md:text-2xl font-semibold">
+                  $30,000.00
+                </h2>
                 <small className="text-green-400">+1.5%</small>
               </div>
             </div>

@@ -17,9 +17,6 @@ export default function AccountType() {
     useState<string>("personal");
 
   const { setOnboardingData } = useOnboardingStore();
-
-  console.log({ setOnboardingData });
-
   const navigate = useNavigate();
 
   const accountTypes = [
@@ -66,8 +63,17 @@ export default function AccountType() {
   ];
 
   const handleSelectAccountType = (value: "individual" | "corporate") => {
-    setOnboardingData({ step2: { account_type: value } });
     setSelectedAccountType(value === "individual" ? "personal" : "business");
+  };
+
+  const handleContinue = () => {
+    setOnboardingData({
+      step2: {
+        account_type:
+          selectedAccountType === "personal" ? "individual" : "corporate",
+      },
+    });
+    navigate("/onboarding/personal-details");
   };
 
   return (
@@ -110,7 +116,7 @@ export default function AccountType() {
               </div>
             ))}
             <Button
-              onClick={() => navigate("/onboarding/personal-details")}
+              onClick={handleContinue}
               className="bg-black text-white dark:bg-white dark:text-black font-semibold cursor-pointer hover:bg-custom-black py-6"
             >
               Submit

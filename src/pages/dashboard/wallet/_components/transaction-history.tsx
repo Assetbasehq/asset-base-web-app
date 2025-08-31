@@ -34,7 +34,7 @@ const transactions = [
   },
   {
     icon: <RiArrowDownLine className="w-6 h-6" />,
-    ticker: "ETH",
+    ticker: "ETHH",
     transactionType: "Buy",
     amount: 1.0,
     type: "BUY",

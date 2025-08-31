@@ -1,106 +1,90 @@
 import DataTable from "@/components/custom/data-table";
 import manWithSpeaker from "@/assets/images/man-with-speaker.svg";
+import { useAuthStore } from "@/store/auth-store";
+import { useState } from "react";
+import { RiCheckLine, RiFileCopyLine } from "react-icons/ri";
+import config from "@/config";
+import noReferralImage from "@/assets/images/no-referral-image.png";
+import { useQuery } from "@tanstack/react-query";
+import { userService } from "@/api/user.api";
 
-type ILeaderboard = {
-  id: number;
-  user: {
-    name: string;
-    image: string;
-    email: string;
-  };
-  points: number;
-  joined: string;
+type IReferral = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  created_at: string;
 };
 
 const columns = [
   {
     header: "#",
-    render: (row: ILeaderboard) => (
-      <div className="flex items-center gap-2">
-        <span>{row.id}</span>
-      </div>
-    ),
+    render: (row: IReferral, rowIndex?: number) => {
+      return (
+        <div className="flex items-center gap-2">
+          <span>{typeof rowIndex === "number" ? rowIndex + 1 : "-"}</span>
+        </div>
+      );
+    },
   },
   {
-    header: "User",
-    render: (row: ILeaderboard) => (
+    header: "First Name",
+    render: (row: IReferral) => (
       <div className="flex items-center gap-2">
-        <img
+        {/* <img
           src={row.user.image}
           alt={row.user.name}
           className="w-10 h-10 rounded-full border border-gray-200"
-        />
+        /> */}
         <div className="flex flex-col">
-          <span className="font-semibold">{row.user.name}</span>
-          <small>{row.user.email}</small>
+          <span className="font-semibold">{row.first_name}</span>
+          {/* <small>{row.user.email}</small> */}
         </div>
       </div>
     ),
   },
   {
-    header: "Points",
-    render: (row: ILeaderboard) => <span className="">{row.points}</span>,
+    header: "Last Name",
+    render: (row: IReferral) => (
+      <div className="flex items-center gap-2">
+        {/* <img
+          src={row.user.image}
+          alt={row.user.name}
+          className="w-10 h-10 rounded-full border border-gray-200"
+        /> */}
+        <div className="flex flex-col">
+          <span className="font-semibold">{row.last_name}</span>
+          {/* <small>{row.user.email}</small> */}
+        </div>
+      </div>
+    ),
   },
-  {
-    header: "Joined",
-    render: (row: ILeaderboard) => <span className="">{row.joined}</span>,
-  },
-];
-
-const leaderboardData = [
-  {
-    id: 1,
-    user: {
-      name: "Alice Johnson",
-      image: "https://randomuser.me/api/portraits/women/1.jpg",
-      email: "alice.johnson@example.com",
-    },
-    points: 1200,
-    joined: "2024-03-15",
-  },
-  {
-    id: 2,
-    user: {
-      name: "Michael Smith",
-      image: "https://randomuser.me/api/portraits/men/2.jpg",
-      email: "michael.smith@example.com",
-    },
-    points: 950,
-    joined: "2024-05-10",
-  },
-  {
-    id: 3,
-    user: {
-      name: "Sophia Williams",
-      image: "https://randomuser.me/api/portraits/women/3.jpg",
-      email: "sophia.williams@example.com",
-    },
-    points: 875,
-    joined: "2024-06-22",
-  },
-  {
-    id: 4,
-    user: {
-      name: "David Brown",
-      image: "https://randomuser.me/api/portraits/men/4.jpg",
-      email: "david.brown@example.com",
-    },
-    points: 730,
-    joined: "2024-07-01",
-  },
-  {
-    id: 5,
-    user: {
-      name: "Emily Davis",
-      image: "https://randomuser.me/api/portraits/women/5.jpg",
-      email: "emily.davis@example.com",
-    },
-    points: 680,
-    joined: "2024-08-12",
-  },
+  // {
+  //   header: "Points",
+  //   render: (row: IReferral) => <span className="">{row.points}</span>,
+  // },
+  // {
+  //   header: "Joined",
+  //   render: (row: IReferral) => <span className="">{row.joined}</span>,
+  // },
 ];
 
 export default function ProfileReferrals() {
+  const [copied, setCopied] = useState(false);
+  const { user } = useAuthStore();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["referrals"],
+    queryFn: userService.getUserReferrals,
+  });
+
+  console.log({ data });
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(`${user?.referral_code}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000); // reset after 2s
+  };
+
   return (
     <div className="flex flex-col text-start p-8">
       <div className="flex flex-col gap-1">
@@ -111,14 +95,75 @@ export default function ProfileReferrals() {
         </p>
       </div>
 
-      <div className="flex justify-end gap-4 my-6 bg-custom-card-foreground rounded-lg px-4">
-        <img src={manWithSpeaker} alt="" />
+      <div className=" bg-custom-light-bg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 my-6 bg-custom-card-foreground rounded-3xl px-8">
+        <div className="flex flex-col gap-4 md:w-1/2 py-12">
+          <p className="text-muted-foreground">Here's your referral code</p>
+          <div className="flex items-center gap-4 w-full">
+            <p className="uppercase text-2xl font-semibold">
+              {user?.referral_code}
+            </p>
+            <span className="bg-custom-black text-white border border-muted-foreground rounded-full p-2 cursor-pointer">
+              {copied ? (
+                <>
+                  <RiCheckLine
+                    onClick={handleCopy}
+                    className="w-4 h-4 cursor-pointer"
+                  />
+                </>
+              ) : (
+                <>
+                  <RiFileCopyLine className="w-4 h-4" onClick={handleCopy} />
+                </>
+              )}
+            </span>
+          </div>
+          <a
+            className="text-custom-orange"
+            href={`${config.CLIENT_BASE_URL}/register?ref=${user?.referral_code}`}
+          >
+            {`${config.CLIENT_BASE_DOMAIN}`}/register?ref=
+            <span className="uppercase">{user?.referral_code}</span>{" "}
+          </a>
+        </div>
+        <div className="hidden md:flex justify-end items-end ">
+          <img src={manWithSpeaker} alt="" className="h-full" />
+        </div>
       </div>
 
       <div>
         <h2 className="text-sm md:text-xl font-semibold">Your Referrals</h2>
-        <DataTable columns={columns} data={leaderboardData} isLoading />
+        <ReferralsTable data={data} isLoading={isLoading} />
       </div>
     </div>
   );
+}
+
+function ReferralsTable({
+  data,
+  isLoading,
+}: {
+  data: IReferral[];
+  isLoading: boolean;
+}) {
+  if (isLoading) {
+    return <DataTable columns={columns} data={data} isLoading />;
+  }
+
+  if (!data?.length) {
+    return (
+      <div className="flex flex-col gap-8 my-16 items-center justify-center h-full">
+        <img src={noReferralImage} alt="No referrals" />
+        <div className="text-center">
+          <h2 className="text-lg md:text-xl text-custom-white">
+            You have no referrals
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Share your referral link to earn rewards.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return <DataTable columns={columns} data={data} isLoading={false} />;
 }

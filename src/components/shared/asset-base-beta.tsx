@@ -19,8 +19,12 @@ export default function AssetBaseBeta() {
 export function AssetBaseBetaWhite() {
   return (
     <div className="flex items-end gap-2 text-custom-white">
-      <img src={assetBaseLogo} alt="asset base" className="mb-1" />
-      <p className="text-3xl text-white">Assetbase</p>
+      <img
+        src={assetBaseLogo}
+        alt="asset base"
+        className="mb-1 w-8 h-8 lg:w-8 lg:h-8"
+      />
+      <p className=" text-2xl lg:text-2xl text-white">Assetbase</p>
       <Badge
         variant="default"
         className="bg-green-700 text-white mb-1 rounded-sm"

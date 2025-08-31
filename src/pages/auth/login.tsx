@@ -184,7 +184,7 @@ export default function Login() {
 
               {/* Forgot password link */}
               <Link
-                to="/auth/forgot-password"
+                to="/forgot-password"
                 className="text-sm underline text-muted-foreground text-left"
               >
                 Forgot password?
@@ -207,7 +207,7 @@ export default function Login() {
           <p className="mt-4 text-muted-foreground">
             Don't have an AssetBase account?
             <Link
-              to="/auth/register"
+              to="/register"
               className="text-custom-orange font-medium pl-1"
             >
               Sign up

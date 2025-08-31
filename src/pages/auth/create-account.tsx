@@ -198,7 +198,7 @@ export default function CreateAccount() {
           <p className="mt-4 text-muted-foreground">
             I have an AssetBase account?
             <Link
-              to="/auth/login"
+              to="/login"
               className="text-custom-orange font-semibold pl-1"
             >
               Sign In

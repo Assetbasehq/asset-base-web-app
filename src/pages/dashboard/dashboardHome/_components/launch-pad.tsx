@@ -1,10 +1,16 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { RiFlashlightFill } from "react-icons/ri";
+import { useGetTrendingAssets } from "@/hooks/useAssets";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { IAsset } from "@/interfaces/asset.interface";
+import AssetCard from "../_cards/asset-card";
 
 export default function LaunchPad() {
+  const { data, isLoading, isError } = useGetTrendingAssets();
+
+  // if (isLoading) return <LaunchPadSkeleton />;
+
   return (
     <Card className="bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
       <CardHeader className="flex items-center justify-between">
@@ -20,70 +26,16 @@ export default function LaunchPad() {
         </Link>
       </CardHeader>
       <CardContent>
-        <Securities />
+        <div className="flex flex-col gap-4">
+          <Assets data={data || []} isLoading={isLoading} />
+        </div>
       </CardContent>
     </Card>
   );
 }
 
-function Securities() {
-  const securitiesData = [
-    {
-      id: "1",
-      name: "Landmark Realty Limited",
-      acronym: "LARL",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$3400.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "2",
-      name: "Tesla",
-      acronym: "TSLA",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "3",
-      name: "TajBank Mudarabah Sukuk",
-      acronym: "TAJM",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "4",
-      name: "TajBank Mudarabah Sukuk",
-      acronym: "TAJM",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "4",
-      name: "TajBank Mudarabah Sukuk",
-      acronym: "TAJM",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-  ];
+function Assets({ data, isLoading }: any) {
+  if (isLoading) return <AssetsSkeleton />;
 
   return (
     <div
@@ -92,49 +44,43 @@ function Securities() {
         backgroundImage: `url(${assetBaseLogo})`,
       }}
     >
-      {securitiesData.map((item) => (
+      {data.map((item: { asset: IAsset }) => (
+        <AssetCard key={item?.asset?.id} item={item} />
+      ))}
+    </div>
+  );
+}
+
+function AssetsSkeleton() {
+  return (
+    <div
+      className="flex gap-4 overflow-scroll w-full no-scrollbar"
+      style={{
+        backgroundImage: `url(${assetBaseLogo})`,
+      }}
+    >
+      {Array.from({ length: 8 }).map((_, i) => (
         <div
-          key={item.id}
-          className=" bg-custom-light-bg flex flex-col gap-4 items-start rounded-2xl p-2 min-w-96"
+          key={i}
+          className="bg-custom-light-bg flex flex-col gap-4 items-start rounded-2xl p-2 min-w-96"
         >
-          <div className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg bg-[#93939417]">
-            <img
-              src={assetBaseLogo}
-              alt=""
-              className=" absolute w-35 top-0 -right-5 opacity-10"
+          <Skeleton
+            className="h-40 w-full rounded-lg"
+            style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+          />
+          <Skeleton
+            className="h-3 w-full rounded-lg"
+            style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+          />
+          <div className="flex gap-1 justify-between items-start w-full pb-1">
+            <Skeleton
+              className="h-4 w-32 rounded-lg"
+              style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
             />
-            <div className="flex items-center gap-2">
-              <img src={item.logo} alt="" className="w-10 h-10" />
-              <div>
-                <h2 className="font-semibold">{item.acronym}</h2>
-                <small>{item.name}</small>
-              </div>
-            </div>
-            <div className="w-full flex flex-col gap-1">
-              <div className="flex justify-between items-center w-full">
-                <small>Price per share</small>
-                <small className="font-semibold">{item.price}</small>
-              </div>
-              <div className="flex justify-between items-center w-full">
-                <small>Funding round closes</small>
-                <small className="font-semibold">in 15days</small>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 items-start w-full pb-1">
-            <Progress
-              value={15}
-              className="w-full bg-white [&>div]:bg-custom-orange"
+            <Skeleton
+              className="h-4 w-32 rounded-lg"
+              style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
             />
-            <div className="flex justify-between items-center w-full">
-              <div className="flex gap-1 items-center">
-                <RiFlashlightFill className="text-custom-orange" />
-                <small className="font-semibold text-custom-orange">
-                  15% raised
-                </small>
-              </div>
-              <small className="font-semibold">2,300,000 available</small>
-            </div>
           </div>
         </div>
       ))}

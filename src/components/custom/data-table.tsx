@@ -11,7 +11,7 @@ import { Skeleton } from "../ui/skeleton";
 
 interface Column {
   header: string;
-  render: (row: any) => React.ReactNode;
+  render: (row: any, index?: number) => React.ReactNode;
 }
 
 interface TableProps<T> {
@@ -57,7 +57,7 @@ export default function DataTable<T>({
                       key={colIndex}
                       className="text-start capitalize p-4"
                     >
-                      {column.render(row)}
+                      {column.render(row, rowIndex)}
                     </TableCell>
                   );
                 })}

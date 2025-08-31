@@ -15,8 +15,6 @@ export default function KYCReminder() {
     (data?.email_status === "verified" ? 1 : 0) +
     (data?.id_status === "verified" ? 1 : 0);
 
-  console.log({ completedSteps });
-
   // progress percentage
   const progress = (completedSteps / totalSteps) * 100;
 
@@ -24,8 +22,8 @@ export default function KYCReminder() {
   // if (isError) return <KYCReminderError />;
 
   return (
-    <Link to="/dashboard/profile/kyc">
-      <Card className="bg-custom-orange-10 text-white rounded-3xl min-w-[400px] lg:min-w-full md:w-full">
+    <Link to="/dashboard/account/kyc">
+      <Card className="bg-custom-orange-10 text-white rounded-3xl min-w-[400px] lg:w-full md:w-full">
         <CardContent>
           <div className="flex items-center justify-between gap-4 text-start">
             <div className="flex items-center gap-4">

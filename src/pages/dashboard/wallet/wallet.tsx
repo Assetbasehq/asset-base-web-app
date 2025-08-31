@@ -1,7 +1,4 @@
 import { Outlet } from "react-router";
-import Options from "./_components/options";
-import TotalBalance from "./_components/totalBalance";
-import TransactionHistory from "./_components/transaction-history";
 
 export default function Wallet() {
   return (

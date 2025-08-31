@@ -85,9 +85,9 @@ function Securities() {
 
   return (
     <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
-      {securitiesData.map((item) => (
+      {securitiesData.map((item, i) => (
         <div
-          key={item.id}
+          key={i}
           className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2"
         >
           <div className="flex items-end text-start gap-16 w-full">

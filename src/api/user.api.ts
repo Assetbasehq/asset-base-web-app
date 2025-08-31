@@ -183,6 +183,14 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+  getUserReferrals = async () => {
+    try {
+      const response = await axiosInstance.get(`referrals`);
+      return response.data?.items;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
 }
 
 export const userService = new UserService();

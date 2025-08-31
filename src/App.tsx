@@ -31,7 +31,6 @@ import ProfileContactUs from "./pages/dashboard/profile/_components/profile-cont
 import ProfilePage from "./pages/dashboard/profile/_components/profile-page";
 import { AuthGuard } from "./guards/auth.guard";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AccountType from "./pages/onboarding/account-type";
 import PersonalDetails from "./pages/onboarding/personal-details";
 import PINSetup from "./pages/onboarding/pin-setup";
@@ -53,7 +52,6 @@ function App() {
       ],
     },
     {
-      path: "/auth",
       element: <AuthLayout />,
       children: [
         {
@@ -67,7 +65,7 @@ function App() {
       ],
     },
     {
-      path: "/auth",
+      // path: "/auth",
       element: <OnboardingLayout />,
       children: [
         {

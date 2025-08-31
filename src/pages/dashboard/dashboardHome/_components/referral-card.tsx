@@ -5,7 +5,7 @@ import referralSpeaker from "@/assets/images/referral-speaker.png";
 
 export default function ReferralCard() {
   return (
-    <Link to="/dashboard/profile/referrals">
+    <Link to="/dashboard/account/referrals">
       <Card className="bg-custom-blue-shade p-0 rounded-3xl min-w-[400px] lg:min-w-full md:w-full border-none">
         <CardContent className="p-0">
           <div className="flex lg:flex-col gap-2 text-start p-6">

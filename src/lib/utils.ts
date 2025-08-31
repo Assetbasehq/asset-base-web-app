@@ -84,3 +84,49 @@ export function getDeviceId() {
   }
   return deviceId;
 }
+
+export function formatUSD(amount: number | null | undefined): string {
+  if (amount == null || isNaN(amount)) return "$0.00";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
+export function formatNaira(amount: number | null | undefined): string {
+  if (amount == null || isNaN(amount)) return "₦0.00";
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
+export function formatNumber(amount: number | null | undefined): string {
+  if (amount == null || isNaN(amount)) return "0";
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+export function calculateRaisePercentage(
+  totalShares: number | null | undefined,
+  availableShares: number | null | undefined
+): number {
+  if (
+    totalShares == null ||
+    availableShares == null ||
+    isNaN(totalShares) ||
+    isNaN(availableShares) ||
+    totalShares <= 0
+  ) {
+    return 0;
+  }
+
+  const raisedShares = totalShares - availableShares;
+  return Math.floor((raisedShares / totalShares) * 100);
+}

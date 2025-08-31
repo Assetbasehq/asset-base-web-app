@@ -10,33 +10,37 @@ import {
   RiStockLine,
   RiBox3Line,
   RiLayoutGridLine,
+  RiUser2Line,
+  RiNotification2Line,
+  RiSearch2Line,
+  RiAddLine,
 } from "react-icons/ri";
 
 const links = [
   {
     label: "Dashboard",
     to: "/dashboard",
-    icon: <RiLayoutGridLine className="w-4 h-4 md:w-6 md:h-6" />,
+    icon: <RiLayoutGridLine className="w-4 h-4 md:w-4 md:h-4" />,
   },
   {
     label: "Wallet",
     to: "/dashboard/wallet",
-    icon: <RiWalletLine className="w-4 h-4 md:w-6 md:h-6" />,
+    icon: <RiWalletLine className="w-4 h-4 md:w-4 md:h-4" />,
   },
   {
     label: "Markets",
     to: "/dashboard/markets",
-    icon: <RiStockLine className="w-4 h-4 md:w-6 md:h-6" />,
+    icon: <RiStockLine className="w-4 h-4 md:w-4 md:h-4" />,
   },
   {
     label: "Liquidity",
     to: "/dashboard/liquidity",
-    icon: <RiBox3Line className="w-4 h-4 md:w-6 md:h-6" />,
+    icon: <RiBox3Line className="w-4 h-4 md:w-4 md:h-4" />,
   },
   {
     label: "Portfolio",
     to: "/dashboard/portfolio",
-    icon: <RiBriefcaseLine className="w-4 h-4 md:w-6 md:h-6" />,
+    icon: <RiBriefcaseLine className="w-4 h-4 md:w-4 md:h-4" />,
   },
 ];
 
@@ -68,7 +72,7 @@ export default function Navbar() {
               >
                 <span className="flex items-center gap-4 text-xs md:text-sm font-semibold">
                   <span className="hidden xl:block"> {icon}</span>
-                  {label}
+                  <p>{label}</p>
                 </span>
               </NavLink>
             </li>
@@ -79,24 +83,24 @@ export default function Navbar() {
       {/* Desktop Right Section */}
       <div className="flex items-center gap-4">
         <div className="hidden lg:flex items-center gap-4">
-          <Button className="bg-orange-500 px-4 py-2 rounded-full w-fit flex items-center gap-2 font-semibold">
+          <Button className="bg-custom-orange text-custom-white px-4 py-2 rounded-full w-fit flex items-center gap-2 cursor-pointer hover:bg-custom-orange/90 transition-all duration-300 ease-in-out">
             <span>
-              <Plus size={20} className="" />
+              <RiAddLine className="" />
             </span>
             Connect
           </Button>
 
-          <Bell
+          <RiNotification2Line
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
-          <Link to="/dashboard/account">
-            <User
+          <Link to="/dashboard/account/profile">
+            <RiUser2Line
               size={34}
-              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+              className="border p-2 rounded-full border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
           </Link>
-          <Search
+          <RiSearch2Line
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
@@ -104,7 +108,7 @@ export default function Navbar() {
 
         {/* Hamburger Icon - Mobile Only */}
         <button
-          className="lg:hidden p-2 text-white cursor-pointer"
+          className="lg:hidden p-2 text-custom-white cursor-pointer"
           onClick={() => setIsOpen(true)}
         >
           <Menu size={28} />
@@ -127,25 +131,25 @@ export default function Navbar() {
         )}
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
-          <Bell
+          <RiNotification2Line
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
           <Link to="/dashboard/account" className="md:hidden">
-            <User
+            <RiUser2Line
               onClick={() => setIsOpen(false)}
               size={34}
               className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
           </Link>
           <Link to="/dashboard/account/profile" className="hidden md:block">
-            <User
+            <RiUser2Line
               onClick={() => setIsOpen(false)}
               size={34}
               className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
           </Link>
-          <Search
+          <RiSearch2Line
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
@@ -157,34 +161,10 @@ export default function Navbar() {
           </Button>
         </div>
 
-        {/* Mobile Nav Links */}
-        {/* <ul className="flex flex-col gap-2 p-4">
-          {links.map(({ label, to, icon }) => (
-            <li key={to}>
-              <NavLink
-                to={to}
-                end={to === "/dashboard"}
-                onClick={() => setIsOpen(false)}
-                className={({ isActive }) =>
-                  cn(
-                    `py-2 px-3 rounded-lg transition-all duration-300 flex items-center gap-2 hover:text-orange-500`,
-                    {
-                      "bg-gray-800": isActive,
-                    }
-                  )
-                }
-              >
-                {icon}
-                {label}
-              </NavLink>
-            </li>
-          ))}
-        </ul> */}
-
         {/* Connect Button - Mobile */}
         <div className="p-4">
-          <Button className="bg-orange-500 px-4 py-2 rounded-full w-full flex items-center gap-2 font-semibold cursor-pointer">
-            <Plus size={20} />
+          <Button className="bg-custom-orange text-custom-white hover:bg-custom-orange/90 transition-all duration-300 ease-in-out px-4 py-2 rounded-full w-full flex items-center gap-2 font-semibold cursor-pointer">
+            <RiAddLine size={20} />
             Connect
           </Button>
         </div>

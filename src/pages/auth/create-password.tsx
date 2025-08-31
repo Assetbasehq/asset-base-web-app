@@ -133,7 +133,7 @@ export default function CreatePassword() {
           <p className="mt-4 text-muted-foreground">
             Don't have an AssetBase account?
             <Link
-              to="/auth/register"
+              to="/register"
               className="text-primary font-semibold pl-1"
             >
               Create Account
