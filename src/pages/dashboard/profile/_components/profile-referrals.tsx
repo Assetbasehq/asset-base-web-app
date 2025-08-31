@@ -132,7 +132,7 @@ export default function ProfileReferrals() {
 
       <div>
         <h2 className="text-sm md:text-xl font-semibold">Your Referrals</h2>
-        <ReferralsTable data={data} isLoading={isLoading} />
+        <ReferralsTable data={[]} isLoading={isLoading} />
       </div>
     </div>
   );
@@ -165,5 +165,5 @@ function ReferralsTable({
     );
   }
 
-  return <DataTable columns={columns} data={data} isLoading={false} />;
+  return <DataTable columns={columns} data={data || []} isLoading={false} />;
 }
