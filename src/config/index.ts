@@ -6,6 +6,7 @@ const config = {
   CLIENT_BASE_DOMAIN: rawClientUrl
     ? rawClientUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")
     : "",
+  CLIENT_NEW_API_URL: import.meta.env.VITE_NEW_API_URL ?? "",
 };
 
 export default config;

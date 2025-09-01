@@ -28,6 +28,7 @@ export default function IDVerification({
     mutationFn: verificationService.initiateDojahVerification,
     onSuccess: (data) => {
       console.log({ data });
+
       setUserData(data);
       switchToDojah();
     },

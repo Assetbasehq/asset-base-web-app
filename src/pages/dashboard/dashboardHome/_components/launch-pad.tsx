@@ -19,7 +19,7 @@ export default function LaunchPad() {
           <p>Acurated list of securities you can fund</p>
         </div>
         <Link
-          to="/#"
+          to="/dashboard/assets"
           className="text-custom-orange font-semibold cursor-pointer underline text-sm"
         >
           View All

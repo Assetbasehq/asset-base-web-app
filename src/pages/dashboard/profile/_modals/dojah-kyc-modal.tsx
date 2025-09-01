@@ -15,9 +15,12 @@ export default function DojahKycModal({
 }: DojahKycModalProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  console.log({ userData });
+
   const appID = dojahAppID;
   const publicKey = dojahPublicKey;
-  const type = "custom";
+  
+  const type = "documentCapture";
   const config = {
     widget_id: "", //this is generated from easyonboard here https://app.dojah.io/easy-onboard
   };
@@ -52,14 +55,14 @@ export default function DojahKycModal({
     }
   };
 
-  useEffect(() => {
-    // Cleanup DOM on unmount (make sure container is empty)
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = "";
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   // Cleanup DOM on unmount (make sure container is empty)
+  //   return () => {
+  //     if (containerRef.current) {
+  //       containerRef.current.innerHTML = "";
+  //     }
+  //   };
+  // }, []);
 
   if (!isOpen) {
     return null;
@@ -71,12 +74,11 @@ export default function DojahKycModal({
         response={response}
         appID={appID}
         publicKey={publicKey}
-        type="custom"
+        type={type}
         config={{ widget_id: "your-widget-id" }}
         userData={{ residence_country: "NG" }}
         govData={{}}
-        metadata={{ user_id: userData?.user_id }}
-        
+        metadata={metadata}
       />
     </div>
   );

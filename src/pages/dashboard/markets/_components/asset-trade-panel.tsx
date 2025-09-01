@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import AssetTrade from "./asset-trade/asset-trade";
 import AssetFinance from "./asset-trade/asset-finance";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const tabs = [
   { key: "trade", label: "Trade", component: <AssetTrade /> },
@@ -22,11 +23,13 @@ export default function AssetTradePanel() {
               <button
                 key={tab.key}
                 onClick={() => setActive(tab.key)}
-                className={`flex-1 py-2 px-4 text-center text-sm font-medium relative ${
-                  active === tab.key
-                    ? "text-orange-500"
-                    : "text-custom-white-text"
-                }`}
+                className={cn(
+                  "flex-1 py-2 px-4 text-center text-sm font-medium relative",
+                  {
+                    "text-orange-500": active === tab.key,
+                    "text-custom-white-text": active !== tab.key,
+                  }
+                )}
               >
                 <span className="text-lg">{tab.label}</span>
                 {active === tab.key && (

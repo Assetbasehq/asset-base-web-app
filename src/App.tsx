@@ -37,6 +37,7 @@ import PINSetup from "./pages/onboarding/pin-setup";
 import AssetDetails from "./pages/dashboard/markets/_components/asset-details";
 import Deposit from "./pages/dashboard/wallet/deposit";
 import WalletPage from "./pages/dashboard/wallet/_components/wallet-page";
+import Assets from "./pages/dashboard/assets/assets";
 
 const queryClient = new QueryClient();
 
@@ -115,6 +116,10 @@ function App() {
             {
               path: "",
               element: <DashboardHome />,
+            },
+            {
+              path: "assets",
+              element: <Assets />,
             },
             {
               path: "wallet",

@@ -35,7 +35,7 @@ export default function ProfileKYC() {
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.makeEmailVerificationRequest,
-    onSuccess: (res) => {
+    onSuccess: (res) => {      
       setToken(res?.metadata?.token ?? "");
       toggleModal("confirmEmail", true);
     },

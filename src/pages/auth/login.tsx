@@ -67,7 +67,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-pink-50 to-pink-100 dark:from-black dark:via-black dark:to-black">
+    <div className="w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-geist bg-gradient-to-tr from-white via-pink-50 to-pink-100 dark:from-black dark:via-black dark:to-black">
       <AssetBaseBeta />
 
       <Card className="w-full max-w-lg border text-black bg-white dark:bg-custom-card dark:text-white">
