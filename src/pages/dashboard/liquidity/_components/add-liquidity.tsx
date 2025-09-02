@@ -2,8 +2,11 @@ import { Button } from "@/components/ui/button";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import gridLines from "@/assets/images/gradient-lines.svg";
 import { RiBox3Line } from "react-icons/ri";
+import { useState } from "react";
 
 export default function AddLiquidity() {
+  const [isLiquidityModalOpen, setIsLiquidityModalOpen] = useState(false);
+
   return (
     <div className="relative flex flex-col gap-8 text-custom-white-text text-center items-center justify-between md:text-left md:flex-row bg-custom-card p-4 md:p-8 pr-8 rounded-2xl overflow-hidden">
       <img
@@ -27,7 +30,10 @@ export default function AddLiquidity() {
         </p>
       </div>
       <Button className="flex items-center gap-4 bg-black text-white rounded-full py-6 px-6 cursor-pointer transition-all duration-300 ease-in-out hover:bg-black/80">
-        <div className="flex items-center gap-4 cursor-pointer">
+        <div
+          onClick={() => setIsLiquidityModalOpen(true)}
+          className="flex items-center gap-4 cursor-pointer"
+        >
           <RiBox3Line className="!w-6 !h-6 cursor-pointer" />
           <span className="text-lg cursor-pointer">Add Liquidity</span>
         </div>
