@@ -13,11 +13,11 @@ export default function Assets() {
   const { data, isLoading, isError } = useGetAssets();
   const [isGrid, setIsGrid] = useState(true);
 
-  // const { data: balance } = useQuery({
-  //   queryKey: ["testing"],
-  //   queryFn: async () => walletService.getNewWalletBalance(),
-  // });
-  // console.log({ balance });
+  const { data: balance } = useQuery({
+    queryKey: ["testing"],
+    queryFn: async () => walletService.getNewWalletBalance(),
+  });
+  console.log({ balance });
 
   const navigate = useNavigate();
 
