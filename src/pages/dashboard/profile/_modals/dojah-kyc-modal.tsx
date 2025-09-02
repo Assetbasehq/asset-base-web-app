@@ -1,5 +1,5 @@
 import { dojahAppID, dojahPublicKey } from "@/constants/dojah";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Dojah from "react-dojah";
 
 interface DojahKycModalProps {
@@ -19,10 +19,24 @@ export default function DojahKycModal({
 
   const appID = dojahAppID;
   const publicKey = dojahPublicKey;
-  
-  const type = "documentCapture";
+
+  const type = "custom";
   const config = {
-    widget_id: "", //this is generated from easyonboard here https://app.dojah.io/easy-onboard
+    debug: true,
+    webhook: true,
+    pages: [
+      {
+        page: "govrnement-data",
+        config: {
+          bvn: true,
+          nin: true,
+          dl: true,
+          mobile: true,
+          otp: true,
+          selfie: true,
+        },
+      },
+    ],
   };
 
   const newUserData = {
@@ -75,10 +89,10 @@ export default function DojahKycModal({
         appID={appID}
         publicKey={publicKey}
         type={type}
-        config={{ widget_id: "your-widget-id" }}
         userData={{ residence_country: "NG" }}
         govData={{}}
         metadata={metadata}
+        config={config}
       />
     </div>
   );
