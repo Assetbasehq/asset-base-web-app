@@ -4,6 +4,7 @@ import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { calculateRaisePercentage, formatNumber, formatUSD } from "@/lib/utils";
 import { RiFlashlightFill } from "react-icons/ri";
 import { Link } from "react-router";
+import AssetCardSkeleton from "../../assets/_skeletons/asset-card-skeleton";
 
 interface Props {
   item: {
@@ -67,7 +68,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
     >
       <div
         key={item?.asset.id}
-        className="bg-custom-light-bg text-custom-white flex flex-col gap-4 items-start rounded-2xl p-2 sm:min-w-96 shadow-lg"
+        className="bg-custom-light-bg text-custom-white flex flex-col gap-4 items-start rounded-2xl p-2 min-w-66 sm:min-w-96 shadow-lg"
       >
         <div className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg bg-[#93939417]">
           <img

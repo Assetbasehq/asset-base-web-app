@@ -78,7 +78,7 @@ export default function Assets() {
       >
         <AssetGrid items={data || []} isGrid={isGrid} />
       </motion.div> */}
-      <AssetGrid items={data || []} isGrid={isGrid} />
+      <AssetGrid items={data || []} isGrid={isGrid} isLoading={isLoading} />
     </div>
   );
 }

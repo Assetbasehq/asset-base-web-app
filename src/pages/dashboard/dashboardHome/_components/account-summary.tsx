@@ -6,8 +6,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowDownToLine, ArrowRightLeft, Box, Plus } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "react-router";
+import {
+  RiAddLine,
+  RiArrowLeftRightLine,
+  RiBox3Line,
+  RiDownloadFill,
+} from "react-icons/ri";
 // import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AccountSummary() {
@@ -36,24 +42,26 @@ export default function AccountSummary() {
                 <p className="text-green-400">+1,966 (2.4%)</p>
               </div>
               <div className="flex justify-between md:justify-end w-full gap-4">
-                <div className="flex flex-col gap-2 text-primary items-center">
-                  <Plus className=" h-10 w-10 p-3 rounded-full text-white bg-custom-orange cursor-pointer" />
-                  <span className="font-semibold text-xs text-custom-orange">
-                    Deposit
-                  </span>
-                </div>
+                <Link to="/dashboard/wallet/deposit">
+                  <div className="flex flex-col gap-2 text-primary items-center">
+                    <RiAddLine className="w-12 h-12 p-3 rounded-full text-white bg-custom-orange border border-custom-orange" />
+                    <span className="font-semibold text-xs text-custom-orange">
+                      Deposit
+                    </span>
+                  </div>
+                </Link>
                 <div className="flex flex-col gap-2 text-primary items-center cursor-pointer">
-                  <ArrowDownToLine className="h-10 w-10 p-3 rounded-full text-custom-orange bg-custom-orange/20 border border-custom-orange cursor-pointer " />
+                  <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border border-custom-orange" />{" "}
                   <span className="font-semibold text-xs text-custom-orange ">
                     Withdraw
                   </span>
                 </div>
                 <div className="flex flex-col gap-2 items-center cursor-pointer">
-                  <ArrowRightLeft className=" h-10 w-10 p-3 rounded-full text-custom-black bg-gray-300 " />
+                  <RiArrowLeftRightLine className=" h-12 w-12 p-3 rounded-full text-custom-black bg-gray-300 " />
                   <span className="font-semibold text-xs">Convert</span>
                 </div>
                 <div className="flex flex-col gap-2 items-center cursor-pointer">
-                  <Box className=" h-10 w-10 p-3 rounded-full text-custom-black bg-gray-300 " />
+                  <RiBox3Line className=" h-12 w-12 p-3 rounded-full text-custom-black bg-gray-300 " />
                   <span className="font-semibold text-xs">Add Liquidity</span>
                 </div>
               </div>

@@ -27,15 +27,22 @@ export default function LaunchPad() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-4">
-          <Assets data={data || []} isLoading={isLoading} />
+          <Assets data={data || []} isLoading={isLoading} isError={isError} />
         </div>
       </CardContent>
     </Card>
   );
 }
 
-function Assets({ data, isLoading }: any) {
+function Assets({ data, isLoading, isError }: any) {
   if (isLoading) return <AssetsSkeleton />;
+
+  if (isError)
+    return (
+      <div>
+        <p>Something went wrong</p>
+      </div>
+    );
 
   return (
     <div
