@@ -24,6 +24,7 @@ import { userService } from "@/api/user.api";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import UnauthorizedResetPasswordModal from "./_components/reset-password-modal";
 import UnauthorizedPasswordChangeModal from "./_components/password-change-modal";
+import ButtonLoader from "@/components/custom/button-loader";
 
 interface FormValues {
   email_address: string;
@@ -68,11 +69,11 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-custom-gradient">
-      <Card className="w-full max-w-lg shadow-none">
+    <div className="w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 bg-custom-gradient">
+      <Card className="w-full max-w-lg shadow-none font-neue">
         <CardHeader className="text-start flex flex-col gap-1">
-          <CardTitle className="text-lg font-bold">Forgot Password</CardTitle>
-          <CardDescription className="font-neue">
+          <CardTitle className="text-xl font-medium">Forgot Password</CardTitle>
+          <CardDescription className="">
             Kindly provide your email address used during registration to
             receive instructions for password reset.
           </CardDescription>
@@ -97,7 +98,7 @@ export default function ForgotPassword() {
                 }}
                 render={({ field }) => (
                   <FormItem>
-                    <Label className="font-semibold">Email</Label>
+                    <Label>Email</Label>
                     <FormControl>
                       <div className="flex items-center relative">
                         <Mail
@@ -120,15 +121,16 @@ export default function ForgotPassword() {
 
               {error && <CustomAlert variant="destructive" message={error} />}
 
-              <Button
+              <ButtonLoader
                 type="submit"
+                className="btn-primary font-medium cursor-pointer py-6 my-4"
+                loadingText="Please wait..."
                 disabled={
                   forgotPasswordMutation.isPending || !form.formState.isValid
                 }
-                className="btn-primary font-semibold cursor-pointer py-6 my-4"
               >
                 Submit
-              </Button>
+              </ButtonLoader>
             </form>
           </Form>
         </CardContent>

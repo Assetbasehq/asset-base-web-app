@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { Link, NavLink } from "react-router";
-import { Bell, Menu, Plus, Search, User, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { AssetBaseBetaWhite } from "./asset-base-beta";
@@ -48,7 +48,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full flex items-center justify-between gap-4 p-4 md:p-8 bg-fixed-base text-white">
+    <nav className="w-full flex items-center justify-between gap-4 p-4 md:p-8 bg-fixed-base text-white font-geist">
       <div className="flex items-center gap-6">
         {/* Logo + Title + Beta Badge */}
         <AssetBaseBetaWhite />

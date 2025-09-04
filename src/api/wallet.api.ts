@@ -38,6 +38,21 @@ class WalletService {
       handleAxiosError(error, "failed to create security pin");
     }
   };
+
+  depositToWallet = async (payload?: any) => {
+    try {
+      const response = await axiosInstance.post(`/transaction-requests`, {
+        payload,
+      });
+      const data = response.data;
+
+      console.log({ data });
+
+      return data || [];
+    } catch (error) {
+      handleAxiosError(error, "failed to create security pin");
+    }
+  };
 }
 
 export const walletService = new WalletService();

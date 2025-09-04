@@ -17,13 +17,15 @@ export default function ProfileKYC() {
   const queryClient = useQueryClient();
   const { data, isLoading, isError, refetch } = useUserVerificationStatus();
 
+  console.log({ data });
+
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<Record<string, any> | null>(null);
   const [modals, setModals] = useState({
     confirmEmail: false,
     emailSuccess: false,
     idVerification: false,
-    manualVerification: false,
+    manualVerification: true,
     emailVerified: false,
     manualSuccess: false,
     dojah: false,
@@ -35,7 +37,7 @@ export default function ProfileKYC() {
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.makeEmailVerificationRequest,
-    onSuccess: (res) => {      
+    onSuccess: (res) => {
       setToken(res?.metadata?.token ?? "");
       toggleModal("confirmEmail", true);
     },

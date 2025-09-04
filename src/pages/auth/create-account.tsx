@@ -72,7 +72,9 @@ export default function CreateAccount() {
 
       <Card className="font-neue w-full max-w-lg border">
         <CardHeader className="text-start">
-          <CardTitle className="text-lg">Create an account</CardTitle>
+          <CardTitle className="text-xl font-medium">
+            Create an account
+          </CardTitle>
           <CardDescription>
             Get started to build your asset portfolio across various asset
           </CardDescription>
@@ -197,10 +199,7 @@ export default function CreateAccount() {
         <CardFooter className="flex-col gap-2">
           <p className="mt-4 text-muted-foreground">
             I have an AssetBase account?
-            <Link
-              to="/login"
-              className="text-custom-orange font-semibold pl-1"
-            >
+            <Link to="/login" className="text-custom-orange font-medium pl-1">
               Sign In
             </Link>
           </p>

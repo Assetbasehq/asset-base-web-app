@@ -131,12 +131,14 @@ export default function TotalBalance() {
                 </span>
               </div>
             </Link>
-            <div className="flex flex-col gap-2 text-primary items-center cursor-pointer">
-              <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border border-custom-orange" />{" "}
-              <span className="font-semibold text-xs text-custom-orange ">
-                Withdraw
-              </span>
-            </div>
+            <Link to="/dashboard/wallet/withdraw">
+              <div className="flex flex-col gap-2 text-primary items-center cursor-pointer">
+                <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border border-custom-orange" />{" "}
+                <span className="font-semibold text-xs text-custom-orange ">
+                  Withdraw
+                </span>
+              </div>
+            </Link>
             <div className="flex flex-col gap-2 items-center cursor-pointer">
               <RiArrowLeftRightLine className=" w-12 h-12 p-3 rounded-full bg-custom-input-mute text-custom-white-text" />{" "}
               <span className="font-semibold text-xs">Convert</span>

@@ -327,7 +327,7 @@ export default function PersonalDetails() {
               <Button
                 disabled={registerMutation.isPending}
                 type="submit"
-                className="w-full font-semibold py-6 border-2 text-sm cursor-pointer btn-secondary"
+                className="w-full font-medium py-6 border-2 text-sm cursor-pointer btn-secondary"
               >
                 {registerMutation.isPending ? (
                   <span className="flex items-center">

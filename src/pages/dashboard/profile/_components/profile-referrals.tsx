@@ -3,7 +3,7 @@ import manWithSpeaker from "@/assets/images/man-with-speaker.svg";
 import { useAuthStore } from "@/store/auth-store";
 import { useState } from "react";
 import { RiCheckLine, RiFileCopyLine } from "react-icons/ri";
-import config from "@/config";
+import env from "@/config";
 import noReferralImage from "@/assets/images/no-referral-image.png";
 import { useQuery } from "@tanstack/react-query";
 import { userService } from "@/api/user.api";
@@ -117,13 +117,10 @@ export default function ProfileReferrals() {
               )}
             </span>
           </div>
-          <a
-            className="text-custom-orange"
-            href={`${config.CLIENT_BASE_URL}/register?ref=${user?.referral_code}`}
-          >
-            {`${config.CLIENT_BASE_DOMAIN}`}/register?ref=
+          <p className="text-custom-orange">
+            {`${env.CLIENT_BASE_DOMAIN}`}/register?ref=
             <span className="uppercase">{user?.referral_code}</span>{" "}
-          </a>
+          </p>
         </div>
         <div className="hidden md:flex justify-end items-end ">
           <img src={manWithSpeaker} alt="" className="h-full" />

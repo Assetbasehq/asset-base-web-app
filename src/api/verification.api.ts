@@ -32,6 +32,19 @@ class VerificationService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+  uploadVerificationAttachments = async (payload: any) => {
+    try {
+      const response = await axiosInstance.post(
+        `verification-requests/attachments`,
+        payload
+      );
+      console.log({ response });
+
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
 }
 
 export const verificationService = new VerificationService();
