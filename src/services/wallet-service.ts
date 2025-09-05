@@ -1,36 +1,40 @@
 export class WalletService {
   static getAvailableWallets() {
-    if (!window || !window.ethereum) return [];
+    if (typeof window === "undefined" || !window.ethereum) return [];
+
+    const eth = window.ethereum as any;
 
     console.log({
-      length: window.ethereum.providers?.length,
-      providers: window.ethereum.providers,
-      isMetaMask: window.ethereum.isMetaMask,
-      isTrust: window.ethereum.isTrust,
-      isTrustWallet: window.ethereum.isTrust,
+      providers: eth.providers,
+      isMetaMask: eth.isMetaMask,
+      isTrust: eth.isTrust,
     });
 
-    // If multiple wallets exist
-    if (window.ethereum.providers?.length) {
-      const wallets = window.ethereum.providers.map((prov) => {
-        if (prov.isMetaMask) return { name: "MetaMask", provider: prov };
-        if (prov.isTrust) return { name: "Trust Wallet", provider: prov };
-        return { name: "Unknown Wallet", provider: prov };
+    const wallets: { name: string; provider: any }[] = [];
+
+    // ✅ If multiple wallets exist (EIP-6963 supported)
+    if (Array.isArray(eth.providers) && eth.providers.length > 0) {
+      eth.providers.forEach((prov: any) => {
+        if (prov.isMetaMask) wallets.push({ name: "MetaMask", provider: prov });
+        else if (prov.isTrust || prov.isTrustWallet)
+          wallets.push({ name: "Trust Wallet", provider: prov });
+        else wallets.push({ name: "Unknown Wallet", provider: prov });
       });
-
-      console.log("wallets", wallets);
-
       return wallets;
     }
 
-    // Single wallet installed
-    if (window.ethereum.isMetaMask) {
-      return [{ name: "MetaMask", provider: window.ethereum }];
-    }
-    if (window.ethereum.isTrust) {
-      return [{ name: "Trust Wallet", provider: window.ethereum }];
+    // Fallback detection when only one window.ethereum
+    if (eth.isMetaMask && !eth.isTrust) {
+      // If it's ONLY MetaMask
+      wallets.push({ name: "MetaMask", provider: eth });
+    } else if (eth.isTrust || eth.isTrustWallet) {
+      // If it's ONLY Trust Wallet
+      wallets.push({ name: "Trust Wallet", provider: eth });
+    } else {
+      // Default fallback
+      wallets.push({ name: "Unknown Wallet", provider: eth });
     }
 
-    return [{ name: "Unknown Wallet", provider: window.ethereum }];
+    return wallets;
   }
 }

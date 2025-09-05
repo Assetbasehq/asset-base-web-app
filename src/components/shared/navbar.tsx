@@ -158,11 +158,8 @@ export default function Navbar() {
         </div>
 
         {/* Connect Button - Mobile */}
-        <div className="p-4">
-          <Button className="bg-custom-orange text-custom-white hover:bg-custom-orange/90 transition-all duration-300 ease-in-out px-4 py-2 rounded-full w-full flex items-center gap-2 font-semibold cursor-pointer">
-            <RiAddLine size={20} />
-            Connect
-          </Button>
+        <div onClick={() => setIsOpen(false)} className="p-4">
+          <ConnectWallet className="w-full" />
         </div>
       </div>
 
