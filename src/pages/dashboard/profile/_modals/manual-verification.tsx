@@ -15,7 +15,6 @@ import {
   FormItem,
   FormControl,
   FormMessage,
-  FormLabel,
 } from "@/components/ui/form";
 import {
   Select,
@@ -24,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader } from "lucide-react";
 import ButtonLoader from "@/components/custom/button-loader";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";

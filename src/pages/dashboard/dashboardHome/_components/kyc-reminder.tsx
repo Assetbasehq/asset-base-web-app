@@ -41,8 +41,10 @@ export default function KYCReminder() {
               </div>
 
               <div>
-                <h2 className="text-custom-black-text text-lg font-semibold">Complete KYC</h2>
-                <p className="text-muted-foreground">
+                <h2 className="text-custom-base text-lg font-semibold">
+                  Complete KYC
+                </h2>
+                <p className="text-custom-base">
                   Finish setting up your account
                 </p>
               </div>

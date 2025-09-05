@@ -1,32 +1,34 @@
-import { dojahAppID, dojahPublicKey } from "@/constants/dojah";
-import { useRef } from "react";
+import env from "@/config";
+import { formatDate } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth-store";
 import Dojah from "react-dojah";
 
 interface DojahKycModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
   userData: Record<string, any> | null;
 }
 
 export default function DojahKycModal({
   isOpen,
   onClose,
+  onSuccess,
   userData,
 }: DojahKycModalProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const { user } = useAuthStore();
+  console.log({ userData, user });
 
-  console.log({ userData });
-
-  const appID = dojahAppID;
-  const publicKey = dojahPublicKey;
-
+  const appID = env.DOJAH_APP_ID;
+  const publicKey = env.DOJAH_PUBLIC_KEY;
+  const widgetId = env.DOJAH_WIDGET_ID;
   const type = "custom";
   const config = {
     debug: true,
     webhook: true,
     pages: [
       {
-        page: "govrnement-data",
+        page: "government-data",
         config: {
           bvn: true,
           nin: true,
@@ -37,63 +39,53 @@ export default function DojahKycModal({
         },
       },
     ],
+    widget_id: widgetId,
   };
 
   const newUserData = {
-    first_name: "", //Optional
-    last_name: "", //Optional
-    dob: "", //YYYY-MM-DD Optional
+    first_name: user?.first_name,
+    last_name: user?.last_name,
+    dob: formatDate(user?.date_of_birth),
     residence_country: "NG", //Optional
-    email: "", //optional
-  };
-
-  const govData = {
-    nin: "",
-    bvn: "",
-    dl: "",
-    mobile: "",
+    email: user?.email_address,
   };
 
   const metadata = {
-    user_id: userData?.user_id,
+    user_id: userData?.id,
   };
 
+  // const govData = {
+  //   nin: "",
+  //   bvn: "",
+  //   dl: "",
+  //   mobile: "",
+  // };
   const response = (type: string, data: any) => {
     console.log(type, data);
     if (type === "success") {
+      onSuccess();
     } else if (type === "error") {
-      setTimeout(() => onClose(), 2000);
+      onClose();
     } else if (type === "close") {
     } else if (type === "begin") {
     } else if (type === "loading") {
     }
   };
 
-  // useEffect(() => {
-  //   // Cleanup DOM on unmount (make sure container is empty)
-  //   return () => {
-  //     if (containerRef.current) {
-  //       containerRef.current.innerHTML = "";
-  //     }
-  //   };
-  // }, []);
-
   if (!isOpen) {
     return null;
   }
 
   return (
-    <div ref={containerRef}>
-      <Dojah
-        response={response}
-        appID={appID}
-        publicKey={publicKey}
-        type={type}
-        userData={{ residence_country: "NG" }}
-        govData={{}}
-        metadata={metadata}
-        config={config}
-      />
-    </div>
+    <Dojah
+      response={response}
+      appID={appID}
+      publicKey={publicKey}
+      type={type}
+      userData={newUserData}
+      // govData={govData}
+      metadata={metadata}
+      config={config}
+    />
   );
 }

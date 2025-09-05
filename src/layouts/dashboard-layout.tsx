@@ -1,3 +1,4 @@
+import ScrollToTop from "@/components/custom/scroll-to-top";
 import Navbar from "@/components/shared/navbar";
 import ThemeSwitcher from "@/components/shared/theme-switcher";
 import { Outlet } from "react-router";
@@ -11,6 +12,7 @@ export default function DashboardLayout() {
           <Outlet />
         </main>
         <ThemeSwitcher />
+        <ScrollToTop />
       </div>
     </div>
   );

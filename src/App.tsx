@@ -37,7 +37,9 @@ import PINSetup from "./pages/onboarding/pin-setup";
 import AssetDetails from "./pages/dashboard/markets/_components/asset-details";
 import Deposit from "./pages/dashboard/wallet/deposit";
 import WalletPage from "./pages/dashboard/wallet/_components/wallet-page";
-import Assets from "./pages/dashboard/assets/assets";
+import Assets from "./pages/dashboard/assets/asset-list";
+import Withdraw from "./pages/dashboard/wallet/withdraw";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -132,6 +134,10 @@ function App() {
                 {
                   path: "deposit",
                   element: <Deposit />,
+                },
+                {
+                  path: "withdraw",
+                  element: <Withdraw />,
                 },
               ],
             },
@@ -242,6 +248,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <RouterProvider router={router} />
       {/* {process.env.NODE_ENV === "development" && (
         <ReactQueryDevtools initialIsOpen={false} />

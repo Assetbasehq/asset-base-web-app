@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { Link, NavLink } from "react-router";
-import { Bell, Menu, Plus, Search, User, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { AssetBaseBetaWhite } from "./asset-base-beta";
@@ -15,6 +15,7 @@ import {
   RiSearch2Line,
   RiAddLine,
 } from "react-icons/ri";
+import ConnectWallet from "./connect-wallet";
 
 const links = [
   {
@@ -48,7 +49,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full flex items-center justify-between gap-4 p-4 md:p-8 bg-fixed-base text-white">
+    <nav className="w-full flex items-center justify-between gap-4 p-4 md:p-8 bg-fixed-base text-white font-geist">
       <div className="flex items-center gap-6">
         {/* Logo + Title + Beta Badge */}
         <AssetBaseBetaWhite />
@@ -83,12 +84,7 @@ export default function Navbar() {
       {/* Desktop Right Section */}
       <div className="flex items-center gap-4">
         <div className="hidden lg:flex items-center gap-4">
-          <Button className="bg-custom-orange text-custom-white px-4 py-2 rounded-full w-fit flex items-center gap-2 cursor-pointer hover:bg-custom-orange/90 transition-all duration-300 ease-in-out">
-            <span>
-              <RiAddLine className="" />
-            </span>
-            Connect
-          </Button>
+          <ConnectWallet />
 
           <RiNotification2Line
             size={34}
@@ -171,7 +167,7 @@ export default function Navbar() {
       </div>
 
       {/* 👇 Fixed Bottom Navigation Links */}
-      <div className="fixed bottom-3 left-0 w-full z-50 lg:hidden">
+      <div className="fixed bottom-0 left-0 w-full z-80 lg:hidden bg-custom-card">
         <ul className="flex justify-around items-center p-2">
           {links.map(({ label, to, icon }) => (
             <li key={to}>

@@ -11,7 +11,7 @@ const tabs = [
 ];
 
 export default function AssetTradePanel() {
-  const [active, setActive] = useState("finance");
+  const [active, setActive] = useState("trade");
 
   return (
     <Card className="border-none shadow-none bg-custom-card p-0 px-0">

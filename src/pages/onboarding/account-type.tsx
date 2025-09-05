@@ -80,7 +80,7 @@ export default function AccountType() {
     <div className=" w-full min-h-screen flex flex-col items-center justify-center gap-18 font-neue bg-gradient-to-tr from-white via-white to-pink-100 dark:from-black dark:via-black dark:to-black">
       <Card className="w-full max-w-lg shadow-none text-black bg-white dark:bg-custom-card dark:text-white dark:border-custom-card">
         <CardHeader className="text-start flex flex-col gap-1">
-          <CardTitle className="text-lg text-bold">
+          <CardTitle className="text-xl font-medium">
             Choose an account type
           </CardTitle>
           <CardDescription className="font-neue">
@@ -117,7 +117,7 @@ export default function AccountType() {
             ))}
             <Button
               onClick={handleContinue}
-              className="bg-black text-white dark:bg-white dark:text-black font-semibold cursor-pointer hover:bg-custom-black py-6"
+              className="bg-black text-white dark:bg-white dark:text-black font-medium cursor-pointer hover:bg-custom-black py-6"
             >
               Submit
             </Button>

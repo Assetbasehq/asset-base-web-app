@@ -1,12 +1,15 @@
 const rawClientUrl = import.meta.env.VITE_CLIENT_BASE_URL ?? "";
 
-const config = {
+const env = {
   SERVER_BASE_URL: import.meta.env.VITE_SERVER_BASE_URL ?? "",
   CLIENT_BASE_URL: rawClientUrl,
   CLIENT_BASE_DOMAIN: rawClientUrl
     ? rawClientUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")
     : "",
   CLIENT_NEW_API_URL: import.meta.env.VITE_NEW_API_URL ?? "",
+  DOJAH_APP_ID: import.meta.env.VITE_DOJAH_APP_ID ?? "",
+  DOJAH_PUBLIC_KEY: import.meta.env.VITE_DOJAH_PUBLIC_KEY ?? "",
+  DOJAH_WIDGET_ID: import.meta.env.VITE_DOJAH_WIDGET_ID ?? "",
 };
 
-export default config;
+export default env;

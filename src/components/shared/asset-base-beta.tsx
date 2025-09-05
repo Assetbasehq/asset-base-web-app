@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Badge } from "../ui/badge";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 
@@ -18,7 +19,7 @@ export default function AssetBaseBeta() {
 
 export function AssetBaseBetaWhite() {
   return (
-    <div className="flex items-end gap-2 text-custom-white">
+    <Link to="/dashboard" className="flex items-end gap-2 text-custom-white">
       <img
         src={assetBaseLogo}
         alt="asset base"
@@ -31,6 +32,6 @@ export function AssetBaseBetaWhite() {
       >
         beta
       </Badge>
-    </div>
+    </Link>
   );
 }

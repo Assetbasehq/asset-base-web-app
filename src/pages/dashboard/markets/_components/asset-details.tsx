@@ -6,6 +6,7 @@ import AssetInfo from "./asset-info";
 import AssetTabs from "./asset-tabs";
 import AssetTradePanel from "./asset-trade-panel";
 import AssetOrders from "./asset-orders";
+import { cn } from "@/lib/utils";
 
 interface Asset {
   id: string;
@@ -59,38 +60,44 @@ export default function AssetDetails() {
           </span>
         </div> */}
 
-      <div className="flex items-center px-2 py-1 bg-custom-light-bg text-custom-white rounded-sm">
-        {formattedSegments.map((seg, idx) => {
-          const isLast = idx === formattedSegments.length - 1;
-          const to = "/" + segments.slice(0, idx + 1).join("/");
+        <div className="flex items-center px-2 py-1 bg-custom-light-bg text-custom-white rounded-sm">
+          {formattedSegments.map((seg, idx) => {
+            const isLast = idx === formattedSegments.length - 1;
+            const to = "/" + segments.slice(0, idx + 1).join("/");
 
-          return (
-            <div key={idx} className="flex items-center gap-2 ">
-              <Link
-                to={to}
-                className={`capitalize px-1 py-1 rounded ${
-                  isLast
-                    ? "text-custom-orange font-medium uppercase"
-                    : "hover:text-custom-white-text"
-                }`}
-              >
-                {seg}
-              </Link>
-              {!isLast && <span className="text-muted-foreground">/</span>}
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div key={idx} className="flex items-center gap-2 ">
+                <Link
+                  to={to}
+                  className={cn(
+                    "capitalize px-1 py-1 rounded text-sm",
+                    isLast
+                      ? "text-custom-orange font-medium uppercase"
+                      : "hover:text-custom-white-text"
+                  )}
+                >
+                  {seg}
+                </Link>
+                {!isLast && <span className="text-muted-foreground">/</span>}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 lg:flex-row">
         <div className="flex flex-col gap-4 lg:w-3/5">
           <AssetInfo asset={demoAsset} />
-          <AssetTabs />
+          <div className="hidden lg:block">
+            <AssetTabs />
+          </div>
         </div>
         <div className="flex flex-col gap-4 lg:w-2/5 bg-custom-card rounded-xl p-6">
           <AssetTradePanel />
           <AssetOrders />
+        </div>
+        <div className="block lg:hidden">
+          <AssetTabs />
         </div>
       </div>
     </div>

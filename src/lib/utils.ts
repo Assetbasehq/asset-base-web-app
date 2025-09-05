@@ -130,3 +130,20 @@ export function calculateRaisePercentage(
   const raisedShares = totalShares - availableShares;
   return Math.floor((raisedShares / totalShares) * 100);
 }
+
+export function toCompactAmount(amount: number, decimals = 1): string {
+  if (amount === null || amount === undefined || isNaN(amount)) return "0";
+
+  const absValue = Math.abs(amount);
+  const sign = amount < 0 ? "-" : "";
+
+  if (absValue >= 1_000_000_000) {
+    return `${sign}${(absValue / 1_000_000_000).toFixed(decimals)}B`;
+  } else if (absValue >= 1_000_000) {
+    return `${sign}${(absValue / 1_000_000).toFixed(decimals)}M`;
+  } else if (absValue >= 1_000) {
+    return `${sign}${(absValue / 1_000).toFixed(decimals)}K`;
+  }
+
+  return `${sign}${absValue.toFixed(0)}`;
+}

@@ -4,6 +4,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================
+   Geist Font Family
+============================ */
+
 /* Geist font family with all weights */
 @font-face {
   font-family: "Geist";
@@ -68,6 +72,41 @@
   font-style: normal;
 }
 
+/* ============================
+   Neue Montreal Font Family (OTF)
+============================ */
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("./assets/fonts/neue-montreal/NeueMontreal-Light.otf")
+    format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("./assets/fonts/neue-montreal/NeueMontreal-Regular.otf")
+    format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("./assets/fonts/neue-montreal/NeueMontreal-Medium.otf")
+    format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("./assets/fonts/neue-montreal/NeueMontreal-Bold.otf")
+    format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
 /* Register font with Tailwind */
 @theme {
   --font-geist: "Geist", sans-serif;
@@ -123,7 +162,7 @@
   --color-custom-input-label: var(--custom-input-label);
   --color-custom-light-stroke: var(--custom-light-stroke);
   --color-custom-light-bg: var(--custom-light-bg);
-  --color-custom-grey-text: var(--custom-grey-text);
+  --color-custom-grey: var(--custom-grey);
   --color-custom-blue-shade: var(--custom-blue-shade);
   --color-custom-blue-text: var(--custom-blue-text);
   --color-custom-white-text: var(--custom-white-text);
@@ -143,7 +182,7 @@
   --color-fixed-input-label: #e6e6e6;
   --color-fixed-light-stroke: #9ab404;
   --color-fixed-light-bg: #121212;
-  --color-fixed-grey-text: #cccccc;
+  --color-fixed-grey: #cccccc;
   --color-fixed-blue-shade: #102040;
   --color-fixed-blue-text: #4da6ff;
   --color-fixed-white-text: #f5f5f5;
@@ -203,13 +242,13 @@
   --custom-base: #f5f5f6;
   --custom-card: #ffffff;
   /* --custom-card-inner: #F6F9FA; */
-  --custom-input-stroke: #cddd05;
-  --custom-input-fill: #ffffff;
+  --custom-input-stroke: #cdd0d5;
+  --custom-input-fill: #20232d;
   --custom-input-mute: #f0f2f5;
   --custom-input-label: #ffffff;
-  --custom-light-stroke: #cddd05;
+  --custom-light-stroke: #31353f;
   --custom-light-bg: #f6f9fa;
-  --custom-grey-text: #31353f;
+  --custom-grey: #31353f;
   --custom-blue-shade: #e6f0fc;
   --custom-blue-text: #0a4286;
   --custom-white-text: #0a0d14;
@@ -263,13 +302,13 @@
   --custom-base: #0a0d14;
   --custom-card: #161922;
   /* --custom-card-inner: #222431; */
-  --custom-input-stroke: #9ab404;
-  --custom-input-fill: #1e1e1e;
+  --custom-input-stroke: #525866;
+  --custom-input-fill: #ffffff;
   --custom-input-mute: #31353f;
-  --custom-input-label: #e6e6e6;
-  --custom-light-stroke: #9ab404;
+  --custom-input-label: #ffffff;
+  --custom-light-stroke: #cdd0d5;
   --custom-light-bg: #222431;
-  --custom-grey-text: #cccccc;
+  --custom-grey: #cdd0d5;
   --custom-blue-shade: #102040;
   --custom-blue-text: #4da6ff;
   --custom-white-text: #ffffff;
@@ -295,7 +334,7 @@
 }
 
 .btn-primary {
-  @apply border border-custom-orange bg-white text-custom-orange 
+  @apply border-2 border-custom-orange bg-white text-custom-orange 
   hover:bg-gray-50
    dark:bg-custom-orange dark:text-custom-white 
    dark:hover:bg-custom-orange/80 

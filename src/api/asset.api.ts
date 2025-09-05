@@ -6,8 +6,6 @@ class AssetService {
     try {
       const response = await axiosInstance.get(`/assets/trending`, { params });
       const items = response.data?.items;
-      console.log({ items });
-
       return items || [];
     } catch (error) {
       handleAxiosError(error, "failed to create security pin");
@@ -17,8 +15,6 @@ class AssetService {
     try {
       const response = await axiosInstance.get(`/assets/trending`, { params });
       const items = response.data?.items;
-      console.log({ items });
-
       return items || [];
     } catch (error) {
       handleAxiosError(error, "failed to create security pin");

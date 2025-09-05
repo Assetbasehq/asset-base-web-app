@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { FormatService } from "@/services/format-service";
 import {
   RiArrowDownLine,
   RiArrowUpLine,
@@ -27,24 +28,24 @@ interface AssetInfoProps {
 
 export default function AssetInfo({ asset }: AssetInfoProps) {
   return (
-    <Card className="bg-custom-card border-none text-start shadow-none ">
-      <CardContent className="text-white">
-        <div className="space-y-6">
+    <Card className="bg-custom-card border-none text-start shadow-none py-0">
+      <CardContent className="text-white p-4">
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex gap-4">
-              <img src={asset.logo} alt={asset.name} className="w-12" />
+              <img src={asset.logo} alt={asset.name} className="w-8 sm:w-12" />
               <div>
-                <p className="font-semibold">{asset.acronym}</p>
-                <p className="text-muted-foreground">{asset.name}</p>
+                <p className="font-semibold text-lg">{asset.acronym}</p>
+                <p className="text-muted-foreground text-sm">{asset.name}</p>
               </div>
             </div>
-            <RiShareForwardLine className="h-14 w-14 bg-custom-light-bg p-4 rounded-full" />
+            <RiShareForwardLine className="w-12 h-12 sm:h-14 sm:w-14 bg-custom-light-bg p-4 rounded-full" />
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between">
-            <div className="flex flex-col gap-2 mb-4 md:mb-0">
+            <div className="flex flex-col gap-2 mb-2 md:mb-0">
               <div className="flex items-center gap-2">
-                <p className="font-semibold  text-3xl text-custom-white-text">
+                <p className="font-semibold text-xl  sm:text-3xl text-custom-white-text">
                   {asset.price}
                 </p>
                 <small
@@ -57,42 +58,44 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
                 </small>
               </div>
               <p className="text-muted-foreground text-sm hidden md:block">
-                At close:
+                At close:{" "}
                 <span className="font-semibold text-custom-white-text">
                   {asset.round_closes}
                 </span>
               </p>
             </div>
 
-            <div className="flex gap-4">
-              <div className="flex flex-col gap-1 bg-custom-light-bg rounded-lg p-4 w-fir">
-                <small className="text-muted-foreground text-sm md:text-base">
+            <div className="flex gap-2 sm:gap-4">
+              <div className="flex flex-col gap-1 bg-custom-light-bg rounded-lg px-4 py-1 w-fir">
+                <small className="text-muted-foreground text-xs sm:text-sm md:text-base">
                   24hr Volume
                 </small>
-                <p className="font-semibold text-custom-white-text">
-                  {asset.amount_raised}
+                <p className="font-semibold text-custom-white-text text-sm sm:text-lg">
+                  {FormatService.formatToCompactAmount(23000, "USD", 2)}
                 </p>
               </div>
-              <div className="flex flex-col gap-1 bg-custom-light-bg rounded-lg p-4 w-fit">
-                <small className="text-muted-foreground text-sm md:text-base">
+              <div className="flex flex-col gap-1 bg-custom-light-bg rounded-lg px-4 py-1 w-fit">
+                <small className="text-muted-foreground text-xs sm:text-sm md:text-base">
                   Interest Rate
                 </small>
-                <p className="font-semibold text-custom-white-text">10%</p>
+                <p className="font-semibold text-custom-white-text text-sm sm:text-lg">
+                  10%
+                </p>
               </div>
-              <div className="flex flex-col gap-1 bg-custom-light-bg rounded-lg p-4 w-fit">
-                <small className="text-muted-foreground text-sm md:text-base">
+              <div className="flex flex-col gap-1 bg-custom-light-bg rounded-lg px-4 py-1 w-fit">
+                <small className="text-muted-foreground text-xs sm:text-sm md:text-base">
                   Market Cap
                 </small>
-                <p className="font-semibold text-custom-white-text">
-                  $145,000.00
+                <p className="font-semibold text-custom-white-text text-sm sm:text-lg">
+                  {FormatService.formatToCompactAmount(145000, "USD", 2)}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="border p-4 md:p-6 rounded-lg grid grid-cols-2 gap-4 md:grid-cols-4 text-custom-white-text">
+          <div className="border p-2 sm:p-6 rounded-lg grid grid-cols-2 gap-4 md:grid-cols-4 text-custom-white-text">
             {/* 24h Open */}
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <RiTimeLine className="md:h-5 md:w-5" />
                 <p className="text-xs md:text-lg">24h Open</p>
@@ -108,10 +111,10 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
                   {asset.price_change_24hrs}
                 </small>
               </div>
-            </div>
+            </div> */}
 
             {/* 24h Close */}
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <RiArrowDownLine className="md:h-5 md:w-5 text-red-500" />
                 <p className="text-xs md:text-lg">24h Close</p>
@@ -127,12 +130,12 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
                   {asset.price_change_24hrs}
                 </small>
               </div>
-            </div>
+            </div> */}
 
             {/* 24h High */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-muted-foreground">
-                <RiTimeLine className="md:h-5 md:w-5" />
+                <RiArrowDownLine className="md:h-5 md:w-5 text-red-500" />
                 <p className="text-xs md:text-lg">24h High</p>
               </div>
               <div className="flex items-center gap-2">
@@ -168,21 +171,41 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
             </div>
           </div>
 
-          <div className="bg-custom-blue-shade text-custom-white-text p-6 rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between">
-            <div className="flex items-start md:items-center gap-4">
-              <RiErrorWarningLine className="h-6 w-6 " />
-              <div>
-                <h2 className="text-lg">Looking for more insights?</h2>
-                <p>
-                  The pro view allows experienced traders to view charts and
-                  more
-                </p>
+          <div className="bg-custom-blue-shade text-custom-white-text px-4 py-2 rounded-lg flex gap-1 flex-col md:flex-row items-start md:items-center justify-between">
+            <div className="flex items-start gap-2 md:hidden">
+              <RiErrorWarningLine className="!w-8 !h-8  " />
+              <div className="flex flex-col gap-1">
+                <div>
+                  <p className=" text-custom-grey text-xs md:text-sm tracking-wide leading-4">
+                    Looking for more insights? The pro view allows experienced
+                    traders to view charts and more
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg md:text-lg font-medium">
+                    Switch to Pro
+                  </h2>
+                  <Switch className="border-2" />
+                </div>
               </div>
             </div>
-
-            <div className="flex items-center gap-2 pl-8 md:pl-0">
-              <h2 className="text-xl">Switch to Pro</h2>
-              <Switch className="border-2" />
+            <div className="hidden md:flex items-center gap-4 w-full justify-between">
+              <div className="flex gap-2">
+                <RiErrorWarningLine className="!w-8 !h-8 " />
+                <div>
+                  <h2>Looking for more insights?</h2>
+                  <p className=" text-custom-grey text-xs md:text-sm tracking-wide leading-4">
+                    The pro view allows experienced traders to view charts and
+                    more
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg md:text-lg font-medium">
+                  Switch to Pro
+                </h2>
+                <Switch className="border-2" />
+              </div>
             </div>
           </div>
         </div>

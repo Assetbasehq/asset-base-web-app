@@ -29,6 +29,7 @@ import { authService } from "@/api/auth.api";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import ButtonLoader from "@/components/custom/button-loader";
 import { Label } from "@/components/ui/label";
+import { RiEyeFill, RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 
 interface FormValues {
   email_address: string;
@@ -70,9 +71,11 @@ export default function Login() {
     <div className="w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-geist bg-gradient-to-tr from-white via-pink-50 to-pink-100 dark:from-black dark:via-black dark:to-black">
       <AssetBaseBeta />
 
-      <Card className="w-full max-w-lg border text-black bg-white dark:bg-custom-card dark:text-white">
+      <Card className="w-full max-w-lg border text-black bg-white dark:bg-custom-card dark:text-white font-neue">
         <CardHeader className="text-start flex flex-col gap-1">
-          <CardTitle className="text-lg">Login to your account</CardTitle>
+          <CardTitle className="text-xl font-medium">
+            Login to your account
+          </CardTitle>
           <CardDescription className="font-neue">
             Hey, you're back. Log in to continue investing in assets
           </CardDescription>
@@ -97,87 +100,89 @@ export default function Login() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-6"
+              className="flex flex-col gap-2"
             >
-              {/* Email */}
-              <FormField
-                control={form.control}
-                name="email_address"
-                rules={{
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,3}$/,
-                    message: "Please enter a valid email address",
-                  },
-                }}
-                render={({ field }) => (
-                  <FormItem>
-                    <Label>Email</Label>
-                    <FormControl>
-                      <div className="flex items-center relative">
-                        <Mail
-                          size={22}
-                          className="text-muted-foreground absolute left-3"
-                        />
-                        <Input
-                          {...field}
-                          type="email"
-                          placeholder="johnmercy03@gmail.com"
-                          className="w-full py-6 pl-10 pr-3"
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-end" />
-                  </FormItem>
-                )}
-              />
+              <div className="flex flex-col gap-6">
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email_address"
+                  rules={{
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,3}$/,
+                      message: "Please enter a valid email address",
+                    },
+                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>Email</Label>
+                      <FormControl>
+                        <div className="flex items-center relative">
+                          <Mail
+                            size={22}
+                            className="text-muted-foreground absolute left-3"
+                          />
+                          <Input
+                            {...field}
+                            type="email"
+                            placeholder="johnmercy03@gmail.com"
+                            className="w-full py-6 pl-10 pr-3"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-end" />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Password */}
-              <FormField
-                control={form.control}
-                name="password"
-                rules={{
-                  required: "Password is required",
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters",
-                  },
-                }}
-                render={({ field }) => (
-                  <FormItem>
-                    <Label>Password</Label>
-                    <FormControl>
-                      <div className="flex items-center relative">
-                        <LockKeyhole className="text-muted-foreground absolute left-3" />
-                        <Input
-                          {...field}
-                          type={isPasswordVisible ? "password" : "text"}
-                          placeholder="**********"
-                          className="w-full py-6 pl-10 pr-3 align-text-bottom"
-                        />
-                        {isPasswordVisible ? (
-                          <Eye
-                            size={22}
-                            className="absolute right-3 cursor-pointer"
-                            onClick={() =>
-                              setPasswordVisible(!isPasswordVisible)
-                            }
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  rules={{
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>Password</Label>
+                      <FormControl>
+                        <div className="flex items-center relative">
+                          <LockKeyhole className="text-muted-foreground absolute left-3" />
+                          <Input
+                            {...field}
+                            type={isPasswordVisible ? "password" : "text"}
+                            placeholder="**********"
+                            className="w-full py-6 pl-10 pr-3 align-text-bottom"
                           />
-                        ) : (
-                          <EyeClosed
-                            size={22}
-                            className="absolute right-3 cursor-pointer"
-                            onClick={() =>
-                              setPasswordVisible(!isPasswordVisible)
-                            }
-                          />
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-end" />
-                  </FormItem>
-                )}
-              />
+                          {isPasswordVisible ? (
+                            <RiEyeLine
+                              size={22}
+                              className="absolute right-3 cursor-pointer"
+                              onClick={() =>
+                                setPasswordVisible(!isPasswordVisible)
+                              }
+                            />
+                          ) : (
+                            <RiEyeOffLine
+                              size={22}
+                              className="absolute right-3 cursor-pointer"
+                              onClick={() =>
+                                setPasswordVisible(!isPasswordVisible)
+                              }
+                            />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-end" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               {/* Error Alert */}
               {error && <CustomAlert variant="destructive" message={error} />}
@@ -185,7 +190,7 @@ export default function Login() {
               {/* Forgot password link */}
               <Link
                 to="/forgot-password"
-                className="text-sm underline text-muted-foreground text-left"
+                className="text-sm underline text-muted-foreground text-left w-fit"
               >
                 Forgot password?
               </Link>
@@ -194,10 +199,10 @@ export default function Login() {
                 isLoading={loginMutation.isPending}
                 disabled={loginMutation.isPending || !form.formState.isValid}
                 type="submit"
-                className="w-full btn-primary py-6 font-semibold cursor-pointer"
+                className="w-full btn-primary py-6 mt-6 font-medium cursor-pointer"
                 loadingText="Please wait..."
               >
-                Login
+                Log In
               </ButtonLoader>
             </form>
           </Form>

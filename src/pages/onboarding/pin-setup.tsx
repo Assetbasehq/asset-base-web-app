@@ -44,6 +44,7 @@ export default function PINSetup() {
       setShowSuccessDialog(true);
     },
     onError: (error) => {
+      setError(error.message || "Something went wrong");
       console.log({ error });
     },
   });
@@ -62,7 +63,7 @@ export default function PINSetup() {
     <div className="w-full min-h-screen flex flex-col items-center justify-center font-neue bg-gradient-to-tr from-white via-white to-pink-100 dark:from-black dark:via-black dark:to-black">
       <Card className="w-full max-w-lg shadow-none text-black bg-white dark:bg-custom-card dark:text-white dark:border-custom-card">
         <CardHeader className="text-start flex flex-col gap-1">
-          <CardTitle className="text-lg font-bold">
+          <CardTitle className="text-xl font-medium">
             Setup your transaction PIN
           </CardTitle>
           <CardDescription>
@@ -86,7 +87,10 @@ export default function PINSetup() {
                       <InputOTP
                         maxLength={6}
                         value={field.value}
-                        onChange={field.onChange}
+                        onChange={(e) => {
+                          setError(null);
+                          field.onChange(e);
+                        }}
                         pattern={REGEXP_ONLY_DIGITS}
                       >
                         <InputOTPGroup className="gap-2 md:gap-4">
@@ -105,7 +109,7 @@ export default function PINSetup() {
               />
 
               {/* Confirm PIN */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="confirmPin"
                 render={({ field }) => (
@@ -130,7 +134,7 @@ export default function PINSetup() {
                     </FormControl>
                   </FormItem>
                 )}
-              />
+              /> */}
 
               {error && <CustomAlert message={error} variant="destructive" />}
 
@@ -138,7 +142,7 @@ export default function PINSetup() {
               <Button
                 type="submit"
                 disabled={createPinMutation.isPending}
-                className="w-full font-semibold py-6 border-2 cursor-pointer btn-secondary"
+                className="w-full font-medium py-6 border-2 cursor-pointer btn-secondary"
               >
                 {createPinMutation.isPending ? "Creating..." : "Create PIN"}
               </Button>

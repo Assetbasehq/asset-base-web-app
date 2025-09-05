@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useGetTrendingAssets } from "@/hooks/useAssets";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { IAsset } from "@/interfaces/asset.interface";
-import AssetCard from "../_cards/asset-card";
+import AssetCard from "@/components/shared/asset/asset-card";
 
 export default function LaunchPad() {
   const { data, isLoading, isError } = useGetTrendingAssets();
@@ -52,7 +52,7 @@ function Assets({ data, isLoading, isError }: any) {
       }}
     >
       {data.map((item: { asset: IAsset }) => (
-        <AssetCard key={item?.asset?.id} item={item} />
+        <AssetCard key={item?.asset?.id} item={item} variant="card" />
       ))}
     </div>
   );

@@ -1,4 +1,5 @@
 import { verificationService } from "@/api/verification.api";
+import ButtonLoader from "@/components/custom/button-loader";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
 interface IDVerificationProps {
   isOpen: boolean;
@@ -24,6 +26,8 @@ export default function IDVerification({
   switchToManual,
   switchToDojah,
 }: IDVerificationProps) {
+  const [dojahButtonClicked, setDojahButtonClicked] = useState(false);
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: verificationService.initiateDojahVerification,
     onSuccess: (data) => {
@@ -31,8 +35,13 @@ export default function IDVerification({
 
       setUserData(data);
       switchToDojah();
+
+      setTimeout(() => {
+        setDojahButtonClicked(false);
+      }, 2000);
     },
     onError: (error) => {
+      setDojahButtonClicked(false);
       console.log({ error });
     },
   });
@@ -57,13 +66,18 @@ export default function IDVerification({
           </DialogDescription>
         </DialogHeader>
 
-        <Button
-          disabled={isPending}
-          onClick={() => mutateAsync()}
+        <ButtonLoader
           className="w-full btn-secondary rounded-full mt-2"
+          loadingText="Redirecting..."
+          isLoading={isPending || dojahButtonClicked}
+          disabled={isPending || dojahButtonClicked}
+          onClick={() => {
+            setDojahButtonClicked(true);
+            mutateAsync();
+          }}
         >
           CLICK HERE TO PROCEED
-        </Button>
+        </ButtonLoader>
 
         <p>
           Having issues?

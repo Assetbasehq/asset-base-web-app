@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -36,13 +35,15 @@ export default function AddLiquidityModal({
   onClose,
   onSuccess,
 }: ModalProps) {
-  const [active, setActive] = useState("finance");
+  const [active, setActive] = useState("company-specific");
+
+  if (!isOpen) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         // showCloseButton={false}
-        className="sm:max-w-lg rounded-2xl p-6 md:p-8 text-start"
+        className="sm:max-w-lg rounded-2xl p-6 md:p-8 text-start h-[550px]"
       >
         <DialogHeader className="flex flex-col items-start justify-start gap-0">
           <DialogTitle className="flex items-start gap-2 text-xl text-start">
@@ -52,21 +53,21 @@ export default function AddLiquidityModal({
             Invest in high-yield pools and company funding rounds
           </DialogDescription>
 
-          <div className="w-full border-b text-custom-white-text">
-            <div className="relative flex gap-6 justify-start w-fit max-w-md">
+          <div className="w-full border-b text-custom-white-text my-2">
+            <div className="relative flex gap-6 justify-start w-fit-content max-w-xs">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActive(tab.key)}
                   className={cn(
-                    "flex-1 py-2 px-4 text-center text-sm font-medium relative",
+                    "flex-1 py-2 px-2 text-center text-sm font-medium relative",
                     {
                       "text-orange-500": active === tab.key,
                       "text-custom-white-text": active !== tab.key,
                     }
                   )}
                 >
-                  <span className="text-lg">{tab.label}</span>
+                  <span className="text-sm">{tab.label}</span>
                   {active === tab.key && (
                     <motion.div
                       layoutId="underlineeee"
@@ -84,7 +85,7 @@ export default function AddLiquidityModal({
           </div>
 
           {/* Tab content */}
-          <div className="mt-4">
+          <div className="mt-4 w-full">
             {tabs.find((tab) => tab.key === active)?.component}
           </div>
         </DialogHeader>

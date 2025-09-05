@@ -9,10 +9,22 @@ import TrendingSecurities from "./_components/trending-securities";
 export default function DashboardHome() {
   const { user } = useAuthStore();
 
+  const getTimeBasedGreeting = () => {
+    const date = new Date();
+    const hours = date.getHours();
+    if (hours < 12) {
+      return "Good Morning,";
+    } else if (hours < 17) {
+      return "Good Afternoon,";
+    } else {
+      return "Good Evening,";
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 text-custom-white-text">
-      <p className="text-3xl font-semibold text-start font-geis">
-        Good Morning,
+      <p className="text-3xl font-semibold text-start font-geist">
+        {getTimeBasedGreeting()}
         <span className="capitalize"> {user?.first_name || "..."}</span>
       </p>
       <div className="flex flex-col-reverse lg:flex-row gap-4 w-full">

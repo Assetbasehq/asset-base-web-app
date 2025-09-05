@@ -12,10 +12,14 @@ import ManualVerification from "../_modals/manual-verification";
 import SuccessModal from "@/components/modals/success-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import DojahKycModal from "../_modals/dojah-kyc-modal";
+import { useNavigate } from "react-router";
 
 export default function ProfileKYC() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data, isLoading, isError, refetch } = useUserVerificationStatus();
+
+  console.log({ data });
 
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<Record<string, any> | null>(null);
@@ -35,7 +39,7 @@ export default function ProfileKYC() {
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.makeEmailVerificationRequest,
-    onSuccess: (res) => {      
+    onSuccess: (res) => {
       setToken(res?.metadata?.token ?? "");
       toggleModal("confirmEmail", true);
     },
@@ -121,6 +125,10 @@ export default function ProfileKYC() {
       <DojahKycModal
         isOpen={modals.dojah}
         onClose={() => toggleModal("dojah", false)}
+        onSuccess={() => {
+          toggleModal("dojah", false);
+          toggleModal("dojahSuccess", true);
+        }}
         userData={userData}
       />
 
@@ -166,6 +174,17 @@ export default function ProfileKYC() {
         onClose={() => toggleModal("manualSuccess", false)}
         title="Document Upload Successful"
         description="Your documents will be verified and your status updated soon"
+        buttonText="Close"
+      />
+
+      <SuccessModal
+        isOpen={modals.dojahSuccess}
+        onClose={() => {
+          toggleModal("dojahSuccess", false);
+          navigate("/dashboard/account/kyc");
+        }}
+        title="ID Verification Successful"
+        description={`Your ID has been verified successfully`}
         buttonText="Close"
       />
     </div>

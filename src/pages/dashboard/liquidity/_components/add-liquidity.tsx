@@ -3,6 +3,7 @@ import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import gridLines from "@/assets/images/gradient-lines.svg";
 import { RiBox3Line } from "react-icons/ri";
 import { useState } from "react";
+import AddLiquidityModal from "../_modals/add-liquidity-modal";
 
 export default function AddLiquidity() {
   const [isLiquidityModalOpen, setIsLiquidityModalOpen] = useState(false);
@@ -29,15 +30,21 @@ export default function AddLiquidity() {
           opportunites. Professional fun management meets accesible investing.
         </p>
       </div>
-      <Button className="flex items-center gap-4 bg-black text-white rounded-full py-6 px-6 cursor-pointer transition-all duration-300 ease-in-out hover:bg-black/80">
-        <div
-          onClick={() => setIsLiquidityModalOpen(true)}
-          className="flex items-center gap-4 cursor-pointer"
-        >
+      <Button
+        onClick={() => setIsLiquidityModalOpen(true)}
+        className="flex z-20 items-center gap-4 bg-black text-white rounded-full py-6 px-6 cursor-pointer transition-all duration-300 ease-in-out hover:bg-black/80"
+      >
+        <div className="flex items-center gap-4 cursor-pointer">
           <RiBox3Line className="!w-6 !h-6 cursor-pointer" />
           <span className="text-lg cursor-pointer">Add Liquidity</span>
         </div>
       </Button>
+
+      <AddLiquidityModal
+        isOpen={isLiquidityModalOpen}
+        onClose={() => setIsLiquidityModalOpen(false)}
+        onSuccess={() => setIsLiquidityModalOpen(false)}
+      />
     </div>
   );
 }
