@@ -1,46 +1,44 @@
 import env from "@/config";
 import { formatDate } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
-import { useRef } from "react";
 import Dojah from "react-dojah";
 
 interface DojahKycModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
   userData: Record<string, any> | null;
 }
 
 export default function DojahKycModal({
   isOpen,
   onClose,
+  onSuccess,
   userData,
 }: DojahKycModalProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
   const { user } = useAuthStore();
   console.log({ userData, user });
 
   const appID = env.DOJAH_APP_ID;
   const publicKey = env.DOJAH_PUBLIC_KEY;
   const widgetId = env.DOJAH_WIDGET_ID;
-
   const type = "custom";
   const config = {
     debug: true,
     webhook: true,
-    // pages: [
-    //   {
-    //     page: "govrnement-data",
-    //     config: {
-    //       bvn: true,
-    //       nin: true,
-    //       dl: true,
-    //       mobile: true,
-    //       otp: true,
-    //       selfie: true,
-    //     },
-    //   },
-    // ],
+    pages: [
+      {
+        page: "government-data",
+        config: {
+          bvn: true,
+          nin: true,
+          dl: true,
+          mobile: true,
+          otp: true,
+          selfie: true,
+        },
+      },
+    ],
     widget_id: widgetId,
   };
 
@@ -52,22 +50,22 @@ export default function DojahKycModal({
     email: user?.email_address,
   };
 
-  const govData = {
-    nin: "",
-    bvn: "",
-    dl: "",
-    mobile: "",
-  };
-
   const metadata = {
-    user_id: user?.account_id,
+    user_id: userData?.id,
   };
 
+  // const govData = {
+  //   nin: "",
+  //   bvn: "",
+  //   dl: "",
+  //   mobile: "",
+  // };
   const response = (type: string, data: any) => {
     console.log(type, data);
     if (type === "success") {
+      onSuccess();
     } else if (type === "error") {
-      setTimeout(() => onClose(), 1000);
+      onClose();
     } else if (type === "close") {
     } else if (type === "begin") {
     } else if (type === "loading") {
@@ -85,7 +83,7 @@ export default function DojahKycModal({
       publicKey={publicKey}
       type={type}
       userData={newUserData}
-      govData={govData}
+      // govData={govData}
       metadata={metadata}
       config={config}
     />

@@ -2,7 +2,7 @@ import type { IAsset } from "@/interfaces/asset.interface";
 import { Progress } from "@/components/ui/progress";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { calculateRaisePercentage, formatNumber, formatUSD } from "@/lib/utils";
-import { RiFlashlightFill, RiShareLine } from "react-icons/ri";
+import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
 
@@ -61,11 +61,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
 
   if (variant === "card-detailed") {
     return (
-      <Link
-        key={item?.asset.id}
-        to={`/dashboard/markets/${item?.asset.slug}`}
-        className="cursor-pointer"
-      >
+      <div key={item?.asset.id} className="cursor-pointer">
         <div className="bg-custom-light-bg text-custom-white flex flex-col gap-4 items-start rounded-lg p-2 min-w-66 sm:min-w-96 shadow-lg">
           <div className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg bg-[#93939417]">
             <img
@@ -132,7 +128,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center gap-4 mb-2">
               <RiShareLine className="w-10 h-10 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
-              <RiShareLine className="w-10 h-10 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
+              <RiBookmarkLine className="w-10 h-10 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
             </div>
             <Link
               to={`/dashboard/markets/${item?.asset.slug}`}
@@ -142,7 +138,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             </Link>
           </div>
         </div>
-      </Link>
+      </div>
     );
   }
 

@@ -39,6 +39,7 @@ import Deposit from "./pages/dashboard/wallet/deposit";
 import WalletPage from "./pages/dashboard/wallet/_components/wallet-page";
 import Assets from "./pages/dashboard/assets/asset-list";
 import Withdraw from "./pages/dashboard/wallet/withdraw";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -247,6 +248,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <RouterProvider router={router} />
       {/* {process.env.NODE_ENV === "development" && (
         <ReactQueryDevtools initialIsOpen={false} />

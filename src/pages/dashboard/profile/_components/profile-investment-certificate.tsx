@@ -16,7 +16,7 @@ export default function ProfileInvestmentCertificate() {
 
   return (
     <div className="flex flex-col text-start p-8">
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 max-w-sm">
         <div className="mb-4">
           <h2 className="text-lg md:text-2xl font-semibold">
             Investment Certificate
@@ -27,12 +27,12 @@ export default function ProfileInvestmentCertificate() {
           </p>
         </div>
 
-        <div className="py-4 flex flex-col gap-1">
+        <div className="py-4 flex flex-col gap-1 w-full">
           <p className="text-muted-foreground">Select Asset</p>
 
           <div>
             <Select>
-              <SelectTrigger className="min-w-76 py-6">
+              <SelectTrigger className="min-w-76 py-6 w-full">
                 <SelectValue placeholder="Select Asset" />
               </SelectTrigger>
               <SelectContent className="overflow-hidden">
@@ -64,7 +64,7 @@ export default function ProfileInvestmentCertificate() {
         <ButtonLoader
           isLoading={false}
           // onClick={() => setError("Hellow")}
-          className="w-76 rounded-full my-2 py-5 btn-primary"
+          className="rounded-full my-2 py-5 btn-primary w-full"
         >
           GENERATE CERTIFICATE
         </ButtonLoader>

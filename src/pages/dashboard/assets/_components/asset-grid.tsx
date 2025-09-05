@@ -14,7 +14,7 @@ export default function AssetGrid({
   isGrid = false,
   isLoading,
 }: AssetGridProps) {
-  const variant = isGrid ? "card-detailed" : "compact";
+  const variant = isGrid ? "card" : "compact";
 
   if (isLoading) {
     return (

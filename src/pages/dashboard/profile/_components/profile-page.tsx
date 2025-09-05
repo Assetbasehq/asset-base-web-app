@@ -53,7 +53,7 @@ export default function ProfilePage() {
         <img
           src={assestBaseLogo}
           alt="asset base logo"
-          className="absolute -top-15 -right-35 opacity-20 h-full hidden lg:block"
+          className="absolute -top-10 -right-25 opacity-20 h-full hidden lg:block"
         />
         <img
           src={gridLine}

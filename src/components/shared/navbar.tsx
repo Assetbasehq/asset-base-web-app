@@ -15,6 +15,7 @@ import {
   RiSearch2Line,
   RiAddLine,
 } from "react-icons/ri";
+import ConnectWallet from "./connect-wallet";
 
 const links = [
   {
@@ -83,12 +84,7 @@ export default function Navbar() {
       {/* Desktop Right Section */}
       <div className="flex items-center gap-4">
         <div className="hidden lg:flex items-center gap-4">
-          <Button className="bg-custom-orange text-custom-white px-4 py-2 rounded-full w-fit flex items-center gap-2 cursor-pointer hover:bg-custom-orange/90 transition-all duration-300 ease-in-out">
-            <span>
-              <RiAddLine className="" />
-            </span>
-            Connect
-          </Button>
+          <ConnectWallet />
 
           <RiNotification2Line
             size={34}
@@ -171,7 +167,7 @@ export default function Navbar() {
       </div>
 
       {/* 👇 Fixed Bottom Navigation Links */}
-      <div className="fixed bottom-3 left-0 w-full z-50 lg:hidden">
+      <div className="fixed bottom-0 left-0 w-full z-80 lg:hidden bg-custom-card">
         <ul className="flex justify-around items-center p-2">
           {links.map(({ label, to, icon }) => (
             <li key={to}>

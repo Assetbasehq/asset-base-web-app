@@ -15,17 +15,17 @@ export default function AssetTrade() {
 
   return (
     <div>
-      <div className="w-full border-b text-custom-white-text">
+      <div className="w-full border-b text-custom-white-text ">
         <div className="relative flex w-full bg-custom-light-bg rounded-full px-2 py-1 my-4">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActive(tab.key)}
               className={cn(
-                "flex-1 py-2 text-center text-sm font-medium relative cursor-pointer"
+                "flex-1 py-1 sm:py-2 text-center text-sm font-medium relative cursor-pointer"
               )}
             >
-              <span className="text-lg relative z-50">{tab.label}</span>
+              <span className="text-sm relative z-50">{tab.label}</span>
               {active === "buy" && tab.key === "buy" && (
                 <motion.div
                   layoutId="pill-underline"
@@ -57,22 +57,22 @@ function BuyWindow() {
     <div>
       <form action="" className="flex flex-col gap-4">
         <div>
-          <Label className="text-muted-foreground text-lg">Order Type</Label>
+          <Label className="text-muted-foreground text-sm">Order Type</Label>
           <Input className="w-full py-6" />
         </div>
         <div>
-          <Label className="text-muted-foreground text-lg">
+          <Label className="text-muted-foreground text-sm">
             Price per Share
           </Label>
           <Input className="w-full py-6" />
         </div>
         <div>
-          <Label className="text-muted-foreground text-lg">Quantity</Label>
+          <Label className="text-muted-foreground text-sm">Quantity</Label>
           <Input className="w-full py-6" />
         </div>
         <Button
           disabled
-          className="w-full py-8 rounded-full text-custom-white bg-custom-ticker-green hover:bg-custom-ticker-green/90"
+          className="w-full py-6 rounded-full text-custom-white bg-custom-ticker-green hover:bg-custom-ticker-green/90"
         >
           Buy Code
         </Button>
@@ -86,22 +86,22 @@ function SellWindow() {
     <div>
       <form action="" className="flex flex-col gap-4">
         <div>
-          <Label className="text-muted-foreground text-lg">Order Type</Label>
+          <Label className="text-muted-foreground text-sm">Order Type</Label>
           <Input className="w-full py-6" />
         </div>
         <div>
-          <Label className="text-muted-foreground text-lg">
+          <Label className="text-muted-foreground text-sm">
             Price per Share
           </Label>
           <Input className="w-full py-6" />
         </div>
         <div>
-          <Label className="text-muted-foreground text-lg">Quantity</Label>
+          <Label className="text-muted-foreground text-sm">Quantity</Label>
           <Input className="w-full py-6" />
         </div>
         <Button
           disabled
-          className="w-full py-8 rounded-full text-custom-white bg-custom-ticker-red hover:bg-custom-ticker-red"
+          className="w-full py-6 rounded-full text-custom-white bg-custom-ticker-red hover:bg-custom-ticker-red"
         >
           Sell Code
         </Button>
