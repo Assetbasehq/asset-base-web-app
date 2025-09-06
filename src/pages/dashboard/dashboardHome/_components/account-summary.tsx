@@ -13,6 +13,7 @@ import {
   RiArrowLeftRightLine,
   RiBox3Line,
   RiDownloadFill,
+  RiEyeLine,
 } from "react-icons/ri";
 // import { Skeleton } from "@/components/ui/skeleton";
 
@@ -22,10 +23,10 @@ export default function AccountSummary() {
   // }
 
   return (
-    <Card className="bg-custom-card border-none text-start shadow-none">
-      <CardContent className=" text-white">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-10 w-full">
+    <Card className=" p-0 bg-custom-card border-none text-start shadow-none">
+      <CardContent className=" p-0 text-custom-white">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex flex-col gap-6 w-full">
             <Select defaultValue="usd">
               <SelectTrigger className="w-fit shadow-none border-none bg-gray-100">
                 <SelectValue placeholder="USD" className="text-white" />
@@ -36,9 +37,12 @@ export default function AccountSummary() {
               </SelectContent>
             </Select>
 
-            <div className="w-full flex flex-col items-start gap-6 md:flex-row md:items-center justify-between text-custom-white-text">
+            <div className="w-full flex flex-col items-start gap-2 md:flex-row md:items-center justify-between text-custom-white-text">
               <div className="flex flex-col gap-2">
-                <h2 className="text-3xl font-semibold">$30,000.00</h2>
+                <div className="flex items-center gap-1">
+                  <h2 className="text-3xl font-semibold">$30,000.00</h2>
+                  <RiEyeLine className="w-5 h-5 cursor-pointer" />
+                </div>
                 <p className="text-green-400">+1,966 (2.4%)</p>
               </div>
               <div className="flex justify-between md:justify-end w-full gap-4">
@@ -57,11 +61,11 @@ export default function AccountSummary() {
                   </span>
                 </div>
                 <div className="flex flex-col gap-2 items-center cursor-pointer">
-                  <RiArrowLeftRightLine className=" h-12 w-12 p-3 rounded-full text-custom-black bg-gray-300 " />
+                  <RiArrowLeftRightLine className=" h-12 w-12 p-3 rounded-full bg-custom-light-bg text-custom-white " />
                   <span className="font-semibold text-xs">Convert</span>
                 </div>
                 <div className="flex flex-col gap-2 items-center cursor-pointer">
-                  <RiBox3Line className=" h-12 w-12 p-3 rounded-full text-custom-black bg-gray-300 " />
+                  <RiBox3Line className=" h-12 w-12 p-3 rounded-full bg-custom-light-bg text-custom-white" />
                   <span className="font-semibold text-xs">Add Liquidity</span>
                 </div>
               </div>

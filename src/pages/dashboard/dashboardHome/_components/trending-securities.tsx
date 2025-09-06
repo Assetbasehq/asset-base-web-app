@@ -4,20 +4,24 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function TrendingSecurities() {
   return (
-    <Card className="bg-custom-card border-none shadow-none text-start ">
-      <CardHeader className="flex items-center justify-between">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-2xl font-semibold">Trending Securities</h2>
-          <p className="text-sm">Top Performing securites on AssetBase</p>
+    <Card className="p-4 md:p-4  bg-custom-card border-none shadow-none text-start ">
+      <CardHeader className=" p-0 flex items-center justify-between">
+        <div className="flex flex-col">
+          <h2 className="text-xl md:text-2xl font-semibold">
+            Trending Securities
+          </h2>
+          <p className="text-xs md:text-sm text-custom-grey">
+            Top Performing securites on AssetBase
+          </p>
         </div>
         <Link
           to="#"
-          className="text-custom-orange font-semibold cursor-pointer underline text-sm"
+          className="text-custom-orange font-semibold cursor-pointer underline text-xs md:text-sm"
         >
           View All
         </Link>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         <Securities />
       </CardContent>
     </Card>

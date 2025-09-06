@@ -5,6 +5,7 @@ import { calculateRaisePercentage, formatNumber, formatUSD } from "@/lib/utils";
 import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
+import { FormatService } from "@/services/format-service";
 
 interface Props {
   item: {
@@ -153,7 +154,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
         key={item?.asset.id}
         className="bg-custom-light-bg text-custom-white flex flex-col gap-4 items-start rounded-2xl p-2 min-w-66 sm:min-w-96 shadow-lg"
       >
-        <div className="relative overflow-hidden flex flex-col gap-6 items-start text-start w-full p-4 rounded-lg bg-[#93939417]">
+        <div className="relative overflow-hidden flex flex-col gap-2 items-start text-start w-full p-2 rounded-lg bg-[#93939417]">
           <img
             src={assetBaseLogo}
             alt=""
@@ -165,12 +166,12 @@ export default function AssetCard({ item, variant = "card" }: Props) {
               alt=""
               className="w-10 h-10 rounded-full"
             />
-            <div>
+            <div className="flex flex-col">
               <h2 className="font-semibold">{item?.asset?.asset_symbol}</h2>
-              <small>{item?.asset?.asset_name}</small>
+              <small>{FormatService.formatName(item?.asset?.asset_name)}</small>
             </div>
           </div>
-          <div className="w-full flex flex-col gap-1">
+          <div className="w-full flex flex-col">
             <div className="flex justify-between items-center w-full">
               <small>Price per share</small>
               <small className="font-semibold">
@@ -188,9 +189,9 @@ export default function AssetCard({ item, variant = "card" }: Props) {
         <div className="flex flex-col gap-2 items-start w-full pb-1">
           <Progress
             value={raisePercentage}
-            className="w-full bg-custom-white [&>div]:bg-custom-orange"
+            className="w-full bg-custom-white [&>div]:bg-custom-orange h-1.5"
           />
-          <div className="flex justify-between items-center w-full">
+          <div className="flex justify-between items-center w-full text-sm">
             <div className="flex gap-1 items-center">
               <RiFlashlightFill className="text-custom-orange" />
               <small className="font-semibold text-custom-orange">

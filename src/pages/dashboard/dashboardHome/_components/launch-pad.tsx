@@ -12,20 +12,22 @@ export default function LaunchPad() {
   // if (isLoading) return <LaunchPadSkeleton />;
 
   return (
-    <Card className="bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
-      <CardHeader className="flex items-center justify-between">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-2xl font-semibold">Launchpad</h2>
-          <p>Acurated list of securities you can fund</p>
+    <Card className=" p-4 md:p-4 bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
+      <CardHeader className=" p-0 flex items-center justify-between">
+        <div className="flex flex-col">
+          <h2 className="text-xl md:text-2xl font-semibold">Launchpad</h2>
+          <p className="text-xs md:text-sm text-custom-grey">
+            A curated list of securities you can fund
+          </p>
         </div>
         <Link
           to="/dashboard/assets"
-          className="text-custom-orange font-semibold cursor-pointer underline text-sm"
+          className="text-custom-orange font-semibold cursor-pointer underline text-xs md:text-sm"
         >
           View All
         </Link>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         <div className="flex flex-col gap-4">
           <Assets data={data || []} isLoading={isLoading} isError={isError} />
         </div>

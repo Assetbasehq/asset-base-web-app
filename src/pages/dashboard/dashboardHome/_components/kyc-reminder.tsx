@@ -23,10 +23,10 @@ export default function KYCReminder() {
 
   return (
     <Link to="/dashboard/account/kyc">
-      <Card className="bg-custom-orange-10 text-white rounded-3xl min-w-[400px] lg:w-full md:w-full">
-        <CardContent>
+      <Card className="p-2 px-4 md:p-4 bg-custom-orange-10 text-white rounded-3xl min-w-[350px] lg:w-full md:w-full">
+        <CardContent className="p-0">
           <div className="flex items-center justify-between gap-4 text-start">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-row-reverse lg:flex-row justify-between lg:justify-start items-center gap-4 w-full">
               <div className="p-2 bg-white rounded-full">
                 <div
                   className="relative w-12 h-12 rounded-full flex items-center justify-center bg-white text-white font-bold"
@@ -44,12 +44,12 @@ export default function KYCReminder() {
                 <h2 className="text-custom-base text-lg font-semibold">
                   Complete KYC
                 </h2>
-                <p className="text-custom-base">
+                <p className="text-custom-base text-sm">
                   Finish setting up your account
                 </p>
               </div>
             </div>
-            <Play />
+            <Play className="hidden lg:block" />
           </div>
         </CardContent>
       </Card>

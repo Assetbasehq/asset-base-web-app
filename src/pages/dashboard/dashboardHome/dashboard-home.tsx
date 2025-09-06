@@ -22,8 +22,8 @@ export default function DashboardHome() {
   };
 
   return (
-    <div className="flex flex-col gap-4 text-custom-white-text">
-      <p className="text-3xl font-semibold text-start font-geist">
+    <div className="flex flex-col gap-2 text-custom-white-text">
+      <p className="text-2xl md:text-2xl font-semibold text-start font-geist">
         {getTimeBasedGreeting()}
         <span className="capitalize"> {user?.first_name || "..."}</span>
       </p>
@@ -36,7 +36,7 @@ export default function DashboardHome() {
         </div>
 
         {/* Right Column */}
-        <div className="flex items-center lg:flex-col gap-4 overflow-x-scroll no-scrollbar lg:overflow-visible lg:w-2/5">
+        <div className="lg:flex items-center lg:flex-col gap-4 overflow-x-scroll no-scrollbar lg:overflow-visible lg:w-2/5">
           <div className="w-full flex items-center gap-4 lg:flex-col lg:items-stretch">
             <KYCReminder />
             <ReferralCard />

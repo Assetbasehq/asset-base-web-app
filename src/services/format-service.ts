@@ -90,4 +90,20 @@ export class FormatService {
     const raisedShares = totalShares - availableShares;
     return Math.floor((raisedShares / totalShares) * 100);
   }
+
+  /**
+   * formats a name that takes the name and return the name or name and ... if it is more than 15 chars
+   */
+  static formatName(name: string | null | undefined): string {
+    if (name == null) {
+      return "";
+    }
+
+    const trimmedName = name.trim();
+    if (trimmedName.length <= 15) {
+      return trimmedName;
+    }
+
+    return `${trimmedName.substring(0, 12)}...`;
+  }
 }
