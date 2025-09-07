@@ -23,7 +23,7 @@ export default function DashboardHome() {
 
   return (
     <div className="flex flex-col gap-2 text-custom-white-text">
-      <p className="text-2xl md:text-2xl font-semibold text-start font-geist">
+      <p className="text-xl md:text-2xl font-semibold text-start font-geist">
         {getTimeBasedGreeting()}
         <span className="capitalize"> {user?.first_name || "..."}</span>
       </p>

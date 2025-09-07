@@ -125,13 +125,11 @@ export default function Statistics() {
   // }
 
   return (
-    <Card className="py-4 sm:py-0 bg-custom-card border-none shadow-none">
-      <CardHeader className="flex flex-col items-stretch !p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 p-6 items-start">
+    <Card className="p-0 bg-custom-card border-none shadow-none">
+      <CardContent className="p-2 md:p-4">
+        <CardHeader className="flex flex-col items-stretch !p-0 sm:flex-row">
           <CardTitle className="text-lg">Statistics</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="px-2 sm:p-6">
+        </CardHeader>
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"

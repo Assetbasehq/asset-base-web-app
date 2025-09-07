@@ -168,73 +168,13 @@ export default function AllAssets() {
   ];
 
   return (
-    <div className="mt-8 rounded-xl overflow-hidden">
-      <h2 className="text-2xl font-semibold text-left mb-6">All Assets</h2>
+    <div className="mt-4 rounded-xl overflow-hidden">
+      <h2 className="text-lg md:text-xl font-semibold text-left">All Assets</h2>
       <DataTable
         data={assets}
         columns={columns}
         noDataMessage="No data available."
       />
-      {/* <div className="rounded-xl overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-black text-white">
-              <TableHead className="text-white pl-6">#</TableHead>
-              <TableHead className="text-white">Name</TableHead>
-              <TableHead className="text-white">Price</TableHead>
-              <TableHead className="text-white">1h %</TableHead>
-              <TableHead className="text-white">24h %</TableHead>
-              <TableHead className="text-white">7d %</TableHead>
-              <TableHead className="text-white">Market Cap</TableHead>
-              <TableHead className="text-white p-4">24h Volume</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {assets.map((asset, index) => (
-              <TableRow key={asset.id} className="text-left">
-                <TableCell className="font-medium pl-6">{index + 1}</TableCell>
-                <TableCell className="font-medium flex items-center gap-2 py-8">
-                  <img src={asset.logo} alt={asset.name} className="w-6" />
-                  {asset.name}
-                </TableCell>
-                <TableCell className="text-left">
-                  ${asset.price.toLocaleString()}
-                </TableCell>
-                <TableCell
-                  className={cn({
-                    "text-green-500": asset.change1h >= 0,
-                    "text-red-500": asset.change1h < 0,
-                  })}
-                >
-                  {asset.change1h}%
-                </TableCell>
-                <TableCell
-                  className={cn({
-                    "text-green-500": asset.change24h >= 0,
-                    "text-red-500": asset.change24h < 0,
-                  })}
-                >
-                  {asset.change24h}%
-                </TableCell>
-                <TableCell
-                  className={cn({
-                    "text-green-500": asset.change7d >= 0,
-                    "text-red-500": asset.change7d < 0,
-                  })}
-                >
-                  {asset.change7d}%
-                </TableCell>
-                <TableCell className="">
-                  ${asset.marketCap.toLocaleString()}
-                </TableCell>
-                <TableCell className="">
-                  ${asset.volume24h.toLocaleString()}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div> */}
     </div>
   );
 }

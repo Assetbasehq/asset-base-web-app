@@ -11,35 +11,24 @@ import {
   RiAddLine,
   RiArrowLeftRightLine,
   RiDownloadFill,
+  RiEyeLine,
   RiEyeOffLine,
 } from "react-icons/ri";
 import { Separator } from "@/components/ui/separator";
-import { Link, useSearchParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import { walletService } from "@/api/wallet.api";
+import { Link } from "react-router";
 import { formatNaira, formatUSD } from "@/lib/utils";
-
-interface WalletResponse {
-  account_id: string;
-  balance: number;
-  created_at: string;
-  id: string;
-  status: string;
-  updated_at: string;
-}
+import { useGetWallet } from "@/hooks/useWallet";
+import { useState } from "react";
+import { FormatService } from "@/services/format-service";
 
 export default function TotalBalance() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+  const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
 
-  const currency = (searchParams.get("currency") as "usd" | "ngn") || "usd";
-
-  const { data, isLoading, isError } = useQuery<WalletResponse, Error>({
-    queryKey: ["wallet-balance", currency],
-    queryFn: () => walletService.getWalletBalance({ currency: "ngn" }),
-  });
+  const { data, isLoading, isError } = useGetWallet({ currency });
 
   const handleCurrencyChange = (value: string) => {
-    setSearchParams({ currency: value });
+    setCurrency(value as "usd" | "ngn");
   };
 
   // if (true) {
@@ -47,8 +36,8 @@ export default function TotalBalance() {
   // }
 
   return (
-    <Card className=" bg-transparent py-0 md:py-6 md:bg-custom-card border-none text-start shadow-none">
-      <CardContent className="flex flex-col gap-4 px-0 md:px-6">
+    <Card className=" bg-transparent p-0 md:bg-custom-card border-none text-start shadow-none">
+      <CardContent className="flex flex-col gap-4 p-2 md:p-4">
         <CardTitle className="text-lg font-medium">Total Balance</CardTitle>
 
         <div className="flex justify-between items-start">
@@ -56,12 +45,24 @@ export default function TotalBalance() {
             <div className="w-full flex flex-col items-start gap-6 md:flex-row md:items-center justify-between text-custom-white-text">
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-3xl md:text-4xl font-semibold">
-                    {currency === "usd"
-                      ? formatUSD(data?.balance)
-                      : formatNaira(data?.balance)}
+                  <h2 className="text-xl md:text-3xl font-semibold">
+                    {isBalanceVisible
+                      ? currency === "usd"
+                        ? FormatService.formatToUSD(data?.balance || 0)
+                        : FormatService.formatToNaira(data?.balance || 0)
+                      : "******"}
                   </h2>
-                  <RiEyeOffLine />
+                  {isBalanceVisible ? (
+                    <RiEyeLine
+                      onClick={() => setIsBalanceVisible(!isBalanceVisible)}
+                      className="w-5 h-5 cursor-pointer"
+                    />
+                  ) : (
+                    <RiEyeOffLine
+                      onClick={() => setIsBalanceVisible(!isBalanceVisible)}
+                      className="w-5 h-5 cursor-pointer"
+                    />
+                  )}
                 </div>
                 <p className="text-green-400">+1,966 (2.4%)</p>
               </div>

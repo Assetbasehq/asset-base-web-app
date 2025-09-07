@@ -11,12 +11,12 @@ export default function Liquidity() {
 
   return (
     <div>
-      <h2 className="text-3xl font-semibold text-left mb-4 text-custom-white-text">
+      <h2 className="text-xl md:text-2xl font-semibold text-left mb-2 text-custom-white-text">
         Liquidity
       </h2>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
         <AddLiquidity />
-        <div className="bg-custom-card flex flex-col items-center rounded-lg px-6 py-8">
+        <div className="bg-custom-card flex flex-col items-center rounded-lg p-2 md:p-4">
           <div className=" flex gap-4 border-b w-full pb-2 px-2">
             <Link
               className={cn(`text-lg font-semibold text-custom-white-text`, {

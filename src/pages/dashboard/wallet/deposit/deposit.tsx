@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import WalletBreadCrumb from "./_components/wallet-bread-crumb";
 import { RiArrowRightSLine } from "react-icons/ri";
+import WalletBreadCrumb from "../_components/wallet-bread-crumb";
 
 export default function Deposit() {
   return (
@@ -35,7 +35,9 @@ export default function Deposit() {
           </div>
         </div>
 
-        <Button className="btn-primary rounded-full py-6">PROCEED TO DEPOSIT</Button>
+        <Button className="btn-primary rounded-full py-6">
+          PROCEED TO DEPOSIT
+        </Button>
       </div>
     </div>
   );

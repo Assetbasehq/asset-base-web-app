@@ -7,43 +7,85 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import {
   RiAddLine,
   RiArrowLeftRightLine,
   RiBox3Line,
   RiDownloadFill,
   RiEyeLine,
+  RiEyeOffLine,
 } from "react-icons/ri";
+import { useState } from "react";
+import { useGetWallet } from "@/hooks/useWallet";
+import { FormatService } from "@/services/format-service";
 // import { Skeleton } from "@/components/ui/skeleton";
 
+interface WalletResponse {
+  account_id: string;
+  balance: number;
+  created_at: string;
+  id: string;
+  status: string;
+  updated_at: string;
+}
+
 export default function AccountSummary() {
-  // if (true) {
-  //   return <AccountSummarySkeleton />;
-  // }
+  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+  const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
+
+  const { data, isLoading, isError } = useGetWallet({ currency });
+
+  const handleCurrencyChange = (value: string) => {
+    setCurrency(value as "usd" | "ngn");
+  };
+
+  if (isLoading) {
+    return <AccountSummarySkeleton />;
+  }
 
   return (
     <Card className=" p-0 bg-custom-card border-none text-start shadow-none">
       <CardContent className=" p-0 text-custom-white">
         <div className="flex items-center justify-between p-4">
-          <div className="flex flex-col gap-6 w-full">
-            <Select defaultValue="usd">
+          <div className="flex flex-col gap-4 w-full">
+            <Select
+              defaultValue={currency}
+              onValueChange={handleCurrencyChange}
+            >
               <SelectTrigger className="w-fit shadow-none border-none bg-gray-100">
                 <SelectValue placeholder="USD" className="text-white" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="usd">USD</SelectItem>
-                <SelectItem value="cad">NGN</SelectItem>
+                <SelectItem value="ngn">NGN</SelectItem>
               </SelectContent>
             </Select>
 
             <div className="w-full flex flex-col items-start gap-2 md:flex-row md:items-center justify-between text-custom-white-text">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 w-full">
                 <div className="flex items-center gap-1">
-                  <h2 className="text-3xl font-semibold">$30,000.00</h2>
-                  <RiEyeLine className="w-5 h-5 cursor-pointer" />
+                  <h2 className="text-2xl font-semibold">
+                    {isBalanceVisible
+                      ? currency === "usd"
+                        ? FormatService.formatToUSD(data?.balance || 0)
+                        : FormatService.formatToNaira(data?.balance || 0)
+                      : "*****"}
+                  </h2>
+
+                  {isBalanceVisible ? (
+                    <RiEyeLine
+                      onClick={() => setIsBalanceVisible(!isBalanceVisible)}
+                      className="w-5 h-5 cursor-pointer"
+                    />
+                  ) : (
+                    <RiEyeOffLine
+                      onClick={() => setIsBalanceVisible(!isBalanceVisible)}
+                      className="w-5 h-5 cursor-pointer"
+                    />
+                  )}
                 </div>
-                <p className="text-green-400">+1,966 (2.4%)</p>
+                <small className="text-green-400">+1,966 (2.4%)</small>
               </div>
               <div className="flex justify-between md:justify-end w-full gap-4">
                 <Link to="/dashboard/wallet/deposit">
@@ -54,12 +96,14 @@ export default function AccountSummary() {
                     </span>
                   </div>
                 </Link>
-                <div className="flex flex-col gap-2 text-primary items-center cursor-pointer">
-                  <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border border-custom-orange" />{" "}
-                  <span className="font-semibold text-xs text-custom-orange ">
-                    Withdraw
-                  </span>
-                </div>
+                <Link to="/dashboard/wallet/withdraw">
+                  <div className="flex flex-col gap-2 text-primary items-center cursor-pointer">
+                    <RiDownloadFill className=" w-12 h-12 p-3 text-custom-orange rounded-full bg-custom-orange/20 border border-custom-orange" />{" "}
+                    <span className="font-semibold text-xs text-custom-orange ">
+                      Withdraw
+                    </span>
+                  </div>
+                </Link>
                 <div className="flex flex-col gap-2 items-center cursor-pointer">
                   <RiArrowLeftRightLine className=" h-12 w-12 p-3 rounded-full bg-custom-light-bg text-custom-white " />
                   <span className="font-semibold text-xs">Convert</span>
@@ -89,7 +133,7 @@ function AccountSummarySkeleton() {
               <Skeleton className="h-10 w-20 rounded-md" />
 
               {/* Balance + Actions */}
-              <div className="w-full flex items-center justify-between">
+              <div className="w-full flex flex-col items-start gap-4 md:flex-row md:items-center justify-between">
                 {/* Balance Info */}
                 <div>
                   <Skeleton className="h-8 w-32" />
@@ -97,7 +141,7 @@ function AccountSummarySkeleton() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4">
+                <div className="flex justify-between w-full md:w-fit gap-4">
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="flex flex-col gap-2 items-center">
                       <Skeleton className="h-12 w-12 rounded-full" />

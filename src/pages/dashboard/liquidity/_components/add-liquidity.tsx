@@ -9,7 +9,10 @@ export default function AddLiquidity() {
   const [isLiquidityModalOpen, setIsLiquidityModalOpen] = useState(false);
 
   return (
-    <div className="relative flex flex-col gap-8 text-custom-white-text text-center items-center justify-between md:text-left md:flex-row bg-custom-card p-4 md:p-8 pr-8 rounded-2xl overflow-hidden">
+    <div
+      className="relative flex flex-col gap-8 text-custom-white-text text-center items-center justify-between md:text-left md:flex-row bg-custom-card p-2
+     md:p-4 pr-8 rounded-2xl overflow-hidden"
+    >
       <img
         src={assetBaseLogo}
         alt=""

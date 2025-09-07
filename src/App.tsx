@@ -35,11 +35,11 @@ import AccountType from "./pages/onboarding/account-type";
 import PersonalDetails from "./pages/onboarding/personal-details";
 import PINSetup from "./pages/onboarding/pin-setup";
 import AssetDetails from "./pages/dashboard/markets/_components/asset-details";
-import Deposit from "./pages/dashboard/wallet/deposit";
 import WalletPage from "./pages/dashboard/wallet/_components/wallet-page";
 import Assets from "./pages/dashboard/assets/asset-list";
-import Withdraw from "./pages/dashboard/wallet/withdraw";
 import { Toaster } from "sonner";
+import Deposit from "./pages/dashboard/wallet/deposit/deposit";
+import Withdraw from "./pages/dashboard/wallet/withdraw/withdraw";
 
 const queryClient = new QueryClient();
 

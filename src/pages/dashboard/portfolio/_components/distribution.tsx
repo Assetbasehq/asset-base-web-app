@@ -64,10 +64,10 @@ export default function Distribution() {
   return (
     <Card
       data-chart={id}
-      className="flex flex-col lg:col-span-2 xl:col-span-1 bg-custom-card border-none shadow-none"
+      className=" p-2 md:p-4 flex flex-col lg:col-span-2 xl:col-span-1 bg-custom-card border-none shadow-none"
     >
       <ChartStyle id={id} config={chartConfig} />
-      <CardHeader className="flex-row items-start space-y-0 pb-0">
+      <CardHeader className="flex-row items-start space-y-0 p-0">
         <div className=" flex  items-start text-start">
           <CardTitle className="text-lg">Distribution</CardTitle>
           <Select value={activeMonth} onValueChange={setActiveMonth}>
@@ -105,7 +105,7 @@ export default function Distribution() {
           </Select>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-1 justify-center pb-0">
+      <CardContent className="flex flex-1 justify-center p-0">
         <ChartContainer
           id={id}
           config={chartConfig}

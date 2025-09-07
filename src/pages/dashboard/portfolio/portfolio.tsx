@@ -28,16 +28,16 @@ export default function Portfolio() {
 
   return (
     <div>
-      <h2 className="text-3xl font-semibold text-left mb-4 text-custom-white-text">
+      <h2 className="text-xl md:text-2xl font-semibold text-left mb-2 text-custom-white-text">
         Portfolio
       </h2>
-      <div className="flex flex-col gap-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
+      <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 w-full">
           <TotalAssets />
           <Statistics />
           <Distribution />
         </div>
-        <div className="bg-custom-card text-custom-white-text flex flex-col items-center rounded-lg px-6 py-8">
+        <div className="bg-custom-card text-custom-white-text flex flex-col items-center rounded-lg p-2 md:p-4">
           <div className=" flex gap-8 border-b w-full px-2">
             {Links.map((link) => (
               <Link

@@ -1,0 +1,18 @@
+import { walletService } from "@/api/wallet.api";
+import { useQuery } from "@tanstack/react-query";
+
+interface WalletResponse {
+  account_id: string;
+  balance: number;
+  created_at: string;
+  id: string;
+  status: string;
+  updated_at: string;
+}
+
+export const useGetWallet = ({ currency }: { currency: string }) => {
+  return useQuery<WalletResponse, Error>({
+    queryKey: ["wallet-balance", currency],
+    queryFn: () => walletService.getWalletBalance({ currency }),
+  });
+};

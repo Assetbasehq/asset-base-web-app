@@ -13,8 +13,8 @@ export default function Options() {
   ];
 
   return (
-    <Card className="bg-custom-card border-none text-start shadow-none w-full md:w-3/5">
-      <CardContent className="px-6">
+    <Card className=" p-0 bg-custom-card border-none text-start shadow-none w-full md:w-3/5">
+      <CardContent className="p-2 md:p-4">
         <div className="border-b relative">
           <div className="flex items-center justify-start">
             {tabs.map((tab) => (

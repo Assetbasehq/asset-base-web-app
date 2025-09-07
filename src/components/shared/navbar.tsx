@@ -180,7 +180,7 @@ export default function Navbar() {
 
       {/* 👇 Fixed Bottom Navigation Links */}
       <div className="fixed bottom-0 left-0 w-full z-80 lg:hidden bg-custom-card">
-        <ul className="flex justify-around items-center p-2">
+        <ul className="flex gap-0 items-center w-full justify-between">
           {links.map(({ label, to, icon }) => (
             <li key={to}>
               <NavLink
@@ -188,7 +188,7 @@ export default function Navbar() {
                 end={to === "/dashboard"}
                 className={({ isActive }) =>
                   cn(
-                    `flex flex-col items-center min-w-[70px] sm:min-w-[100px] bg-custom-card p-2 sm:p-4 rounded-lg text-xs sm:text-sm md:text-sm gap-2 transition-colors duration-300 hover:text-orange-500 text-custom-white`,
+                    `flex flex-col items-center min-w-[50px] sm:min-w-[100px] bg-custom-card p-2 sm:p-4 rounded-lg text-xs sm:text-sm md:text-sm gap-2 transition-colors duration-300 hover:text-orange-500 text-custom-white`,
                     {
                       "text-custom-orange rounded-b-none border-b-2 border-custom-orange":
                         isActive,

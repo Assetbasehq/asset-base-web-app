@@ -6,13 +6,7 @@ import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
 import { FormatService } from "@/services/format-service";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Props {
   item: {

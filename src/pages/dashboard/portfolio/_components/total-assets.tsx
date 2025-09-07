@@ -7,68 +7,66 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FormatService } from "@/services/format-service";
 
 export default function TotalAssets() {
-  const balance = "450000000";
+  const balance = "450000";
 
   // if (true) {
   //   return <TotalAssetsSkeleton />;
   // }
 
   return (
-    <Card className="flex flex-col gap-1 bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
-      <CardHeader>
-        <CardTitle className="text-lg">Total Assets</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <Card className=" p-0 flex flex-col gap-1 bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
+      <CardContent className="p-2 md:p-4">
+        <CardHeader className="p-0">
+          <CardTitle className="text-lg">Total Assets</CardTitle>
+        </CardHeader>
         <div className="flex items-center justify-between gap-6 w-full">
           <p className="text-lg md:text-2xl font-bold">
-            {Number(balance).toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}
+            {FormatService.formatToCompactAmount(balance, "USD", 2)}
           </p>
           <Select defaultValue="usd">
             <SelectTrigger className="w-fit">
-              <SelectValue placeholder="USD" className="text-white" />
+              <SelectValue placeholder="USD" className="text-custom-white" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="usd">USD</SelectItem>
-              <SelectItem value="cad">NGN</SelectItem>
+              <SelectItem value="ngn">NGN</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="flex gap-2 text-sm md:text-lg font-semibold">
-          <p className="text-green-400">+1.25%</p>
-          <p>+34,000 this week</p>
+          <p className="text-green-400 text-sm">+1.25%</p>
+          <p className="text-custome-grey text-sm">+34,000 this week</p>
         </div>
 
         <div className="text-start grid grid-cols-2 gap-2 w-full mt-4">
-          <div className=" bg-custom-light-bg p-4 rounded-xl">
+          <div className=" bg-custom-light-bg p-2 rounded-xl">
             <small className="text-xs font-semibold text-muted-foreground">
               Holdings
             </small>
-            <p className="text-lg md:text-xl font-bold">$150,000.45</p>
+            <p className="text-sm md:text-lg font-bold">$150,000.45</p>
             <small className="text-xs text-green-400">+1.25% (24h)</small>
           </div>
-          <div className="bg-custom-light-bg p-4 rounded-xl">
+          <div className="bg-custom-light-bg p-2 rounded-xl">
             <small className="text-xs font-semibold text-muted-foreground">
               All-Time Profit
             </small>
-            <p className="text-lg md:text-xl font-bold">+$150,000.45</p>
+            <p className="text-sm md:text-lg font-bold">+$150,000.45</p>
             <small className="text-xs text-green-400">+100.25% (24h)</small>
           </div>
-          <div className=" bg-custom-light-bg p-4 rounded-xl">
+          <div className=" bg-custom-light-bg p-2 rounded-xl">
             <small className="text-xs font-semibold text-muted-foreground">
               Avg. Buy Price
             </small>
-            <p className="text-lg md:text-xl font-bold">$9,100.45</p>
+            <p className="text-sm md:text-lg font-bold">$9,100.45</p>
           </div>
-          <div className=" bg-custom-light-bg p-4 rounded-xl">
+          <div className=" bg-custom-light-bg p-2 rounded-xl">
             <small className="text-xs font-semibold text-muted-foreground">
               Cost Basis
             </small>
-            <p className="text-lg md:text-xl font-bold">$50,000.45</p>
+            <p className="text-sm md:text-lg font-bold">$50,000.45</p>
           </div>
         </div>
       </CardContent>

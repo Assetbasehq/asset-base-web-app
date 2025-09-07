@@ -60,7 +60,7 @@ const securitiesData = [
 
 export default function HottestLaunchpad() {
   return (
-    <div className="text-left border-2 p-4 rounded-2xl flex flex-col gap-4 md:w-1/2">
+    <div className="text-left border-2 p-2 rounded-2xl flex flex-col gap-2 md:w-1/2">
       <h2 className="text-xl font">Hottest Launchpad</h2>
       <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
         {securitiesData.map((item) => (
