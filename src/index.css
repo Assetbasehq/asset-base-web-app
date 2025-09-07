@@ -189,8 +189,12 @@
   --color-fixed-ticker-green: #2ea678;
   --color-fixed-ticker-red: #b31533;
   --color-fixed-orange: #aa7744;
-
+  --color-fixed-orange-10: #fdddc4;
   --color-rise: #0e98a0;
+
+  /* Fixed Dark Colors  */
+  --color-fixed-orange-10-dark: #1d1512;
+
 
   /* Fonts  */
   --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
@@ -255,9 +259,9 @@
   --custom-ticker-green: #38c793;
   --custom-ticker-red: #df1c41;
   --custom-orange: #f46c31;
-  --custom-orange-10: #1d1512;
   --custom-ticker-green: #38c793;
   --custom-ticker-red: #df1c41;
+  --custom-orange-10: #fdddc4;
 
   /* New Colors  */
   /* --muted-foregroundd: #868C98; */
@@ -314,7 +318,7 @@
   --custom-white-text: #ffffff;
   --custom-ticker-green: #2ea678;
   --custom-ticker-red: #b31533;
-  --custom-orange-10: #fdddc4;
+  --custom-orange-10: #1d1512;
 }
 
 @layer base {

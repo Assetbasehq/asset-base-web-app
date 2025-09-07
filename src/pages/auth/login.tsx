@@ -24,7 +24,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import AssetBaseBeta from "@/components/shared/asset-base-beta";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/api/auth.api";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import ButtonLoader from "@/components/custom/button-loader";

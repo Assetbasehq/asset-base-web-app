@@ -6,6 +6,13 @@ import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
 import { FormatService } from "@/services/format-service";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface Props {
   item: {
@@ -27,35 +34,35 @@ export default function AssetCard({ item, variant = "card" }: Props) {
         to={`/dashboard/markets/${item?.asset.slug}`}
         className="cursor-pointer"
       >
-        <div className="bg-custom-light-bg text-custom-white flex items-center justify-between rounded-xl p-4 shadow-md gap-4">
-          <div>
-            {/* Left section - logo + name */}
-            <div className="flex items-center gap-3">
-              <img
-                src={item?.asset?.image_urls[0]}
-                alt=""
-                className="w-10 h-10 rounded-full"
-              />
-              <div>
-                <h2 className="font-semibold">{item?.asset?.asset_symbol}</h2>
-                <small className="text-sm">{item?.asset?.asset_name}</small>
+        <Card className="p-0 border-none shadwo-none">
+          <CardContent className="bg-custom-light-bg text-custom-white flex items-center justify-between rounded-xl p-4 gap-4">
+            <div>
+              <div className="flex items-center gap-3">
+                <img
+                  src={item?.asset?.image_urls[0]}
+                  alt=""
+                  className="w-10 h-10 rounded-full"
+                />
+                <div>
+                  <h2 className="font-semibold">{item?.asset?.asset_symbol}</h2>
+                  <small className="text-sm">{item?.asset?.asset_name}</small>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Right section - stats */}
-          <div className="flex flex-col items-end gap-1">
-            <div className="flex gap-1 items-center">
-              <RiFlashlightFill className="text-custom-orange" />
-              <small className="font-semibold text-custom-orange">
-                {raisePercentage}% raised
+            <div className="flex flex-col items-end gap-1">
+              <div className="flex gap-1 items-center">
+                <RiFlashlightFill className="text-custom-orange" />
+                <small className="font-semibold text-custom-orange">
+                  {raisePercentage}% raised
+                </small>
+              </div>
+              <small className="font-semibold">
+                {formatNumber(item?.asset?.available_shares)} available
               </small>
             </div>
-            <small className="font-semibold">
-              {formatNumber(item?.asset?.available_shares)} available
-            </small>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </Link>
     );
   }
