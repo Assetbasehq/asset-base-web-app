@@ -175,18 +175,20 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             />
             <div className="flex flex-col">
               <h2 className="font-semibold">{item?.asset?.asset_symbol}</h2>
-              <small>{FormatService.formatName(item?.asset?.asset_name)}</small>
+              <small className="text-custom-grey">
+                {FormatService.formatName(item?.asset?.asset_name)}
+              </small>
             </div>
           </div>
           <div className="w-full flex flex-col">
             <div className="flex justify-between items-center w-full">
-              <small>Price per share</small>
+              <small className="text-custom-grey">Price per share</small>
               <small className="font-semibold">
                 {formatUSD(item?.asset?.price_per_share)}
               </small>
             </div>
             <div className="flex justify-between items-center w-full">
-              <small>Funding round closes</small>
+              <small className="text-custom-grey">Funding round closes</small>
               <small className="font-medium">
                 in <span className="font-bold">15days</span>
               </small>
@@ -208,6 +210,37 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             <small className="font-semibold">
               {formatNumber(item?.asset?.available_shares)} available
             </small>
+          </div>
+        </div>
+
+        {/* Only on desktop  */}
+        <div className="hidden md:flex flex-col gap-4 w-full ">
+          <div className="flex flex-col gap-2 items-start w-full">
+            <div className="flex justify-between items-center w-full">
+              <p className="text-sm text-custom-grey">Category</p>
+              <small className="capitalize bg-custom-input-stroke text-custom-white px-2 rounded">
+                {item?.asset?.category}
+              </small>
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <p className="text-sm text-custom-grey">Location</p>
+              <p className="capitalize text-custom-grey px-2 rounded">
+                {item?.asset?.iso_country_code === "NG" ? "Nigeria" : "Ghana"}
+              </p>
+            </div>
+          </div>
+          <Separator />
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center gap-4 mb-2">
+              <RiShareLine className="w-10 h-10 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
+              <RiBookmarkLine className="w-10 h-10 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
+            </div>
+            <Link
+              to={`/dashboard/markets/${item?.asset.slug}`}
+              className="text-sm text-custom-orange font-light underline w-fit"
+            >
+              See More Details
+            </Link>
           </div>
         </div>
       </div>

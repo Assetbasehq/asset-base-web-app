@@ -39,7 +39,7 @@ export default function SearchInput({ className }: { className?: string }) {
   return (
     <div className={cn(`relative max-w-sm`, className)}>
       {/* Search Icon */}
-      <RiSearchLine className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+      <RiSearchLine className="absolute left-3 top-1/2 -translate-y-1/2 text-custom-grey text-lg" />
 
       {/* Input Field */}
       <Input
@@ -47,7 +47,7 @@ export default function SearchInput({ className }: { className?: string }) {
         placeholder=""
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
-        className="pl-10 pr-10 rounded focus-visible:ring-1 focus-visible:ring-primary border"
+        className="pl-10 pr-10 rounded focus-visible:ring-1 focus-visible:ring-primary border text-custom-white"
       />
 
       {/* Clear Button */}
@@ -55,7 +55,7 @@ export default function SearchInput({ className }: { className?: string }) {
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-custom-grey transition-colors"
         >
           <RiCloseLine className="text-lg" />
         </button>

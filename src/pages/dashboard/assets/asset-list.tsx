@@ -35,7 +35,7 @@ export default function Assets() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const type = searchParams.get("type") || "all";
-  const location = searchParams.get("location") || "";
+  const location = searchParams.get("location") || "all";
   const category = searchParams.get("category") || "all";
 
   const { data, isLoading, isError } = useGetAssets();
@@ -110,13 +110,13 @@ export default function Assets() {
         </p>
       </div>
 
-      <div className="lg:flex items-center">
-        <div>
+      <div className="lg:flex items-center justify-between w-full">
+        <div className="lg:w-1/2 lg:max-w-sm">
           <ul className="flex gap-2 text-custom-white text-sm mt-6 cursor-pointer bg-custom-card py-2 px-2 rounded-sm w-full">
             <li
               onClick={() => handleParamsChange("type", "all")}
               className={cn(
-                `text-custom-grey px-1 sm:px-2 md:px-6 py-1 rounded-sm w-1/3`,
+                `text-custom-grey px-1 sm:px-2 md:px-2 py-1 rounded-sm w-1/3`,
                 {
                   "text-custom-white bg-custom-base": type === "all",
                 }
@@ -127,7 +127,7 @@ export default function Assets() {
             <li
               onClick={() => handleParamsChange("type", "upcoming")}
               className={cn(
-                `text-custom-grey px-1 sm:px-2 md:px-6 py-1 rounded-sm w-1/3`,
+                `text-custom-grey px-1 sm:px-2 md:px-2 py-1 rounded-sm w-1/3`,
                 {
                   "text-custom-white bg-custom-base": type === "upcoming",
                 }
@@ -138,7 +138,7 @@ export default function Assets() {
             <li
               onClick={() => handleParamsChange("type", "newlyAdded")}
               className={cn(
-                `text-custom-grey px-1 sm:px-2 md:px-6 py-1 rounded-sm w-1/3`,
+                `text-custom-grey px-1 sm:px-2 md:px-2 py-1 rounded-sm w-1/3`,
                 {
                   "text-custom-white bg-custom-base": type === "newlyAdded",
                 }
@@ -149,7 +149,7 @@ export default function Assets() {
           </ul>
         </div>
 
-        <div className="flex gap-2 items-center justify-between mt-4">
+        <div className="flex gap-2 items-center justify-between mt-4 lg:w-1/2 lg:max-w-lg">
           <SearchInput />
           <div className="flex gap-2 items-center ">
             <RiListOrdered
@@ -172,9 +172,17 @@ export default function Assets() {
             />
           </div>
           <div className="flex gap-2">
+            {/* <CustomSelect
+              icon={<RiFileList3Line />}
+              className="w-fit text-custom-white"
+              options={categories}
+              placeholder="Category"
+              defaultValue={category ? category : undefined}
+              onChange={(value) => handleParamsChange("category", value)}
+            /> */}
             <CustomSelect
               icon={<RiFileList3Line />}
-              className="w-fit"
+              className="w-fit text-custom-white"
               options={categories}
               placeholder="Category"
               defaultValue={category ? category : undefined}
@@ -182,7 +190,7 @@ export default function Assets() {
             />
             <CustomSelect
               icon={<RiMapPin2Line />}
-              className="w-fit"
+              className="w-fit text-custom-white"
               options={locations}
               placeholder="Location"
               defaultValue={location ? location : undefined}

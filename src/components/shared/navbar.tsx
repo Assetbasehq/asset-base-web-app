@@ -122,39 +122,54 @@ export default function Navbar() {
       {/* Mobile Slide-out Menu */}
       <div
         className={cn(
-          "fixed top-0 right-0 h-full w-64 bg-custom-gray-muted text-white shadow-lg transform transition-transform duration-300 z-50 ",
-          isOpen ? "translate-x-0" : "translate-x-full"
+          "fixed top-15 h-fit w-[90%] max-w-lg mx-auto left-0 right-0 origin-top bg-custom-base text-custom-black p-4 rounded-lg transform transition-transform duration-300 z-50 ",
+          isOpen ? " scale-y-100" : "scale-y-0"
         )}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-700">
-          <RiNotification2Line
-            size={34}
-            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
-          />
-          <Link to="/dashboard/account" className="md:hidden">
-            <RiUser2Line
-              onClick={() => setIsOpen(false)}
+        <Button
+          className="cursor-pointer rounded-full text-custom-ticker-red bg-custom-light-bg flex justify-self-end"
+          onClick={() => setIsOpen(false)}
+        >
+          <X height={20} width={20} />
+        </Button>
+
+        <div className="flex flex-col gap-2 justify-between items-start">
+          <Link to="/dashboard" className="flex items-center gap-2">
+            <RiNotification2Line
               size={34}
               className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
+            <p className=" text-custom-grey">Notifications</p>
           </Link>
-          <Link to="/dashboard/account/profile" className="hidden md:block">
-            <RiUser2Line
-              onClick={() => setIsOpen(false)}
-              size={34}
-              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
-            />
-          </Link>
-          <RiSearch2Line
-            size={34}
-            className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
-          />
-          <Button
-            className="bg-custom-base text-custom-white cursor-pointer"
-            onClick={() => setIsOpen(false)}
+          <Link
+            to="/dashboard/account"
+            className="md:hidden flex items-center gap-2"
           >
-            <X size={28} />
-          </Button>
+            <RiUser2Line
+              onClick={() => setIsOpen(false)}
+              size={34}
+              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+            />
+            <p className=" text-custom-grey">Profile</p>
+          </Link>
+          <Link
+            to="/dashboard/account/profile"
+            className="hidden md:flex items-center gap-2 "
+          >
+            <RiUser2Line
+              onClick={() => setIsOpen(false)}
+              size={34}
+              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+            />
+            <p className=" text-custom-grey">Profile</p>
+          </Link>
+          <div className="flex items-center gap-2">
+            <RiSearch2Line
+              size={34}
+              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+            />
+            <p className=" text-custom-grey">Search</p>
+          </div>
         </div>
 
         {/* Connect Button - Mobile */}

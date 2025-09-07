@@ -129,6 +129,14 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+  sendEnquiry = async (payload: { message: string }) => {
+    try {
+      const response = await axiosInstance.post(`/users/support`, payload);
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to send enquiry");
+    }
+  };
 
   // Others
   getUserNextOfKin = async (userId: string) => {
