@@ -39,18 +39,43 @@ class WalletService {
     }
   };
 
-  depositToWallet = async (payload?: any) => {
+  depositCrypto = async () => {
     try {
-      const response = await axiosInstance.post(`/transaction-requests`, {
-        payload,
-      });
+      const response = await axios.get(
+        `${config.CLIENT_NEW_API_URL}/wallet/deposit-crypto`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
       const data = response.data;
 
       console.log({ data });
 
-      return data || [];
+      return data;
     } catch (error) {
-      handleAxiosError(error, "failed to create security pin");
+      handleAxiosError(error, "Failed to deposit crypto");
+    }
+  };
+  
+  getCryptoWalletBalance = async () => {
+    try {
+      const response = await axios.get(
+        `${config.CLIENT_NEW_API_URL}/wallet/balance`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      const data = response.data;
+
+      console.log({ data });
+
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to get crypto wallet balance");
     }
   };
 }

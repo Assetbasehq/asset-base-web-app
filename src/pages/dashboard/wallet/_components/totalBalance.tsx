@@ -17,7 +17,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router";
 import { formatNaira, formatUSD } from "@/lib/utils";
-import { useGetWallet } from "@/hooks/useWallet";
+import {
+  useGetCryptoBalance,
+  useGetWallet,
+  useRequestCryptoDeposit,
+} from "@/hooks/useWallet";
 import { useState } from "react";
 import { FormatService } from "@/services/format-service";
 
@@ -26,6 +30,12 @@ export default function TotalBalance() {
   const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
 
   const { data, isLoading, isError } = useGetWallet({ currency });
+
+  const { data: cryptoWalletBalance } = useGetCryptoBalance();
+
+  const { data: walll } = useRequestCryptoDeposit();
+
+  console.log({ walll, data, cryptoWalletBalance });
 
   const handleCurrencyChange = (value: string) => {
     setCurrency(value as "usd" | "ngn");

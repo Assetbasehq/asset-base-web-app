@@ -40,6 +40,7 @@ import Assets from "./pages/dashboard/assets/asset-list";
 import { Toaster } from "sonner";
 import Deposit from "./pages/dashboard/wallet/deposit/deposit";
 import Withdraw from "./pages/dashboard/wallet/withdraw/withdraw";
+import CryptoDeposit from "./pages/dashboard/wallet/deposit/crypto/crypto-deposit";
 
 const queryClient = new QueryClient();
 
@@ -133,7 +134,16 @@ function App() {
                 },
                 {
                   path: "deposit",
-                  element: <Deposit />,
+                  children: [
+                    {
+                      path: "",
+                      element: <Deposit />,
+                    },
+                    {
+                      path: "crypto",
+                      element: <CryptoDeposit />,
+                    },
+                  ],
                 },
                 {
                   path: "withdraw",

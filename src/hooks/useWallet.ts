@@ -16,3 +16,19 @@ export const useGetWallet = ({ currency }: { currency: string }) => {
     queryFn: () => walletService.getWalletBalance({ currency }),
   });
 };
+
+//Crypto
+
+export const useRequestCryptoDeposit = () => {
+  return useQuery<any, Error>({
+    queryKey: ["crypto-deposit"],
+    queryFn: () => walletService.depositCrypto(),
+  });
+};
+
+export const useGetCryptoBalance = () => {
+  return useQuery<any, Error>({
+    queryKey: ["crypto-balance"],
+    queryFn: () => walletService.getCryptoWalletBalance(),
+  });
+};

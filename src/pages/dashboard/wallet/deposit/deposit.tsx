@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { RiArrowRightSLine } from "react-icons/ri";
 import WalletBreadCrumb from "../_components/wallet-bread-crumb";
+import { Link } from "react-router";
 
 export default function Deposit() {
   return (
     <div className="text-custom-white-text flex flex-col gap-4">
       <WalletBreadCrumb />
 
-      <div className="flex flex-col gap-8 text-start max-w-3xl mx-auto">
+      <div className="flex flex-col gap-8 text-start w-full max-w-md mx-auto">
         <div>
           <h2 className="text-xl font-semibold">Deposit to wallet</h2>
           <p className="text-muted-foreground text-sm">
@@ -20,18 +21,27 @@ export default function Deposit() {
           <div className="flex flex-col items-start  gap-4">
             <Button
               variant="outline"
-              className="w-100 flex justify-between rounded px-2 py-6"
+              className="w-full flex justify-between rounded px-2 py-6 cursor-pointer"
             >
               USD Wallet
               <RiArrowRightSLine />
             </Button>
             <Button
               variant="outline"
-              className="w-100 flex justify-between rounded px-2 py-6"
+              className="w-full flex justify-between rounded px-2 py-6 cursor-pointer"
             >
               NGN Wallet
               <RiArrowRightSLine />
             </Button>
+            <Link to="/dashboard/wallet/deposit/crypto" className="w-full">
+              <Button
+                variant="outline"
+                className="w-full flex justify-between rounded px-2 py-6 cursor-pointer"
+              >
+                Crypto Wallet
+                <RiArrowRightSLine />
+              </Button>
+            </Link>
           </div>
         </div>
 
