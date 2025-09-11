@@ -34,7 +34,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AccountType from "./pages/onboarding/account-type";
 import PersonalDetails from "./pages/onboarding/personal-details";
 import PINSetup from "./pages/onboarding/pin-setup";
-import AssetDetails from "./pages/dashboard/markets/_components/asset-details";
+import AssetDetails, {
+  AssetDetailsInvest,
+} from "./pages/dashboard/markets/_components/asset-details";
 import WalletPage from "./pages/dashboard/wallet/_components/wallet-page";
 import Assets from "./pages/dashboard/assets/asset-list";
 import { Toaster } from "sonner";
@@ -158,6 +160,19 @@ function App() {
                 {
                   path: ":assetId",
                   element: <AssetDetails />,
+                },
+              ],
+            },
+            {
+              path: "assets",
+              children: [
+                {
+                  index: true,
+                  element: <Assets />,
+                },
+                {
+                  path: ":assetId",
+                  element: <AssetDetailsInvest />,
                 },
               ],
             },

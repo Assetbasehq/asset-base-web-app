@@ -6,7 +6,13 @@ import AssetInfo from "./asset-info";
 import AssetTabs from "./asset-tabs";
 import AssetTradePanel from "./asset-trade-panel";
 import AssetOrders from "./asset-orders";
-import { cn } from "@/lib/utils";
+import { calculateRaisePercentage, cn } from "@/lib/utils";
+import { RiBookmarkLine, RiShareLine } from "react-icons/ri";
+import AssetAbout from "./asset-tabs/asset-about";
+import { Card, CardContent } from "@/components/ui/card";
+import { useState } from "react";
+import { motion } from "motion/react";
+import { Progress } from "@/components/ui/progress";
 
 interface Asset {
   id: string;
@@ -99,6 +105,215 @@ export default function AssetDetails() {
         <div className="block lg:hidden">
           <AssetTabs />
         </div>
+      </div>
+    </div>
+  );
+}
+
+const sampleImages = [
+  {
+    id: 1,
+    name: "Mountain View",
+    url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    alt: "Beautiful mountain landscape with sunrise",
+  },
+  {
+    id: 2,
+    name: "City Skyline",
+    url: "https://images.unsplash.com/photo-1494526585095-c41746248156",
+    alt: "City skyline during sunset",
+  },
+  {
+    id: 3,
+    name: "Forest Path",
+    url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3",
+    alt: "Pathway surrounded by lush forest",
+  },
+  {
+    id: 4,
+    name: "Ocean Waves",
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    alt: "Waves crashing on the beach",
+  },
+  {
+    id: 5,
+    name: "Desert Dunes",
+    url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+    alt: "Golden desert dunes under a clear sky",
+  },
+];
+
+const tabs = [
+  { key: "about", label: "About", component: <AssetAbout /> },
+  { key: "discussions", label: "Discussions", component: <AssetAbout /> },
+  { key: "updates", label: "Updates", component: <AssetAbout /> },
+  { key: "Feedback", label: "Feedback", component: <AssetAbout /> },
+];
+
+export function AssetDetailsInvest() {
+  const [active, setActive] = useState("about");
+  const { assetId } = useParams<{ assetId: string }>();
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const segments = location.pathname.split("/").filter(Boolean);
+
+  const formattedSegments = segments.map((seg) =>
+    seg.toLowerCase() === "dashboard" ? "home" : seg
+  );
+
+  const raisePercentage = calculateRaisePercentage(236415, 150000);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <Button
+          onClick={() => navigate(-1)}
+          className=" bg-custom-light-bg text-custom-white-text flex gap-2"
+        >
+          <ArrowLeft />
+          Back Home
+        </Button>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4 justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 ">
+            <img src={assetBaseLogo} alt="" className="w-12 h-12" />
+            <div className="text-start flex flex-col">
+              <h2 className="font-semibold text-custom-white">
+                Landmark Realty Limited
+              </h2>
+              <small className="text-xs md:text-sm text-custom-grey">
+                World famous hospitable company from Nigeria
+              </small>
+            </div>
+          </div>
+          <div className="flex gap-2 items-center w-full">
+            <small className="capitalize bg-custom-input-stroke text-custom-white px-2 rounded">
+              Private Business
+            </small>
+            <small className="capitalize bg-custom-input-stroke text-custom-white px-2 rounded">
+              Nigeria
+            </small>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 mb-2">
+          <RiShareLine className="w-9 h-9 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
+          <RiBookmarkLine className="w-9 h-9 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <div>
+            <img
+              src={sampleImages[0].url}
+              alt=""
+              className="h-62 w-full rounded-2xl"
+            />
+            <div className="flex justify-center gap-4 mt-4">
+              {sampleImages.map((image) => (
+                <div key={image.id} className="w-8 h-4 md:w-40 md:h-20">
+                  <img
+                    src={image.url}
+                    alt={image.alt}
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Card className="border-none shadow-none bg-transparent p-0 px-0">
+            <CardContent className="p-0">
+              {/* Tabs header */}
+              <div className="w-full border-b text-custom-white-text">
+                <div className="relative flex gap-6 justify-start w-fit max-w-md">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActive(tab.key)}
+                      className={cn(
+                        "flex-1 py-1 text-center text-xs font-medium relative cursor-pointer",
+                        {
+                          "text-orange-500": active === tab.key,
+                          "text-custom-grey": active !== tab.key,
+                        }
+                      )}
+                    >
+                      <span className="text-sm">{tab.label}</span>
+                      {active === tab.key && (
+                        <motion.div
+                          layoutId="underlineeee"
+                          className="absolute bottom-0 left-0 right-0 h-[2px] bg-orange-500"
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 30,
+                          }}
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tab content */}
+              <div className="mt-4">
+                {tabs.find((tab) => tab.key === active)?.component}
+              </div>
+            </CardContent>
+          </Card>
+
+          <div></div>
+
+          <div>
+            <h2 className="text-sm md:text-lg text-custom-white font-semibold">
+              Highlights
+            </h2>
+            <p>
+              Founded in 1997 and headquartered in Lagos, Landmark Africa has
+              transformed the hospitality landscape in Nigeria through an
+              integrated ecosystem of leisure, real estate, and lifestyle
+              assets. The company currently manages over 130,000 square meters
+              of premium mixed-use property, including beaches, event centres,
+              restaurants, retail hubs, residences, and office spaces. With over
+              4 million visitors annually and a loyal clientele base of Fortune
+              500 firms, Landmark Africa has become the benchmark for premium
+              lifestyle destinations in West Africa.
+            </p>
+          </div>
+        </div>
+
+        <Card className="border-none shadow-none bg-transparent p-0 px-0">
+          <CardContent className="p-0">
+            <p>$234,000</p>
+            <Progress
+              value={raisePercentage}
+              className="w-full bg-custom-white [&>div]:bg-custom-orange h-1.5"
+            />
+            <small className="font-semibold text-custom-orange">
+              {raisePercentage}% raised
+            </small>
+            <div>
+              <small className="text-custom-grey">Price per share</small>
+              <small className="text-custom-grey">$500</small>
+            </div>
+            <div>
+              <small className="text-custom-grey">Available Shares</small>
+              <small className="text-custom-grey">1,200</small>
+            </div>
+            <div>
+              <small className="text-custom-grey">Raising goal</small>
+              <small className="text-custom-grey">$1,200,000</small>
+            </div>
+
+            <Button className="btn-primary py-6 rounded-full">
+              Invest Now
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

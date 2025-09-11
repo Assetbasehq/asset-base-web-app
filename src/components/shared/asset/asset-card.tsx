@@ -7,6 +7,7 @@ import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
 import { FormatService } from "@/services/format-service";
 import { Card, CardContent } from "@/components/ui/card";
+import cardCover from "@/assets/images/card-cover.png";
 
 interface Props {
   item: {
@@ -30,7 +31,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
       >
         <Card className="p-0 border-none shadwo-none">
           <CardContent className="bg-custom-light-bg text-custom-white flex items-center justify-between rounded-xl p-4 gap-4">
-            <div>
+            <div className="text-start">
               <div className="flex items-center gap-3">
                 <img
                   src={item?.asset?.image_urls[0]}
@@ -39,7 +40,9 @@ export default function AssetCard({ item, variant = "card" }: Props) {
                 />
                 <div>
                   <h2 className="font-semibold">{item?.asset?.asset_symbol}</h2>
-                  <small className="text-sm">{item?.asset?.asset_name}</small>
+                  <small className="text-sm">
+                    {FormatService.formatName(item?.asset?.asset_name)}
+                  </small>
                 </div>
               </div>
             </div>
@@ -148,19 +151,16 @@ export default function AssetCard({ item, variant = "card" }: Props) {
   return (
     <Link
       key={item?.asset.id}
-      to={`/dashboard/markets/${item?.asset.slug}`}
+      // to={`/dashboard/markets/${item?.asset.slug}`}
+      to={`/dashboard/assets/${item?.asset.slug}`}
       className="cursor-pointer"
     >
       <div
         key={item?.asset.id}
-        className="bg-custom-light-bg text-custom-white flex flex-col gap-4 items-start rounded-2xl p-2 min-w-66 sm:min-w-96 shadow-lg"
+        className="bg-custom-light-bg text-custom-white flex flex-col gap-2 items-start rounded-2xl p-2 min-w-66 sm:min-w-96 shadow-lg"
       >
-        <div className="relative overflow-hidden flex flex-col gap-2 items-start text-start w-full p-2 rounded-lg bg-[#93939417]">
-          <img
-            src={assetBaseLogo}
-            alt=""
-            className=" absolute w-35 top-0 -right-5 opacity-10"
-          />
+        <img src={cardCover} alt="" className="w-full" />
+        <div className="relative overflow-hidden flex justify-between gap-2 items-start text-start w-full rounded-lg">
           <div className="flex items-center gap-2">
             <img
               src={item?.asset?.image_urls[0]}
@@ -174,21 +174,14 @@ export default function AssetCard({ item, variant = "card" }: Props) {
               </small>
             </div>
           </div>
-          <div className="w-full flex flex-col">
-            <div className="flex justify-between items-center w-full">
-              <small className="text-custom-grey">Price per share</small>
-              <small className="font-semibold">
-                {formatUSD(item?.asset?.price_per_share)}
-              </small>
-            </div>
-            <div className="flex justify-between items-center w-full">
-              <small className="text-custom-grey">Funding round closes</small>
-              <small className="font-medium">
-                in <span className="font-bold">15days</span>
-              </small>
-            </div>
+          <div className="hidden md:flex items-center gap-4 mb-2">
+            <RiShareLine className="w-9 h-9 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
+            <RiBookmarkLine className="w-9 h-9 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
           </div>
         </div>
+        <p className="text-sm text-custom-grey">
+          {FormatService.truncateString(item?.asset?.asset_description, 50)}
+        </p>
         <div className="flex flex-col gap-2 items-start w-full pb-1">
           <Progress
             value={raisePercentage}
@@ -208,7 +201,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
         </div>
 
         {/* Only on desktop  */}
-        <div className="hidden md:flex flex-col gap-4 w-full ">
+        {/* <div className="hidden md:flex flex-col gap-4 w-full ">
           <div className="flex flex-col gap-2 items-start w-full">
             <div className="flex justify-between items-center w-full">
               <p className="text-sm text-custom-grey">Category</p>
@@ -235,6 +228,29 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             >
               See More Details
             </Link>
+          </div>
+        </div> */}
+
+        <div className="relative overflow-hidden flex flex-col gap-2 items-start text-start w-full p-2 rounded-lg bg-[#93939417]">
+          <img
+            src={assetBaseLogo}
+            alt=""
+            className=" absolute w-35 top-0 -right-5 opacity-10"
+          />
+
+          <div className="w-full flex flex-col">
+            <div className="flex justify-between items-center w-full">
+              <small className="text-custom-grey">Price per share</small>
+              <small className="font-semibold">
+                {formatUSD(item?.asset?.price_per_share)}
+              </small>
+            </div>
+            <div className="flex justify-between items-center w-full">
+              <small className="text-custom-grey">Funding round closes</small>
+              <small className="font-medium">
+                in <span className="font-bold">15days</span>
+              </small>
+            </div>
           </div>
         </div>
       </div>
