@@ -19,16 +19,8 @@ import {
 import { useState } from "react";
 import { useGetWallet } from "@/hooks/useWallet";
 import { FormatService } from "@/services/format-service";
+import { flags } from "@/constants/images";
 // import { Skeleton } from "@/components/ui/skeleton";
-
-interface WalletResponse {
-  account_id: string;
-  balance: number;
-  created_at: string;
-  id: string;
-  status: string;
-  updated_at: string;
-}
 
 export default function AccountSummary() {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
@@ -57,8 +49,22 @@ export default function AccountSummary() {
                 <SelectValue placeholder="USD" className="text-white" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="usd">USD</SelectItem>
-                <SelectItem value="ngn">NGN</SelectItem>
+                <SelectItem value="usd">
+                  <img
+                    className="w-5 h-5"
+                    src={flags.usa.flag}
+                    alt={flags.usa.alt}
+                  />
+                  USD
+                </SelectItem>
+                <SelectItem value="ngn">
+                  <img
+                    className="w-5 h-5"
+                    src={flags.nigeria.flag}
+                    alt={flags.nigeria.alt}
+                  />
+                  NGN
+                </SelectItem>
               </SelectContent>
             </Select>
 
@@ -85,7 +91,11 @@ export default function AccountSummary() {
                     />
                   )}
                 </div>
-                <small className="text-green-400">+1,966 (2.4%)</small>
+                {isBalanceVisible ? (
+                  <small className="text-green-400">+1,966 (2.4%)</small>
+                ) : (
+                  <small className="text-green-400">******</small>
+                )}
               </div>
               <div className="flex justify-between md:justify-end w-full gap-4">
                 <Link to="/dashboard/wallet/deposit">

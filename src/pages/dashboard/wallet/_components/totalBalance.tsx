@@ -16,14 +16,10 @@ import {
 } from "react-icons/ri";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router";
-import { formatNaira, formatUSD } from "@/lib/utils";
-import {
-  useGetCryptoBalance,
-  useGetWallet,
-  useRequestCryptoDeposit,
-} from "@/hooks/useWallet";
+import { useGetCryptoBalance, useGetWallet } from "@/hooks/useWallet";
 import { useState } from "react";
 import { FormatService } from "@/services/format-service";
+import { flags } from "@/constants/images";
 
 export default function TotalBalance() {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
@@ -33,12 +29,25 @@ export default function TotalBalance() {
 
   const { data: cryptoWalletBalance } = useGetCryptoBalance();
 
-  const { data: walll } = useRequestCryptoDeposit();
-
-  console.log({ walll, data, cryptoWalletBalance });
+  console.log({ cryptoWalletBalance });
 
   const handleCurrencyChange = (value: string) => {
     setCurrency(value as "usd" | "ngn");
+  };
+
+  const handleGetAllBalance = () => {
+    let finalAmount = 0;
+
+    if (cryptoWalletBalance) {
+      finalAmount =
+        cryptoWalletBalance?.assets[0]?.balance +
+        cryptoWalletBalance?.assets[1]?.balance;
+    }
+    if (data) {
+      finalAmount += data.balance;
+    }
+
+    return finalAmount;
   };
 
   // if (true) {
@@ -58,7 +67,7 @@ export default function TotalBalance() {
                   <h2 className="text-xl md:text-3xl font-semibold">
                     {isBalanceVisible
                       ? currency === "usd"
-                        ? FormatService.formatToUSD(data?.balance || 0)
+                        ? FormatService.formatToUSD(handleGetAllBalance() || 0)
                         : FormatService.formatToNaira(data?.balance || 0)
                       : "******"}
                   </h2>
@@ -74,7 +83,11 @@ export default function TotalBalance() {
                     />
                   )}
                 </div>
-                <p className="text-green-400">+1,966 (2.4%)</p>
+                {isBalanceVisible ? (
+                  <p className="text-green-400">+1,966 (2.4%)</p>
+                ) : (
+                  "*****"
+                )}
               </div>
             </div>
           </div>
@@ -86,9 +99,9 @@ export default function TotalBalance() {
               <SelectItem value="usd">
                 <span className="flex items-center gap-2">
                   <img
-                    src="https://flagcdn.com/us.svg"
-                    alt="US Flag"
-                    className="h-6 w-6 rounded-full"
+                    className="w-5 h-5"
+                    src={flags.usa.flag}
+                    alt={flags.usa.alt}
                   />
                   <span>USD</span>
                 </span>
@@ -97,9 +110,9 @@ export default function TotalBalance() {
               <SelectItem value="ngn">
                 <span className="flex items-center gap-2">
                   <img
-                    src="https://flagcdn.com/ng.svg"
-                    alt="Nigeria Flag"
-                    className="h-3 w-9 rounded-full"
+                    className="w-5 h-5"
+                    src={flags.nigeria.flag}
+                    alt={flags.nigeria.alt}
                   />
                   <span>NGN</span>
                 </span>
@@ -114,9 +127,11 @@ export default function TotalBalance() {
               <h2 className=" text-sm">Wallet Balance</h2>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg md:text-2xl font-semibold">
-                  {currency === "usd"
-                    ? formatUSD(data?.balance)
-                    : formatNaira(data?.balance)}
+                  {isBalanceVisible
+                    ? currency === "usd"
+                      ? FormatService.formatToUSD(handleGetAllBalance() || 0)
+                      : FormatService.formatToNaira(data?.balance)
+                    : "******"}
                 </h2>
                 <small className="text-green-400">+0.4%</small>
               </div>

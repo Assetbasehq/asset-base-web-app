@@ -40,7 +40,8 @@ import Assets from "./pages/dashboard/assets/asset-list";
 import { Toaster } from "sonner";
 import Deposit from "./pages/dashboard/wallet/deposit/deposit";
 import Withdraw from "./pages/dashboard/wallet/withdraw/withdraw";
-import CryptoDeposit from "./pages/dashboard/wallet/deposit/crypto/crypto-deposit";
+import { WagmiProvider } from "wagmi";
+import { wagmiConfig } from "./lib/wagmi.config";
 
 const queryClient = new QueryClient();
 
@@ -138,10 +139,6 @@ function App() {
                     {
                       path: "",
                       element: <Deposit />,
-                    },
-                    {
-                      path: "crypto",
-                      element: <CryptoDeposit />,
                     },
                   ],
                 },
@@ -259,7 +256,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      <RouterProvider router={router} />
+      <WagmiProvider config={wagmiConfig}>
+        <RouterProvider router={router} />
+      </WagmiProvider>
       {/* {process.env.NODE_ENV === "development" && (
         <ReactQueryDevtools initialIsOpen={false} />
       )} */}

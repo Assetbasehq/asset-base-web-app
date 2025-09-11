@@ -7,47 +7,69 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useWallectConnector } from "@/hooks/useWalletConnector";
 import { FormatService } from "@/services/format-service";
 import { useState } from "react";
 import shieldImage from "@/assets/images/shield-fingerprint.svg";
 import { cn } from "@/lib/utils";
 import { CustomAlert } from "../custom/custom-alert";
+import {
+  useAccount,
+  useBalance,
+  useConnect,
+  useDisconnect,
+  type Connector,
+} from "wagmi";
+import { formatEther } from "viem";
 
 export interface ConnectWalletProps {
   className?: string;
 }
 
+// const ASSET_CHAIN_ID = 12345;
+const ASSET_CHAIN_USDT_CONTRACT = "0x04f868C5b3F0A100a207c7e9312946cC2c48a7a3";
+
 export default function ConnectWallet({ className }: ConnectWalletProps) {
   const [open, setOpen] = useState(false);
 
-  const {
-    balance,
-    providers,
+  const { connectors, connect, error } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { address, isConnected, chainId } = useAccount();
+  const { data: walletBalance } = useBalance({
     address,
-    connectWallet,
-    disconnectWallet,
-    error,
-  } = useWallectConnector();
+    token: ASSET_CHAIN_USDT_CONTRACT,
+    chainId: chainId,
+  });
+
+  const formattedBalance = walletBalance
+    ? FormatService.formatToUSD(
+        parseFloat(formatEther(walletBalance.value)) || 0
+      )
+    : FormatService.formatToUSD(0);
 
   const handleOpen = () => setOpen(true);
+
+  console.log({
+    walletBalance,
+    isConnected,
+    chainId,
+  });
 
   return (
     <div>
       <Button
-        // onClick={handleClick}
-        onClick={() => (address ? disconnectWallet() : handleOpen())}
-        // onClick={handleConnect1}
+        onClick={() => handleOpen()}
         className={cn(
           `bg-custom-orange text-custom-white px-4 py-2 rounded-full w-fit flex items-center gap-2 cursor-pointer hover:bg-custom-orange/90 transition-all duration-300 ease-in-out`,
           className
         )}
       >
-        {address && FormatService.formatToUSD(balance)}
-        {address ? (
-          <p className="text-sm font-medium">
-            - {address.slice(0, 6)}...{address.slice(-4)}
-          </p>
+        {isConnected && address ? (
+          <>
+            {formattedBalance && <span>{formattedBalance}</span>}
+            <p className="text-sm font-medium">
+              - {address.slice(0, 6)}...{address.slice(-4)}
+            </p>
+          </>
         ) : (
           <span className="flex items-center gap-1">
             <span>
@@ -58,32 +80,21 @@ export default function ConnectWallet({ className }: ConnectWalletProps) {
         )}
       </Button>
 
-      <ConnectWalletModal
-        open={open}
-        setOpen={setOpen}
-        providers={providers}
-        connectWallet={(provider) =>
-          connectWallet(provider, () => setOpen(false))
-        }
-        error={error}
-      />
+      <ConnectWalletModal open={open} setOpen={setOpen} />
     </div>
   );
 }
 
-function ConnectWalletModal({
+export function ConnectWalletModal({
   open,
   setOpen,
-  providers,
-  connectWallet,
-  error,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  providers: any[];
-  connectWallet: (provider: any) => void;
-  error: string | null;
 }) {
+  const { connectors, connect, error } = useConnect();
+  const { connector: activeConnector, isConnected } = useAccount();
+
   if (!open) {
     return null;
   }
@@ -105,23 +116,28 @@ function ConnectWalletModal({
         <div className="flex gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 w-full">
-              {providers.length > 0 ? (
-                providers.map((provider) => {
+              {connectors.length > 0 ? (
+                connectors.map((connector: Connector) => {
+                  const isCurrent = activeConnector?.id === connector.id;
                   return (
                     <Button
                       className="flex items-center justify-start gap-2 bg-custom-base hover:bg-custom-light-bg text-custom-white w-full cursor-pointer "
-                      key={provider.info.uuid}
+                      key={connector.uid}
                       onClick={() => {
-                        connectWallet(provider.provider);
-                        // setOpen(false);
+                        if (!isCurrent) {
+                          connect({ connector }); // ✅ only connect if not already connected
+                        }
                       }}
                     >
                       <img
                         className="w-6 h-6"
-                        src={provider.info.icon}
-                        alt={provider.info.name}
+                        src={connector.icon}
+                        alt={connector.name}
                       />
-                      <div>{provider.info.name}</div>
+                      <div>{connector.name}</div>
+                      {isCurrent && (
+                        <div className="text-xs text-green-500">Connected</div>
+                      )}
                     </Button>
                   );
                 })
@@ -131,7 +147,9 @@ function ConnectWalletModal({
                 </div>
               )}
             </div>
-            {error && <CustomAlert message={error} variant="destructive" />}
+            {error && (
+              <CustomAlert message={error?.message} variant="destructive" />
+            )}
             <p className="text-custom-grey text-xs">
               By connecting your wallet, you're agree to our{" "}
               <small className="text-custom-orange text-sm ">

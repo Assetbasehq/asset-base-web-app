@@ -32,3 +32,11 @@ export const useGetCryptoBalance = () => {
     queryFn: () => walletService.getCryptoWalletBalance(),
   });
 };
+
+export const useGetAddressTransactions = (address: string) => {
+  return useQuery<any, Error>({
+    queryKey: ["address-transactions", address],
+    queryFn: () => walletService.getAddressTransactions(address),
+    enabled: !!address,
+  });
+};

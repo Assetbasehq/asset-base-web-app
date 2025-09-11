@@ -6,7 +6,6 @@ import {
   RiArrowUpDownLine,
   RiArrowUpLine,
 } from "react-icons/ri";
-// import { Skeleton } from "@/components/ui/skeleton";
 
 const transactions = [
   {
@@ -43,7 +42,19 @@ const transactions = [
   },
 ];
 
+// https://scan-testnet.assetchain.org/
+
 export default function TransactionHistory() {
+  // const { data: cryptoWalletBalance } = useGetCryptoBalance();
+
+  // console.log({ cryptoWalletBalance });
+
+  // const { data } = useGetAddressTransactions(
+  //   cryptoWalletBalance?.assets[0]?.tokenAddress
+  // );
+
+  // console.log({ data, cryptoWalletBalance,  });
+
   // if (true) {
   //   return <TransactionHistorySkeleton />;
   // }

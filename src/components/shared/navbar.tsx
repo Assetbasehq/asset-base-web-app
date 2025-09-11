@@ -13,7 +13,6 @@ import {
   RiUser2Line,
   RiNotification2Line,
   RiSearch2Line,
-  RiAddLine,
 } from "react-icons/ri";
 import ConnectWallet from "./connect-wallet";
 
@@ -85,6 +84,7 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <div className="hidden lg:flex items-center gap-4">
           <ConnectWallet />
+          {/* <WalletConnection /> */}
 
           <RiNotification2Line
             size={34}

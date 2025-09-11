@@ -2,8 +2,12 @@ import { BrowserProvider, ethers } from "ethers";
 import { useEffect, useState } from "react";
 
 export const useWallectConnector = () => {
+  const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [providers, setProviders] = useState<EIP6963ProviderDetail[]>([]);
+  // const [connectedProviders, setConnectedProviders] = useState<
+  //   EIP6963ProviderDetail[]
+  // >([]);
   const [address, setAddress] = useState<string>("");
   const [balance, setBalance] = useState<number>(0);
   const [selectedProvider, setSelectedProvider] =
@@ -35,6 +39,43 @@ export const useWallectConnector = () => {
     };
   }, []);
 
+  // ---- 2. Check which wallets are connected ----
+  // useEffect(() => {
+  //   const checkConnectedProviders = async () => {
+  //     console.log("Checking connected providers...");
+  //     console.log({ providers });
+
+  //     const results: EIP6963ProviderDetail[] = [];
+
+  //     for (const providerDetail of providers) {
+  //       try {
+  //         const accounts = (await providerDetail.provider.request({
+  //           method: "eth_accounts", // No popup, just checks silently
+  //         })) as string[];
+
+  //         if (accounts.length > 0) {
+  //           console.log("Connected address:", accounts[0]);
+  //           results.push(providerDetail);
+  //         }
+  //       } catch (err) {
+  //         console.error(
+  //           `Error checking accounts for provider ${providerDetail.info.name}:`,
+  //           err
+  //         );
+  //       }
+  //     }
+
+  //     console.log({ results });
+      
+
+  //     setConnectedProviders(results);
+  //   };
+
+  //   if (providers.length > 0) {
+  //     checkConnectedProviders();
+  //   }
+  // }, [providers]);
+
   const STORAGE_KEY = "connectedWallet";
 
   useEffect(() => {
@@ -57,6 +98,7 @@ export const useWallectConnector = () => {
   }, [providers]);
 
   const connectWallet = async (provider: any, onConnect?: () => void) => {
+    setIsConnecting(true);
     setError(null);
     try {
       const accounts = await provider.request({
@@ -102,7 +144,7 @@ export const useWallectConnector = () => {
               STORAGE_KEY,
               JSON.stringify({
                 providerName: providerDetail.info.name,
-                savedAddress: connectedAddress,
+                savedAddress: newAccounts[0],
               })
             );
           }
@@ -118,14 +160,15 @@ export const useWallectConnector = () => {
       });
 
       // Further logic to handle connected accounts
-    } catch (error) {
-      //   if (error.code === 4001) {
-      //     setError({
-      //       message: "User rejected request",
-      //       type: "info",
-      //     });
-      //   }
+    } catch (error: any) {
+      if (error.code === 4001) {
+        setError("User rejected wallet connection request.");
+      } else {
+        setError(error.message || "Unknown error occurred");
+      }
       console.error("Error connecting to wallet:", error);
+    } finally {
+      setIsConnecting(false);
     }
   };
 
@@ -137,6 +180,7 @@ export const useWallectConnector = () => {
   };
 
   return {
+    isConnecting,
     error,
     providers,
     connectWallet,

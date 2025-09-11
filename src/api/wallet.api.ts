@@ -1,5 +1,5 @@
 import config from "@/config";
-import axiosInstance from "@/lib/axios.config";
+import axiosInstance, { web3axiosInstance } from "@/lib/axios.config";
 import { handleAxiosError } from "@/lib/utils";
 import axios from "axios";
 
@@ -41,41 +41,42 @@ class WalletService {
 
   depositCrypto = async () => {
     try {
-      const response = await axios.get(
-        `${config.CLIENT_NEW_API_URL}/wallet/deposit-crypto`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
+      const response = await web3axiosInstance.get(`/wallet/deposit-crypto`);
       const data = response.data;
-
-      console.log({ data });
-
       return data;
     } catch (error) {
       handleAxiosError(error, "Failed to deposit crypto");
     }
   };
-  
+
   getCryptoWalletBalance = async () => {
     try {
-      const response = await axios.get(
-        `${config.CLIENT_NEW_API_URL}/wallet/balance`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      const data = response.data;
+      const response = await web3axiosInstance.get(`/wallet/balance`);
+      const data = response.data?.data;
 
       console.log({ data });
 
       return data;
     } catch (error) {
       handleAxiosError(error, "Failed to get crypto wallet balance");
+    }
+  };
+
+  // BlockChain
+  getAddressTransactions = async (address: string) => {
+    try {
+      const response = await axios.get(
+        `https://scan-testnet.assetchain.org/addresses/${address}/transactions`
+      );
+      const data = response.data;
+
+      console.log({ data, response });
+
+      return data;
+    } catch (error) {
+      console.log({ error });
+
+      handleAxiosError(error, "Failed to get address transactions");
     }
   };
 }

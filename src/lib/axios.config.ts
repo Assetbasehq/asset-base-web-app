@@ -1,6 +1,8 @@
+import env from "@/config";
 import axios from "axios";
 
 const apiUrl: string = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const web3ApiUrl: string = env.WEB3_SERVICE_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: `${apiUrl}`,
@@ -17,6 +19,24 @@ axiosInstance.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+
+const web3axiosInstance = axios.create({
+  baseURL: `${web3ApiUrl}`,
+});
+
+// Request interceptor → attach accessToken
+web3axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export { web3axiosInstance };
 
 // Response interceptor → handle expired token
 // axiosInstance.interceptors.response.use(

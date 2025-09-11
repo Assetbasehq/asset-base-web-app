@@ -195,7 +195,6 @@
   /* Fixed Dark Colors  */
   --color-fixed-orange-10-dark: #1d1512;
 
-
   /* Fonts  */
   --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
@@ -247,7 +246,7 @@
   --custom-card: #ffffff;
   /* --custom-card-inner: #F6F9FA; */
   --custom-input-stroke: #cdd0d5;
-  --custom-input-fill: #20232d;
+  --custom-input-fill: #ffffff;
   --custom-input-mute: #f0f2f5;
   --custom-input-label: #ffffff;
   --custom-light-stroke: #31353f;
@@ -307,7 +306,7 @@
   --custom-card: #161922;
   /* --custom-card-inner: #222431; */
   --custom-input-stroke: #525866;
-  --custom-input-fill: #ffffff;
+  --custom-input-fill: #20232d;
   --custom-input-mute: #31353f;
   --custom-input-label: #ffffff;
   --custom-light-stroke: #cdd0d5;

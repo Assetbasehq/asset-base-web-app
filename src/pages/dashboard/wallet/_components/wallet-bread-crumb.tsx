@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { RiArrowLeftLine } from "react-icons/ri";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 export default function WalletBreadCrumb() {
   const location = useLocation();
   const segments = location.pathname.split("/").filter(Boolean);
+
+  const naviagate = useNavigate();
 
   const formattedSegments = segments.map((seg) =>
     seg.toLowerCase() === "dashboard" ? "home" : seg
@@ -17,10 +19,10 @@ export default function WalletBreadCrumb() {
           asChild
           className="flex items-center gap-2 text-xs cursor-pointer p-2 bg-custom-light-bg text-custom-white-text rounded-lg hover:bg-custom-light-bg/80 transition-all duration-300 ease-in-out"
         >
-          <Link to="/dashboard/wallet">
+          <Button onClick={() => naviagate(-1)}>
             <RiArrowLeftLine />
             <p>Back </p>
-          </Link>
+          </Button>
         </Button>
       </div>
 
