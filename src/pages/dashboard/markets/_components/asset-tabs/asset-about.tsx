@@ -1,7 +1,7 @@
 export default function AssetAbout() {
   return (
     <div className="text-sm text-start leading-relaxed text-muted-foreground">
-      <h2 className="text-sm md:text-lg text-custom-white font-semibold">
+      <h2 className="text-sm md:text-lg text-custom-white font-semibold pb-2">
         Highlights
       </h2>
       <p>
@@ -16,7 +16,7 @@ export default function AssetAbout() {
       </p>
 
       <p>
-        ts visionary leadership, proven business model, and commitment to
+        Its visionary leadership, proven business model, and commitment to
         innovation and sustainability make this a compelling investment
         opportunity. Landmark seeks to replicate and expand its ecosystem by
         deploying new capital across strategic locations in Nigeria and
