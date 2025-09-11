@@ -157,7 +157,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
     >
       <div
         key={item?.asset.id}
-        className="bg-custom-light-bg text-custom-white flex flex-col gap-2 items-start rounded-2xl p-2 min-w-66 sm:min-w-96 shadow-lg"
+        className="bg-custom-light-bg text-custom-white flex flex-col gap-2 items-start rounded-2xl p-2 min-w-66 sm:min-w-96 shadow-lg h-full"
       >
         <img src={cardCover} alt="" className="w-full" />
         <div className="relative overflow-hidden flex justify-between gap-2 items-start text-start w-full rounded-lg">
@@ -231,7 +231,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
           </div>
         </div> */}
 
-        <div className="relative overflow-hidden flex flex-col gap-2 items-start text-start w-full p-2 rounded-lg bg-[#93939417]">
+        <div className="relative overflow-hidden flex flex-col gap-2 items-start text-start w-full p-2 rounded-lg bg-[#93939417] mt-auto">
           <img
             src={assetBaseLogo}
             alt=""

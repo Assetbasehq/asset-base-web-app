@@ -12,7 +12,7 @@ export default function LaunchPad() {
   // if (isLoading) return <LaunchPadSkeleton />;
 
   return (
-    <Card className=" p-4 md:p-4 bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none">
+    <Card className=" p-4 md:p-4 bg-custom-card text-custom-white-text rounded-lg text-start border-none shadow-none gap-4">
       <CardHeader className=" p-0 flex items-center justify-between">
         <div className="flex flex-col">
           <h2 className="text-xl md:text-2xl font-semibold">Launchpad</h2>
@@ -28,7 +28,7 @@ export default function LaunchPad() {
         </Link>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 items-stretch">
           <Assets data={data || []} isLoading={isLoading} isError={isError} />
         </div>
       </CardContent>
