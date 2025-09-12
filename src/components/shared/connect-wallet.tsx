@@ -48,11 +48,11 @@ export default function ConnectWallet({ className }: ConnectWalletProps) {
 
   const handleOpen = () => setOpen(true);
 
-  console.log({
-    walletBalance,
-    isConnected,
-    chainId,
-  });
+  // console.log({
+  //   walletBalance,
+  //   isConnected,
+  //   chainId,
+  // });
 
   return (
     <div>

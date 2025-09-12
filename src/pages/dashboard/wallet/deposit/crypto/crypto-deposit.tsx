@@ -26,7 +26,9 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
 
   const { address, isConnected, chainId } = useAccount();
 
-  const { data, isLoading, isError } = useRequestCryptoDeposit();
+  const { data: depositData, isLoading, isError } = useRequestCryptoDeposit();
+
+  console.log({ depositData });
 
   const {
     data: hash,
@@ -46,7 +48,7 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
   };
 
   const handleCopyAddress = async () => {
-    await navigator.clipboard.writeText(`${data?.data?.address}`);
+    await navigator.clipboard.writeText(`${depositData?.address}`);
     setCopied(true);
     console.log("ddd");
 
@@ -56,7 +58,7 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
   const handleSendTransaction = () => {
     if (!isConnected) return setIsModalOpen(true);
     if (!amountToFund) return;
-    const to = data?.data?.address;
+    const to = depositData?.address;
     const value = parseEther(amountToFund.toString()); // Ensure it's clean
 
     sendTransaction?.({ to, value, gas: BigInt(21000) });
@@ -126,7 +128,7 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
         </div>
 
         <div className="py-4 px-4 rounded-md bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer">
-          <p className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <img src={images.assetBase.logo} alt={images.assetBase.alt} />
             <div className="flex flex-col items-start">
               <p className="text-xs md:text-sm">
@@ -139,10 +141,10 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
                 ) : (
                   <>
                     <small className="sm:hidden">
-                      {truncateWalletAddress(data?.data?.address, 12)}
+                      {truncateWalletAddress(depositData?.address, 12)}
                     </small>
                     <small className="hidden sm:block">
-                      {data?.data?.address}
+                      {depositData?.address}
                     </small>
                   </>
                 )}{" "}
@@ -165,7 +167,7 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
                 </span>
               </p>
             </div>
-          </p>
+          </div>
         </div>
       </div>
 

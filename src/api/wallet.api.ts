@@ -42,7 +42,7 @@ class WalletService {
   depositCrypto = async () => {
     try {
       const response = await web3axiosInstance.get(`/wallet/deposit-crypto`);
-      const data = response.data;
+      const data = response.data?.data;
       return data;
     } catch (error) {
       handleAxiosError(error, "Failed to deposit crypto");
