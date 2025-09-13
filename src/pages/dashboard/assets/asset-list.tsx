@@ -10,8 +10,6 @@ import { useNavigate, useSearchParams } from "react-router";
 import AssetGrid from "./_components/asset-grid";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { walletService } from "@/api/wallet.api";
 import SearchInput from "./_components/search-input";
 import type { SelectOption } from "@/components/custom/custom-select";
 import CustomSelect from "@/components/custom/custom-select";
@@ -35,17 +33,11 @@ export default function Assets() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const type = searchParams.get("type") || "all";
-  const location = searchParams.get("location") || "all";
-  const category = searchParams.get("category") || "all";
+  const location = searchParams.get("location") || "";
+  const category = searchParams.get("category") || "";
 
   const { data, isLoading, isError } = useGetAssets();
   const [isGrid, setIsGrid] = useState(true);
-
-  const { data: balance } = useQuery({
-    queryKey: ["testing"],
-    queryFn: async () => walletService.getNewWalletBalance(),
-  });
-  console.log({ balance });
 
   const navigate = useNavigate();
 
@@ -53,7 +45,13 @@ export default function Assets() {
 
   const handleParamsChange = (key: string, value: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set(key, value);
+
+    if (!value || value.toLowerCase() === "all") {
+      newSearchParams.delete(key);
+    } else {
+      newSearchParams.set(key, value);
+    }
+
     setSearchParams(newSearchParams);
   };
 
@@ -72,33 +70,6 @@ export default function Assets() {
             </span>
           </Button>
         </div>
-
-        {/* Toggle Tabs */}
-        {/* <div className="relative flex bg-custom-light-bg px-2 py-2 rounded-lg gap-2">
-          <RiLayoutGridFill
-            onClick={() => setIsGrid(true)}
-            className={cn("w-6 h-6 z-10 cursor-pointer", {
-              "text-white": isGrid,
-              "text-custom-white-text": !isGrid,
-            })}
-          />
-
-          <RiMenuLine
-            onClick={() => setIsGrid(false)}
-            className={cn(
-              "w-6 h-6 z-10 pr-1",
-              !isGrid ? "text-white" : "text-custom-white-text"
-            )}
-          />
-
-          <motion.div
-            layoutId="activeTab"
-            className="absolute top-1 bottom-2 w-8 h-8 rounded-md bg-orange-500"
-            initial={false}
-            animate={{ left: isGrid ? 5 : 35 }} 
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          />
-        </div> */}
       </div>
 
       <div className="flex flex-col items-start gap-2 mt-4">
@@ -172,35 +143,42 @@ export default function Assets() {
             />
           </div>
           <div className="flex gap-2">
-            {/* <CustomSelect
-              icon={<RiFileList3Line />}
-              className="w-fit text-custom-white"
-              options={categories}
-              placeholder="Category"
-              defaultValue={category ? category : undefined}
-              onChange={(value) => handleParamsChange("category", value)}
-            /> */}
             <CustomSelect
               icon={<RiFileList3Line />}
               className="w-fit text-custom-white"
               options={categories}
               placeholder="Category"
-              defaultValue={category ? category : undefined}
-              onChange={(value) => handleParamsChange("category", value)}
+              defaultValue={category || ""}
+              onChange={(value) => {
+                if (value === "all") {
+                  return handleParamsChange("category", "");
+                }
+                handleParamsChange("category", value);
+              }}
             />
             <CustomSelect
               icon={<RiMapPin2Line />}
               className="w-fit text-custom-white"
               options={locations}
               placeholder="Location"
-              defaultValue={location ? location : undefined}
-              onChange={(value) => handleParamsChange("location", value)}
+              defaultValue={location || ""}
+              onChange={(value) => {
+                if (value === "all") {
+                  return handleParamsChange("location", "");
+                }
+                handleParamsChange("location", value);
+              }}
             />
           </div>
         </div>
       </div>
 
-      <AssetGrid items={data || []} isGrid={isGrid} isLoading={isLoading} />
+      <AssetGrid
+        items={data || []}
+        isGrid={isGrid}
+        isLoading={isLoading}
+        isError={isError}
+      />
     </div>
   );
 }

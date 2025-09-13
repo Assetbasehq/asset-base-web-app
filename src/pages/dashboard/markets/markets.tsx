@@ -6,7 +6,7 @@ import TrendingAssets from "./_components/trending-assets";
 export default function Markets() {
   return (
     <div className="text-custom-white-text">
-      <h2 className="text-xl md:text-2xl font-semibold text-left mb-2">
+      <h2 className="text-xl md:text-2xl text-left mb-2">
         Markets
       </h2>
       <HotAssets />

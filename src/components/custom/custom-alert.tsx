@@ -1,12 +1,18 @@
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { AlertCircleIcon, CheckCircle2, Info, XCircle } from "lucide-react";
+import { AlertCircleIcon, CircleCheckBig, Info, XCircle } from "lucide-react";
 
 export type AlertVariant = "destructive" | "default" | "success" | "info";
 
+// export interface AlertMessage {
+//   message: string; // Optional heading
+//   description: string; // Main alert message
+//   type: AlertVariant; // Determines styling
+// }
+
 interface CustomAlertProps {
   variant?: AlertVariant;
-  message: string;
+  message: string | React.ReactNode;
   description?: string;
   className?: string;
 }
@@ -21,7 +27,7 @@ const variantStyles: Record<AlertVariant, string> = {
 const variantIcons: Record<AlertVariant, React.ElementType> = {
   destructive: AlertCircleIcon,
   default: Info,
-  success: CheckCircle2,
+  success: CircleCheckBig,
   info: XCircle,
 };
 
@@ -47,7 +53,9 @@ export function CustomAlert({
           {message}
         </AlertTitle>
         {description && (
-          <AlertDescription className="text-xs opacity-90">
+          <AlertDescription
+            className={cn(`text-xs opacity-90`, variantStyles[variant])}
+          >
             {description}
           </AlertDescription>
         )}

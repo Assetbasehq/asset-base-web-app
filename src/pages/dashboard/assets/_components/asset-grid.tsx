@@ -6,15 +6,25 @@ import AssetCardSkeleton from "@/components/shared/asset/asset-card-skeleton";
 interface AssetGridProps {
   items: { asset: IAsset }[];
   isLoading: boolean;
+  isError: boolean;
   isGrid?: boolean;
 }
 
 export default function AssetGrid({
   items,
   isGrid = false,
+  isError,
   isLoading,
 }: AssetGridProps) {
-  const variant = isGrid ? "card" : "compact";
+  const variant = isGrid ? "card-detailed" : "compact";
+
+  if (isError) {
+    return (
+      <div>
+        <p>Something went wrong</p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

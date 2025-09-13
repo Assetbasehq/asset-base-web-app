@@ -15,7 +15,7 @@ export default function ProfileInvestmentCertificate() {
   const [error, setError] = useState<string | null>("");
 
   return (
-    <div className="flex flex-col text-start p-8">
+    <div className="flex flex-col text-start p-4">
       <div className="flex flex-col gap-1 max-w-sm">
         <div className="mb-4">
           <h2 className="text-lg md:text-2xl font-semibold">

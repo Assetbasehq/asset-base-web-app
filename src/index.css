@@ -174,14 +174,14 @@
   /* Fixed Colors  */
   --color-fixed-white: #fdfdfd;
   --color-fixed-black: #000000;
-  --color-fixed-base: #1a1a1a;
+  --color-fixed-base: #0a0d14;
   --color-fixed-card: #111111;
   --color-fixed-input-stroke: #9ab404;
   --color-fixed-input-fill: #1e1e1e;
   --color-fixed-input-mute: #2a2a2a;
   --color-fixed-input-label: #e6e6e6;
   --color-fixed-light-stroke: #9ab404;
-  --color-fixed-light-bg: #121212;
+  --color-fixed-light-bg: #222431;
   --color-fixed-grey: #cccccc;
   --color-fixed-blue-shade: #102040;
   --color-fixed-blue-text: #4da6ff;

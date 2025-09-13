@@ -86,7 +86,7 @@ export default function ProfileReferrals() {
   };
 
   return (
-    <div className="flex flex-col text-start p-8">
+    <div className="flex flex-col text-start p-4">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg md:text-2xl font-semibold">Referrals</h2>
         <p className="text-muted-foreground">
@@ -95,8 +95,8 @@ export default function ProfileReferrals() {
         </p>
       </div>
 
-      <div className=" bg-custom-light-bg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 my-6 bg-custom-card-foreground rounded-3xl px-8">
-        <div className="flex flex-col gap-4 md:w-1/2 py-12">
+      <div className=" bg-custom-light-bg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 my-6 bg-custom-card-foreground rounded-2xl px-4">
+        <div className="flex flex-col gap-2 md:w-1/2 py-6">
           <p className="text-muted-foreground">Here's your referral code</p>
           <div className="flex items-center gap-4 w-full">
             <p className="uppercase text-2xl font-semibold">

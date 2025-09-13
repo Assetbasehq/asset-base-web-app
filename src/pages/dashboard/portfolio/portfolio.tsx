@@ -28,7 +28,7 @@ export default function Portfolio() {
 
   return (
     <div>
-      <h2 className="text-xl md:text-2xl font-semibold text-left mb-2 text-custom-white-text">
+      <h2 className="text-xl md:text-2xl text-left mb-2 text-custom-white-text">
         Portfolio
       </h2>
       <div className="flex flex-col gap-2">
@@ -38,11 +38,11 @@ export default function Portfolio() {
           <Distribution />
         </div>
         <div className="bg-custom-card text-custom-white-text flex flex-col items-center rounded-lg p-2 md:p-4">
-          <div className=" flex gap-8 border-b w-full px-2">
+          <div className=" flex gap-2 md:gap-4 border-b w-full pt-4">
             {Links.map((link) => (
               <Link
                 key={link.path}
-                className={cn(`text-lg font-semibold pb-2`, {
+                className={cn(`text-sm font-semibold pb-2 px-2`, {
                   "text-custom-orange border-b border-custom-orange ":
                     isActiveLink(link.path),
                 })}

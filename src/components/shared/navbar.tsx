@@ -104,10 +104,10 @@ export default function Navbar() {
 
         {/* Hamburger Icon - Mobile Only */}
         <button
-          className="lg:hidden p-2 text-custom-white cursor-pointer"
+          className="lg:hidden py-2 px-4 text-custom-white cursor-pointer bg-fixed-light-bg/50 rounded-md"
           onClick={() => setIsOpen(true)}
         >
-          <Menu size={28} />
+          <Menu size={22} />
         </button>
       </div>
 

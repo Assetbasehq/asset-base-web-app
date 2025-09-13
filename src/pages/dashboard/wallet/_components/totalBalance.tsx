@@ -56,13 +56,13 @@ export default function TotalBalance() {
 
   return (
     <Card className=" bg-transparent p-0 md:bg-custom-card border-none text-start shadow-none">
-      <CardContent className="flex flex-col gap-4 p-2 md:p-4">
-        <CardTitle className="text-lg font-medium">Total Balance</CardTitle>
+      <CardContent className="flex flex-col gap-2 md:gap-4 p-2 md:p-4">
+        <CardTitle className="text-sm font-medium p-0">Total Balance</CardTitle>
 
         <div className="flex justify-between items-start">
           <div className="flex flex-col gap-10 w-full">
             <div className="w-full flex flex-col items-start gap-6 md:flex-row md:items-center justify-between text-custom-white-text">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl md:text-3xl font-semibold">
                     {isBalanceVisible
@@ -92,41 +92,35 @@ export default function TotalBalance() {
             </div>
           </div>
           <Select defaultValue={currency} onValueChange={handleCurrencyChange}>
-            <SelectTrigger className="w-fit min-w-[110px] shadow-none border-none bg-gray-100 px-3">
+            <SelectTrigger className="w-fit min-w-[70px] shadow-none border-none bg-gray-100 px-3">
               <SelectValue placeholder="Currency" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="usd">
-                <span className="flex items-center gap-2">
-                  <img
-                    className="w-5 h-5"
-                    src={flags.usa.flag}
-                    alt={flags.usa.alt}
-                  />
-                  <span>USD</span>
-                </span>
+                <img
+                  className="w-5 h-5"
+                  src={flags.usa.flag}
+                  alt={flags.usa.alt}
+                />
               </SelectItem>
 
               <SelectItem value="ngn">
-                <span className="flex items-center gap-2">
-                  <img
-                    className="w-5 h-5"
-                    src={flags.nigeria.flag}
-                    alt={flags.nigeria.alt}
-                  />
-                  <span>NGN</span>
-                </span>
+                <img
+                  className="w-5 h-5"
+                  src={flags.nigeria.flag}
+                  alt={flags.nigeria.alt}
+                />
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-between mt-6">
-          <div className="flex gap-5 sm:gap-10 items-center my-6 md:my-0 md:h-14">
-            <div className="flex flex-col gap-1">
-              <h2 className=" text-sm">Wallet Balance</h2>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg md:text-2xl font-semibold">
+        <div className="flex flex-col md:flex-row items-center justify-between">
+          <div className="flex gap-5 sm:gap-10 items-center my-6 md:my-0 md:h-14 md:gap-4 ">
+            <div className="flex flex-col gap-1 md:bg-custom-light-bg md:px-4 md:py-2 rounded-md">
+              <h2 className=" text-sm font-light">Wallet Balance</h2>
+              <div className="flex items-center gap-1">
+                <h2 className="text-md md:text-xl font-medium">
                   {isBalanceVisible
                     ? currency === "usd"
                       ? FormatService.formatToUSD(handleGetAllBalance() || 0)
@@ -137,18 +131,16 @@ export default function TotalBalance() {
               </div>
             </div>
             <Separator orientation="vertical" className="hidden md:block" />
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1  md:bg-custom-light-bg md:px-4 md:py-2 rounded-md">
               <h2 className="text-sm">Investment Balance</h2>
               <div className="flex items-center gap-2">
-                <h2 className=" text-lg md:text-2xl font-semibold">
-                  $30,000.00
-                </h2>
+                <h2 className="text-md md:text-xl font-medium">$30,000.00</h2>
                 <small className="text-green-400">+1.5%</small>
               </div>
             </div>
           </div>
 
-          <div className="flex justify-between md:justify-end w-fit gap-4 md:gap-12">
+          <div className="flex justify-around md:justify-end w-full gap-4 md:gap-12">
             <Link to="/dashboard/wallet/deposit">
               <div className="flex flex-col gap-2 text-primary items-center">
                 <RiAddLine className="w-12 h-12 p-3 rounded-full text-white bg-custom-orange border border-custom-orange" />

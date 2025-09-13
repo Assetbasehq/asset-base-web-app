@@ -82,17 +82,186 @@ export default function PersonalInformation() {
   );
 
   return (
-    <div>
+    <div className="py-2">
       <Form {...personalInformationForm}>
-        <form
-          onSubmit={personalInformationForm.handleSubmit(onSubmit)}
-          className="flex flex-col lg:flex-row gap-4"
-        >
-          <div className="flex flex-col items-start lg:w-2/5">
-            <h2 className="text-lg font-semibold">Personal Information</h2>
-            <p className="text-muted-foreground">
-              Update your personal details here
-            </p>
+        <form onSubmit={personalInformationForm.handleSubmit(onSubmit)}>
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex flex-col items-start lg:w-2/5">
+              <h2 className="text-lg font-semibold">Personal Information</h2>
+              <p className="text-muted-foreground">
+                Update your personal details here
+              </p>
+              <Button
+                type="submit"
+                disabled={
+                  !personalInformationForm.formState.isValid ||
+                  !personalInformationForm.formState.isDirty ||
+                  upadateUserMutation.isPending
+                }
+                className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer hidden lg:block"
+              >
+                {btnText}
+              </Button>
+              {error && (
+                <CustomAlert
+                  variant="destructive"
+                  message={error}
+                  className="w-fit"
+                />
+              )}
+
+              {success && (
+                <CustomAlert
+                  variant="success"
+                  message={success}
+                  className="w-fit"
+                />
+              )}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-3/5">
+              <FormField
+                control={personalInformationForm.control}
+                name="first_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="py-6  capitalize"
+                        placeholder="John"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={personalInformationForm.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="py-6  capitalize"
+                        placeholder="Doe"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={personalInformationForm.control}
+                name="phone_number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="py-6  capitalize"
+                        placeholder="+2345678901"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={personalInformationForm.control}
+                name="date_of_birth"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Date of Birth</FormLabel>
+                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal py-6",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        {calendarOpen && (
+                          <Calendar
+                            mode="single"
+                            selected={field.value as Date}
+                            captionLayout="dropdown"
+                            onSelect={(date) => {
+                              field.onChange(date);
+                              setCalendarOpen(false);
+                            }}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                          />
+                        )}
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={personalInformationForm.control}
+                name="country"
+                rules={{ required: "Country is required" }}
+                render={({ field }) => {
+                  const error =
+                    personalInformationForm.formState.errors.country;
+
+                  return (
+                    <FormItem>
+                      <FormLabel>Country Of Residence</FormLabel>
+                      <FormControl>
+                        <Select
+                          onOpenChange={(open) => setCountryOpen(open)}
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger
+                            className={cn(
+                              "w-full py-6 pr-3 align-text-bottom cursor-pointer capitalize",
+                              error && "border-red-500 text-red-500" // 👈 highlight when invalid
+                            )}
+                          >
+                            <SelectValue placeholder="Select Country">
+                              {field.value}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent className="max-h-[300px]">
+                            {countryOpen &&
+                              countryCodes.map((country) => (
+                                <SelectItem
+                                  key={country.name}
+                                  value={country.name}
+                                  className="capitalize"
+                                >
+                                  {country.name}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+          </div>
+          <div className="flex justify-start lg:hidden">
             <Button
               type="submit"
               disabled={
@@ -100,166 +269,10 @@ export default function PersonalInformation() {
                 !personalInformationForm.formState.isDirty ||
                 upadateUserMutation.isPending
               }
-              className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer"
+              className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer "
             >
               {btnText}
             </Button>
-            {error && (
-              <CustomAlert
-                variant="destructive"
-                message={error}
-                className="w-fit"
-              />
-            )}
-
-            {success && (
-              <CustomAlert
-                variant="success"
-                message={success}
-                className="w-fit"
-              />
-            )}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-3/5">
-            <FormField
-              control={personalInformationForm.control}
-              name="first_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="py-6  capitalize"
-                      placeholder="John"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={personalInformationForm.control}
-              name="last_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="py-6  capitalize"
-                      placeholder="Doe"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={personalInformationForm.control}
-              name="phone_number"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="py-6  capitalize"
-                      placeholder="+2345678901"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={personalInformationForm.control}
-              name="date_of_birth"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Date of Birth</FormLabel>
-                  <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal py-6",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      {calendarOpen && (
-                        <Calendar
-                          mode="single"
-                          selected={field.value as Date}
-                          captionLayout="dropdown"
-                          onSelect={(date) => {
-                            field.onChange(date);
-                            setCalendarOpen(false);
-                          }}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                        />
-                      )}
-                    </PopoverContent>
-                  </Popover>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={personalInformationForm.control}
-              name="country"
-              rules={{ required: "Country is required" }}
-              render={({ field }) => {
-                const error = personalInformationForm.formState.errors.country;
-
-                return (
-                  <FormItem>
-                    <FormLabel>Country Of Residence</FormLabel>
-                    <FormControl>
-                      <Select
-                        onOpenChange={(open) => setCountryOpen(open)}
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger
-                          className={cn(
-                            "w-full py-6 pr-3 align-text-bottom cursor-pointer capitalize",
-                            error && "border-red-500 text-red-500" // 👈 highlight when invalid
-                          )}
-                        >
-                          <SelectValue placeholder="Select Country">
-                            {field.value}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent className="max-h-[300px]">
-                          {countryOpen &&
-                            countryCodes.map((country) => (
-                              <SelectItem
-                                key={country.name}
-                                value={country.name}
-                                className="capitalize"
-                              >
-                                {country.name}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
           </div>
         </form>
       </Form>

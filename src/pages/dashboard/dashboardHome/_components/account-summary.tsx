@@ -40,36 +40,9 @@ export default function AccountSummary() {
     <Card className=" p-0 bg-custom-card border-none text-start shadow-none">
       <CardContent className=" p-0 text-custom-white">
         <div className="flex items-center justify-between p-4">
-          <div className="flex flex-col gap-4 w-full">
-            <Select
-              defaultValue={currency}
-              onValueChange={handleCurrencyChange}
-            >
-              <SelectTrigger className="w-fit shadow-none border-none bg-gray-100">
-                <SelectValue placeholder="USD" className="text-white" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="usd">
-                  <img
-                    className="w-5 h-5"
-                    src={flags.usa.flag}
-                    alt={flags.usa.alt}
-                  />
-                  USD
-                </SelectItem>
-                <SelectItem value="ngn">
-                  <img
-                    className="w-5 h-5"
-                    src={flags.nigeria.flag}
-                    alt={flags.nigeria.alt}
-                  />
-                  NGN
-                </SelectItem>
-              </SelectContent>
-            </Select>
-
-            <div className="w-full flex flex-col items-start gap-2 md:flex-row md:items-center justify-between text-custom-white-text">
-              <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col md:flex-row items-start md:items-end gap-4 w-full">
+            <div className="flex gap-2 md:flex-col-reverse md:items-start md:gap-8 w-full">
+              <div className="flex flex-col w-full">
                 <div className="flex items-center gap-1">
                   <h2 className="text-2xl font-semibold">
                     {isBalanceVisible
@@ -97,7 +70,36 @@ export default function AccountSummary() {
                   <small className="text-green-400">******</small>
                 )}
               </div>
-              <div className="flex justify-between md:justify-end w-full gap-4">
+              <Select
+                defaultValue={currency}
+                onValueChange={handleCurrencyChange}
+              >
+                <SelectTrigger className="w-fit shadow-none border-none bg-gray-100">
+                  <SelectValue placeholder="USD" className="text-white" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="usd">
+                    <img
+                      className="w-5 h-5"
+                      src={flags.usa.flag}
+                      alt={flags.usa.alt}
+                    />
+                    USD
+                  </SelectItem>
+                  <SelectItem value="ngn">
+                    <img
+                      className="w-5 h-5"
+                      src={flags.nigeria.flag}
+                      alt={flags.nigeria.alt}
+                    />
+                    NGN
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full flex flex-col items-start gap-2 md:flex-row md:items-center justify-between text-custom-white-text">
+              <div className="flex justify-between md:justify-end w-full gap-4 md:gap-8">
                 <Link to="/dashboard/wallet/deposit">
                   <div className="flex flex-col gap-2 text-primary items-center">
                     <RiAddLine className="w-12 h-12 p-3 rounded-full text-white bg-custom-orange border border-custom-orange" />

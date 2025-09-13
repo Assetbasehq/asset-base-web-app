@@ -24,9 +24,9 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
 
-  const { address, isConnected, chainId } = useAccount();
+  const { isConnected } = useAccount();
 
-  const { data: depositData, isLoading, isError } = useRequestCryptoDeposit();
+  const { data: depositData, isLoading } = useRequestCryptoDeposit();
 
   console.log({ depositData });
 
@@ -42,6 +42,20 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
       hash,
     });
 
+  const getErrorMessage = (err: unknown): string => {
+    if (!err) return "An unknown error occurred";
+
+    if (err instanceof BaseError && err.shortMessage) {
+      return err.shortMessage;
+    }
+
+    if (typeof err === "object" && err !== null && "message" in err) {
+      return (err as { message: string }).message;
+    }
+
+    return "An unexpected error occurred";
+  };
+
   const handleAmountChange = (amount: string) => {
     const amountNumber = Number(amount);
     if (!isNaN(amountNumber)) setAmountToFund(amountNumber);
@@ -50,8 +64,6 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
   const handleCopyAddress = async () => {
     await navigator.clipboard.writeText(`${depositData?.address}`);
     setCopied(true);
-    console.log("ddd");
-
     setTimeout(() => setCopied(false), 2000); // reset after 2s
   };
 
@@ -63,6 +75,9 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
 
     sendTransaction?.({ to, value, gas: BigInt(21000) });
   };
+
+  const getExplorerLink = (hash: string | undefined) =>
+    `https://scan-testnet.assetchain.org/tx/${hash}`;
 
   return (
     <div className="flex flex-col gap-4">
@@ -80,18 +95,30 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
 
       {error && (
         <CustomAlert
-          message={`Error: ${
-            (error as BaseError).shortMessage || error.message
-          }`}
+          message={`Error: ${getErrorMessage(error)}`}
           variant="destructive"
         />
       )}
-      {hash && <div>Transaction Hash: {hash}</div>}
       {isConfirming && (
         <CustomAlert message="Waiting for confirmation..." variant="info" />
       )}
       {isConfirmed && (
-        <CustomAlert message="Transaction confirmed" variant="success" />
+        <CustomAlert
+          message={
+            <div>
+              <span>Transaction confirmed</span>{" "}
+              <a
+                href={getExplorerLink(hash)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline text-xs hover:opacity-80"
+              >
+                view
+              </a>
+            </div>
+          }
+          variant="success"
+        />
       )}
 
       {/* <Button
@@ -135,7 +162,7 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
                 {" "}
                 Send directly to my AssetBase wallet
               </p>
-              <p className="text-custom-white flex gap-2 text-xs">
+              <p className="text-custom-white flex items-center gap-2 text-xs">
                 {isLoading ? (
                   "..."
                 ) : (

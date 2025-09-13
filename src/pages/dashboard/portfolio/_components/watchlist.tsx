@@ -1,5 +1,6 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import DataTable from "@/components/custom/data-table";
+import { Button } from "@/components/ui/button";
 
 type Asset = {
   id: string;
@@ -100,91 +101,149 @@ const assets: Asset[] = [
     volume24h: 12345678,
   },
 ];
-export default function Watchlist() {
-  const columns = [
-    {
-      header: "#",
-      render: (row: Asset) => (
-        <div className="flex items-center gap-2">{row.id}</div>
-      ),
-    },
-    {
-      header: "Name",
-      render: (row: Asset) => (
-        <div className="flex items-center gap-2">
-          <img
-            src={row.logo}
-            alt={row.name}
-            className=" w-8 h-8 lg:w-12 lg:h-12"
-          />
-          <div className="flex flex-col">
-            <span className="font-semibold">{row.symbol}</span>
-            <span>{row.name}</span>
-          </div>
+
+const mobileColumns = [
+  {
+    header: "#",
+    render: (row: Asset) => (
+      <div className="flex items-center gap-2">{row.id}</div>
+    ),
+  },
+  {
+    header: "Name",
+    render: (row: Asset) => (
+      <div className="flex items-center gap-2">
+        <img
+          src={row.logo}
+          alt={row.name}
+          className="w-8 h-8 lg:w-12 lg:h-12"
+        />
+        <div className="flex flex-col">
+          <span className="">{row.symbol}</span>
+          <span className="text-xs">{row.name}</span>
         </div>
-      ),
-    },
-    {
-      header: "Price",
-      render: (row: Asset) => (
-        <span className="text-primary">${row.price.toFixed(2)}</span>
-      ),
-    },
-    {
-      header: "1h %",
-      render: (row: Asset) => (
-        <span
-          className={`${
-            row.change1h.toString().includes("-")
-              ? "text-green-400"
-              : "text-red-400"
-          }`}
-        >
-          {row.change1h.toFixed(2)}%
-        </span>
-      ),
-    },
-    {
-      header: "24h %",
-      render: (row: Asset) => (
-        <span
-          className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
-        >
-          {row.change24h.toFixed(2)}%
-        </span>
-      ),
-    },
-    {
-      header: "7d %",
-      render: (row: Asset) => (
-        <span
-          className={`${row.change7d > 0 ? "text-green-400" : "text-red-400"}`}
-        >
-          {row.change7d.toFixed(2)}%
-        </span>
-      ),
-    },
-    {
-      header: "Market Cap",
-      render: (row: Asset) => (
-        <span>${row.marketCap.toLocaleString("en-US")}</span>
-      ),
-    },
-    {
-      header: "24h Volume",
-      render: (row: Asset) => (
-        <span>${row.volume24h.toLocaleString("en-US")}</span>
-      ),
-    },
-  ];
+      </div>
+    ),
+  },
+  {
+    header: "",
+    render: (row: Asset) => (
+      <div>
+        <Button className="bg-transparent border border-custom-orange text-custom-orange rounded-full px-4 !py-0 text-xs hover:bg-transparent cursor-pointer">
+          Trade
+        </Button>
+      </div>
+    ),
+  },
+
+  {
+    header: "24h %",
+    render: (row: Asset) => (
+      <span
+        className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
+      >
+        {row.change24h.toFixed(2)}%
+      </span>
+    ),
+  },
+];
+
+const columns = [
+  {
+    header: "#",
+    render: (row: Asset) => (
+      <div className="flex items-center gap-2">{row.id}</div>
+    ),
+  },
+  {
+    header: "Name",
+    render: (row: Asset) => (
+      <div className="flex items-center gap-2">
+        <img
+          src={row.logo}
+          alt={row.name}
+          className=" w-8 h-8 lg:w-12 lg:h-12"
+        />
+        <div className="flex flex-col">
+          <span className="font-semibold">{row.symbol}</span>
+          <span>{row.name}</span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    header: "Price",
+    render: (row: Asset) => (
+      <span className="text-primary">${row.price.toFixed(2)}</span>
+    ),
+  },
+  {
+    header: "1h %",
+    render: (row: Asset) => (
+      <span
+        className={`${
+          row.change1h.toString().includes("-")
+            ? "text-green-400"
+            : "text-red-400"
+        }`}
+      >
+        {row.change1h.toFixed(2)}%
+      </span>
+    ),
+  },
+  {
+    header: "24h %",
+    render: (row: Asset) => (
+      <span
+        className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
+      >
+        {row.change24h.toFixed(2)}%
+      </span>
+    ),
+  },
+  {
+    header: "7d %",
+    render: (row: Asset) => (
+      <span
+        className={`${row.change7d > 0 ? "text-green-400" : "text-red-400"}`}
+      >
+        {row.change7d.toFixed(2)}%
+      </span>
+    ),
+  },
+  {
+    header: "Market Cap",
+    render: (row: Asset) => (
+      <span>${row.marketCap.toLocaleString("en-US")}</span>
+    ),
+  },
+  {
+    header: "24h Volume",
+    render: (row: Asset) => (
+      <span>${row.volume24h.toLocaleString("en-US")}</span>
+    ),
+  },
+];
+
+export default function Watchlist() {
   return (
     <div>
-      <DataTable
-        // isLoading={true}
-        data={assets}
-        columns={columns}
-        noDataMessage="No data available."
-      />
+      <div className="md:hidden">
+        <DataTable
+          // isLoading={true}
+          data={assets}
+          columns={mobileColumns}
+          noDataMessage="No data available."
+        />
+      </div>
+      <div className="hidden md:block">
+        <DataTable
+          // isLoading={true}
+          data={assets}
+          columns={columns}
+          noDataMessage="No data available."
+        />
+      </div>
     </div>
   );
 }

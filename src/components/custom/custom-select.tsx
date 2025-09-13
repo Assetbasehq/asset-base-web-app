@@ -30,15 +30,17 @@ export default function CustomSelect({
   className,
   icon,
 }: CustomSelectProps) {
+  console.log({ defaultValue });
+
   return (
-    <Select defaultValue={defaultValue} onValueChange={onChange}>
+    <Select value={defaultValue} onValueChange={onChange}>
       <SelectTrigger
         className={cn(
           "w-[200px] rounded border focus:ring-1 focus:ring-primary focus:border-primary transition-colors",
           className
         )}
       >
-        <span className="mr-2 lg:hidden"> {icon}</span>
+        <span className="mr-1"> {icon}</span>
         <span className="hidden lg:flex">
           <SelectValue placeholder={placeholder} />
         </span>

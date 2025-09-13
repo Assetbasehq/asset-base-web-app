@@ -36,7 +36,7 @@ export default function DataTable<T>({
   }
 
   return (
-    <div className="mt-4 rounded-xl overflow-x-auto">
+    <div className="mt-2 rounded-xl overflow-x-auto">
       <div className="rounded-xl overflow-x-auto">
         <Table>
           <TableHeader className="bg-black text-white">

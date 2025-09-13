@@ -86,20 +86,142 @@ export default function NextOfKin() {
   return (
     <div>
       <Form {...nextOfKinInformation}>
-        <form
-          onSubmit={nextOfKinInformation.handleSubmit(onSubmit)}
-          className="flex flex-col lg:flex-row gap-4"
-        >
-          <div className="flex flex-col items-start lg:w-2/5">
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
-              Next Of Kin Information{" "}
-              <small className="text-custom-orange bg-custom-orange/10 px-3 py-1 rounded-full">
-                Optional
-              </small>
-            </h2>
-            <p className="text-muted-foreground">
-              Update your personal details here
-            </p>
+        <form onSubmit={nextOfKinInformation.handleSubmit(onSubmit)}>
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex flex-col items-start lg:w-2/5">
+              <h2 className="flex items-center gap-2 text-lg font-semibold">
+                Next Of Kin Information{" "}
+                <small className="text-custom-orange bg-custom-orange/10 px-3 py-1 rounded-full">
+                  Optional
+                </small>
+              </h2>
+              <p className="text-muted-foreground">
+                Update your personal details here
+              </p>
+              <Button
+                type="submit"
+                disabled={
+                  !nextOfKinInformation.formState.isValid ||
+                  !nextOfKinInformation.formState.isDirty ||
+                  nextOfKinMutation.isPending
+                }
+                className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer hidden lg:block"
+              >
+                {btnText}
+              </Button>
+
+              {error && (
+                <CustomAlert
+                  variant="destructive"
+                  message={error}
+                  className="w-fit"
+                />
+              )}
+
+              {success && (
+                <CustomAlert
+                  variant="success"
+                  message={success}
+                  className="w-fit"
+                />
+              )}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-3/5">
+              <FormField
+                control={nextOfKinInformation.control}
+                name="email_address"
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,3}$/,
+                    message: "Please enter a valid email address",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        className="py-6"
+                        placeholder="Johndoe@gmail.com"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={nextOfKinInformation.control}
+                rules={{ required: true }}
+                name="first_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="py-6 capitalize"
+                        placeholder="John"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={nextOfKinInformation.control}
+                rules={{ required: true }}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="py-6 capitalize"
+                        placeholder="Doe"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={nextOfKinInformation.control}
+                rules={{ required: true }}
+                name="phone_number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="py-6"
+                        placeholder="+2345678901"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={nextOfKinInformation.control}
+                rules={{ required: true }}
+                name="relationship"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Relationship</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="py-6"
+                        placeholder="Brother"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex justify-start">
             <Button
               type="submit"
               disabled={
@@ -107,116 +229,10 @@ export default function NextOfKin() {
                 !nextOfKinInformation.formState.isDirty ||
                 nextOfKinMutation.isPending
               }
-              className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer"
+              className="mt-4 text-muted-foreground bg-custom-input-mute cursor-pointer lg:hidden"
             >
               {btnText}
             </Button>
-
-            {error && (
-              <CustomAlert
-                variant="destructive"
-                message={error}
-                className="w-fit"
-              />
-            )}
-
-            {success && (
-              <CustomAlert
-                variant="success"
-                message={success}
-                className="w-fit"
-              />
-            )}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-3/5">
-            <FormField
-              control={nextOfKinInformation.control}
-              name="email_address"
-              rules={{
-                required: "Email is required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,3}$/,
-                  message: "Please enter a valid email address",
-                },
-              }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email Address</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      className="py-6"
-                      placeholder="Johndoe@gmail.com"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={nextOfKinInformation.control}
-              rules={{ required: true }}
-              name="first_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="py-6 capitalize"
-                      placeholder="John"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={nextOfKinInformation.control}
-              rules={{ required: true }}
-              name="last_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="py-6 capitalize"
-                      placeholder="Doe"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={nextOfKinInformation.control}
-              rules={{ required: true }}
-              name="phone_number"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="py-6"
-                      placeholder="+2345678901"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={nextOfKinInformation.control}
-              rules={{ required: true }}
-              name="relationship"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Relationship</FormLabel>
-                  <FormControl>
-                    <Input className="py-6" placeholder="Brother" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
           </div>
         </form>
       </Form>

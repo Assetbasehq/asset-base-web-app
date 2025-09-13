@@ -42,8 +42,8 @@ export default function ProfilePage() {
   );
 
   return (
-    <div className={cn("flex flex-col gap-8 ")}>
-      <div className="relative bg-custom-light-bg px-8 py-8 text-start overflow-hidden">
+    <div className={cn("flex flex-col gap-2 ")}>
+      <div className="relative bg-custom-light-bg px-4 py-4 text-start overflow-hidden">
         <h2 className="text-lg md:text-2xl font-semibold">
           {/* Hi, <span className="capitalize">{user?.first_name || "..."}</span> */}
         </h2>
@@ -67,7 +67,7 @@ export default function ProfilePage() {
           <ProfileSkeleton />
         </div>
       </div>
-      <div className="bg-custom-card rounded-b-lg px-8 py-8 flex flex-col gap-16">
+      <div className="bg-custom-card rounded-b-lg px-4 py-4 flex flex-col gap-4">
         <div className="flex flex-col lg:flex-row gap-4 text-start">
           <div className="text-start flex flex-col lg:w-2/5">
             <h2 className="font-semibold">Profile photo</h2>

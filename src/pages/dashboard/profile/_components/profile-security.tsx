@@ -72,24 +72,24 @@ export default function ProfileSecurity() {
   });
 
   return (
-    <div className="flex flex-col text-start p-8">
+    <div className="flex flex-col text-start p-4">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg md:text-2xl font-semibold">Security</h2>
         <p className="text-muted-foreground">Manage your account security</p>
       </div>
 
-      <div className="flex flex-col gap-4 mt-8">
+      <div className="flex flex-col gap-4 mt-4">
         <Button
           disabled={passwordResetMutation.isPending}
           onClick={() => passwordResetMutation.mutateAsync()}
           variant="outline"
-          className="border rounded-3xl flex items-center justify-between cursor-pointer h-full w-full"
+          className="border rounded-2xl flex items-center justify-between cursor-pointer h-full w-full"
         >
-          <div className="flex items-center gap-4 w-full p-4">
+          <div className="flex items-center gap-4 w-full p-1 sm:p-2">
             <LockKeyhole />
-            <div className="flex items-center gap-4">
-              <p className="font-medium text-lg">Password Reset</p>
-            </div>
+            <p className="font-medium text-xs sm:text-sm md:text-lg">
+              Password Reset
+            </p>
           </div>
           <ChevronRight size={20} className="text-custom-white-text" />
         </Button>
@@ -98,13 +98,13 @@ export default function ProfileSecurity() {
           disabled={pinChangeMutation.isPending}
           onClick={() => pinChangeMutation.mutateAsync()}
           variant="outline"
-          className="border rounded-3xl flex items-center justify-between cursor-pointer h-full w-full"
+          className="border rounded-2xl flex items-center justify-between cursor-pointer h-full w-full"
         >
-          <div className="flex items-center gap-4 w-full p-4">
+          <div className="flex items-center gap-2 w-full p-1 sm:p-2">
             <Lock />
-            <div className="flex items-center gap-4">
-              <p className="font-medium text-lg">Change PIN</p>
-            </div>
+            <p className="font-medium text-xs sm:text-sm md:text-lg">
+              Change PIN
+            </p>
           </div>
           <ChevronRight size={20} className="text-custom-white-text" />
         </Button>

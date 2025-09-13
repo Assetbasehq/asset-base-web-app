@@ -13,7 +13,7 @@ export default function ProfileAccountStatement() {
     setModals((prev) => ({ ...prev, [key]: value }));
 
   return (
-    <div className="flex flex-col text-start p-8">
+    <div className="flex flex-col text-start p-4">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg md:text-2xl font-semibold">Account Statement</h2>
         <p className="text-muted-foreground">Generate your account statement</p>
@@ -23,12 +23,14 @@ export default function ProfileAccountStatement() {
         <Button
           onClick={() => toggleModal("statement", true)}
           variant="outline"
-          className="border rounded-3xl flex items-center justify-between cursor-pointer h-full w-full"
+          className="border rounded-2xl flex items-center justify-between cursor-pointer h-full w-full"
         >
-          <div className="flex items-center gap-4 w-full p-4">
+          <div className="flex items-center gap-4 w-full p-1 md:p-2">
             <Mail className=" " />
             <div className="flex items-center gap-4">
-              <p className="font-medium text-lg">Generate Account Statement</p>
+              <p className="font-medium text-xs sm:text-sm md:text-lg">
+                Generate Account Statement
+              </p>
             </div>
           </div>
           <ChevronRight size={20} className="text-white" />

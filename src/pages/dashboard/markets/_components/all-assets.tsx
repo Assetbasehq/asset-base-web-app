@@ -15,7 +15,7 @@ type Asset = {
 
 const assets: Asset[] = [
   {
-    id: "btc",
+    id: "1",
     name: "Bitcoin",
     logo: assetBaseLogo,
     price: 58432.12,
@@ -26,7 +26,7 @@ const assets: Asset[] = [
     volume24h: 28412345678,
   },
   {
-    id: "eth",
+    id: "2",
     name: "Ethereum",
     logo: assetBaseLogo,
     price: 3124.87,
@@ -37,7 +37,7 @@ const assets: Asset[] = [
     volume24h: 12412345678,
   },
   {
-    id: "bnb",
+    id: "3",
     name: "BNB",
     logo: assetBaseLogo,
     price: 412.55,
@@ -48,7 +48,7 @@ const assets: Asset[] = [
     volume24h: 2412345678,
   },
   {
-    id: "ada",
+    id: "4",
     name: "Cardano",
     logo: assetBaseLogo,
     price: 1.25,
@@ -59,7 +59,7 @@ const assets: Asset[] = [
     volume24h: 912345678,
   },
   {
-    id: "sol",
+    id: "5",
     name: "Solana",
     logo: assetBaseLogo,
     price: 23.55,
@@ -70,7 +70,7 @@ const assets: Asset[] = [
     volume24h: 12345678,
   },
   {
-    id: "doge",
+    id: "6",
     name: "Dogecoin",
     logo: assetBaseLogo,
     price: 0.05,
@@ -81,7 +81,7 @@ const assets: Asset[] = [
     volume24h: 12345678,
   },
   {
-    id: "avax",
+    id: "7",
     name: "Avalanche",
     logo: assetBaseLogo,
     price: 23.55,
@@ -99,7 +99,6 @@ export default function AllAssets() {
       header: "#",
       render: (row: Asset) => (
         <div className="flex items-center gap-2">
-          <img src={row.logo} alt={row.name} className="w-8 h-8" />
           <span>{row.id}</span>
         </div>
       ),
@@ -167,14 +166,56 @@ export default function AllAssets() {
     },
   ];
 
+  const mobileColumns = [
+    {
+      header: "#",
+      render: (row: Asset) => (
+        <div className="flex items-center gap-2">
+          <span>{row.id}</span>
+        </div>
+      ),
+    },
+    {
+      header: "Name",
+      render: (row: Asset) => (
+        <div className="flex items-center gap-2">
+          <img src={row.logo} alt={row.name} className="w-8 h-8" />
+          <div className="flex flex-col">
+            <span>{row.name}</span>
+            <span className="text-xs font-light">${row.price.toFixed(2)}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      header: "24h %",
+      render: (row: Asset) => (
+        <span
+          className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
+        >
+          {row.change24h.toFixed(2)}%
+        </span>
+      ),
+    },
+  ];
+
   return (
-    <div className="mt-4 rounded-xl overflow-hidden">
-      <h2 className="text-lg md:text-xl font-semibold text-left">All Assets</h2>
-      <DataTable
-        data={assets}
-        columns={columns}
-        noDataMessage="No data available."
-      />
+    <div className="mt-2 rounded-xl overflow-hidden">
+      <h2 className="text-lg md:text-xl text-left py-2">All Assets</h2>
+      <div className="hidden md:block">
+        <DataTable
+          data={assets}
+          columns={columns}
+          noDataMessage="No data available."
+        />
+      </div>
+      <div className="md:hidden">
+        <DataTable
+          data={assets}
+          columns={mobileColumns}
+          noDataMessage="No data available."
+        />
+      </div>
     </div>
   );
 }

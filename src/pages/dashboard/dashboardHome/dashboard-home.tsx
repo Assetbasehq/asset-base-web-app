@@ -23,15 +23,15 @@ export default function DashboardHome() {
 
   return (
     <div className="flex flex-col gap-2 text-custom-white-text">
-      <p className="text-xl md:text-2xl font-semibold text-start font-geist">
+      <p className="text-xl md:text-2xl text-start font-geist">
         {getTimeBasedGreeting()}
         <span className="capitalize"> {user?.first_name || "..."}</span>
       </p>
       <div className="flex flex-col-reverse lg:flex-row gap-4 w-full">
         {/* Left Column */}
         <div className="w-full lg:w-3/5 flex flex-col space-y-4 ">
-          <LaunchPad />
           <AccountSummary />
+          <LaunchPad />
           <TrendingSecurities />
         </div>
 

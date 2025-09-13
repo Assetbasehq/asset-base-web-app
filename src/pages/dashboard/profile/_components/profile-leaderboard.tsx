@@ -103,7 +103,7 @@ const leaderboardData = [
 export default function ProfileLeaderboard() {
   return (
     <div>
-      <div className="flex flex-col gap-6 text-start p-8">
+      <div className="flex flex-col gap-6 text-start p-4">
         <Tasks />
         <YourPerformance />
         <div>

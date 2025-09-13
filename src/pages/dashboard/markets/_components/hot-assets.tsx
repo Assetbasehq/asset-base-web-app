@@ -53,15 +53,15 @@ const marketPairs = [
 ];
 export default function HotAssets() {
   return (
-    <Card className="overflow-scroll no-scrollbar shadow-none border-none p-0">
+    <Card className="overflow-scroll no-scrollbar rounded shadow-none border-none p-0">
       <CardContent className="p-0 flex flex-col gap-4 text-start">
-        <div className="flex gap-6 p-2 md:p-4">
+        <div className="flex gap-6 p-2 text-xs">
           {marketPairs.map((marketPair) => (
             <div
               key={marketPair.id}
               className="flex gap-1 items-center justify-between"
             >
-              <h1 className="font-semibold">{marketPair.pair}</h1>
+              <h1 className="">{marketPair.pair}</h1>
               <p
                 className={cn({
                   "text-green-500": marketPair.price_change_24hrs.includes("+"),

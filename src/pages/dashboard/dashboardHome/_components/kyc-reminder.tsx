@@ -42,8 +42,8 @@ export default function KYCReminder() {
               />
 
               <div className=" flex flex-col text-custom-white">
-                <h2 className="text-lg font-semibold">Complete KYC</h2>
-                <p className="text-custom-grey text-sm">
+                <h2 className="text-lg font-light">Complete KYC</h2>
+                <p className="text-custom-grey text-xs font-light">
                   Finish setting up your account
                 </p>
               </div>
