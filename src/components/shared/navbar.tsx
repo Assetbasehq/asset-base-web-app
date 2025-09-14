@@ -48,7 +48,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full flex items-center justify-between gap-4 p-2 md:p-4 bg-fixed-base text-white font-geist">
+    <nav className="w-full flex items-center justify-between gap-4 p-4 bg-fixed-base text-white font-geist">
       <div className="flex items-center gap-6">
         {/* Logo + Title + Beta Badge */}
         <AssetBaseBetaWhite />
@@ -107,7 +107,7 @@ export default function Navbar() {
           className="lg:hidden py-2 px-4 text-custom-white cursor-pointer bg-fixed-light-bg/50 rounded-md"
           onClick={() => setIsOpen(true)}
         >
-          <Menu size={22} />
+          <Menu size={22} className="text-white" />
         </button>
       </div>
 
@@ -119,7 +119,7 @@ export default function Navbar() {
         />
       )}
 
-      {/* Mobile Slide-out Menu */}
+      {/* Mobile Slide-down Menu */}
       <div
         className={cn(
           "fixed top-15 h-fit w-[90%] max-w-lg mx-auto left-0 right-0 origin-top bg-custom-base text-custom-black p-4 rounded-lg transform transition-transform duration-300 z-50 ",
@@ -134,10 +134,14 @@ export default function Navbar() {
         </Button>
 
         <div className="flex flex-col gap-2 justify-between items-start">
-          <Link to="/dashboard" className="flex items-center gap-2">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2"
+            onClick={() => setIsOpen(false)}
+          >
             <RiNotification2Line
               size={34}
-              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+              className="border p-2 rounded-full text-custom-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
             <p className=" text-custom-grey">Notifications</p>
           </Link>
@@ -148,25 +152,25 @@ export default function Navbar() {
             <RiUser2Line
               onClick={() => setIsOpen(false)}
               size={34}
-              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+              className="border p-2 rounded-full text-custom-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
             <p className=" text-custom-grey">Profile</p>
           </Link>
           <Link
             to="/dashboard/account/profile"
-            className="hidden md:flex items-center gap-2 "
+            className="hidden md:flex items-center gap-2"
+            onClick={() => setIsOpen(false)}
           >
             <RiUser2Line
-              onClick={() => setIsOpen(false)}
               size={34}
-              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+              className="border p-2 rounded-full text-custom-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
             <p className=" text-custom-grey">Profile</p>
           </Link>
           <div className="flex items-center gap-2">
             <RiSearch2Line
               size={34}
-              className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
+              className="border p-2 rounded-full text-custom-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
             />
             <p className=" text-custom-grey">Search</p>
           </div>

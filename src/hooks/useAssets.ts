@@ -11,6 +11,6 @@ export const useGetTrendingAssets = () => {
 export const useGetAssets = () => {
   return useQuery<any, Error>({
     queryKey: ["assets"],
-    queryFn: () => assetService.getTrendingAssets(),
+    queryFn: () => assetService.getAssets(),
   });
 };

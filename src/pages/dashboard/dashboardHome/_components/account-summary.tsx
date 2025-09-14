@@ -77,14 +77,14 @@ export default function AccountSummary() {
                 <SelectTrigger className="w-fit shadow-none border-none bg-gray-100">
                   <SelectValue placeholder="USD" className="text-white" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="min-w-fit">
                   <SelectItem value="usd">
                     <img
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       src={flags.usa.flag}
                       alt={flags.usa.alt}
                     />
-                    USD
+                    <span className="hidden md:inline">USD</span>
                   </SelectItem>
                   <SelectItem value="ngn">
                     <img
@@ -92,7 +92,7 @@ export default function AccountSummary() {
                       src={flags.nigeria.flag}
                       alt={flags.nigeria.alt}
                     />
-                    NGN
+                    <span className="hidden md:inline">NGN</span>
                   </SelectItem>
                 </SelectContent>
               </Select>

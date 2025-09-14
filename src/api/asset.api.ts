@@ -13,7 +13,7 @@ class AssetService {
   };
   getAssets = async (params?: any) => {
     try {
-      const response = await axiosInstance.get(`/assets/trending`, { params });
+      const response = await axiosInstance.get(`/assets`, { params });
       const items = response.data?.items;
       return items || [];
     } catch (error) {

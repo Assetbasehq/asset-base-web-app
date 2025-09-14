@@ -10,23 +10,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import cardCover from "@/assets/images/card-cover.png";
 
 interface Props {
-  item: {
-    asset: IAsset;
-  };
+  asset: IAsset;
   variant?: "card" | "compact" | "card-detailed";
 }
 
-export default function AssetCard({ item, variant = "card" }: Props) {
+export default function AssetCard({ asset, variant = "card" }: Props) {
   const raisePercentage = calculateRaisePercentage(
-    item?.asset?.number_of_shares,
-    item?.asset?.available_shares
+    asset?.number_of_shares,
+    asset?.available_shares
   );
+
+  console.log({ asset });
+  
 
   if (variant === "compact") {
     return (
       <Link
-        key={item?.asset.id}
-        to={`/dashboard/markets/${item?.asset.slug}`}
+        key={asset.id}
+        to={`/dashboard/markets/${asset?.slug}`}
         className="cursor-pointer"
       >
         <Card className="p-0 border-none shadwo-none">
@@ -34,14 +35,14 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             <div className="text-start">
               <div className="flex items-center gap-3">
                 <img
-                  src={item?.asset?.image_urls[0]}
+                  src={asset?.image_urls[0]}
                   alt=""
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
-                  <h2 className="font-semibold">{item?.asset?.asset_symbol}</h2>
+                  <h2 className="font-semibold">{asset?.asset_symbol}</h2>
                   <small className="text-sm">
-                    {FormatService.formatName(item?.asset?.asset_name)}
+                    {FormatService.formatName(asset?.asset_name)}
                   </small>
                 </div>
               </div>
@@ -55,7 +56,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
                 </small>
               </div>
               <small className="font-semibold">
-                {formatNumber(item?.asset?.available_shares)} available
+                {formatNumber(asset?.available_shares)} available
               </small>
             </div>
           </CardContent>
@@ -66,7 +67,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
 
   if (variant === "card-detailed") {
     return (
-      <div key={item?.asset.id} className="cursor-pointer">
+      <div key={asset.id} className="cursor-pointer">
         <div className="bg-custom-light-bg text-custom-white flex flex-col gap-3 items-start rounded-lg p-2 min-w-66 sm:min-w-96 shadow-lg">
           <div className="relative overflow-hidden flex flex-col gap-4 items-start text-start w-full p-2 rounded-lg bg-[#93939417]">
             <img
@@ -76,20 +77,20 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             />
             <div className="flex items-center gap-2">
               <img
-                src={item?.asset?.image_urls[0]}
+                src={asset?.image_urls[0]}
                 alt=""
                 className="w-10 h-10 rounded-full"
               />
               <div className="flex flex-col">
-                <h2 className="font-medium">{item?.asset?.asset_symbol}</h2>
-                <small>{item?.asset?.asset_name}</small>
+                <h2 className="font-medium">{asset?.asset_symbol}</h2>
+                <small>{asset?.asset_name}</small>
               </div>
             </div>
             <div className="w-full flex flex-col gap-1">
               <div className="flex justify-between items-center w-full">
                 <small>Price per share</small>
                 <small className="font-semibold">
-                  {formatUSD(item?.asset?.price_per_share)}
+                  {formatUSD(asset?.price_per_share)}
                 </small>
               </div>
               <div className="flex justify-between items-center w-full">
@@ -111,7 +112,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
                 <small>{raisePercentage}% raised</small>
               </div>
               <small className="font-semibold text-custom-grey-text">
-                {formatNumber(item?.asset?.available_shares)} available
+                {formatNumber(asset?.available_shares)} available
               </small>
             </div>
           </div>
@@ -119,13 +120,13 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             <div className="flex justify-between items-center w-full">
               <p className="text-sm text-custom-grey">Category</p>
               <small className="capitalize bg-custom-input-stroke text-custom-grey px-2 rounded">
-                {item?.asset?.category}
+                {asset?.category}
               </small>
             </div>
             <div className="flex justify-between items-center w-full">
               <p className="text-sm text-custom-grey">Location</p>
               <p className="capitalize text-custom-grey px-2 rounded">
-                {item?.asset?.iso_country_code === "NG" ? "Nigeria" : "Ghana"}
+                {asset?.iso_country_code === "NG" ? "Nigeria" : "Ghana"}
               </p>
             </div>
           </div>
@@ -136,7 +137,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
               <RiBookmarkLine className="w-8 h-8 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
             </div>
             <Link
-              to={`/dashboard/markets/${item?.asset.slug}`}
+              to={`/dashboard/markets/${asset.slug}`}
               className="text-xs text-custom-orange font-light underline w-fit"
             >
               See More Details
@@ -150,32 +151,32 @@ export default function AssetCard({ item, variant = "card" }: Props) {
   // Default "card" variant
   return (
     <Link
-      key={item?.asset.id}
-      // to={`/dashboard/markets/${item?.asset.slug}`}
-      to={`/dashboard/assets/${item?.asset.slug}`}
+      key={asset?.id}
+      // to={`/dashboard/markets/${asset.slug}`}
+      to={`/dashboard/assets/${asset.slug}`}
       className="cursor-pointer"
     >
       <div
-        key={item?.asset.id}
+        key={asset?.id}
         className="bg-custom-light-bg text-custom-white flex flex-col gap-2 items-start rounded-2xl p-2 min-w-76 shadow-lg h-full"
       >
         <div className="relative overflow-hidden flex justify-between gap-2 items-start text-start w-full rounded-lg">
           <div className="flex items-center gap-2">
             <img
-              src={item?.asset?.image_urls[0]}
+              src={asset?.image_urls[0]}
               alt=""
               className="w-10 h-10 rounded-full"
             />
             <div className="flex flex-col">
-              <h2 className="font-light">{item?.asset?.asset_symbol}</h2>
+              <h2 className="font-light">{asset?.asset_symbol}</h2>
               <small className="text-custom-grey font-light text-xs">
-                {FormatService.formatName(item?.asset?.asset_name)}
+                {FormatService.formatName(asset?.asset_name)}
               </small>
             </div>
           </div>
         </div>
         <p className="text-xs sm:text-sm text-custom-grey font-light">
-          {FormatService.truncateString(item?.asset?.asset_description, 30)}
+          {FormatService.truncateString(asset?.asset_description, 30)}
         </p>
         <div className="flex flex-col gap-1 items-start w-full">
           <Progress
@@ -190,7 +191,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
               </small>
             </div>
             <small className="">
-              {formatNumber(item?.asset?.available_shares)} available
+              {formatNumber(asset?.available_shares)} available
             </small>
           </div>
         </div>
@@ -205,9 +206,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
           <div className="w-full flex flex-col text-sm">
             <div className="flex justify-between items-center w-full">
               <small className="text-custom-grey">Price per share</small>
-              <small className="">
-                {formatUSD(item?.asset?.price_per_share)}
-              </small>
+              <small className="">{formatUSD(asset?.price_per_share)}</small>
             </div>
             <div className="flex justify-between items-center w-full">
               <small className="text-custom-grey">Funding round closes</small>
@@ -224,27 +223,27 @@ export default function AssetCard({ item, variant = "card" }: Props) {
   // Default "card" variant
   return (
     <Link
-      key={item?.asset.id}
-      // to={`/dashboard/markets/${item?.asset.slug}`}
-      to={`/dashboard/assets/${item?.asset.slug}`}
+      key={asset.id}
+      // to={`/dashboard/markets/${asset.slug}`}
+      to={`/dashboard/assets/${asset.slug}`}
       className="cursor-pointer"
     >
       <div
-        key={item?.asset.id}
+        key={asset.id}
         className="bg-custom-light-bg text-custom-white flex flex-col gap-2 items-start rounded-2xl p-2 min-w-66 sm:min-w-96 shadow-lg h-full"
       >
         <img src={cardCover} alt="" className="w-full" />
         <div className="relative overflow-hidden flex justify-between gap-2 items-start text-start w-full rounded-lg">
           <div className="flex items-center gap-2">
             <img
-              src={item?.asset?.image_urls[0]}
+              src={asset?.image_urls[0]}
               alt=""
               className="w-10 h-10 rounded-full"
             />
             <div className="flex flex-col">
-              <h2 className="font-semibold">{item?.asset?.asset_symbol}</h2>
+              <h2 className="font-semibold">{asset?.asset_symbol}</h2>
               <small className="text-custom-grey">
-                {FormatService.formatName(item?.asset?.asset_name)}
+                {FormatService.formatName(asset?.asset_name)}
               </small>
             </div>
           </div>
@@ -254,7 +253,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
           </div>
         </div>
         <p className="text-sm text-custom-grey">
-          {FormatService.truncateString(item?.asset?.asset_description, 50)}
+          {FormatService.truncateString(asset?.asset_description, 50)}
         </p>
         <div className="flex flex-col gap-2 items-start w-full pb-1">
           <Progress
@@ -269,7 +268,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
               </small>
             </div>
             <small className="font-semibold">
-              {formatNumber(item?.asset?.available_shares)} available
+              {formatNumber(asset?.available_shares)} available
             </small>
           </div>
         </div>
@@ -316,7 +315,7 @@ export default function AssetCard({ item, variant = "card" }: Props) {
             <div className="flex justify-between items-center w-full">
               <small className="text-custom-grey">Price per share</small>
               <small className="font-semibold">
-                {formatUSD(item?.asset?.price_per_share)}
+                {formatUSD(asset?.price_per_share)}
               </small>
             </div>
             <div className="flex justify-between items-center w-full">

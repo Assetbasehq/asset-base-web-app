@@ -36,12 +36,12 @@ export default function CustomSelect({
     <Select value={defaultValue} onValueChange={onChange}>
       <SelectTrigger
         className={cn(
-          "w-[200px] rounded border focus:ring-1 focus:ring-primary focus:border-primary transition-colors",
+          "w-[200px] rounded border focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-custom-grey gap-0",
           className
         )}
       >
         <span className="mr-1"> {icon}</span>
-        <span className="hidden lg:flex">
+        <span className="text-xs hidden sm:block">
           <SelectValue placeholder={placeholder} />
         </span>
         {/* <ChevronDown className="ml-2 h-4 w-4 opacity-60" /> */}

@@ -14,12 +14,24 @@ import SearchInput from "./_components/search-input";
 import type { SelectOption } from "@/components/custom/custom-select";
 import CustomSelect from "@/components/custom/custom-select";
 import { RiFileList3Line } from "react-icons/ri";
+import { SearchableSelect } from "@/components/custom/searchable-select";
+import countries from "@/data/countries";
 
 const categories: SelectOption[] = [
   { label: "All", value: "all" },
+  { label: "Art", value: "art" },
+  { label: "Charity", value: "charity" },
+  { label: "Commodities", value: "commodities" },
   { label: "Crypto", value: "crypto" },
-  { label: "Stocks", value: "stocks" },
+  { label: "Debt/Bond", value: "debt" },
+  { label: "Private Business", value: "private" },
   { label: "Real Estate", value: "real-estate" },
+  { label: "Startup", value: "startup" },
+  { label: "Other", value: "other" },
+];
+const sortBy: SelectOption[] = [
+  { label: "Newest First", value: "asc" },
+  { label: "Oldest First", value: "desc" },
 ];
 
 const locations: SelectOption[] = [
@@ -126,7 +138,7 @@ export default function Assets() {
             <RiListOrdered
               onClick={() => setIsGrid(false)}
               className={cn(
-                `w-10 h-10 p-2 border rounded text-custom-white cursor-pointer`,
+                `w-9 h-9 p-2 border rounded text-custom-white cursor-pointer`,
                 {
                   "border-custom-orange": !isGrid,
                 }
@@ -135,7 +147,7 @@ export default function Assets() {
             <RiLayoutGridLine
               onClick={() => setIsGrid(true)}
               className={cn(
-                `w-10 h-10 p-2 border rounded text-custom-white cursor-pointer`,
+                `w-9 h-9 p-2 border rounded text-custom-white cursor-pointer`,
                 {
                   "border-custom-orange": isGrid,
                 }
@@ -156,17 +168,16 @@ export default function Assets() {
                 handleParamsChange("category", value);
               }}
             />
-            <CustomSelect
+            <SearchableSelect
               icon={<RiMapPin2Line />}
-              className="w-fit text-custom-white"
-              options={locations}
-              placeholder="Location"
-              defaultValue={location || ""}
-              onChange={(value) => {
-                if (value === "all") {
-                  return handleParamsChange("location", "");
-                }
-                handleParamsChange("location", value);
+              options={countries.map((country) => ({
+                label: `${country.flag} ${country.countryNameEn} `,
+                value: country.countryNameEn.toLowerCase(),
+              }))}
+              placeholder="Select a country"
+              value={location || ""}
+              onChange={(value: string) => {
+                handleParamsChange("location", value.toLowerCase());
               }}
             />
           </div>
@@ -174,7 +185,7 @@ export default function Assets() {
       </div>
 
       <AssetGrid
-        items={data || []}
+        assets={data || []}
         isGrid={isGrid}
         isLoading={isLoading}
         isError={isError}

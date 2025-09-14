@@ -2,6 +2,9 @@ import usaFlag from "@/assets/images/usa-flag.svg";
 import nigerianFlag from "@/assets/images/nigerian-flag.svg";
 import tetherUSDT from "@/assets/images/tether-usd.png";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
+import ghanaFlag from "@/assets/images/ghana-flag.svg";
+import ugandanFlag from "@/assets/images/uganda-flag.svg";
+import kenyanFlag from "@/assets/images/kenya-flag.svg";
 
 export const flags = {
   usa: {
@@ -18,6 +21,21 @@ export const flags = {
     name: "Tether",
     flag: tetherUSDT,
     alt: "tether usd icon",
+  },
+  ghana: {
+    name: "Ghana",
+    flag: ghanaFlag,
+    alt: "ghana flag",
+  },
+  uganda: {
+    name: "Uganda",
+    flag: ugandanFlag,
+    alt: "uganda flag",
+  },
+  kenya: {
+    name: "Kenya",
+    flag: kenyanFlag,
+    alt: "kenya flag",
   },
 };
 

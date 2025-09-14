@@ -4,14 +4,14 @@ import AssetCard from "@/components/shared/asset/asset-card";
 import AssetCardSkeleton from "@/components/shared/asset/asset-card-skeleton";
 
 interface AssetGridProps {
-  items: { asset: IAsset }[];
+  assets: IAsset[];
   isLoading: boolean;
   isError: boolean;
   isGrid?: boolean;
 }
 
 export default function AssetGrid({
-  items,
+  assets,
   isGrid = false,
   isError,
   isLoading,
@@ -48,8 +48,8 @@ export default function AssetGrid({
         isGrid && "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
       )}
     >
-      {items.map((item) => (
-        <AssetCard key={item.asset.id} item={item} variant={variant} />
+      {assets.map((asset) => (
+        <AssetCard key={asset.id} asset={asset} variant={variant} />
       ))}
     </div>
   );

@@ -38,7 +38,7 @@ import AssetDetails, {
   AssetDetailsInvest,
 } from "./pages/dashboard/markets/_components/asset-details";
 import WalletPage from "./pages/dashboard/wallet/_components/wallet-page";
-import Assets from "./pages/dashboard/assets/asset-list";
+import Assets from "./pages/dashboard/assets/assets";
 import { Toaster } from "sonner";
 import Deposit from "./pages/dashboard/wallet/deposit/deposit";
 import Withdraw from "./pages/dashboard/wallet/withdraw/withdraw";

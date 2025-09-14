@@ -54,7 +54,7 @@ function Assets({ data, isLoading, isError }: any) {
       }}
     >
       {data.map((item: { asset: IAsset }) => (
-        <AssetCard key={item?.asset?.id} item={item} variant="card" />
+        <AssetCard key={item?.asset?.id} asset={item?.asset} variant="card" />
       ))}
     </div>
   );

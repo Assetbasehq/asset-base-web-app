@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import WalletBreadCrumb from "../_components/wallet-bread-crumb";
-import { flags, images } from "@/constants/images";
+import { flags } from "@/constants/images";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import { Card } from "@/components/ui/card";
 import { useState, type ReactNode } from "react";
@@ -13,14 +13,68 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import {
-  useGetCryptoBalance,
-  useRequestCryptoDeposit,
-} from "@/hooks/useWallet";
-import { RiCheckLine, RiFileCopyLine } from "react-icons/ri";
 import CryptoDeposit from "./crypto/crypto-deposit";
+import NairaDeposit from "./naira/naira-deposit";
+import FundWithCard from "./naira/card/fund-with-card";
+
+// interface DepositState {
+//   walletToFund: WalletToFundOptions | null;
+//   currency: string | null;
+//   fundingMethod: string | null;
+//   step: number;
+// }
+
+// const initialState: DepositState = {
+//   walletToFund: null,
+//   currency: null,
+//   fundingMethod: null,
+//   step: 1,
+// };
+
+// const walletOptions = [
+//   {
+//     name: "USD",
+//     key: "USD",
+//     icon: (
+//       <img src={flags.usa.flag} alt={flags.usa.alt} className="w-6 md:w-12" />
+//     ),
+//     currencies: [
+//       { name: "Nigerian Naira", logo: flags.nigeria.flag },
+//       { name: "US Dollar", logo: flags.usa.flag },
+//       { name: "Ghanian Cedis", logo: flags.ghana.flag },
+//       { name: "Ugandan Shillings", logo: flags.uganda.flag },
+//       { name: "Kenyan Shillings", logo: flags.kenya.flag },
+//     ],
+//   },
+//   {
+//     name: "Naira",
+//     key: "NAIRA",
+//     icon: (
+//       <img
+//         src={flags.nigeria.flag}
+//         alt={flags.nigeria.alt}
+//         className="w-6 md:w-12"
+//       />
+//     ),
+//     currencies: [{ name: "Nigerian Naira", logo: flags.nigeria.flag }],
+//   },
+//   {
+//     name: "Crypto",
+//     key: "CRYPTO",
+//     icon: (
+//       <img
+//         src={flags.tetherUSDT.flag}
+//         alt={flags.tetherUSDT.alt}
+//         className="w-6 md:w-12"
+//       />
+//     ),
+//     currencies: [
+//       { name: "USDT", logo: flags.tetherUSDT.flag },
+//       { name: "USDC", logo: flags.tetherUSDT.flag },
+//       { name: "cNGN", logo: flags.tetherUSDT.flag },
+//     ],
+//   },
+// ];
 
 const options = [
   {
@@ -54,27 +108,36 @@ const options = [
 type WalletToFundOptions = "USD" | "NAIRA" | "CRYPTO";
 interface OptionItem {
   name: string;
-  logo: ReactNode; // or `ReactNode` if you're using React Icons or components
+  logo: ReactNode;
 }
 
 const walletOptionMap: Record<WalletToFundOptions, OptionItem[]> = {
   USD: [
-    { name: "PayPal", logo: <img src={flags.usa.flag} alt="" /> },
-    { name: "Stripe", logo: "/icons/stripe.svg" },
-    { name: "Bank Transfer", logo: "/icons/bank.svg" },
+    {
+      name: "Nigerian Naira",
+      logo: <img src={flags.nigeria.flag} alt={flags.nigeria.alt} />,
+    },
+    {
+      name: "US Dollar",
+      logo: <img src={flags.usa.flag} alt={flags.usa.alt} />,
+    },
+    {
+      name: "Ghanian Cedis",
+      logo: <img src={flags.ghana.flag} alt={flags.ghana.alt} />,
+    },
+    {
+      name: "Ugandan Shillings",
+      logo: <img src={flags.uganda.flag} alt={flags.uganda.alt} />,
+    },
+    {
+      name: "Kenyan Shillings",
+      logo: <img src={flags.kenya.flag} alt={flags.kenya.alt} />,
+    },
   ],
   NAIRA: [
     {
-      name: "GTBank",
-      logo: <img src={flags.tetherUSDT.flag} alt={flags.tetherUSDT.alt} />,
-    },
-    {
-      name: "Zenith Bank",
-      logo: <img src={flags.tetherUSDT.flag} alt={flags.tetherUSDT.alt} />,
-    },
-    {
-      name: "Access Bank",
-      logo: <img src={flags.tetherUSDT.flag} alt={flags.tetherUSDT.alt} />,
+      name: "Nigerian Naira",
+      logo: <img src={flags.nigeria.flag} alt={flags.nigeria.alt} />,
     },
   ],
   CRYPTO: [
@@ -94,22 +157,18 @@ const walletOptionMap: Record<WalletToFundOptions, OptionItem[]> = {
 };
 
 export default function Deposit() {
-  // const [walletToFund, setWalletToFund] = useState<WalletToFundOptions | null>(
-  //   "CRYPTO"
-  // );
-  // const [selectedOption, setSelectedOption] = useState<string | null>("USDT");
-  // const [stage, setStage] = useState(2);
   const [walletToFund, setWalletToFund] = useState<WalletToFundOptions | null>(
     null
   );
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [fundingMethod, setFundingMethod] = useState<string | null>(null);
   const [stage, setStage] = useState(1);
 
   const goBack = () => setStage(stage - 1);
 
   return (
     <div className="text-custom-white-text flex flex-col gap-4">
-      <WalletBreadCrumb />
+      <WalletBreadCrumb stage={stage} goBack={goBack} />
 
       <div className="flex flex-col gap-8 text-start w-full max-w-md mx-auto">
         <div>
@@ -178,7 +237,8 @@ export default function Deposit() {
                       {walletToFund &&
                         walletOptionMap[walletToFund].map((option) => (
                           <SelectItem key={option.name} value={option.name}>
-                            {option.name}
+                            <span className="w-5 h-5">{option.logo}</span>
+                            <span>{option.name}</span>
                           </SelectItem>
                         ))}
                     </SelectContent>
@@ -200,69 +260,37 @@ export default function Deposit() {
           {stage === 2 && walletToFund === "CRYPTO" && (
             <CryptoDeposit goBack={goBack} />
           )}
+
+          {/* Naira Deposits  */}
+          {/* Stage 2  */}
+          {stage === 2 && walletToFund === "NAIRA" && (
+            <NairaDeposit
+              goBack={goBack}
+              nextStage={() => {
+                console.log({ stage });
+
+                setStage((prev) => prev + 1);
+              }}
+              walletToFund={walletToFund}
+              selectedOption={selectedOption}
+              fundingMethod={fundingMethod}
+              setFundingMethod={setFundingMethod}
+            />
+          )}
+
+          {stage === 3 &&
+            walletToFund === "NAIRA" &&
+            fundingMethod === "CARD" && (
+              <FundWithCard
+                goBack={goBack}
+                // nextStage={() => setStage((prev) => prev + 1)}
+                // walletToFund={walletToFund}
+                // selectedOption={selectedOption}
+                // setFundingMethod={setFundingMethod}
+              />
+            )}
         </AnimatedWrapper>
       </div>
     </div>
   );
 }
-
-// function FundWithCrypto({ goBack }: { goBack: () => void }) {
-//   const [amountToFund, setAmountToFund] = useState<number | null>(null);
-
-//   const handleAmountChange = (amount: string) => {
-//     const amountNumber = Number(amount);
-//     if (!isNaN(amountNumber)) setAmountToFund(amountNumber);
-//   };
-
-//   return (
-//     <div className="flex flex-col gap-4">
-//       <div className="flex flex-col gap-1">
-//         <Label className="text-custom-grey text-xs md:text-sm">
-//           Enter amount to fund
-//         </Label>
-//         <Input
-//           onChange={(e) => handleAmountChange(e.target.value)}
-//           type="text"
-//           className="py-6 w-full"
-//           placeholder="10"
-//         />
-//       </div>
-
-//       <Button
-//         variant="outline"
-//         className="flex justify-between bg-custom-base w-full rounded-full !py-0"
-//       >
-//         <small className="text-custom-grey">$1</small>
-//         <small>$1,576.03</small>
-//       </Button>
-
-//       <div className="flex flex-col gap-2">
-//         <p className="text-custom-grey text-xs md:text-sm">
-//           Fund to crypto wallet
-//         </p>
-//         <Button
-//           disabled={!amountToFund}
-//           className="py-6 md:py-8 bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer"
-//         >
-//           <img src={images.assetBase.logo} alt={images.assetBase.alt} /> Send
-//           directly to an external address
-//         </Button>
-//         <Button
-//           disabled={!amountToFund}
-//           className="py-6 md:py-8 bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer"
-//         >
-//           <img src={images.assetBase.logo} alt={images.assetBase.alt} /> Send to
-//           my connected wallet
-//         </Button>
-//       </div>
-
-//       <Button
-//         variant="ghost"
-//         className="text-muted-foreground hover:text-custom-orange bg-custom-light-bg cursor-pointer"
-//         onClick={goBack}
-//       >
-//         Back
-//       </Button>
-//     </div>
-//   );
-// }

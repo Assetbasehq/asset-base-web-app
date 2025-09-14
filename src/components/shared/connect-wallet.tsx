@@ -32,7 +32,6 @@ export default function ConnectWallet({ className }: ConnectWalletProps) {
   const [open, setOpen] = useState(false);
 
   const { connectors, connect, error } = useConnect();
-  const { disconnect } = useDisconnect();
   const { address, isConnected, chainId } = useAccount();
   const { data: walletBalance } = useBalance({
     address,
@@ -94,6 +93,7 @@ export function ConnectWalletModal({
 }) {
   const { connectors, connect, error } = useConnect();
   const { connector: activeConnector, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
 
   if (!open) {
     return null;
@@ -102,7 +102,7 @@ export function ConnectWalletModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
-        className=" w-lg sm:max-w-lg bg-custom-base text-custom-white rounded-2xl font-neue"
+        className=" w-lg sm:max-w-lg lg:w-3xl md:max-w-4xl bg-custom-base text-custom-white rounded-2xl font-neue"
         showCloseButton={false}
       >
         <DialogHeader>
@@ -113,32 +113,48 @@ export function ConnectWalletModal({
             Get Started by connecting your preferred wallet below
           </DialogDescription>
         </DialogHeader>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 w-full">
               {connectors.length > 0 ? (
                 connectors.map((connector: Connector) => {
                   const isCurrent = activeConnector?.id === connector.id;
                   return (
-                    <Button
-                      className="flex items-center justify-start gap-2 bg-custom-base hover:bg-custom-light-bg text-custom-white w-full cursor-pointer "
-                      key={connector.uid}
-                      onClick={() => {
-                        if (!isCurrent) {
-                          connect({ connector }); // ✅ only connect if not already connected
-                        }
-                      }}
-                    >
-                      <img
-                        className="w-6 h-6"
-                        src={connector.icon}
-                        alt={connector.name}
-                      />
-                      <div>{connector.name}</div>
-                      {isCurrent && (
-                        <div className="text-xs text-green-500">Connected</div>
-                      )}
-                    </Button>
+                    <div className="flex justify-between w-full">
+                      <Button
+                        className="w-50 flex items-center justify-start gap-2 bg-custom-base hover:bg-custom-light-bg text-custom-white cursor-pointer "
+                        key={connector.uid}
+                        onClick={() => {
+                          if (!isCurrent) {
+                            connect({ connector }); // ✅ only connect if not already connected
+                          }
+                        }}
+                      >
+                        <img
+                          className="w-6 h-6"
+                          src={connector.icon}
+                          alt={connector.name}
+                        />
+                        <div>{connector.name}</div>
+                        {isCurrent && (
+                          <div className="text-xs text-green-500">
+                            Connected
+                          </div>
+                        )}
+                      </Button>
+                      <Button
+                        className={cn(
+                          `bg-custom-light-bg w-30 text-xs !p-0 cursor-pointer`,
+                          {
+                            hidden: !isCurrent,
+                          }
+                        )}
+                        variant="destructive"
+                        onClick={() => disconnect()}
+                      >
+                        Disconnect
+                      </Button>
+                    </div>
                   );
                 })
               ) : (
@@ -151,7 +167,7 @@ export function ConnectWalletModal({
               <CustomAlert message={error?.message} variant="destructive" />
             )}
             <p className="text-custom-grey text-xs">
-              By connecting your wallet, you're agree to our{" "}
+              By connecting your wallet, you agree to our{" "}
               <small className="text-custom-orange text-sm ">
                 Terms of Service
               </small>{" "}
@@ -161,7 +177,7 @@ export function ConnectWalletModal({
               </small>
             </p>
           </div>
-          <img className="hidden" src={shieldImage} alt="" />
+          <img className="hidden lg:block w-60" src={shieldImage} alt="" />
         </div>
       </DialogContent>
     </Dialog>

@@ -31,21 +31,22 @@ export default function TotalAssets() {
             <SelectTrigger className="w-fit">
               <SelectValue placeholder="USD" className="text-custom-white" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="min-w-fit">
               <SelectItem value="usd">
                 <img
                   className="w-5 h-5"
                   src={flags.usa.flag}
                   alt={flags.usa.alt}
                 />
+                <span className="hidden md:inline">USD</span>
               </SelectItem>
-
               <SelectItem value="ngn">
                 <img
                   className="w-5 h-5"
                   src={flags.nigeria.flag}
                   alt={flags.nigeria.alt}
                 />
+                <span className="hidden md:inline">NGN</span>
               </SelectItem>
             </SelectContent>
           </Select>
