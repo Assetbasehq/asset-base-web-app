@@ -15,66 +15,7 @@ import {
 } from "@/components/ui/select";
 import CryptoDeposit from "./crypto/crypto-deposit";
 import NairaDeposit from "./naira/naira-deposit";
-import FundWithCard from "./naira/card/fund-with-card";
-
-// interface DepositState {
-//   walletToFund: WalletToFundOptions | null;
-//   currency: string | null;
-//   fundingMethod: string | null;
-//   step: number;
-// }
-
-// const initialState: DepositState = {
-//   walletToFund: null,
-//   currency: null,
-//   fundingMethod: null,
-//   step: 1,
-// };
-
-// const walletOptions = [
-//   {
-//     name: "USD",
-//     key: "USD",
-//     icon: (
-//       <img src={flags.usa.flag} alt={flags.usa.alt} className="w-6 md:w-12" />
-//     ),
-//     currencies: [
-//       { name: "Nigerian Naira", logo: flags.nigeria.flag },
-//       { name: "US Dollar", logo: flags.usa.flag },
-//       { name: "Ghanian Cedis", logo: flags.ghana.flag },
-//       { name: "Ugandan Shillings", logo: flags.uganda.flag },
-//       { name: "Kenyan Shillings", logo: flags.kenya.flag },
-//     ],
-//   },
-//   {
-//     name: "Naira",
-//     key: "NAIRA",
-//     icon: (
-//       <img
-//         src={flags.nigeria.flag}
-//         alt={flags.nigeria.alt}
-//         className="w-6 md:w-12"
-//       />
-//     ),
-//     currencies: [{ name: "Nigerian Naira", logo: flags.nigeria.flag }],
-//   },
-//   {
-//     name: "Crypto",
-//     key: "CRYPTO",
-//     icon: (
-//       <img
-//         src={flags.tetherUSDT.flag}
-//         alt={flags.tetherUSDT.alt}
-//         className="w-6 md:w-12"
-//       />
-//     ),
-//     currencies: [
-//       { name: "USDT", logo: flags.tetherUSDT.flag },
-//       { name: "USDC", logo: flags.tetherUSDT.flag },
-//       { name: "cNGN", logo: flags.tetherUSDT.flag },
-//     ],
-//   },
-// ];
+import type { DepositState } from "@/interfaces/wallet.interfae";
 
 const options = [
   {
@@ -157,18 +98,134 @@ const walletOptionMap: Record<WalletToFundOptions, OptionItem[]> = {
 };
 
 export default function Deposit() {
-  const [walletToFund, setWalletToFund] = useState<WalletToFundOptions | null>(
-    null
-  );
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [fundingMethod, setFundingMethod] = useState<string | null>(null);
-  const [stage, setStage] = useState(1);
+  const [state, setState] = useState<DepositState>({
+    walletToFund: null,
+    currencyToFund: null,
+    fundingMethod: null,
+    stage: 1,
+  });
 
-  const goBack = () => setStage(stage - 1);
+  const goBack = () => setState((prev) => ({ ...prev, stage: prev.stage - 1 }));
+  const nextStage = () =>
+    setState((prev) => ({ ...prev, stage: prev.stage + 1 }));
+
+  console.log({ state });
+
+  const renderCurrentStep = () => {
+    // Step 1: Always wallet and currency selection
+    if (state.stage === 1) {
+      return (
+        <div>
+          <div>
+            <h2>Wallet to fund</h2>
+            <div className="flex items-stretch gap-4 mt-1 w-full">
+              {options.map((option) => (
+                <Card
+                  key={option.name}
+                  className={cn(
+                    `p-2 md:p-4 border-2 bg-custon-input-fill border-custom-input-stroke w-1/3 cursor-pointer`,
+                    {
+                      "border-custom-orange":
+                        option.name.toUpperCase() === state.walletToFund,
+                    }
+                  )}
+                  onClick={() => {
+                    setState((prev) => ({
+                      ...prev,
+                      walletToFund:
+                        option.name.toUpperCase() as WalletToFundOptions,
+                      currencyToFund: null,
+                    }));
+                  }}
+                >
+                  <span className="bg-custom-card w-fit p-2 rounded-full">
+                    {option.icon}
+                  </span>
+                  <p className="text-xs md:text-sm font-semibold mt-auto">
+                    {option.name}
+                  </p>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          <Separator className="my-4 p-0.25 rounded-full" />
+
+          <div>
+            <h2 className="text-sm md:text-">Select Currency to fund</h2>
+            <div className="flex items-center gap-4 mt-1 w-full">
+              <Select
+                value={state.currencyToFund || ""}
+                onValueChange={(value) => {
+                  setState((prev) => ({ ...prev, currencyToFund: value }));
+                }}
+              >
+                <SelectTrigger className="w-full py-6 rounded">
+                  <SelectValue
+                    placeholder={
+                      state.walletToFund
+                        ? walletOptionMap[state.walletToFund][0].name
+                        : "Please select a destination wallet"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {state.walletToFund &&
+                    walletOptionMap[state.walletToFund].map((option) => (
+                      <SelectItem key={option.name} value={option.name}>
+                        <span className="w-5 h-5">{option.logo}</span>
+                        <span>{option.name}</span>
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <Button
+            disabled={!state.walletToFund || !state.currencyToFund}
+            onClick={() => setState((prev) => ({ ...prev, stage: 2 }))}
+            className="btn-primary rounded-full py-4 md:py-6 mt-6 w-full text-xs"
+          >
+            PROCEED TO DEPOSIT
+          </Button>
+        </div>
+      );
+    }
+
+    // Step 2+: Depends on wallet type
+    switch (state.walletToFund) {
+      case "CRYPTO":
+        return <CryptoDeposit goBack={goBack} />;
+
+      case "NAIRA":
+        return (
+          <NairaDeposit
+            state={state}
+            setState={(updatedState: Partial<DepositState>) =>
+              setState({ ...state, ...updatedState })
+            }
+            prevStage={goBack}
+            nextStage={nextStage}
+          />
+        );
+
+        break;
+      case "USD":
+        // Add USD flow here when ready
+        return <div>USD deposit flow - Coming soon</div>;
+
+      default:
+        return <div>Please select a wallet type</div>;
+    }
+
+    // Fallback
+    return <div>Invalid step</div>;
+  };
 
   return (
     <div className="text-custom-white-text flex flex-col gap-4">
-      <WalletBreadCrumb stage={stage} goBack={goBack} />
+      <WalletBreadCrumb stage={state.stage} goBack={goBack} />
 
       <div className="flex flex-col gap-8 text-start w-full max-w-md mx-auto">
         <div>
@@ -178,9 +235,10 @@ export default function Deposit() {
           </p>
         </div>
 
-        <AnimatedWrapper animationKey={String(stage)}>
+        <AnimatedWrapper animationKey={String(state.stage)}>
+          {renderCurrentStep()}
           {/* Stage 1  */}
-          {stage === 1 && (
+          {/* {stage === 1 && (
             <div>
               <div>
                 <h2>Wallet to fund</h2>
@@ -254,16 +312,16 @@ export default function Deposit() {
                 PROCEED TO DEPOSIT
               </Button>
             </div>
-          )}
+          )} */}
 
           {/* Stage 2  */}
-          {stage === 2 && walletToFund === "CRYPTO" && (
+          {/* {stage === 2 && walletToFund === "CRYPTO" && (
             <CryptoDeposit goBack={goBack} />
-          )}
+          )} */}
 
           {/* Naira Deposits  */}
           {/* Stage 2  */}
-          {stage === 2 && walletToFund === "NAIRA" && (
+          {/* {stage === 2 && walletToFund === "NAIRA" && (
             <NairaDeposit
               goBack={goBack}
               nextStage={() => {
@@ -276,19 +334,19 @@ export default function Deposit() {
               fundingMethod={fundingMethod}
               setFundingMethod={setFundingMethod}
             />
-          )}
+          )} */}
 
-          {stage === 3 &&
+          {/* {stage === 3 &&
             walletToFund === "NAIRA" &&
             fundingMethod === "CARD" && (
               <FundWithCard
                 goBack={goBack}
-                // nextStage={() => setStage((prev) => prev + 1)}
-                // walletToFund={walletToFund}
-                // selectedOption={selectedOption}
-                // setFundingMethod={setFundingMethod}
+                nextStage={() => setStage((prev) => prev + 1)}
+                walletToFund={walletToFund}
+                selectedOption={selectedOption}
+                setFundingMethod={setFundingMethod}
               />
-            )}
+            )} */}
         </AnimatedWrapper>
       </div>
     </div>

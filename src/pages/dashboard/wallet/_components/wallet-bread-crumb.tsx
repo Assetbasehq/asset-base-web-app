@@ -6,8 +6,8 @@ export default function WalletBreadCrumb({
   stage,
   goBack,
 }: {
-  stage: number;
-  goBack: () => void;
+  stage?: number;
+  goBack?: () => void;
 }) {
   const location = useLocation();
   const segments = location.pathname.split("/").filter(Boolean);
@@ -28,7 +28,8 @@ export default function WalletBreadCrumb({
           <Button
             onClick={() => {
               if (stage === 1) return naviagate("/dashboard/wallet");
-              goBack();
+              if (!goBack) return naviagate("/dashboard/wallet");
+              goBack?.();
             }}
           >
             <RiArrowLeftLine />

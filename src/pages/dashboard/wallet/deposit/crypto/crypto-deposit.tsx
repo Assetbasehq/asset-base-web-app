@@ -62,7 +62,7 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
   };
 
   const handleCopyAddress = async () => {
-    await navigator.clipboard.writeText(`${depositData?.address}`);
+    await navigator.clipboard.writeText(`${depositData?.walletAddress}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000); // reset after 2s
   };
@@ -70,7 +70,7 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
   const handleSendTransaction = () => {
     if (!isConnected) return setIsModalOpen(true);
     if (!amountToFund) return;
-    const to = depositData?.address;
+    const to = depositData?.walletAddress;
     const value = parseEther(amountToFund.toString()); // Ensure it's clean
 
     sendTransaction?.({ to, value, gas: BigInt(21000) });
@@ -168,10 +168,10 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
                 ) : (
                   <>
                     <small className="sm:hidden">
-                      {truncateWalletAddress(depositData?.address, 12)}
+                      {truncateWalletAddress(depositData?.walletAddress, 12)}
                     </small>
                     <small className="hidden sm:block">
-                      {depositData?.address}
+                      {depositData?.walletAddress}
                     </small>
                   </>
                 )}{" "}
@@ -197,14 +197,6 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
           </div>
         </div>
       </div>
-
-      <Button
-        variant="ghost"
-        className="text-muted-foreground hover:text-custom-orange bg-custom-light-bg cursor-pointer"
-        onClick={goBack}
-      >
-        Back
-      </Button>
 
       <ConnectWalletModal open={isModalOpen} setOpen={setIsModalOpen} />
     </div>

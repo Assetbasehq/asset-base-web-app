@@ -1,6 +1,6 @@
 import usaFlag from "@/assets/images/usa-flag.svg";
 import nigerianFlag from "@/assets/images/nigerian-flag.svg";
-import tetherUSDT from "@/assets/images/tether-usd.png";
+import tetherUSDT from "@/assets/images/tether-usdt.svg";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import ghanaFlag from "@/assets/images/ghana-flag.svg";
 import ugandanFlag from "@/assets/images/uganda-flag.svg";
