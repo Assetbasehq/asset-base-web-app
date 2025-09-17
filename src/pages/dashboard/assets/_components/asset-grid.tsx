@@ -8,6 +8,7 @@ interface AssetGridProps {
   isLoading: boolean;
   isError: boolean;
   isGrid?: boolean;
+  userWatchlist?: { asset: IAsset }[];
 }
 
 export default function AssetGrid({
@@ -15,6 +16,7 @@ export default function AssetGrid({
   isGrid = false,
   isError,
   isLoading,
+  userWatchlist = [],
 }: AssetGridProps) {
   const variant = isGrid ? "card-detailed" : "compact";
 
@@ -49,7 +51,12 @@ export default function AssetGrid({
       )}
     >
       {assets.map((asset) => (
-        <AssetCard key={asset.id} asset={asset} variant={variant} />
+        <AssetCard
+          key={asset.id}
+          asset={asset}
+          variant={variant}
+          userWatchlist={userWatchlist}
+        />
       ))}
     </div>
   );

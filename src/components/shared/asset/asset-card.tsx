@@ -1,27 +1,60 @@
 import type { IAsset } from "@/interfaces/asset.interface";
 import { Progress } from "@/components/ui/progress";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
-import { calculateRaisePercentage, formatNumber, formatUSD } from "@/lib/utils";
+import {
+  calculateRaisePercentage,
+  cn,
+  formatNumber,
+  formatUSD,
+} from "@/lib/utils";
 import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
 import { FormatService } from "@/services/format-service";
 import { Card, CardContent } from "@/components/ui/card";
 import cardCover from "@/assets/images/card-cover.png";
+import {
+  useAddToWatchlist,
+  useRemoveFromWatchlist,
+} from "@/hooks/useWatchlist";
 
 interface Props {
   asset: IAsset;
   variant?: "card" | "compact" | "card-detailed";
+  // userWatchlist?: IAsset[];
+  userWatchlist?: { asset: IAsset }[];
 }
 
-export default function AssetCard({ asset, variant = "card" }: Props) {
+export default function AssetCard({
+  asset,
+  userWatchlist = [],
+  variant = "card",
+}: Props) {
   const raisePercentage = calculateRaisePercentage(
     asset?.number_of_shares,
     asset?.available_shares
   );
 
-  console.log({ asset });
-  
+  const isInWatchlist = userWatchlist?.some(
+    (item) => item.asset.id === asset.id
+  );
+
+  const addToWatchlistMutation = useAddToWatchlist({ asset_id: asset.id });
+  const removeFromWatchlistMutation = useRemoveFromWatchlist({
+    asset_id: asset.id,
+  });
+
+  const handleAddToWatchlist = async () => {
+    console.log("ddd");
+
+    if (isInWatchlist) {
+      await removeFromWatchlistMutation.mutateAsync();
+      console.log("removed");
+      return;
+    }
+
+    await addToWatchlistMutation.mutateAsync();
+  };
 
   if (variant === "compact") {
     return (
@@ -134,7 +167,15 @@ export default function AssetCard({ asset, variant = "card" }: Props) {
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center gap-4 mb-2">
               <RiShareLine className="w-8 h-8 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
-              <RiBookmarkLine className="w-8 h-8 bg-custom-input-stroke text-custom-grey p-2 rounded-full" />
+              <RiBookmarkLine
+                onClick={handleAddToWatchlist}
+                className={cn(
+                  "w-8 h-8 p-2 rounded-full cursor-pointer transition-colors",
+                  isInWatchlist
+                    ? "bg-custom-orange text-white"
+                    : "bg-custom-input-stroke text-custom-grey"
+                )}
+              />
             </div>
             <Link
               to={`/dashboard/markets/${asset.slug}`}

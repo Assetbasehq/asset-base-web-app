@@ -21,7 +21,7 @@ class WalletService {
     try {
       // const response = await axiosInstance.get(`/wallets`, { params });
       const response = await axios.get(
-        `${config.CLIENT_NEW_API_URL}/wallet/balance`,
+        `${config.WEB3_SERVICE_BASE_URL}/wallet/balance`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -52,6 +52,42 @@ class WalletService {
   getCryptoWalletBalance = async () => {
     try {
       const response = await web3axiosInstance.get(`/wallet/balance`);
+      const data = response.data?.data;
+
+      console.log({ data });
+
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to get crypto wallet balance");
+    }
+  };
+
+  getYellowCardFee = async (params: Record<string, any>) => {
+    try {
+      const response = await web3axiosInstance.get(
+        `/transaction/yellow-card/fee`,
+        {
+          params,
+        }
+      );
+      const data = response.data?.data;
+
+      console.log({ data });
+
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to get crypto wallet balance");
+    }
+  };
+
+  getYellowCardNetworks = async (params: Record<string, any>) => {
+    try {
+      const response = await web3axiosInstance.get(
+        `/transaction/yellow-card/networks`,
+        {
+          params,
+        }
+      );
       const data = response.data?.data;
 
       console.log({ data });

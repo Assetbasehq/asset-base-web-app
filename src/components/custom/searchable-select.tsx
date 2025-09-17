@@ -44,7 +44,7 @@ export function SearchableSelect({
   className,
   icon,
 }: SearchableSelectProps) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const selectedOption = options.find((opt) => opt.value === value);
 

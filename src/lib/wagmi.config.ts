@@ -24,6 +24,29 @@ export const assetChain = {
   },
 };
 
+// constants/tokens.ts
+export const USDT_TOKEN = {
+  symbol: "USDT",
+  name: "Tether USD",
+  address: "0x04f868C5b3F0A100a207c7e9312946cC2c48a7a3",
+  decimals: 18, // USDT usually has 6 decimals
+  logo: "/logos/usdt.svg",
+  abi: [
+    {
+      name: "transfer",
+      type: "function",
+      stateMutability: "nonpayable",
+      inputs: [
+        { name: "recipient", type: "address" },
+        { name: "amount", type: "uint256" },
+      ],
+      outputs: [{ name: "", type: "bool" }],
+    },
+  ],
+};
+
+//scan.assetchain.org/address/0x26E490d30e73c36800788DC6d6315946C4BbEa24
+
 export const wagmiConfig = createConfig({
   chains: [mainnet, sepolia, assetChain],
   connectors: [

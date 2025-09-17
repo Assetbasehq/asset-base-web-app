@@ -51,11 +51,29 @@ export default function NairaDeposit({
   return (
     <div>
       <div className="bg-custom-light-bg p-4 flex flex-col gap-2 rounded-md">
-        <p>Fund Naira Wallet</p>
-        <p>Fund with Naira</p>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 w-fit relative">
+            <img
+              src={state.walletToFund?.logo as string}
+              alt={state.walletToFund?.name}
+              className="w-8"
+            />
+            <img
+              src={state.currencyToFund?.logo as string}
+              alt={state.currencyToFund?.name}
+              className="w-5 absolute -right-2 bottom-0"
+            />
+          </div>
+          <div>
+            <p className="text-sm">
+              Fund {state.walletToFund?.name as string} Wallet
+            </p>
+            <p className="text-sm">Fund with {state.currencyToFund?.name}</p>
+          </div>
+        </div>
       </div>
       <Separator className="my-4 p-0.25 rounded-full" />
-      <div className="flex flex-col gap-1">
+      {/* <div className="flex flex-col gap-1">
         <p className="text-xs">Select Funding method</p>
         <Select
           value={state.fundingMethod || ""}
@@ -76,7 +94,7 @@ export default function NairaDeposit({
             ))}
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
 
       <div className="text-xs mt-4 flex flex-col gap-1">
         <div className="flex justify-between">

@@ -16,6 +16,18 @@ import CustomSelect from "@/components/custom/custom-select";
 import { RiFileList3Line } from "react-icons/ri";
 import { SearchableSelect } from "@/components/custom/searchable-select";
 import countries from "@/data/countries";
+import { useUserWatchlist } from "@/hooks/useWatchlist";
+
+interface FilterOption {
+  key: string;
+  label: string;
+}
+
+const filterOptions: FilterOption[] = [
+  { key: "all", label: "All" },
+  { key: "upcoming", label: "Ending Soon" },
+  { key: "newlyAdded", label: "Newly Added" },
+];
 
 const categories: SelectOption[] = [
   { label: "All", value: "all" },
@@ -42,6 +54,7 @@ const locations: SelectOption[] = [
 ];
 
 export default function Assets() {
+  const [isGrid, setIsGrid] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const type = searchParams.get("type") || "all";
@@ -49,11 +62,11 @@ export default function Assets() {
   const category = searchParams.get("category") || "";
 
   const { data, isLoading, isError } = useGetAssets();
-  const [isGrid, setIsGrid] = useState(true);
+  const { data: watchlist, isLoading: isWatchlistLoading } = useUserWatchlist();
 
   const navigate = useNavigate();
 
-  console.log({ data });
+  console.log({ data, watchlist });
 
   const handleParamsChange = (key: string, value: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -96,39 +109,20 @@ export default function Assets() {
       <div className="lg:flex items-center justify-between w-full">
         <div className="lg:w-1/2 lg:max-w-sm">
           <ul className="flex gap-2 text-custom-white text-sm mt-6 cursor-pointer bg-custom-card py-2 px-2 rounded-sm w-full">
-            <li
-              onClick={() => handleParamsChange("type", "all")}
-              className={cn(
-                `text-custom-grey px-1 sm:px-2 md:px-2 py-1 rounded-sm w-1/3`,
-                {
-                  "text-custom-white bg-custom-base": type === "all",
-                }
-              )}
-            >
-              All
-            </li>
-            <li
-              onClick={() => handleParamsChange("type", "upcoming")}
-              className={cn(
-                `text-custom-grey px-1 sm:px-2 md:px-2 py-1 rounded-sm w-1/3`,
-                {
-                  "text-custom-white bg-custom-base": type === "upcoming",
-                }
-              )}
-            >
-              Ending Soon
-            </li>
-            <li
-              onClick={() => handleParamsChange("type", "newlyAdded")}
-              className={cn(
-                `text-custom-grey px-1 sm:px-2 md:px-2 py-1 rounded-sm w-1/3`,
-                {
-                  "text-custom-white bg-custom-base": type === "newlyAdded",
-                }
-              )}
-            >
-              Newly Added
-            </li>
+            {filterOptions.map((option) => (
+              <li
+                key={option.key}
+                onClick={() => handleParamsChange("type", option.key)}
+                className={cn(
+                  "text-custom-grey px-1 sm:px-2 md:px-2 py-1 rounded-sm w-1/3 transition-colors duration-200",
+                  {
+                    "text-custom-white bg-custom-base": type === option.key,
+                  }
+                )}
+              >
+                {option.label}
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -189,6 +183,7 @@ export default function Assets() {
         isGrid={isGrid}
         isLoading={isLoading}
         isError={isError}
+        userWatchlist={isWatchlistLoading ? [] : watchlist}
       />
     </div>
   );

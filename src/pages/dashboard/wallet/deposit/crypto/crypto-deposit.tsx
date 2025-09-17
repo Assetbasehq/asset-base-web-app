@@ -8,39 +8,39 @@ import { images } from "@/constants/images";
 import { RiCheckLine, RiFileCopyLine } from "react-icons/ri";
 import {
   useAccount,
-  useSendTransaction,
   useWaitForTransactionReceipt,
+  useWriteContract,
 } from "wagmi";
-import { BaseError, parseEther } from "viem";
+import { BaseError, parseUnits } from "viem";
 import { truncateWalletAddress } from "@/lib/utils";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
+import { USDT_TOKEN } from "@/lib/wagmi.config";
 
 interface CryptoDepositProps {
-  goBack: () => void;
+  token?: "USDT" | "USDC" | "cNGN";
 }
 
-export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
+export default function CryptoDeposit({ token }: CryptoDepositProps) {
   const [copied, setCopied] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
+  const {
+    writeContractAsync,
+    data: txHash,
+    error: txError,
+    isPending: isTxPending,
+  } = useWriteContract();
 
-  const { isConnected } = useAccount();
+  const { isLoading: isTxConfirming, isSuccess: isTxConfirmed } =
+    useWaitForTransactionReceipt({
+      hash: txHash,
+    });
+
+  const { isConnected, chain } = useAccount();
 
   const { data: depositData, isLoading } = useRequestCryptoDeposit();
 
   console.log({ depositData });
-
-  const {
-    data: hash,
-    isPending: isTransactionPending,
-    error,
-    sendTransaction,
-  } = useSendTransaction();
-
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
 
   const getErrorMessage = (err: unknown): string => {
     if (!err) return "An unknown error occurred";
@@ -67,13 +67,42 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
     setTimeout(() => setCopied(false), 2000); // reset after 2s
   };
 
-  const handleSendTransaction = () => {
+  const handleSendTransaction = async () => {
     if (!isConnected) return setIsModalOpen(true);
     if (!amountToFund) return;
     const to = depositData?.walletAddress;
-    const value = parseEther(amountToFund.toString()); // Ensure it's clean
 
-    sendTransaction?.({ to, value, gas: BigInt(21000) });
+    try {
+      const finalAmount = parseUnits(
+        amountToFund.toString(),
+        USDT_TOKEN.decimals
+      );
+
+      console.log("=== Transaction Debug ===");
+      console.log("Recipient Address:", depositData?.walletAddress);
+      console.log("USDT Contract Address:", USDT_TOKEN.address);
+      console.log("Final Amount (raw units):", finalAmount);
+      console.log("Wallet Chain:", chain?.id);
+      console.log("=========================");
+
+      console.log("Sending USDT Transfer", {
+        contract: USDT_TOKEN.address,
+        args: [depositData.walletAddress, finalAmount.toString()],
+        abi: USDT_TOKEN.abi,
+        value: finalAmount.toString(),
+      });
+
+      await writeContractAsync({
+        address: USDT_TOKEN.address as `0x${string}`,
+        abi: USDT_TOKEN.abi,
+        functionName: "transfer",
+        args: [depositData.walletAddress, finalAmount.toString()],
+      });
+    } catch (err) {
+      console.error("USDT Transaction error:", err);
+    }
+
+    // sendTransaction?.({ to, value, gas: BigInt(21000) });
   };
 
   const getExplorerLink = (hash: string | undefined) =>
@@ -93,22 +122,22 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
         />
       </div>
 
-      {error && (
+      {txError && (
         <CustomAlert
-          message={`Error: ${getErrorMessage(error)}`}
+          message={`Error: ${getErrorMessage(txError)}`}
           variant="destructive"
         />
       )}
-      {isConfirming && (
+      {isTxConfirming && (
         <CustomAlert message="Waiting for confirmation..." variant="info" />
       )}
-      {isConfirmed && (
+      {isTxConfirmed && (
         <CustomAlert
           message={
             <div>
               <span>Transaction confirmed</span>{" "}
               <a
-                href={getExplorerLink(hash)}
+                href={getExplorerLink(txHash)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 underline text-xs hover:opacity-80"
@@ -121,30 +150,19 @@ export default function CryptoDeposit({ goBack }: CryptoDepositProps) {
         />
       )}
 
-      {/* <Button
-        // disabled
-        variant="outline"
-        className="flex justify-between bg-custom-base w-full rounded-full !py-0"
-      >
-        <small className="text-custom-grey">$1</small>
-        <small>$1,576.03</small>
-      </Button> */}
-
       <div className="flex flex-col gap-2">
         <p className="text-custom-grey text-xs md:text-sm">
           Fund to crypto wallet
         </p>
 
         <Button
-          disabled={!amountToFund || isTransactionPending}
+          disabled={!amountToFund || isTxPending}
           onClick={() => handleSendTransaction()}
           className="py-6 md:py-8 bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer"
         >
           <img src={images.assetBase.logo} alt={images.assetBase.alt} />
           <span>
-            {isTransactionPending
-              ? "Confirming..."
-              : "Fund from my connected wallet"}
+            {isTxPending ? "Confirming..." : "Fund from my connected wallet"}
           </span>
         </Button>
 
