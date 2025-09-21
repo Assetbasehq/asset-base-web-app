@@ -1,198 +1,117 @@
-import { Button } from "@/components/ui/button";
-import WalletBreadCrumb from "../_components/wallet-bread-crumb";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
-import { Card } from "@/components/ui/card";
+import {
+  destinationWalletCurrencies,
+  type DestinationWalletType,
+  type ICurrencyOption,
+  type IWalletType,
+} from "@/interfaces/deposit-interface";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import CryptoDeposit from "./crypto/crypto-deposit";
-import NairaDeposit from "./naira/naira-deposit";
-import {
-  walletOptionMap,
-  walletOptions,
-  type DepositState,
-  type WalletToFundOptions,
-} from "@/interfaces/wallet.interfae";
-import USDDeposit from "./usd/usd-deposit";
+import SelectWallet from "./_components/select-wallet";
+import SelectFundingMethod from "./_components/select-funding-method";
+import DepositWrapper from "./_components/deposit-wraper";
+import { useNavigate } from "react-router";
 
 export default function Deposit() {
-  const [state, setState] = useState<DepositState>({
-    walletToFund: null,
-    currencyToFund: null,
-    fundingMethod: null,
-    stage: 1,
+  const [selectedWallet, setSelectedWallet] =
+    useState<DestinationWalletType | null>(null);
+  const [destinationWallet, setDestinationWallet] =
+    useState<IWalletType | null>(null);
+  const [sourceCurrency, setSourceCurrency] = useState<ICurrencyOption | null>(
+    null
+  );
+
+  const [stage, setStage] = useState(1);
+
+  const navigate = useNavigate();
+
+  const handleSelectWallet = (wallet: IWalletType) => {
+    console.log({ wallet });
+    setSelectedWallet(wallet.name.toUpperCase() as DestinationWalletType);
+    setDestinationWallet(wallet);
+    setSourceCurrency(null);
+  };
+
+  console.log({
+    selectedWallet,
+    destinationWallet,
+    sourceCurrency,
   });
 
-  const goBack = () => setState((prev) => ({ ...prev, stage: prev.stage - 1 }));
-  const nextStage = () =>
-    setState((prev) => ({ ...prev, stage: prev.stage + 1 }));
+  const availableCurrencies = selectedWallet
+    ? destinationWalletCurrencies[selectedWallet] || []
+    : [];
 
-  const renderCurrentStep = () => {
-    // STEP 1: Wallet and Currency Selection
-    if (state.stage === 1) {
-      return (
-        <div>
-          <div>
-            <h2>Wallet to fund</h2>
-            <div className="flex items-stretch gap-4 mt-1 w-full">
-              {walletOptions.map((option) => (
-                <Card
-                  key={option.name}
-                  className={cn(
-                    "p-2 md:p-4 border-2 bg-custon-input-fill border-custom-input-stroke w-1/3 cursor-pointer",
-                    {
-                      "border-custom-orange":
-                        state.walletToFund?.name.toUpperCase() ===
-                        option.name.toUpperCase(),
-                    }
-                  )}
-                  onClick={() =>
-                    setState((prev) => ({
-                      ...prev,
-                      walletToFund: option,
-                      currencyToFund: null,
-                    }))
-                  }
-                >
-                  <span className="bg-custom-card w-fit p-2 rounded-full">
-                    <img src={option.logo} alt={option.name} className="w-6" />
-                  </span>
-                  <p className="text-xs md:text-sm font-semibold mt-auto">
-                    {option.name}
-                  </p>
-                </Card>
-              ))}
-            </div>
-          </div>
+  const handleSelectCurrency = (currencyCode: string) => {
+    console.log({ currencyCode });
 
-          <Separator className="my-4 p-0.25 rounded-full" />
+    if (!selectedWallet) return;
 
-          <div>
-            <h2 className="text-sm">Select Currency to fund</h2>
-            <div className="flex items-center gap-4 mt-1 w-full">
-              <Select
-                value={state.currencyToFund?.currencyCode || ""}
-                onValueChange={(value) => {
-                  if (!state.walletToFund) return;
+    const selected = availableCurrencies.find(
+      (currency) => currency.currencyCode === currencyCode
+    );
 
-                  const key =
-                    state.walletToFund.name.toUpperCase() as WalletToFundOptions;
-                  const selectedCurrency = walletOptionMap[key].find(
-                    (option) => option.currencyCode === value
-                  );
+    console.log({ selected });
 
-                  if (selectedCurrency) {
-                    setState((prev) => ({
-                      ...prev,
-                      currencyToFund: selectedCurrency,
-                    }));
-                  }
-                }}
-              >
-                <SelectTrigger className="w-full py-6 rounded">
-                  <SelectValue
-                    placeholder={
-                      state.walletToFund
-                        ? walletOptionMap[
-                            state.walletToFund.name.toUpperCase() as WalletToFundOptions
-                          ][0].name
-                        : "Please select a destination wallet"
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {state.walletToFund &&
-                    walletOptionMap[
-                      state.walletToFund.name.toUpperCase() as WalletToFundOptions
-                    ].map((option) => (
-                      <SelectItem
-                        key={option.currencyCode}
-                        value={option.currencyCode}
-                      >
-                        <div className="flex items-center gap-2">
-                          <img
-                            src={option.logo}
-                            alt={option.name}
-                            className="w-5"
-                          />
-                          <span>{option.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Button
-            disabled={!state.walletToFund || !state.currencyToFund}
-            onClick={() => setState((prev) => ({ ...prev, stage: 2 }))}
-            className="btn-primary rounded-full py-4 md:py-6 mt-6 w-full text-xs"
-          >
-            PROCEED TO DEPOSIT
-          </Button>
-        </div>
-      );
-    }
-
-    // STEP 2+: Render dynamic deposit flow
-    const walletName =
-      state.walletToFund?.name.toUpperCase() as WalletToFundOptions;
-
-    switch (walletName) {
-      case "CRYPTO":
-        return <CryptoDeposit />;
-
-      case "NAIRA":
-        return (
-          <NairaDeposit
-            state={state}
-            setState={(updatedState: Partial<DepositState>) =>
-              setState({ ...state, ...updatedState })
-            }
-            prevStage={goBack}
-            nextStage={nextStage}
-          />
-        );
-
-      case "USD":
-        return (
-          <USDDeposit
-            state={state}
-            setState={(updatedState: Partial<DepositState>) =>
-              setState({ ...state, ...updatedState })
-            }
-          />
-        );
-
-      default:
-        return <div>Please select a wallet type</div>;
+    if (selected) {
+      setSourceCurrency(selected);
     }
   };
 
+  const handleNext = () => {
+    console.log({ destinationWallet, sourceCurrency });
+
+    if (!destinationWallet || !sourceCurrency) return;
+
+    if (destinationWallet.name.toUpperCase() === "CRYPTO") {
+      navigate(
+        `/dashboard/wallet/deposit/${destinationWallet.name.toLowerCase()}/${sourceCurrency.currencyCode.toLowerCase()}`
+      );
+    }
+
+    //bring up stage 2
+    setStage(2);
+  };
+
+  const handleGoBack =
+    stage === 1
+      ? undefined
+      : () => {
+          setStage(1);
+        };
+
   return (
-    <div className="text-custom-white-text flex flex-col gap-4">
-      <WalletBreadCrumb stage={state.stage} goBack={goBack} />
+    <DepositWrapper goBack={handleGoBack}>
+      <div className="text-custom-white-text flex flex-col gap-4">
+        <div className="flex flex-col gap-8 text-start w-full max-w-md mx-auto">
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold">Deposit to wallet</h2>
+            <p className="text-muted-foreground text-sm">
+              Fund your wallet to start trading
+            </p>
+          </div>
 
-      <div className="flex flex-col gap-8 text-start w-full max-w-md mx-auto">
-        <div>
-          <h2 className="text-xl font-semibold">Deposit to wallet</h2>
-          <p className="text-muted-foreground text-sm">
-            Fund your wallet to start trading
-          </p>
+          <AnimatedWrapper animationKey={String(stage)}>
+            {stage === 1 && (
+              <SelectWallet
+                selectedWallet={selectedWallet}
+                destinationWallet={destinationWallet}
+                sourceCurrency={sourceCurrency}
+                availableCurrencies={availableCurrencies}
+                onSelectWallet={handleSelectWallet}
+                onSelectCurrency={handleSelectCurrency}
+                handleNext={handleNext}
+              />
+            )}
+
+            {stage === 2 && destinationWallet && (
+              <SelectFundingMethod
+                destinationWalletCode={destinationWallet?.currencyCode}
+                sourceCurrencyCode={sourceCurrency?.currencyCode}
+              />
+            )}
+          </AnimatedWrapper>
         </div>
-
-        <AnimatedWrapper animationKey={String(state.stage)}>
-          {renderCurrentStep()}
-        </AnimatedWrapper>
       </div>
-    </div>
+    </DepositWrapper>
   );
 }

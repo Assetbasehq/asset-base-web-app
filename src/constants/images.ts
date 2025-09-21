@@ -5,6 +5,8 @@ import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import ghanaFlag from "@/assets/images/ghana-flag.svg";
 import ugandanFlag from "@/assets/images/uganda-flag.svg";
 import kenyanFlag from "@/assets/images/kenya-flag.svg";
+import usdc from "@/assets/images/usdc.svg";
+import cNGN from "@/assets/images/cngn.svg";
 
 export const flags = {
   usa: {
@@ -16,11 +18,6 @@ export const flags = {
     name: "Nigeria",
     flag: nigerianFlag,
     alt: "nigeria flag",
-  },
-  tetherUSDT: {
-    name: "Tether",
-    flag: tetherUSDT,
-    alt: "tether usd icon",
   },
   ghana: {
     name: "Ghana",
@@ -37,6 +34,11 @@ export const flags = {
     flag: kenyanFlag,
     alt: "kenya flag",
   },
+  tetherUSDT: {
+    name: "Tether",
+    flag: tetherUSDT,
+    alt: "tether usd icon",
+  },
 };
 
 export const images = {
@@ -44,5 +46,20 @@ export const images = {
     name: "Assetbase",
     logo: assetBaseLogo,
     alt: "asset base logo",
+  },
+  tetherUSDT: {
+    name: "Tether",
+    logo: tetherUSDT,
+    alt: "tether usd icon",
+  },
+  USDC: {
+    name: "USDC",
+    logo: usdc,
+    alt: "usdc icon",
+  },
+  cNGN: {
+    name: "cNGN",
+    logo: cNGN,
+    alt: "cNGN icon",
   },
 };

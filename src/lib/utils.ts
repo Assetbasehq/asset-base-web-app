@@ -148,7 +148,18 @@ export function toCompactAmount(amount: number, decimals = 1): string {
   return `${sign}${absValue.toFixed(0)}`;
 }
 
-export function truncateWalletAddress(address: string | null | undefined, length = 8): string {
+export function truncateWalletAddress(
+  address: string | null | undefined,
+  length = 8
+): string {
   if (address == null || address.length < length * 2) return "";
   return `${address.slice(0, length)}...${address.slice(-length)}`;
+}
+
+export function generatePaymentURL(
+  destWalletCode: string,
+  sourceCurrencyCode: string,
+  paymentMethod: string
+): string {
+  return `/dashboard/wallet/deposit/${destWalletCode}/${sourceCurrencyCode}/${paymentMethod}`;
 }

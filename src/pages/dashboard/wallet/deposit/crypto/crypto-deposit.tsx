@@ -15,12 +15,9 @@ import { BaseError, parseUnits } from "viem";
 import { truncateWalletAddress } from "@/lib/utils";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
 import { USDT_TOKEN } from "@/lib/wagmi.config";
+import DepositWrapper from "../_components/deposit-wraper";
 
-interface CryptoDepositProps {
-  token?: "USDT" | "USDC" | "cNGN";
-}
-
-export default function CryptoDeposit({ token }: CryptoDepositProps) {
+export default function CryptoDeposit() {
   const [copied, setCopied] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
@@ -109,114 +106,122 @@ export default function CryptoDeposit({ token }: CryptoDepositProps) {
     `https://scan-testnet.assetchain.org/tx/${hash}`;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <Label className="text-custom-grey text-xs md:text-sm">
-          Enter amount to fund
-        </Label>
-        <Input
-          onChange={(e) => handleAmountChange(e.target.value)}
-          type="text"
-          className="py-6 w-full"
-          placeholder="10"
-        />
-      </div>
-
-      {txError && (
-        <CustomAlert
-          message={`Error: ${getErrorMessage(txError)}`}
-          variant="destructive"
-        />
-      )}
-      {isTxConfirming && (
-        <CustomAlert message="Waiting for confirmation..." variant="info" />
-      )}
-      {isTxConfirmed && (
-        <CustomAlert
-          message={
-            <div>
-              <span>Transaction confirmed</span>{" "}
-              <a
-                href={getExplorerLink(txHash)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline text-xs hover:opacity-80"
-              >
-                view
-              </a>
-            </div>
-          }
-          variant="success"
-        />
-      )}
-
-      <div className="flex flex-col gap-2">
-        <p className="text-custom-grey text-xs md:text-sm">
-          Fund to crypto wallet
-        </p>
-
-        <Button
-          disabled={!amountToFund || isTxPending}
-          onClick={() => handleSendTransaction()}
-          className="py-6 md:py-8 bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer"
-        >
-          <img src={images.assetBase.logo} alt={images.assetBase.alt} />
-          <span>
-            {isTxPending ? "Confirming..." : "Fund from my connected wallet"}
-          </span>
-        </Button>
-
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t my-6">
-          <span className="bg-background dark:bg-custom-card text-muted-foreground relative z-10 px-2 text-xs">
-            OR
-          </span>
+    <DepositWrapper>
+      <div className="flex flex-col gap-4 max-w-4xl">
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold">Fund With Crypto</h2>
+          <p className="text-muted-foreground text-sm">
+            Fund your wallet to start trading
+          </p>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label className="text-custom-grey text-xs md:text-sm">
+            Enter amount to fund
+          </Label>
+          <Input
+            onChange={(e) => handleAmountChange(e.target.value)}
+            type="text"
+            className="py-6 w-full"
+            placeholder="10"
+          />
         </div>
 
-        <div className="py-4 px-4 rounded-md bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer">
-          <div className="flex items-center gap-2">
+        {txError && (
+          <CustomAlert
+            message={`Error: ${getErrorMessage(txError)}`}
+            variant="destructive"
+          />
+        )}
+        {isTxConfirming && (
+          <CustomAlert message="Waiting for confirmation..." variant="info" />
+        )}
+        {isTxConfirmed && (
+          <CustomAlert
+            message={
+              <div>
+                <span>Transaction confirmed</span>{" "}
+                <a
+                  href={getExplorerLink(txHash)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline text-xs hover:opacity-80"
+                >
+                  view
+                </a>
+              </div>
+            }
+            variant="success"
+          />
+        )}
+
+        <div className="flex flex-col gap-2">
+          <p className="text-custom-grey text-xs md:text-sm">
+            Fund to crypto wallet
+          </p>
+
+          <Button
+            disabled={!amountToFund || isTxPending}
+            onClick={() => handleSendTransaction()}
+            className="py-6 md:py-8 bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer"
+          >
             <img src={images.assetBase.logo} alt={images.assetBase.alt} />
-            <div className="flex flex-col items-start">
-              <p className="text-xs md:text-sm">
-                {" "}
-                Send directly to my AssetBase wallet
-              </p>
-              <p className="text-custom-white flex items-center gap-2 text-xs">
-                {isLoading ? (
-                  "..."
-                ) : (
-                  <>
-                    <small className="sm:hidden">
-                      {truncateWalletAddress(depositData?.walletAddress, 12)}
-                    </small>
-                    <small className="hidden sm:block">
-                      {depositData?.walletAddress}
-                    </small>
-                  </>
-                )}{" "}
-                <span className=" cursor-pointer">
-                  {copied ? (
-                    <>
-                      <RiCheckLine
-                        onClick={handleCopyAddress}
-                        className="w-4 h-4 cursor-pointer"
-                      />
-                    </>
+            <span>
+              {isTxPending ? "Confirming..." : "Fund from my connected wallet"}
+            </span>
+          </Button>
+
+          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t my-6">
+            <span className="bg-background dark:bg-custom-card text-muted-foreground relative z-10 px-2 text-xs">
+              OR
+            </span>
+          </div>
+
+          <div className="py-4 px-4 rounded-md bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer">
+            <div className="flex items-center gap-2">
+              <img src={images.assetBase.logo} alt={images.assetBase.alt} />
+              <div className="flex flex-col items-start">
+                <p className="text-xs md:text-sm">
+                  {" "}
+                  Send directly to my AssetBase wallet
+                </p>
+                <p className="text-custom-white flex items-center gap-2 text-xs">
+                  {isLoading ? (
+                    "..."
                   ) : (
                     <>
-                      <RiFileCopyLine
-                        className="w-4 h-4"
-                        onClick={handleCopyAddress}
-                      />
+                      <small className="sm:hidden">
+                        {truncateWalletAddress(depositData?.walletAddress, 12)}
+                      </small>
+                      <small className="hidden sm:block">
+                        {depositData?.walletAddress}
+                      </small>
                     </>
-                  )}
-                </span>
-              </p>
+                  )}{" "}
+                  <span className=" cursor-pointer">
+                    {copied ? (
+                      <>
+                        <RiCheckLine
+                          onClick={handleCopyAddress}
+                          className="w-4 h-4 cursor-pointer"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <RiFileCopyLine
+                          className="w-4 h-4"
+                          onClick={handleCopyAddress}
+                        />
+                      </>
+                    )}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <ConnectWalletModal open={isModalOpen} setOpen={setIsModalOpen} />
-    </div>
+        <ConnectWalletModal open={isModalOpen} setOpen={setIsModalOpen} />
+      </div>
+    </DepositWrapper>
   );
 }

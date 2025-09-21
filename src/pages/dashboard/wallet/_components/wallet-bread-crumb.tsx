@@ -2,21 +2,10 @@ import { Button } from "@/components/ui/button";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router";
 
-export default function WalletBreadCrumb({
-  stage,
-  goBack,
-}: {
-  stage?: number;
-  goBack?: () => void;
-}) {
+export default function WalletBreadCrumb({ goBack }: { goBack?: () => void }) {
   const location = useLocation();
-  const segments = location.pathname.split("/").filter(Boolean);
 
   const naviagate = useNavigate();
-
-  const formattedSegments = segments.map((seg) =>
-    seg.toLowerCase() === "dashboard" ? "home" : seg
-  );
 
   return (
     <div className="flex items-center justify-between">
@@ -27,9 +16,8 @@ export default function WalletBreadCrumb({
         >
           <Button
             onClick={() => {
-              if (stage === 1) return naviagate("/dashboard/wallet");
-              if (!goBack) return naviagate("/dashboard/wallet");
-              goBack?.();
+              if (goBack) return goBack?.();
+              return naviagate(-1);
             }}
           >
             <RiArrowLeftLine />
@@ -40,9 +28,11 @@ export default function WalletBreadCrumb({
 
       {/* Breadcrumb */}
       <div className="flex items-center p-2 bg-custom-light-bg rounded-sm">
-        {formattedSegments.map((seg, idx) => {
-          const isLast = idx === formattedSegments.length - 1;
-          const to = "/" + segments.slice(0, idx + 1).join("/");
+        {["home", "wallet", "deposit"].map((seg, idx) => {
+          const isLast = idx === 2;
+          const to =
+            "/" +
+            ["dashboard", "wallet", "deposit"].slice(0, idx + 1).join("/");
 
           return (
             <div key={idx} className="flex items-center gap-2 ">
