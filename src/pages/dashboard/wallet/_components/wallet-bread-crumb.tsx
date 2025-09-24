@@ -8,7 +8,7 @@ export default function WalletBreadCrumb({ goBack }: { goBack?: () => void }) {
   const naviagate = useNavigate();
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between mb-8">
       <div className="flex justify-start items-start">
         <Button
           asChild

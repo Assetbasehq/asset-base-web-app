@@ -29,7 +29,7 @@ export default function TotalBalance() {
 
   const { data: cryptoWalletBalance } = useGetCryptoBalance();
 
-  console.log({ cryptoWalletBalance });
+  console.log({ cryptoWalletBalance, data });
 
   const handleCurrencyChange = (value: string) => {
     setCurrency(value as "usd" | "ngn");
@@ -39,13 +39,20 @@ export default function TotalBalance() {
     let finalAmount = 0;
 
     if (cryptoWalletBalance) {
-      finalAmount =
-        cryptoWalletBalance?.assets[0]?.balance +
-        cryptoWalletBalance?.assets[1]?.balance;
+      const totalBalance = cryptoWalletBalance.assets.reduce(
+        (sum: number, asset: { balance: string | number }) => {
+          return sum + Number(asset.balance || 0);
+        },
+        0
+      );
+
+      finalAmount += totalBalance;
     }
     if (data) {
       finalAmount += data.balance;
     }
+
+    console.log({ finalAmount });
 
     return finalAmount;
   };

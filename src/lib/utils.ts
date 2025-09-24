@@ -159,7 +159,29 @@ export function truncateWalletAddress(
 export function generatePaymentURL(
   destWalletCode: string,
   sourceCurrencyCode: string,
-  paymentMethod: string
+  channel: string
 ): string {
-  return `/dashboard/wallet/deposit/${destWalletCode}/${sourceCurrencyCode}/${paymentMethod}`;
+  let lastSegment = "";
+
+  switch (channel.toLowerCase()) {
+    case "card":
+    case "ngn-card":
+      lastSegment = "ngn-card";
+      break;
+
+    case "bank_transfer":
+      lastSegment = "bank-transfer";
+      break;
+
+    case "mobile_money":
+      lastSegment = "mobile-money";
+      break;
+
+    default:
+      // fallback for unknown methods
+      lastSegment = "other";
+      break;
+  }
+
+  return `/dashboard/wallet/deposit/${destWalletCode}/${sourceCurrencyCode}/${lastSegment}`;
 }

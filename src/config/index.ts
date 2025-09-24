@@ -10,6 +10,7 @@ const env = {
   DOJAH_APP_ID: import.meta.env.VITE_DOJAH_APP_ID ?? "",
   DOJAH_PUBLIC_KEY: import.meta.env.VITE_DOJAH_PUBLIC_KEY ?? "",
   DOJAH_WIDGET_ID: import.meta.env.VITE_DOJAH_WIDGET_ID ?? "",
+  FLUTTERWAVE_PUBLIC_KEY: import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY ?? "",
 };
 
 export default env;

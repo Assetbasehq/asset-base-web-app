@@ -113,4 +113,29 @@ export class FormatService {
     }
     return str;
   }
+
+  /**
+   * Formats a string:
+   * - Leaves all-uppercase strings as is.
+   * - Converts snake_case to "Capitalized Words".
+   *
+   * Examples:
+   *   "bank_transfer" -> "Bank Transfer"
+   *   "MOBILE_MONEY" -> "MOBILE_MONEY"
+   */
+  static formatSelectText(text: string): string {
+    if (!text) return "";
+
+    // If the entire text is already uppercase, return as is
+    if (text === text.toUpperCase()) {
+      return text;
+    }
+
+    // Replace underscores with spaces and capitalize each letter in each word
+    return text
+      .replace(/_/g, " ") // Replace underscores with spaces
+      .split(" ") // Split into words
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  }
 }

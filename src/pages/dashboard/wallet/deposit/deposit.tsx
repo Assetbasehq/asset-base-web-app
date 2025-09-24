@@ -31,18 +31,12 @@ export default function Deposit() {
     setSourceCurrency(null);
   };
 
-  console.log({
-    selectedWallet,
-    destinationWallet,
-    sourceCurrency,
-  });
-
   const availableCurrencies = selectedWallet
     ? destinationWalletCurrencies[selectedWallet] || []
     : [];
 
   const handleSelectCurrency = (currencyCode: string) => {
-    console.log({ currencyCode });
+    // console.log({ currencyCode });
 
     if (!selectedWallet) return;
 
@@ -50,7 +44,7 @@ export default function Deposit() {
       (currency) => currency.currencyCode === currencyCode
     );
 
-    console.log({ selected });
+    // console.log({ selected });
 
     if (selected) {
       setSourceCurrency(selected);
@@ -58,7 +52,7 @@ export default function Deposit() {
   };
 
   const handleNext = () => {
-    console.log({ destinationWallet, sourceCurrency });
+    // console.log({ destinationWallet, sourceCurrency });
 
     if (!destinationWallet || !sourceCurrency) return;
 

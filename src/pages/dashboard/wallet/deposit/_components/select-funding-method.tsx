@@ -8,16 +8,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import {
-  fundingMethodsMap,
-  type FundingMethod,
-} from "@/interfaces/deposit-interface";
 import { CurrencyService } from "@/services/currency-service";
-import { FormatService } from "@/services/format-service";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router";
+import { Form, useNavigate } from "react-router";
 import { generatePaymentURL } from "@/lib/utils";
+import type { IOMethod } from "@/interfaces/wallet.interfae";
+import { FormatService } from "@/services/format-service";
+import { useIoMethods } from "@/hooks/useIoMethod";
+import {
+  getAvailableIOMethods,
+  getIOMethodDisplayName,
+  getIOMethodFee,
+  getIOMethodRate,
+} from "@/helpers/deposit-methods";
 
 interface FundingMethodProps {
   destinationWalletCode: string | null;
@@ -28,9 +32,7 @@ export default function SelectFundingMethod({
   destinationWalletCode,
   sourceCurrencyCode,
 }: FundingMethodProps) {
-  const [selectedMethod, setSelectedMethod] = useState<FundingMethod | null>(
-    null
-  );
+  const [selectedMethod, setSelectedMethod] = useState<IOMethod | null>(null);
 
   const navigate = useNavigate();
 
@@ -42,35 +44,50 @@ export default function SelectFundingMethod({
       }),
   });
 
-  const { data: io } = useQuery({
-    queryKey: ["io-methods"],
-    queryFn: () =>
-      configService.getSupportedCurrencies({
-        // filter_key: "intent",
-        // filter_value: "funding",
-      }),
+  const { data: ioMethods } = useIoMethods({
+    filter_key: "intent",
+    filter_value: "funding",
   });
 
-  console.log({ fundingMethods: data, io });
+  // console.log({ fundingMethods: data, ioMethods });
+
+  // Available filtered IO methods
+  const availableOptions = useMemo(
+    () =>
+      getAvailableIOMethods(
+        ioMethods || [],
+        destinationWalletCode,
+        sourceCurrencyCode
+      ),
+    [ioMethods, destinationWalletCode, sourceCurrencyCode]
+  );
+
+  console.log({ availableOptions });
 
   // Normalize lowercase wallet codes to uppercase
   const normalizedDest = destinationWalletCode?.toUpperCase();
   const normalizedSource = sourceCurrencyCode?.toUpperCase();
 
-  // Dynamically fetch available funding methods
-  const fundingMethods = useMemo<FundingMethod[]>(() => {
-    return (
-      fundingMethodsMap[normalizedDest as string] ||
-      fundingMethodsMap[normalizedSource as string] ||
-      []
-    );
-  }, [normalizedDest, normalizedSource]);
+  const handleSelectMethod = (value: string) => {
+    const [channel, networkName] = value.split("|");
 
-  const handleSelectMethod = (method: string) => {
-    console.log({ selectedMethod });
-    const foundMethod = fundingMethods.find((m) => m.type === method);
+    console.log({ channel, networkName });
 
-    setSelectedMethod(foundMethod as FundingMethod);
+    const method = availableOptions.find((m) => {
+      const matchBase =
+        m.channel === channel &&
+        m.currency.code.toLowerCase() === normalizedSource?.toLowerCase() &&
+        m.destination_wallets.includes(normalizedDest?.toLowerCase() as string);
+
+      // If mobile money, also match network_name
+      if (channel === "mobile_money") {
+        return matchBase && m.network_name === networkName;
+      }
+
+      return matchBase;
+    });
+
+    setSelectedMethod(method || null);
   };
 
   const handleProceed = () => {
@@ -86,13 +103,14 @@ export default function SelectFundingMethod({
     const url = generatePaymentURL(
       normalizedDest?.toLowerCase() as string,
       normalizedSource?.toLowerCase() as string,
-      "ngn-card"
+      selectedMethod.channel
     );
-
     navigate(url);
+
+    return;
   };
 
-  console.log({ destinationWalletCode, sourceCurrencyCode });
+  // console.log({ destinationWalletCode, sourceCurrencyCode });
 
   return (
     <div>
@@ -123,25 +141,46 @@ export default function SelectFundingMethod({
 
       <div className="flex flex-col gap-1">
         <p className="text-xs">Select Funding method</p>
-        <Select value={selectedMethod?.type} onValueChange={handleSelectMethod}>
+        <Select
+          value={
+            selectedMethod
+              ? selectedMethod.channel === "mobile_money"
+                ? `${selectedMethod.channel}|${selectedMethod.network_name}`
+                : selectedMethod.channel
+              : "" // Always controlled
+          }
+          onValueChange={handleSelectMethod}
+        >
           <SelectTrigger className="w-full py-6 rounded">
-            <SelectValue placeholder={"Select an option"} />
+            <SelectValue placeholder="Select an option">
+              {selectedMethod
+                ? selectedMethod.channel === "mobile_money"
+                  ? selectedMethod.network_name // Show only network name
+                  : FormatService.formatSelectText(
+                      getIOMethodDisplayName(selectedMethod)
+                    ) // e.g., card
+                : "Select an option"}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            {fundingMethods.map((method) => (
-              <SelectItem key={method.type} value={method.type}>
-                <div className="flex items-center gap-2">
-                  <div>
-                    <p className="text-sm font-medium">{method.label}</p>
-                    {method.description && (
-                      <p className="text-xs text-muted-foreground">
-                        {method.description}
-                      </p>
-                    )}
+            {availableOptions.map((method: IOMethod, i) => {
+              const value =
+                method.channel === "mobile_money"
+                  ? `${method.channel}|${method.network_name}`
+                  : method.channel;
+
+              return (
+                <SelectItem key={i} value={value}>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium capitalize">
+                      {FormatService.formatSelectText(
+                        getIOMethodDisplayName(method)
+                      )}
+                    </p>
                   </div>
-                </div>
-              </SelectItem>
-            ))}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>
@@ -151,7 +190,7 @@ export default function SelectFundingMethod({
           <div className="flex justify-between">
             <p>RATE</p>
             <p className="font-semibold">
-              $1 ~ {selectedMethod?.rate}%
+              $1 ~ {getIOMethodRate(selectedMethod)}
               {/* {isLoading
               ? "..."
               : FormatService.formatWithCommas(data?.rate / 100)} */}
@@ -159,18 +198,12 @@ export default function SelectFundingMethod({
           </div>
           <div className="flex justify-between">
             <p>Fee</p>
-            <p className="font-semibold">
-              {false
-                ? "..."
-                : FormatService.formatWithCommas(
-                    (selectedMethod?.feePercentage as number) / 100
-                  )}
-            </p>
+            <p className="font-semibold">{getIOMethodFee(selectedMethod)}</p>
           </div>
-          {/* <div className="flex justify-between">
-          <p>Timeline</p>
-          <p className="font-semibold">5 - 15mins</p>
-        </div> */}
+          <div className="flex justify-between">
+            <p>Timeline</p>
+            <p className="font-semibold">{selectedMethod.timeline}</p>
+          </div>
         </div>
       )}
 

@@ -18,7 +18,6 @@ export const useGetWallet = ({ currency }: { currency: string }) => {
 };
 
 //Crypto
-
 export const useRequestCryptoDeposit = () => {
   return useQuery<any, Error>({
     queryKey: ["crypto-deposit"],
