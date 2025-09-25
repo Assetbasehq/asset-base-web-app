@@ -161,6 +161,8 @@ export function generatePaymentURL(
   sourceCurrencyCode: string,
   channel: string
 ): string {
+  console.log(channel);
+
   let lastSegment = "";
 
   switch (channel.toLowerCase()) {
@@ -168,9 +170,8 @@ export function generatePaymentURL(
     case "ngn-card":
       lastSegment = "ngn-card";
       break;
-
-    case "bank_transfer":
-      lastSegment = "bank-transfer";
+    case "risevest":
+      lastSegment = "rise-wallet";
       break;
 
     case "mobile_money":

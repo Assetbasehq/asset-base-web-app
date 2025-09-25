@@ -16,7 +16,7 @@ export default function DepositWrapper({ goBack, children }: WrapperProps) {
       <WalletBreadCrumb goBack={goBack} />
 
       <AnimatedWrapper animationKey={location.pathname}>
-        <div className="flex flex-col gap-8 text-start w-full max-w-md mx-auto">
+        <div className="flex flex-col gap-4 text-start w-full max-w-md mx-auto">
           {children}
         </div>
       </AnimatedWrapper>

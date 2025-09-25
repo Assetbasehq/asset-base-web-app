@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import {
   RiAddLine,
   RiArrowLeftRightLine,
@@ -17,7 +17,7 @@ import {
   RiEyeOffLine,
 } from "react-icons/ri";
 import { useState } from "react";
-import { useGetWallet } from "@/hooks/useWallet";
+import { useGetCryptoBalance, useGetWallet } from "@/hooks/useWallet";
 import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
 // import { Skeleton } from "@/components/ui/skeleton";
@@ -28,8 +28,34 @@ export default function AccountSummary() {
 
   const { data, isLoading, isError } = useGetWallet({ currency });
 
+  const { data: cryptoWalletBalance } = useGetCryptoBalance();
+
   const handleCurrencyChange = (value: string) => {
     setCurrency(value as "usd" | "ngn");
+  };
+
+  console.log({ data, cryptoWalletBalance });
+
+  const handleGetAllBalance = () => {
+    let finalAmount = 0;
+
+    if (cryptoWalletBalance) {
+      const totalBalance = cryptoWalletBalance.assets.reduce(
+        (sum: number, asset: { balance: string | number }) => {
+          return sum + Number(asset.balance || 0);
+        },
+        0
+      );
+
+      finalAmount += totalBalance;
+    }
+    if (data) {
+      finalAmount += data.balance;
+    }
+
+    console.log({ finalAmount });
+
+    return finalAmount;
   };
 
   if (isLoading) {
@@ -47,7 +73,7 @@ export default function AccountSummary() {
                   <h2 className="text-2xl font-semibold">
                     {isBalanceVisible
                       ? currency === "usd"
-                        ? FormatService.formatToUSD(data?.balance || 0)
+                        ? FormatService.formatToUSD(handleGetAllBalance() || 0)
                         : FormatService.formatToNaira(data?.balance || 0)
                       : "*****"}
                   </h2>

@@ -170,6 +170,7 @@
   --color-custom-ticker-red: var(--custom-ticker-red);
   --color-custom-orange: var(--custom-orange);
   --color-custom-orange-10: var(--custom-orange-10);
+  --color-custom-rise-green: var(--custom-rise-green);
 
   /* Fixed Colors  */
   --color-fixed-white: #fdfdfd;
@@ -304,7 +305,6 @@
   --custom-black: #000000;
   --custom-base: #0a0d14;
   --custom-card: #161922;
-  /* --custom-card-inner: #222431; */
   --custom-input-stroke: #525866;
   --custom-input-fill: #20232d;
   --custom-input-mute: #31353f;
@@ -318,6 +318,7 @@
   --custom-ticker-green: #2ea678;
   --custom-ticker-red: #b31533;
   --custom-orange-10: #1d1512;
+  --custom-rise-green: #0becf81a;
 }
 
 @layer base {
@@ -340,7 +341,7 @@
   @apply border-2 border-custom-orange bg-white text-custom-orange 
   hover:bg-gray-50
    dark:bg-custom-orange dark:text-custom-white 
-   dark:hover:bg-custom-orange/80 
+   dark:hover:bg-custom-orange/80 dark:hover:border-custom-orange/80
    cursor-pointer
    transition-all ease-in-out duration-300;
 }

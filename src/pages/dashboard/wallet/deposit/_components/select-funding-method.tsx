@@ -94,8 +94,13 @@ export default function SelectFundingMethod({
     console.log({
       normalizedDest,
       normalizedSource,
-      selectedMethod: "ngn-card",
+      channel:
+        selectedMethod?.channel === "api_vendor"
+          ? selectedMethod.provider
+          : selectedMethod?.channel,
     });
+
+    // return;
 
     if (!normalizedDest && !normalizedSource) return;
     if (!selectedMethod) return;
@@ -103,7 +108,9 @@ export default function SelectFundingMethod({
     const url = generatePaymentURL(
       normalizedDest?.toLowerCase() as string,
       normalizedSource?.toLowerCase() as string,
-      selectedMethod.channel
+      selectedMethod?.channel === "api_vendor"
+        ? selectedMethod.provider
+        : selectedMethod?.channel
     );
     navigate(url);
 

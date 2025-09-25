@@ -9,7 +9,7 @@ export type WalletType =
   | "bank_account"
   | "mobile_money";
 
-interface TransactionRequest {
+export interface ITransactionRequest {
   amount: string | number;
   provider?: string;
   currency: string;
@@ -26,7 +26,7 @@ interface TransactionRequest {
 }
 
 class TransactionRequestService {
-  initiateNewTransaction = async (payload: TransactionRequest) => {
+  initiateNewTransaction = async (payload: ITransactionRequest) => {
     try {
       const response = await axiosInstance.post(
         `/transaction-requests`,

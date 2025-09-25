@@ -1,8 +1,19 @@
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { AlertCircleIcon, CircleCheckBig, Info, XCircle } from "lucide-react";
+import {
+  AlertCircleIcon,
+  CircleCheckBig,
+  Info,
+  XCircle,
+  AlertTriangle,
+} from "lucide-react";
 
-export type AlertVariant = "destructive" | "default" | "success" | "info";
+export type AlertVariant =
+  | "destructive"
+  | "default"
+  | "success"
+  | "info"
+  | "warning";
 
 // export interface AlertMessage {
 //   message: string; // Optional heading
@@ -22,6 +33,15 @@ const variantStyles: Record<AlertVariant, string> = {
   default: "bg-blue-50 border-blue-300 text-blue-700",
   success: "bg-green-50 border-green-300 text-green-700",
   info: "bg-slate-50 border-slate-300 text-slate-700",
+  warning: "bg-custom-orange-10 border-custom-orange-10 text-custom-grey",
+};
+
+const iconStyles: Record<AlertVariant, string> = {
+  destructive: "bg-rose-50 border-rose-300 text-rose-700",
+  default: "bg-blue-50 border-blue-300 text-blue-700",
+  success: "bg-green-50 border-green-300 text-green-700",
+  info: "bg-slate-50 border-slate-300 text-slate-700",
+  warning: "bg-custom-card text-custom-orange",
 };
 
 const variantIcons: Record<AlertVariant, React.ElementType> = {
@@ -29,6 +49,7 @@ const variantIcons: Record<AlertVariant, React.ElementType> = {
   default: Info,
   success: CircleCheckBig,
   info: XCircle,
+  warning: AlertTriangle,
 };
 
 export function CustomAlert({
@@ -47,9 +68,17 @@ export function CustomAlert({
         variantStyles[variant]
       )}
     >
-      <Icon className="!h-4 !w-4 shrink-0 mb-1" />
+      <div
+        className={cn(
+          "p-1 rounded-full flex items-center justify-center",
+          iconStyles[variant]
+        )}
+      >
+        <Icon className="!h-4 !w-5 shrink-0 mb-1" />
+      </div>
+
       <div className="flex flex-col">
-        <AlertTitle className="text-sm font-medium tracking-wide">
+        <AlertTitle className="text-xs font-medium tracking-wide">
           {message}
         </AlertTitle>
         {description && (

@@ -11,7 +11,7 @@ import { flags } from "@/constants/images";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import WithdrawToBankAccount from "./bank/continue-with-bank";
 import WithdrawToCrypto from "./crypto/withdraw-with-crypto";
-import WithdrawToRiseWallet from "./rise/continue-with-rise";
+import WithdrawToRiseWallet from "./rise/withdraw-to-rise";
 
 const options = [
   {
