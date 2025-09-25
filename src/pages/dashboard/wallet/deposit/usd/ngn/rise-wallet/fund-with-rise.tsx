@@ -14,10 +14,12 @@ import riselogo from "@/assets/images/rise-r-logo.png";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { FormatService } from "@/services/format-service";
+import AnimatedWrapper from "@/components/animations/animated-wrapper";
 
 export default function FundWithRiseWallet() {
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isRiseAccountLinked, setIsRiseAccountLinked] = useState(false);
 
   const isLinked = false; // Replace with actual logic later
 
@@ -88,13 +90,24 @@ export default function FundWithRiseWallet() {
         </div>
       </div>
 
-      <LinkRiseWallet isLinked={isLinked} />
+      <AnimatedWrapper animationKey={String(isRiseAccountLinked)}>
+        <LinkRiseWallet
+          isLinked={isRiseAccountLinked}
+          linkRiseAccount={() => setIsRiseAccountLinked(true)}
+        />
+      </AnimatedWrapper>
     </DepositWrapper>
   );
 }
 
-export function LinkRiseWallet({ isLinked }: { isLinked: boolean }) {
-  if (false) {
+export function LinkRiseWallet({
+  isLinked,
+  linkRiseAccount,
+}: {
+  isLinked: boolean;
+  linkRiseAccount: () => void;
+}) {
+  if (!isLinked) {
     return (
       <div className="flex flex-col items-center gap-4 text-center my-12">
         <img src={riseLink} alt="rise" className="w-28 h-28" />
@@ -102,7 +115,10 @@ export function LinkRiseWallet({ isLinked }: { isLinked: boolean }) {
           Your Rise account is not yet linked. Link your account to have access
           to your wallet
         </h2>
-        <Button className="btn-primary rounded-full py-6 w-full">
+        <Button
+          onClick={linkRiseAccount}
+          className="btn-primary rounded-full py-6 w-full"
+        >
           Link Rise Account
         </Button>
       </div>
@@ -110,7 +126,7 @@ export function LinkRiseWallet({ isLinked }: { isLinked: boolean }) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 text-center my-12">
+    <div className="flex flex-col items-center text-center my-12">
       <Button className="flex items-center justify-between gap-4 w-full bg-custom-rise-green py-10 hover:bg-custom-rise-green/90">
         <div className="flex items-center gap-2 text-custom-grey">
           <img

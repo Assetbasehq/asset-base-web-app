@@ -45,7 +45,7 @@ export default function SelectWallet({
             <Card
               key={option.name}
               className={cn(
-                "p-2 md:p-4 border-2 bg-custon-input-fill border-custom-input-stroke w-1/3 cursor-pointer",
+                "p-2 md:p-4 items-center border-2 bg-custon-input-fill border-custom-input-stroke w-1/3 cursor-pointer",
                 {
                   "border-custom-orange":
                     selectedWallet === option.name.toUpperCase(),
@@ -59,7 +59,7 @@ export default function SelectWallet({
                 <img src={option.logo} alt={option.name} className="w-6" />
               </span>
               <p className="text-xs md:text-sm font-semibold mt-auto">
-                {option.name}
+                {option.name} Wallet
               </p>
             </Card>
           ))}

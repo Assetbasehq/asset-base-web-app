@@ -30,6 +30,20 @@ export class FormatService {
   }
 
   /**
+   * Formats a number into a Ghanaian Cedis currency string
+   * Example: 1234.56 => "₵1,234.56"
+   */
+  static formatToGHS(amount: number | null | undefined): string {
+    if (amount == null || isNaN(amount)) return "₵0.00";
+    return new Intl.NumberFormat("en-GH", {
+      style: "currency",
+      currency: "GHS",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
+  /**
    * Formats a number with commas (no currency symbol)
    * Example: 1234567 => "1,234,567"
    */

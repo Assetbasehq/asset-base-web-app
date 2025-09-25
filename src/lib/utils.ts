@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { AxiosError } from "axios";
 import { v4 as uuidv4 } from "uuid";
+import type { IOMethod } from "@/interfaces/wallet.interfae";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -159,23 +160,28 @@ export function truncateWalletAddress(
 export function generatePaymentURL(
   destWalletCode: string,
   sourceCurrencyCode: string,
-  channel: string
+  selectedMethod: IOMethod
 ): string {
-  console.log(channel);
+  console.log({ selectedMethod });
 
   let lastSegment = "";
 
-  switch (channel.toLowerCase()) {
+  switch (selectedMethod.channel.toLowerCase()) {
     case "card":
-    case "ngn-card":
-      lastSegment = "ngn-card";
+      if (selectedMethod.provider === "flutterwave") {
+        lastSegment = "ngn-card";
+      }
+
+      if (selectedMethod.provider === "stripe") {
+        lastSegment = "usd-card";
+      }
       break;
     case "risevest":
       lastSegment = "rise-wallet";
       break;
 
     case "mobile_money":
-      lastSegment = "mobile-money";
+      lastSegment = selectedMethod.network_code;
       break;
 
     default:

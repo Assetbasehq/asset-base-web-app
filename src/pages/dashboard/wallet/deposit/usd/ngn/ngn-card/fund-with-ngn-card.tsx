@@ -20,7 +20,7 @@ import { FormatService } from "@/services/format-service";
 import { useGetExternalWallets } from "@/hooks/use-external-wallets";
 import { RiArrowRightSLine, RiBankCardLine } from "react-icons/ri";
 import { Loader } from "lucide-react";
-import SaveCardModal from "./_components/save-card-modal";
+import SaveCardModal from "../../../_components/save-card-modal";
 import type { CardItem } from "@/interfaces/external-wallets";
 import {
   Dialog,
@@ -233,9 +233,7 @@ export default function FundWithNGNCard() {
                 <RiBankCardLine size={40} className="!w-6 !h-6" />
                 <div className="text-start">
                   <p className="text-sm">Pay with a new card</p>
-                  <p className="text-xs">
-                    We support Visa, Mastercard, Discover and American Express
-                  </p>
+                  <p className="text-xs">We support Visa, Mastercard, Verve</p>
                 </div>
               </div>
               <RiArrowRightSLine size={20} />
@@ -268,11 +266,6 @@ function ExternalWallets({
 }: ExternalWalletProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleCardClick = (card: any) => {
-    handleSelectCard(card);
-    setIsModalOpen(true);
-  };
-
   const closeModal = () => {
     setIsModalOpen(false);
     handleSelectCard(null);
@@ -284,6 +277,10 @@ function ExternalWallets({
         <Loader />
       </div>
     );
+  }
+
+  if (wallets.length === 0) {
+    return null;
   }
 
   return (

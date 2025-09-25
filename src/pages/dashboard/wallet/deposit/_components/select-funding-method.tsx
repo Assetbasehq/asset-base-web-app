@@ -1,4 +1,3 @@
-import { configService } from "@/api/config";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -9,9 +8,8 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { CurrencyService } from "@/services/currency-service";
-import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Form, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { generatePaymentURL } from "@/lib/utils";
 import type { IOMethod } from "@/interfaces/wallet.interfae";
 import { FormatService } from "@/services/format-service";
@@ -36,20 +34,10 @@ export default function SelectFundingMethod({
 
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["funding-methods"],
-    queryFn: () =>
-      configService.getFundingMethods({
-        wallet_status: "true",
-      }),
-  });
-
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
     filter_value: "funding",
   });
-
-  // console.log({ fundingMethods: data, ioMethods });
 
   // Available filtered IO methods
   const availableOptions = useMemo(
@@ -94,6 +82,7 @@ export default function SelectFundingMethod({
     console.log({
       normalizedDest,
       normalizedSource,
+      selectedMethod,
       channel:
         selectedMethod?.channel === "api_vendor"
           ? selectedMethod.provider
@@ -108,9 +97,7 @@ export default function SelectFundingMethod({
     const url = generatePaymentURL(
       normalizedDest?.toLowerCase() as string,
       normalizedSource?.toLowerCase() as string,
-      selectedMethod?.channel === "api_vendor"
-        ? selectedMethod.provider
-        : selectedMethod?.channel
+      selectedMethod
     );
     navigate(url);
 
@@ -198,9 +185,6 @@ export default function SelectFundingMethod({
             <p>RATE</p>
             <p className="font-semibold">
               $1 ~ {getIOMethodRate(selectedMethod)}
-              {/* {isLoading
-              ? "..."
-              : FormatService.formatWithCommas(data?.rate / 100)} */}
             </p>
           </div>
           <div className="flex justify-between">
