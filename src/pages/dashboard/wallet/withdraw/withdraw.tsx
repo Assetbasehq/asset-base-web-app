@@ -46,7 +46,6 @@ export default function Withdraw() {
   return (
     <div className="text-custom-white-text flex flex-col gap-4">
       <WalletBreadCrumb
-        stage={stage}
         goBack={() => {
           setStage(stage - 1);
         }}
