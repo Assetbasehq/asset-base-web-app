@@ -102,7 +102,7 @@ export default function FundUsdWithGhsMTN() {
   const buyRate = selectedMethod?.currency?.buy_rate || 0;
   const dollarEquivalent = amountToFund ? amountToFund / buyRate : 0;
   const amountToDeduct = amountToFund;
-  const isMinimumAmount = amountToDeduct ? dollarEquivalent <= 10 : true;
+  const isMinimumAmount = amountToDeduct ? dollarEquivalent >= 10 : true;
 
   return (
     <DepositWrapper>
@@ -163,7 +163,7 @@ export default function FundUsdWithGhsMTN() {
             </div>
           </div>
 
-          {amountToFund && isMinimumAmount && (
+          {amountToFund && !isMinimumAmount && (
             <CustomAlert variant="warning" message="Minimum deposit is $10" />
           )}
           {error && <CustomAlert variant="destructive" message={error} />}
@@ -184,7 +184,7 @@ export default function FundUsdWithGhsMTN() {
           </div>
 
           <Button
-            disabled={!amountToDeduct || phoneNumber.length < 9}
+            disabled={!isMinimumAmount || phoneNumber.length < 9 || isPending}
             onClick={handleSubmit}
             className="btn-primary py-6 rounded-full"
           >

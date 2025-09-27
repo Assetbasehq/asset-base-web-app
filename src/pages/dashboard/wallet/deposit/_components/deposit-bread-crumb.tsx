@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router";
 
-export default function WalletBreadCrumb({ goBack }: { goBack?: () => void }) {
+export default function DepositBreadCrumb({ goBack }: { goBack?: () => void }) {
   const location = useLocation();
 
   const naviagate = useNavigate();

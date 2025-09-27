@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router";
-import WalletBreadCrumb from "../../_components/wallet-bread-crumb";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
+import DepositBreadCrumb from "./deposit-bread-crumb";
 
 interface WrapperProps {
   goBack?: () => void;
@@ -13,7 +13,7 @@ export default function DepositWrapper({ goBack, children }: WrapperProps) {
 
   return (
     <div>
-      <WalletBreadCrumb goBack={goBack} />
+      <DepositBreadCrumb goBack={goBack} />
 
       <AnimatedWrapper animationKey={location.pathname}>
         <div className="flex flex-col gap-4 text-start w-full max-w-md mx-auto">

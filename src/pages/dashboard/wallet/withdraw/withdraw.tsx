@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import WalletBreadCrumb from "../_components/wallet-bread-crumb";
 import { Card } from "@/components/ui/card";
 import riseIcon from "@/assets/icons/rise-icon.svg";
 import { useState } from "react";
@@ -12,6 +11,7 @@ import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import WithdrawToBankAccount from "./bank/continue-with-bank";
 import WithdrawToCrypto from "./crypto/withdraw-with-crypto";
 import WithdrawToRiseWallet from "./rise/withdraw-to-rise";
+import WithdrawBreadCrumb from "./_components/withdraw-bread-crumb";
 
 const options = [
   {
@@ -45,7 +45,7 @@ export default function Withdraw() {
 
   return (
     <div className="text-custom-white-text flex flex-col gap-4">
-      <WalletBreadCrumb
+      <WithdrawBreadCrumb
         goBack={() => {
           setStage(stage - 1);
         }}

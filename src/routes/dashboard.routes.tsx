@@ -124,7 +124,7 @@ export const dashboardRoutes: RouteObject[] = [
                     element: <FundUsdWithUgxAirtel />,
                   },
                   {
-                    path: "usd/kes/m-pesa",
+                    path: "usd/kes/mpesa",
                     element: <FundUsdWithKesMpesa />,
                   },
 

@@ -17,7 +17,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router";
 import { useGetCryptoBalance, useGetWallet } from "@/hooks/useWallet";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
 
@@ -25,36 +25,50 @@ export default function TotalBalance() {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
 
-  const { data, isLoading, isError } = useGetWallet({ currency });
+  const {
+    data: walletData,
+    isLoading: isWalletLoading,
+    isError: isWalletError,
+  } = useGetWallet({ currency });
 
-  const { data: cryptoWalletBalance } = useGetCryptoBalance();
+  const {
+    data: cryptoWalletBalance,
+    isLoading: isCryptoLoading,
+    isError: isCryptoError,
+  } = useGetCryptoBalance();
 
-  console.log({ cryptoWalletBalance, data });
+  const isLoading = isWalletLoading || isCryptoLoading;
+
+  /**
+   * Utility to calculate and format the total balance
+   */
+  const formattedTotalBalance = useMemo(() => {
+    if (!walletData && !cryptoWalletBalance) return 0;
+
+    let total = 0;
+
+    // Add crypto wallet balances
+    if (cryptoWalletBalance?.assets?.length) {
+      total += cryptoWalletBalance.assets.reduce(
+        (sum: number, asset: { balance: string | number }) =>
+          sum + Number(asset.balance || 0),
+        0
+      );
+    }
+
+    // Add fiat wallet balance
+    if (walletData?.balance) {
+      total += walletData.balance;
+    }
+
+    // Format based on selected currency
+    return currency === "usd"
+      ? FormatService.formatToUSD(total)
+      : FormatService.formatToNaira(total);
+  }, [cryptoWalletBalance, walletData, currency]);
 
   const handleCurrencyChange = (value: string) => {
     setCurrency(value as "usd" | "ngn");
-  };
-
-  const handleGetAllBalance = () => {
-    let finalAmount = 0;
-
-    if (cryptoWalletBalance) {
-      const totalBalance = cryptoWalletBalance.assets.reduce(
-        (sum: number, asset: { balance: string | number }) => {
-          return sum + Number(asset.balance || 0);
-        },
-        0
-      );
-
-      finalAmount += totalBalance;
-    }
-    if (data) {
-      finalAmount += data.balance;
-    }
-
-    console.log({ finalAmount });
-
-    return finalAmount;
   };
 
   // if (true) {
@@ -71,13 +85,13 @@ export default function TotalBalance() {
             <div className="w-full flex flex-col items-start gap-6 md:flex-row md:items-center justify-between text-custom-white-text">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xl md:text-3xl font-semibold">
-                    {isBalanceVisible
-                      ? currency === "usd"
-                        ? FormatService.formatToUSD(handleGetAllBalance() || 0)
-                        : FormatService.formatToNaira(data?.balance || 0)
-                      : "******"}
-                  </h2>
+                  {isLoading ? (
+                    <Skeleton className="h-8 w-32 rounded-md" />
+                  ) : (
+                    <h2 className="text-xl md:text-3xl font-semibold">
+                      {isBalanceVisible ? formattedTotalBalance : "******"}
+                    </h2>
+                  )}
                   {isBalanceVisible ? (
                     <RiEyeLine
                       onClick={() => setIsBalanceVisible(!isBalanceVisible)}
@@ -90,7 +104,9 @@ export default function TotalBalance() {
                     />
                   )}
                 </div>
-                {isBalanceVisible ? (
+                {isLoading ? (
+                  <Skeleton className="h-4 w-20 mt-1 rounded-md" />
+                ) : isBalanceVisible ? (
                   <p className="text-green-400">+1,966 (2.4%)</p>
                 ) : (
                   "*****"
@@ -129,11 +145,13 @@ export default function TotalBalance() {
               <h2 className=" text-sm font-light">Wallet Balance</h2>
               <div className="flex items-center gap-1">
                 <h2 className="text-md md:text-xl font-medium">
-                  {isBalanceVisible
-                    ? currency === "usd"
-                      ? FormatService.formatToUSD(handleGetAllBalance() || 0)
-                      : FormatService.formatToNaira(data?.balance)
-                    : "******"}
+                  {isLoading ? (
+                    <Skeleton className="h-6 w-24 rounded-md" />
+                  ) : (
+                    <h2 className="text-md md:text-xl font-medium">
+                      {isBalanceVisible ? formattedTotalBalance : "******"}
+                    </h2>
+                  )}
                 </h2>
                 <small className="text-green-400">+0.4%</small>
               </div>
