@@ -183,10 +183,12 @@ export default function TotalBalance() {
                 </span>
               </div>
             </Link>
-            <div className="flex flex-col gap-2 items-center cursor-pointer">
-              <RiArrowLeftRightLine className=" w-12 h-12 p-3 rounded-full bg-custom-input-mute text-custom-white-text" />{" "}
-              <span className="font-semibold text-xs">Convert</span>
-            </div>
+            <Link to="/dashboard/wallet/swap">
+              <div className="flex flex-col gap-2 items-center cursor-pointer">
+                <RiArrowLeftRightLine className=" w-12 h-12 p-3 rounded-full bg-custom-input-mute text-custom-white-text" />{" "}
+                <span className="font-semibold text-xs">Convert</span>
+              </div>
+            </Link>
           </div>
         </div>
       </CardContent>

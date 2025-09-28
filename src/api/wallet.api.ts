@@ -13,7 +13,25 @@ class WalletService {
 
       return data || [];
     } catch (error) {
-      handleAxiosError(error, "failed to create security pin");
+      handleAxiosError(error, "Failed to create security pin");
+    }
+  };
+
+  walletExchange = async (payload?: {
+    amount: number;
+    src_currency: string;
+    dest_currency: string;
+    credential: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(`/wallets/exchange`, payload);
+      const data = response.data;
+
+      console.log({ data });
+
+      return data || [];
+    } catch (error) {
+      handleAxiosError(error, "Failed to swap currency");
     }
   };
 

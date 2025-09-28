@@ -184,6 +184,16 @@ export function generatePaymentURL(
       lastSegment = selectedMethod.network_code;
       break;
 
+    case "virtual_account":
+      lastSegment = "virtual-account";
+      break;
+
+    case "api_vendor":
+      if (selectedMethod.provider === "risevest") {
+        lastSegment = "rise-wallet";
+      }
+      break;
+
     default:
       // fallback for unknown methods
       lastSegment = "other";

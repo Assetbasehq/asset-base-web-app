@@ -7,6 +7,7 @@ import ugandanFlag from "@/assets/images/uganda-flag.svg";
 import kenyanFlag from "@/assets/images/kenya-flag.svg";
 import usdc from "@/assets/images/usdc.svg";
 import cNGN from "@/assets/images/cngn.svg";
+import checkMark from "@/assets/images/check-mark.svg";
 
 export const flags = {
   usa: {
@@ -61,5 +62,10 @@ export const images = {
     name: "cNGN",
     logo: cNGN,
     alt: "cNGN icon",
+  },
+  checkMark: {
+    name: "check mark",
+    logo: checkMark,
+    alt: "check mark icon",
   },
 };

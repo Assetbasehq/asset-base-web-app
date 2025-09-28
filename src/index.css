@@ -341,7 +341,7 @@
   @apply border-2 border-custom-orange bg-white text-custom-orange 
   hover:bg-gray-50
    dark:bg-custom-orange dark:text-custom-white 
-   dark:hover:bg-custom-orange/80 dark:hover:border-custom-orange/80
+   dark:hover:bg-custom-orange/80 dark:hover:border-custom-orange/0
    cursor-pointer
    transition-all ease-in-out duration-300;
 }

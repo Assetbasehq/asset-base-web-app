@@ -44,6 +44,7 @@ import FundNgnWithNgnVirtualAccount from "@/pages/dashboard/wallet/deposit/ngn/n
 import FundNgnWithNgnRiseWallet from "@/pages/dashboard/wallet/deposit/ngn/ngn/rise-wallet/fund-ngn-with-ngn-rise-wallet";
 import FundUsdWithGhsMTN from "@/pages/dashboard/wallet/deposit/usd/ghs/mtn/fund-usd-with-ghs-mtn";
 import FundUsdWithGhsVodafone from "@/pages/dashboard/wallet/deposit/usd/ghs/vodafone/fund-usd-with-ghs-airtel";
+import ConvertFunds from "@/pages/dashboard/wallet/convert/convert";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -166,6 +167,10 @@ export const dashboardRoutes: RouteObject[] = [
               {
                 path: "withdraw",
                 element: <Withdraw />,
+              },
+              {
+                path: "swap",
+                element: <ConvertFunds />,
               },
             ],
           },

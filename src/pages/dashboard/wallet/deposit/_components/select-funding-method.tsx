@@ -50,16 +50,12 @@ export default function SelectFundingMethod({
     [ioMethods, destinationWalletCode, sourceCurrencyCode]
   );
 
-  console.log({ availableOptions });
-
   // Normalize lowercase wallet codes to uppercase
   const normalizedDest = destinationWalletCode?.toUpperCase();
   const normalizedSource = sourceCurrencyCode?.toUpperCase();
 
   const handleSelectMethod = (value: string) => {
     const [channel, networkName] = value.split("|");
-
-    console.log({ channel, networkName });
 
     const method = availableOptions.find((m) => {
       const matchBase =

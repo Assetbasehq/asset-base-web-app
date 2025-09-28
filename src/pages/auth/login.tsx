@@ -1,7 +1,6 @@
 import ConnectWalletButton from "@/components/buttons/connect-wallet-button";
 import GoogleLoginButton from "@/components/buttons/google-login-button";
 import RiseLoginButton from "@/components/buttons/rise-login-button";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,

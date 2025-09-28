@@ -16,7 +16,7 @@ import {
   RiEyeLine,
   RiEyeOffLine,
 } from "react-icons/ri";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useGetCryptoBalance, useGetWallet } from "@/hooks/useWallet";
 import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
@@ -26,36 +26,50 @@ export default function AccountSummary() {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
 
-  const { data, isLoading, isError } = useGetWallet({ currency });
+  const {
+    data: walletData,
+    isLoading: isWalletLoading,
+    isError: isWalletError,
+  } = useGetWallet({ currency });
 
-  const { data: cryptoWalletBalance } = useGetCryptoBalance();
+  const {
+    data: cryptoWalletBalance,
+    isLoading: isCryptoLoading,
+    isError: isCryptoError,
+  } = useGetCryptoBalance();
+
+  const isLoading = isWalletLoading || isCryptoLoading;
+
+  /**
+   * Utility to calculate and format the total balance
+   */
+  const formattedTotalBalance = useMemo(() => {
+    if (!walletData && !cryptoWalletBalance) return 0;
+
+    let total = 0;
+
+    // Add crypto wallet balances
+    if (cryptoWalletBalance?.assets?.length) {
+      total += cryptoWalletBalance.assets.reduce(
+        (sum: number, asset: { balance: string | number }) =>
+          sum + Number(asset.balance || 0),
+        0
+      );
+    }
+
+    // Add fiat wallet balance
+    if (walletData?.balance) {
+      total += walletData.balance;
+    }
+
+    // Format based on selected currency
+    return currency === "usd"
+      ? FormatService.formatToUSD(total)
+      : FormatService.formatToNaira(total);
+  }, [cryptoWalletBalance, walletData, currency]);
 
   const handleCurrencyChange = (value: string) => {
     setCurrency(value as "usd" | "ngn");
-  };
-
-  console.log({ data, cryptoWalletBalance });
-
-  const handleGetAllBalance = () => {
-    let finalAmount = 0;
-
-    if (cryptoWalletBalance) {
-      const totalBalance = cryptoWalletBalance.assets.reduce(
-        (sum: number, asset: { balance: string | number }) => {
-          return sum + Number(asset.balance || 0);
-        },
-        0
-      );
-
-      finalAmount += totalBalance;
-    }
-    if (data) {
-      finalAmount += data.balance;
-    }
-
-    console.log({ finalAmount });
-
-    return finalAmount;
   };
 
   if (isLoading) {
@@ -70,13 +84,13 @@ export default function AccountSummary() {
             <div className="flex gap-2 md:flex-col-reverse md:items-start md:gap-8 w-full">
               <div className="flex flex-col w-full">
                 <div className="flex items-center gap-1">
-                  <h2 className="text-2xl font-semibold">
-                    {isBalanceVisible
-                      ? currency === "usd"
-                        ? FormatService.formatToUSD(handleGetAllBalance() || 0)
-                        : FormatService.formatToNaira(data?.balance || 0)
-                      : "*****"}
-                  </h2>
+                  {isLoading ? (
+                    <Skeleton className="h-8 w-32 rounded-md" />
+                  ) : (
+                    <h2 className="text-xl md:text-3xl font-semibold">
+                      {isBalanceVisible ? formattedTotalBalance : "******"}
+                    </h2>
+                  )}
 
                   {isBalanceVisible ? (
                     <RiEyeLine
@@ -142,10 +156,12 @@ export default function AccountSummary() {
                     </span>
                   </div>
                 </Link>
-                <div className="flex flex-col gap-2 items-center cursor-pointer">
-                  <RiArrowLeftRightLine className=" h-12 w-12 p-3 rounded-full bg-custom-light-bg text-custom-white " />
-                  <span className="font-semibold text-xs">Convert</span>
-                </div>
+                <Link to={"/dashboard/wallet/swap"}>
+                  <div className="flex flex-col gap-2 items-center cursor-pointer">
+                    <RiArrowLeftRightLine className=" h-12 w-12 p-3 rounded-full bg-custom-light-bg text-custom-white " />
+                    <span className="font-semibold text-xs">Convert</span>
+                  </div>
+                </Link>
                 <div className="flex flex-col gap-2 items-center cursor-pointer">
                   <RiBox3Line className=" h-12 w-12 p-3 rounded-full bg-custom-light-bg text-custom-white" />
                   <span className="font-semibold text-xs">Add Liquidity</span>
