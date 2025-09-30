@@ -46,5 +46,13 @@ export const getIOMethodDisplayName = (method: IOMethod) => {
 };
 
 export const getIOMethodRate = (method: IOMethod) => {
-  return `${method.currency.symbol}${method.currency.buy_rate}`;
+  if (method.destination_wallets.includes("ngn")) {
+    return `$1 ~ ${method.currency.symbol}${method.currency.buy_rate}`;
+  }
+
+  if (method.destination_wallets.includes("usd")) {
+    return `$1 ~ ${method.currency.symbol}${method.currency.buy_rate}`;
+  }
+
+  return `$1 ~ ${method.currency.symbol}${method.currency.buy_rate}`;
 };

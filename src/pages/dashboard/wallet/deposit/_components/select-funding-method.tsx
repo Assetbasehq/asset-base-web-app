@@ -50,6 +50,8 @@ export default function SelectFundingMethod({
     [ioMethods, destinationWalletCode, sourceCurrencyCode]
   );
 
+  console.log({ ioMethods, availableOptions });
+
   // Normalize lowercase wallet codes to uppercase
   const normalizedDest = destinationWalletCode?.toUpperCase();
   const normalizedSource = sourceCurrencyCode?.toUpperCase();
@@ -179,9 +181,7 @@ export default function SelectFundingMethod({
         <div className="text-xs mt-4 flex flex-col gap-1">
           <div className="flex justify-between">
             <p>RATE</p>
-            <p className="font-semibold">
-              $1 ~ {getIOMethodRate(selectedMethod)}
-            </p>
+            <p className="font-semibold">{getIOMethodRate(selectedMethod)}</p>
           </div>
           <div className="flex justify-between">
             <p>Fee</p>
