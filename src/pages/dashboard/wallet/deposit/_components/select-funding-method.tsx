@@ -87,8 +87,6 @@ export default function SelectFundingMethod({
           : selectedMethod?.channel,
     });
 
-    // return;
-
     if (!normalizedDest && !normalizedSource) return;
     if (!selectedMethod) return;
 
@@ -97,6 +95,10 @@ export default function SelectFundingMethod({
       normalizedSource?.toLowerCase() as string,
       selectedMethod
     );
+
+    // console.log(url);
+    // return;
+
     navigate(url);
 
     return;
@@ -139,7 +141,7 @@ export default function SelectFundingMethod({
               ? selectedMethod.channel === "mobile_money"
                 ? `${selectedMethod.channel}|${selectedMethod.network_name}`
                 : selectedMethod.channel
-              : "" // Always controlled
+              : ""
           }
           onValueChange={handleSelectMethod}
         >
@@ -147,10 +149,10 @@ export default function SelectFundingMethod({
             <SelectValue placeholder="Select an option">
               {selectedMethod
                 ? selectedMethod.channel === "mobile_money"
-                  ? selectedMethod.network_name // Show only network name
+                  ? selectedMethod.network_name
                   : FormatService.formatSelectText(
                       getIOMethodDisplayName(selectedMethod)
-                    ) // e.g., card
+                    )
                 : "Select an option"}
             </SelectValue>
           </SelectTrigger>
@@ -189,7 +191,9 @@ export default function SelectFundingMethod({
           </div>
           <div className="flex justify-between">
             <p>Timeline</p>
-            <p className="font-semibold">{selectedMethod.timeline}</p>
+            <p className="font-semibold capitalize">
+              {selectedMethod.timeline}
+            </p>
           </div>
         </div>
       )}

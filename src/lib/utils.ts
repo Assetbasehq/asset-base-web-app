@@ -188,6 +188,10 @@ export function generatePaymentURL(
       lastSegment = "virtual-account";
       break;
 
+    case "bank_account":
+      lastSegment = "bank-account";
+      break;
+
     case "api_vendor":
       if (selectedMethod.provider === "risevest") {
         lastSegment = "rise-wallet";

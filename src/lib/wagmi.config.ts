@@ -1,5 +1,5 @@
 // wagmiConfig.ts
-import { createConfig, http } from "wagmi";
+import { createConfig, createStorage, http } from "wagmi";
 import { mainnet, sepolia } from "wagmi/chains";
 import { metaMask, coinbaseWallet, walletConnect } from "wagmi/connectors";
 
@@ -49,6 +49,7 @@ export const USDT_TOKEN = {
 
 export const wagmiConfig = createConfig({
   chains: [mainnet, sepolia, assetChain],
+  // storage: createStorage({ storage: window.localStorage }),
   connectors: [
     // metaMask(),
     // coinbaseWallet({ appName: "MyDApp" }),

@@ -19,17 +19,22 @@ export const getAvailableIOMethods = (
 };
 
 export const getIOMethodFee = (method: IOMethod) => {
+  console.log({ method });
+
   switch (method.fee.type) {
     case "flat":
-      return `No fee`;
+      if (method.fee.value === 0) return "No Fee";
+      return `${method.currency.symbol}${method.fee.value}`;
     case "percentage":
       return `${method.fee.value}%`;
     case "added_percentage":
       return `${method.fee.value}% + ${method.currency.symbol}${method.fee.additional_value}`;
     case "capped_added_percentage":
-      return `${method.fee.value}% + ${method.currency.symbol}${method.fee.cap}`;
+      return `${method.fee.value}%`;
+    // case "capped_added_percentage":
+    //   return `${method.fee.value}% + ${method.currency.symbol}${method.fee.cap}`;
     default:
-      return `0`;
+      return `No Fee`;
   }
 };
 

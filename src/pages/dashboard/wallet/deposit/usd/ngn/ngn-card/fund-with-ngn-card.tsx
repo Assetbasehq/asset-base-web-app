@@ -102,7 +102,7 @@ export default function FundWithNGNCard() {
       },
       customizations: {
         title: `Add your card`,
-        description: `Fund Assetbase Wallet with $1`,
+        description: `Fund Assetbase Wallet with N1`,
         logo: "",
       },
     });
