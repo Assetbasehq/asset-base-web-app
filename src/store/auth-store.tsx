@@ -7,21 +7,45 @@ interface AuthCredentials {
   password: string;
 }
 
+interface IUserVerificationStatus {
+  account_id: string;
+  email_status: "verified" | "unverified";
+  id_status: "verified" | "unverified";
+}
+
 export interface UserState {
   user: IUser | null;
+  verificationStatus: IUserVerificationStatus | null;
   authCredentials: AuthCredentials | null;
   setUser: (user: IUser | null) => void;
+  setVerificationStatus: (data: IUserVerificationStatus) => void;
+  isUserVerified: () => boolean;
   setAuthCredentials: (creds: AuthCredentials | null) => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<UserState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
+      verificationStatus: null,
       authCredentials: null,
       setUser: (user: IUser | null) => {
         set({ user });
+      },
+      setVerificationStatus: (data: IUserVerificationStatus) => {
+        set({ verificationStatus: data });
+      },
+      isUserVerified: () => {
+        const user = get().user;
+        const verificationStatus = get().verificationStatus;
+
+        if (!user || !verificationStatus) return false;
+
+        return (
+          verificationStatus.email_status === "verified" &&
+          verificationStatus.id_status === "verified"
+        );
       },
       setAuthCredentials: (creds: AuthCredentials | null) => {
         set({ authCredentials: creds });

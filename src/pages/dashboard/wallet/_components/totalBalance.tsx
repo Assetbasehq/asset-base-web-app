@@ -144,7 +144,7 @@ export default function TotalBalance() {
             <div className="flex flex-col gap-1 md:bg-custom-light-bg md:px-4 md:py-2 rounded-md">
               <h2 className=" text-sm font-light">Wallet Balance</h2>
               <div className="flex items-center gap-1">
-                <h2 className="text-md md:text-xl font-medium">
+                <div className="text-md md:text-xl font-medium">
                   {isLoading ? (
                     <Skeleton className="h-6 w-24 rounded-md" />
                   ) : (
@@ -152,7 +152,7 @@ export default function TotalBalance() {
                       {isBalanceVisible ? formattedTotalBalance : "******"}
                     </h2>
                   )}
-                </h2>
+                </div>
                 <small className="text-green-400">+0.4%</small>
               </div>
             </div>

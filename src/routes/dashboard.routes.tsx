@@ -31,10 +31,8 @@ import type { RouteObject } from "react-router";
 import Deposit404 from "@/pages/dashboard/wallet/deposit/deposit-404";
 import CryptoDeposit from "@/pages/dashboard/wallet/deposit/crypto/crypto-deposit";
 import Deposit from "@/pages/dashboard/wallet/deposit/deposit";
-import FundWithNGNCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-with-ngn-card";
-import FundWithRiseWallet from "@/pages/dashboard/wallet/deposit/usd/ngn/rise-wallet/fund-with-rise";
-import FundUsdWithUsdCard from "@/pages/dashboard/wallet/deposit/usd/ngn/usd-card/fund-usd-with-usd-card";
-import FundUsdWithBankAccount from "@/pages/dashboard/wallet/deposit/usd/ngn/bank-account/fund-usd-with-bank-account";
+import FundUsdWithUsdCard from "@/pages/dashboard/wallet/deposit/usd/usd/usd-card/fund-usd-with-usd-card";
+import FundUsdWithBankAccount from "@/pages/dashboard/wallet/deposit/usd/usd/bank-account/fund-usd-with-bank-account";
 import FundUsdWithGhsTigo from "@/pages/dashboard/wallet/deposit/usd/ghs/tigo/fund-usd-with-ghs-tigo";
 import FundUsdWithUgxMTN from "@/pages/dashboard/wallet/deposit/usd/ugx/mtn/fund-usd-with-ugx-mtn";
 import FundUsdWithUgxAirtel from "@/pages/dashboard/wallet/deposit/usd/ugx/airtel/fund-usd-with-ugx-airtel";
@@ -45,6 +43,8 @@ import FundNgnWithNgnRiseWallet from "@/pages/dashboard/wallet/deposit/ngn/ngn/r
 import FundUsdWithGhsMTN from "@/pages/dashboard/wallet/deposit/usd/ghs/mtn/fund-usd-with-ghs-mtn";
 import FundUsdWithGhsVodafone from "@/pages/dashboard/wallet/deposit/usd/ghs/vodafone/fund-usd-with-ghs-airtel";
 import ConvertFunds from "@/pages/dashboard/wallet/convert/convert";
+import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/rise-wallet/fund-with-rise";
+import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -90,11 +90,11 @@ export const dashboardRoutes: RouteObject[] = [
                   // --- USD BASED ROUTES ---
                   {
                     path: "usd/ngn/ngn-card",
-                    element: <FundWithNGNCard />,
+                    element: <FundUsdWithNgnCard />,
                   },
                   {
                     path: "usd/usd/rise-wallet",
-                    element: <FundWithRiseWallet />,
+                    element: <FundUsdWithUsdRiseWallet />,
                   },
                   {
                     path: "usd/usd/usd-card",

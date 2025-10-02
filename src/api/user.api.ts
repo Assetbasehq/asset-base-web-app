@@ -1,5 +1,6 @@
 import axiosInstance from "@/lib/axios.config";
 import { handleAxiosError } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth-store";
 
 class UserService {
   createSecurityPin = async (payload: any) => {
@@ -186,6 +187,8 @@ class UserService {
   getUserVerificationStatus = async () => {
     try {
       const response = await axiosInstance.get(`verifications`);
+      const storeState = useAuthStore.getState();
+      storeState.setVerificationStatus(response?.data);
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");

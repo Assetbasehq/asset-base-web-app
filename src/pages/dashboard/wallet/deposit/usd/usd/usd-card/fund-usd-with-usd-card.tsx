@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { Label } from "recharts";
 import DepositWrapper from "../../../_components/deposit-wraper";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useGetExternalWallets } from "@/hooks/use-external-wallets";
+import { useMemo, useState } from "react";
 import { useIoMethods } from "@/hooks/useIoMethod";
+import { useGetExternalWallets } from "@/hooks/use-external-wallets";
 import {
   calculateIOMethodFee,
   getAvailableIOMethods,
@@ -13,28 +13,40 @@ import {
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { FormatService } from "@/services/format-service";
 import { Button } from "@/components/ui/button";
+import { RiArrowRightSLine, RiBankCardLine } from "react-icons/ri";
+import SaveCardModal from "../../../_components/save-card-modal";
+import type { CardItem } from "@/interfaces/external-wallets";
+import { useMutation } from "@tanstack/react-query";
 import {
   transactionRequestService,
   type ITransactionRequest,
 } from "@/api/transaction-request";
-import { useMutation } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
+import StripeModal from "./_components/stripe-modal";
+import ExternalWallets from "../../../_common/external-wallets";
+import ConfirmCardSelection from "../../../_common/confirm-card-selection";
 import { useAuthStore } from "@/store/auth-store";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
 
 interface IAmountToFund {
-  amount: number | null;
+  amount: number;
   formattedAmount: string;
 }
 
-export default function FundUsdWithGhsMTN() {
+export default function FundUsdWithUsdCard() {
   const [amountToFund, setAmountToFund] = useState<IAmountToFund | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [shouldSaveCard, setShouldSaveCard] = useState(false);
+  const [isSavingCard, setIsSavingCard] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<CardItem | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isConfirmingCardSelection, setIsConfirmingCardSelection] =
+    useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const [actionRestricted, setActionRestricted] = useState(false);
-  const { user, isUserVerified } = useAuthStore();
+  const [isActionRestricted, setIsActionRestricted] = useState(false);
+
+  const { isUserVerified } = useAuthStore();
 
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
@@ -43,7 +55,7 @@ export default function FundUsdWithGhsMTN() {
 
   const { data: externalWallets, isLoading: isExternalWalletsLoading } =
     useGetExternalWallets({
-      currency: "ghs",
+      currency: "usd",
       wallet_type: "card",
     });
 
@@ -51,8 +63,8 @@ export default function FundUsdWithGhsMTN() {
     mutationFn: transactionRequestService.initiateNewTransaction,
     onSuccess: (data) => {
       console.log({ data });
-      window.location.href = data.metadata.auth_url;
-      // handleBringUpPaymentModal(data.id);
+      setClientSecret(data.metadata.client_secret);
+      setIsStripeModalOpen(true);
     },
     onError: (error) => {
       console.log({ error });
@@ -64,13 +76,13 @@ export default function FundUsdWithGhsMTN() {
     const availableOptions = getAvailableIOMethods(
       ioMethods || [],
       "usd",
-      "ghs"
+      "usd"
     );
 
-    return availableOptions.find(
-      (m) => m.channel === "mobile_money" && m.network_code === "mtn"
-    );
+    return availableOptions.find((m) => m.channel === "card");
   }, [ioMethods]);
+
+  console.log({ selectedMethod });
 
   const handleAmountChange = (val: string) => {
     setError(null);
@@ -90,37 +102,37 @@ export default function FundUsdWithGhsMTN() {
     }
   };
 
-  const handlePhoneChange = (value: string) => {
-    let sanitized = value.replace(/\D/g, ""); // Keep only digits
-
-    // If pasted with country code, strip it
-    if (sanitized.startsWith("233")) {
-      sanitized = sanitized.slice(3);
-    }
-
-    setPhoneNumber(sanitized);
+  const handleOpenSaveCardModal = () => {
+    setError(null);
+    setSelectedCard(null);
+    setIsSavingCard(true);
+  };
+  const handleSelectCard = (card: CardItem) => {
+    setError(null);
+    setShouldSaveCard(true);
+    setSelectedCard(card);
+    setIsConfirmingCardSelection(true);
   };
 
   const handleSubmit = async () => {
-    if (!isUserVerified) return setActionRestricted(true);
+    if (!isUserVerified()) return setIsActionRestricted(true);
 
-    setError(null);
-    const redirectURL = window.location.origin + `/dashboard/wallet`;
     const payload: ITransactionRequest = {
+      currency: "usd",
+      provider: "stripe",
       request_type: "funding",
+      wallet_type: "card",
       amount: amountToFund?.amount as number,
-      currency: "ghs",
-      provider: "flutterwave",
-      wallet_type: "mobile_money",
       dest_wallet_currency: "usd",
-      external_wallet: {
-        phone_number: phoneNumber,
-        network: "mtn",
-        should_save: shouldSaveCard,
-        redirect_url: redirectURL,
-      },
     };
 
+    if (selectedCard) {
+      payload.external_wallet_id = selectedCard.id;
+    }
+
+    if (!selectedCard) {
+      payload.external_wallet = { should_save: shouldSaveCard };
+    }
     console.log({ payload });
 
     await mutateAsync(payload);
@@ -130,73 +142,32 @@ export default function FundUsdWithGhsMTN() {
     amountToFund?.amount,
     selectedMethod
   );
-  const buyRate = selectedMethod?.currency?.buy_rate || 0;
-  const dollarEquivalent = amountToFund
-    ? (Number(amountToFund?.amount) - calculatedFee) / buyRate
-    : 0;
-  const amountToDeduct = amountToFund?.amount;
-  const isMinimumAmount = amountToDeduct ? dollarEquivalent >= 10 : false;
-
-  console.log({ amountToDeduct, calculatedFee });
+  const amountToDeduct = amountToFund?.amount ?? 0;
+  const amountToReceive = amountToDeduct - calculatedFee;
+  const isMinimumAmount = amountToDeduct ? amountToDeduct >= 10 : false;
 
   return (
     <DepositWrapper>
-      {/* <SaveCardModal
-        isOpen={isSavingCard}
-        onClose={() => setIsSavingCard(false)}
-        onSelect={(shouldSaveCard) => {
-          setShouldSaveCard(shouldSaveCard);
-          setIsSavingCard(false);
-          handleSubmit();
-        }}
-      /> */}
-
-      <ActionRestrictedModal
-        isOpen={actionRestricted}
-        onClose={() => setActionRestricted(false)}
-      />
-
       <div className="text-custom-white-text flex flex-col gap-4">
         <div className="flex flex-col gap-4 text-start w-full max-w-md mx-auto">
           <div className="mb-8">
-            <h2 className="text-xl font-semibold">Fund With Mobile Money</h2>
+            <h2 className="text-xl font-semibold">Fund With Card</h2>
             <p className="text-muted-foreground text-sm">
               Minimum deposit is $10
             </p>
           </div>
           <div className="flex flex-col gap-2">
             <Label className="text-custom-grey text-xs md:text-sm">
-              Enter Phone Number
-            </Label>
-            <div className="flex items-center">
-              <Input
-                value={"+233"}
-                disabled
-                className="w-20 py-6 rounded-none rounded-l-md text-center bg-gray-100 cursor-not-allowed font-medium"
-              />
-              <Input
-                value={phoneNumber}
-                onChange={(e) => handlePhoneChange(e.target.value)}
-                type="tel"
-                className="flex-1 py-6 rounded-none rounded-r-md"
-                placeholder="247365914"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label className="text-custom-grey text-xs md:text-sm">
               Enter amount to fund
             </Label>
-            <div className="flex items-center">
-              <Input
-                value={amountToFund?.formattedAmount || ""}
-                inputMode="numeric"
-                onChange={(e) => handleAmountChange(e.target.value)}
-                type="text"
-                className="flex-1 py-6"
-                placeholder="10"
-              />
-            </div>
+            <Input
+              value={amountToFund?.formattedAmount || ""}
+              inputMode="numeric"
+              onChange={(e) => handleAmountChange(e.target.value)}
+              type="text"
+              className="py-6 w-full"
+              placeholder="10"
+            />
             <div className="flex justify-between text-xs border px-4 py-2 rounded-full">
               <p className="text-custom-grey"> $1 </p>
               <p className="font-semibold">
@@ -208,56 +179,41 @@ export default function FundUsdWithGhsMTN() {
           {amountToFund && !isMinimumAmount && (
             <CustomAlert variant="warning" message="Minimum deposit is $10" />
           )}
+
           {error && <CustomAlert variant="destructive" message={error} />}
 
           <div className="text-xs text-custom-grey mt-4 flex flex-col gap-2">
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToGHS(amountToDeduct || 0)}
+                {FormatService.formatToNaira(amountToFund?.amount || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToGHS(calculatedFee)}
+                {FormatService.formatToNaira(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
-              <p>Dollar equivalent</p>
+              <p>You'll receive</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(dollarEquivalent)}
+                {FormatService.formatToUSD(amountToReceive || 0)}
               </p>
             </div>
           </div>
 
-          <Button
-            disabled={!isMinimumAmount || phoneNumber.length < 9 || isPending}
-            onClick={handleSubmit}
-            className="btn-primary py-6 rounded-full"
-          >
-            {isPending ? (
-              <span className="flex items-center gap-2">
-                <Loader /> Processing...
-              </span>
-            ) : (
-              <span>Pay</span>
-            )}
-          </Button>
-
-          {/* <div className="flex flex-col gap-2 ">
+          <div className="flex flex-col gap-2 ">
             <p className="text-custom-grey text-xs">Select Funding Card</p>
             <ExternalWallets
               wallets={externalWallets?.items || []}
               isLoading={isExternalWalletsLoading}
-              isMinimumAmount={isMinimumAmount}
-              selectedCard={selectedCard}
-              amountToFund={amountToFund}
+              isMinimumAmount={!isMinimumAmount}
+              amountToFund={amountToFund?.amount as number}
               handleSelectCard={handleSelectCard}
-              onSubmit={handleSubmit}
             />
             <Button
-              disabled={isMinimumAmount}
+              disabled={!isMinimumAmount}
               onClick={handleOpenSaveCardModal}
               className="mt-1 bg-custom-blue-shade text-custom-white hover:bg-custom-blue-shade/90 cursor-pointer rounded text-sm py-8 px-4 flex justify-between items-center gap-4 w-full"
             >
@@ -265,14 +221,56 @@ export default function FundUsdWithGhsMTN() {
                 <RiBankCardLine size={40} className="!w-6 !h-6" />
                 <div className="text-start">
                   <p className="text-sm">Pay with a new card</p>
-                  <p className="text-xs">We support Visa, Mastercard, Verve</p>
+                  <p className="text-xs">
+                    We support Visa, Mastercard, Discover and American Express
+                  </p>
                 </div>
               </div>
               <RiArrowRightSLine size={20} />
             </Button>
-          </div> */}
+          </div>
         </div>
       </div>
+
+      <SaveCardModal
+        isOpen={isSavingCard}
+        isLoading={isPending}
+        onClose={() => setIsSavingCard(false)}
+        onSelect={(shouldSaveCard) => {
+          setShouldSaveCard(shouldSaveCard);
+          setIsSavingCard(false);
+          handleSubmit();
+        }}
+      />
+
+      <ConfirmCardSelection
+        amountToFund={Number(amountToFund?.amount)}
+        card={selectedCard}
+        isLoading={isProcessing || isPending}
+        error={error}
+        isOpen={isConfirmingCardSelection}
+        onClose={() => {
+          setIsConfirmingCardSelection(false);
+          setError(null);
+        }}
+        onConfirm={handleSubmit}
+      />
+
+      <ActionRestrictedModal
+        isOpen={isActionRestricted}
+        onClose={() => setIsActionRestricted(false)}
+      />
+
+      <StripeModal
+        isOpen={isStripeModalOpen}
+        onClose={() => {
+          setIsStripeModalOpen(false);
+          setIsProcessing(false);
+          setIsConfirmingCardSelection(false);
+        }}
+        amountToFund={amountToFund?.amount as number}
+        clientSecret={clientSecret as string}
+      />
     </DepositWrapper>
   );
 }

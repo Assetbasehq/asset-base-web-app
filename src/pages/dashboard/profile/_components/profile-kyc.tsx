@@ -51,7 +51,7 @@ export default function ProfileKYC() {
   const handleEmailSuccess = () => {
     toggleModal("confirmEmail", false);
     toggleModal("emailSuccess", true);
-    queryClient.invalidateQueries({ queryKey: ["email-verification-status"] });
+    queryClient.invalidateQueries({ queryKey: ["verification-status"] });
   };
 
   const handleManualSuccess = () => {

@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { useGetExternalWallets } from "@/hooks/use-external-wallets";
 import { useIoMethods } from "@/hooks/useIoMethod";
 import {
+  calculateIOMethodFee,
   getAvailableIOMethods,
   getIOMethodRate,
+  normalizeCurrencyInput,
 } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { FormatService } from "@/services/format-service";
@@ -16,22 +18,34 @@ import {
   type ITransactionRequest,
 } from "@/api/transaction-request";
 import { useMutation } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
+import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
+import { useAuthStore } from "@/store/auth-store";
+
+interface IAmountToFund {
+  amount: number | null;
+  formattedAmount: string;
+}
+
 export default function FundUsdWithUgxAirtel() {
-  const [amountToFund, setAmountToFund] = useState<number | null>(null);
+  const [amountToFund, setAmountToFund] = useState<IAmountToFund | null>(null);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [shouldSaveCard, setShouldSaveCard] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [actionRestricted, setActionRestricted] = useState(false);
+  const { user, isUserVerified } = useAuthStore();
 
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
     filter_value: "funding",
   });
 
-  const { data: externalWallets, isLoading: isExternalWalletsLoading } =
-    useGetExternalWallets({
-      currency: "ugx",
-      wallet_type: "card",
-    });
+  // const { data: externalWallets, isLoading: isExternalWalletsLoading } =
+  //   useGetExternalWallets({
+  //     currency: "ugx",
+  //     wallet_type: "card",
+  //   });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: transactionRequestService.initiateNewTransaction,
@@ -58,10 +72,22 @@ export default function FundUsdWithUgxAirtel() {
     );
   }, [ioMethods]);
 
-  const handleAmountChange = (amount: string) => {
+  const handleAmountChange = (val: string) => {
     setError(null);
-    const amountNumber = Number(amount);
-    if (!isNaN(amountNumber)) setAmountToFund(amountNumber);
+
+    if (val === "") {
+      setAmountToFund(null);
+      return;
+    }
+
+    const { amount, formattedAmount } = normalizeCurrencyInput(val);
+
+    if (amount) {
+      setAmountToFund({
+        amount: Number(amount),
+        formattedAmount,
+      });
+    }
   };
 
   const handlePhoneChange = (value: string) => {
@@ -76,11 +102,13 @@ export default function FundUsdWithUgxAirtel() {
   };
 
   const handleSubmit = async () => {
+    if (!isUserVerified) return setActionRestricted(true);
+
     setError(null);
     const redirectURL = window.location.origin + `/dashboard/wallet`;
     const payload: ITransactionRequest = {
       request_type: "funding",
-      amount: amountToFund as number,
+      amount: amountToFund?.amount as number,
       currency: "ugx",
       provider: "flutterwave",
       wallet_type: "mobile_money",
@@ -98,24 +126,25 @@ export default function FundUsdWithUgxAirtel() {
     await mutateAsync(payload);
   };
 
+  const calculatedFee = calculateIOMethodFee(
+    amountToFund?.amount,
+    selectedMethod
+  );
   const buyRate = selectedMethod?.currency?.buy_rate || 0;
-  const dollarEquivalent = amountToFund ? amountToFund / buyRate : 0;
-  const amountToDeduct = amountToFund;
+  const dollarEquivalent = amountToFund
+    ? (Number(amountToFund?.amount) - calculatedFee) / buyRate
+    : 0;
+  const amountToDeduct = amountToFund?.amount;
   const isMinimumAmount = amountToDeduct ? dollarEquivalent >= 10 : false;
 
   console.log({ selectedMethod });
 
   return (
     <DepositWrapper>
-      {/* <SaveCardModal
-              isOpen={isSavingCard}
-              onClose={() => setIsSavingCard(false)}
-              onSelect={(shouldSaveCard) => {
-                setShouldSaveCard(shouldSaveCard);
-                setIsSavingCard(false);
-                handleSubmit();
-              }}
-            /> */}
+      <ActionRestrictedModal
+        isOpen={actionRestricted}
+        onClose={() => setActionRestricted(false)}
+      />
 
       <div className="text-custom-white-text flex flex-col gap-4">
         <div className="flex flex-col gap-4 text-start w-full max-w-md mx-auto">
@@ -152,6 +181,8 @@ export default function FundUsdWithUgxAirtel() {
             </Label>
             <div className="flex items-center">
               <Input
+                value={amountToFund?.formattedAmount || ""}
+                inputMode="numeric"
                 onChange={(e) => handleAmountChange(e.target.value)}
                 type="text"
                 className="flex-1 py-6"
@@ -175,7 +206,13 @@ export default function FundUsdWithUgxAirtel() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToGHS(amountToDeduct)}
+                {FormatService.formatToGHS(amountToDeduct || 0)}
+              </p>
+            </div>
+            <div className="flex justify-between">
+              <p>Fee</p>
+              <p className="font-semibold tracking-wide">
+                {FormatService.formatToGHS(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
@@ -191,35 +228,14 @@ export default function FundUsdWithUgxAirtel() {
             onClick={handleSubmit}
             className="btn-primary py-6 rounded-full"
           >
-            Pay
+            {isPending ? (
+              <span className="flex items-center gap-2">
+                <Loader /> Processing...
+              </span>
+            ) : (
+              <span>Pay</span>
+            )}
           </Button>
-
-          {/* <div className="flex flex-col gap-2 ">
-                  <p className="text-custom-grey text-xs">Select Funding Card</p>
-                  <ExternalWallets
-                    wallets={externalWallets?.items || []}
-                    isLoading={isExternalWalletsLoading}
-                    isMinimumAmount={isMinimumAmount}
-                    selectedCard={selectedCard}
-                    amountToFund={amountToFund}
-                    handleSelectCard={handleSelectCard}
-                    onSubmit={handleSubmit}
-                  />
-                  <Button
-                    disabled={isMinimumAmount}
-                    onClick={handleOpenSaveCardModal}
-                    className="mt-1 bg-custom-blue-shade text-custom-white hover:bg-custom-blue-shade/90 cursor-pointer rounded text-sm py-8 px-4 flex justify-between items-center gap-4 w-full"
-                  >
-                    <div className="flex items-center gap-2">
-                      <RiBankCardLine size={40} className="!w-6 !h-6" />
-                      <div className="text-start">
-                        <p className="text-sm">Pay with a new card</p>
-                        <p className="text-xs">We support Visa, Mastercard, Verve</p>
-                      </div>
-                    </div>
-                    <RiArrowRightSLine size={20} />
-                  </Button>
-                </div> */}
         </div>
       </div>
     </DepositWrapper>

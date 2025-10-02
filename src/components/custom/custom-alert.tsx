@@ -29,7 +29,8 @@ interface CustomAlertProps {
 }
 
 const variantStyles: Record<AlertVariant, string> = {
-  destructive: "bg-rose-50 border-rose-300 text-rose-700",
+  // destructive: "bg-rose-50 border-rose-300 text-rose-700",
+  destructive: "bg-custom-orange-10 border-custom-orange-10 text-custom-grey",
   default: "bg-blue-50 border-blue-300 text-blue-700",
   success: "bg-green-50 border-green-300 text-green-700",
   info: "bg-slate-50 border-slate-300 text-slate-700",
@@ -37,7 +38,8 @@ const variantStyles: Record<AlertVariant, string> = {
 };
 
 const iconStyles: Record<AlertVariant, string> = {
-  destructive: "bg-rose-50 border-rose-300 text-rose-700",
+  // destructive: "bg-rose-50 border-rose-300 text-rose-700",
+  destructive: "bg-custom-card text-custom-orange",
   default: "bg-blue-50 border-blue-300 text-blue-700",
   success: "bg-green-50 border-green-300 text-green-700",
   info: "bg-slate-50 border-slate-300 text-slate-700",
@@ -45,7 +47,7 @@ const iconStyles: Record<AlertVariant, string> = {
 };
 
 const variantIcons: Record<AlertVariant, React.ElementType> = {
-  destructive: AlertCircleIcon,
+  destructive: AlertTriangle,
   default: Info,
   success: CircleCheckBig,
   info: XCircle,
@@ -63,7 +65,7 @@ export function CustomAlert({
   return (
     <Alert
       className={cn(
-        "mb-4 mt-3 rounded flex items-center gap-1 w-full py-2",
+        "rounded flex items-center w-full py-2 gap-1",
         className,
         variantStyles[variant]
       )}
@@ -74,7 +76,7 @@ export function CustomAlert({
           iconStyles[variant]
         )}
       >
-        <Icon className="!h-4 !w-5 shrink-0 mb-1" />
+        <Icon className="!h-3 !w-3" />
       </div>
 
       <div className="flex flex-col">

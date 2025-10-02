@@ -1,20 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
 import { Navigate, Outlet, useLocation } from "react-router";
-import { authService } from "@/api/auth.api";
 import AuthLoader from "@/components/custom/custom-loader";
+import { useAuthUser } from "@/hooks/use-auth-user";
+import { useUserVerificationStatus } from "@/hooks/useVerification";
 
 export const AuthGuard = () => {
   const location = useLocation();
 
-  const {
-    data: user,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["auth-user"],
-    queryFn: () => authService.getUser(),
-    retry: false,
-  });
+  const { data: user, isLoading, isError } = useAuthUser();
+  const { data: verificationStatus } = useUserVerificationStatus();
 
   if (isLoading) {
     return <AuthLoader />;

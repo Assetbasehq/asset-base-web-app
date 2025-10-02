@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import riseLink from "@/assets/images/rise-link.svg";
 import DepositWrapper from "../../../_components/deposit-wraper";
 import { useGetExternalWallets } from "@/hooks/use-external-wallets";
 import { useMemo, useState } from "react";
@@ -10,16 +8,19 @@ import {
   getAvailableIOMethods,
   getIOMethodRate,
 } from "@/helpers/deposit-methods";
-import riselogo from "@/assets/images/rise-r-logo.png";
-import { RiArrowDownSLine } from "react-icons/ri";
-import { CustomAlert } from "@/components/custom/custom-alert";
 import { FormatService } from "@/services/format-service";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
+import { useAuthStore } from "@/store/auth-store";
+import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
+import { LinkRiseWallet } from "@/components/shared/link-rise-wallet";
 
-export default function FundWithRiseWallet() {
+export default function FundUsdWithUsdRiseWallet() {
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRiseAccountLinked, setIsRiseAccountLinked] = useState(false);
+
+  const [actionRestricted, setActionRestricted] = useState(false);
+  const { user, isUserVerified } = useAuthStore();
 
   const isLinked = false; // Replace with actual logic later
 
@@ -30,7 +31,7 @@ export default function FundWithRiseWallet() {
 
   const { data, isLoading } = useGetExternalWallets({
     fetch_balance: "true",
-    // currency: "usd",
+    currency: "usd",
     // wallet_type: "api_vendor",
     // provider: "api_vendor",
   });
@@ -45,7 +46,7 @@ export default function FundWithRiseWallet() {
     return availableOptions.find((m) => m.channel === "api_vendor");
   }, [ioMethods]);
 
-  console.log({ items: data?.items, isLoading, selectedMethod });
+  console.log({ items: data?.items, selectedMethod });
 
   const handleAmountChange = (amount: string) => {
     setError(null);
@@ -55,6 +56,11 @@ export default function FundWithRiseWallet() {
 
   return (
     <DepositWrapper>
+      <ActionRestrictedModal
+        isOpen={actionRestricted}
+        onClose={() => setActionRestricted(false)}
+      />
+
       <div className="flex flex-col gap-4 text-start w-full max-w-md mx-auto">
         <div className="mb-8">
           <h2 className="text-xl font-semibold">Fund With Rise Wallet</h2>
@@ -93,59 +99,10 @@ export default function FundWithRiseWallet() {
       <AnimatedWrapper animationKey={String(isRiseAccountLinked)}>
         <LinkRiseWallet
           isLinked={isRiseAccountLinked}
+          handleLinkRiseAccount={() => setIsRiseAccountLinked(false)}
           linkRiseAccount={() => setIsRiseAccountLinked(true)}
         />
       </AnimatedWrapper>
     </DepositWrapper>
-  );
-}
-
-export function LinkRiseWallet({
-  isLinked,
-  linkRiseAccount,
-}: {
-  isLinked: boolean;
-  linkRiseAccount: () => void;
-}) {
-  if (!isLinked) {
-    return (
-      <div className="flex flex-col items-center gap-4 text-center my-12">
-        <img src={riseLink} alt="rise" className="w-28 h-28" />
-        <h2 className="text-sm font-medium max-w-sm text-custom-grey">
-          Your Rise account is not yet linked. Link your account to have access
-          to your wallet
-        </h2>
-        <Button
-          onClick={linkRiseAccount}
-          className="btn-primary rounded-full py-6 w-full"
-        >
-          Link Rise Account
-        </Button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col items-center text-center my-12">
-      <Button className="flex items-center justify-between gap-4 w-full bg-custom-rise-green py-10 hover:bg-custom-rise-green/90">
-        <div className="flex items-center gap-2 text-custom-grey">
-          <img
-            src={riselogo}
-            alt="rise"
-            className="w-12 h-12 bg-custom-card p-2 rounded-full"
-          />
-          <p>johndoe@gmail.com</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <p className="text-custom-grey">Logout</p>
-          <RiArrowDownSLine className="text-custom-grey" />
-        </div>
-      </Button>
-      <CustomAlert
-        variant="warning"
-        message="You can fund a minimun of $10 with your Rise Account"
-        className="text-xs"
-      />
-    </div>
   );
 }

@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { useState } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Elements,
   useStripe,
@@ -16,6 +9,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
+import env from "@/config";
 
 interface StripeModalProps {
   clientSecret: string;
@@ -24,7 +18,7 @@ interface StripeModalProps {
   onClose: () => void;
 }
 
-const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
+const stripePromise = loadStripe(env.STRIPE_PUBLIC_KEY);
 
 export default function StripeModal({
   isOpen,
@@ -38,7 +32,7 @@ export default function StripeModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="p-0">
         {clientSecret ? (
           <Elements
             stripe={stripePromise}
@@ -62,7 +56,10 @@ export default function StripeModal({
             <FundWithStripe
               amountToFund={Number(amountToFund)}
               handleError={(message: string) => console.error(message)}
-              handleSuccess={() => console.log("Payment successful!")}
+              handleSuccess={() => {
+                console.log("Payment successful!");
+                onClose();
+              }}
             />
           </Elements>
         ) : (

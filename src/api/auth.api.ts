@@ -108,6 +108,15 @@ class AuthService {
       handleAxiosError(error, "Failed to login with Google");
     }
   };
+
+  loginWithRise = async (payload: any) => {
+    try {
+      const response = await axiosInstance.post(`/sessions/rise`);
+      return response.data?.data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to login with Rise");
+    }
+  };
 }
 
 export const authService = new AuthService();

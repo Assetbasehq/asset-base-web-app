@@ -4,11 +4,15 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function FundNgnWithNgnVirtualAccount() {
   const [bvn, setBvn] = useState<string>("");
   const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [error, setError] = React.useState<string | null>(null);
+
+  const [actionRestricted, setActionRestricted] = useState(false);
+  const { user, isUserVerified } = useAuthStore();
 
   const handleInputChange = (newBvn: string) => {
     setError(null);
@@ -62,7 +66,9 @@ export default function FundNgnWithNgnVirtualAccount() {
 
           {error && <CustomAlert variant="destructive" message={error} />}
 
-          <Button className="btn-primary py-6 rounded-full mt-auto">Validate</Button>
+          <Button className="btn-primary py-6 rounded-full mt-auto">
+            Validate
+          </Button>
         </div>
       </div>
     </DepositWrapper>

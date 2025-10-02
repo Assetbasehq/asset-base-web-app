@@ -9,7 +9,7 @@ interface IUserVerificationStatus {
 
 export const useUserVerificationStatus = () => {
   return useQuery<IUserVerificationStatus | null | undefined, Error>({
-    queryKey: ["email-verification-status"],
+    queryKey: ["verification-status"],
     queryFn: () => userService.getUserVerificationStatus(),
     retry: false,
   });

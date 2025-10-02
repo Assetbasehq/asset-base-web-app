@@ -8,19 +8,33 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import doubleCheckImage from "@/assets/images/check-double-line.svg";
+import { CustomAlert } from "@/components/custom/custom-alert";
+import { Loader } from "lucide-react";
 
 interface ActionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  isLoading: boolean;
+  error?: string | null;
   onSelect: (shouldSaveCard: boolean) => void;
 }
 
 export default function SaveCardModal({
   isOpen,
   onClose,
+  isLoading,
+  error,
   onSelect,
 }: ActionModalProps) {
   if (!isOpen) return null;
+
+  const btnText = isLoading ? (
+    <span className="flex items-center gap-2">
+      <Loader /> Processing...
+    </span>
+  ) : (
+    <span>Save Card</span>
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -41,16 +55,21 @@ export default function SaveCardModal({
             Do you want to save card for future payments?
           </DialogDescription>
         </DialogHeader>
+
+        {error && <CustomAlert variant="destructive" message={error} />}
+
         <DialogFooter className="">
           <div className="flex flex-col gap-4 w-full">
             <Button
+              disabled={isLoading}
               onClick={() => onSelect(true)}
               className="w-full font-medium py-5 rounded-full btn-primary"
             >
-              Save Card
+              {btnText}
             </Button>
             <Button
-              onClick={() => onSelect(true)}
+              disabled={isLoading}
+              onClick={() => onSelect(false)}
               className="w-full font-medium py-5 rounded-full cursor-pointer"
             >
               No, Thanks

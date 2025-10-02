@@ -1,4 +1,5 @@
 import type { IOMethod } from "@/interfaces/wallet.interfae";
+import { FormatService } from "@/services/format-service";
 
 export const getAvailableIOMethods = (
   ioMethods: IOMethod[] = [],
@@ -38,6 +39,33 @@ export const getIOMethodFee = (method: IOMethod) => {
   }
 };
 
+export const calculateIOMethodFee = (
+  amount: number | string | null | undefined,
+  method: IOMethod | undefined | null
+): number => {
+  if (!method) return 0;
+  if (!amount) return 0;
+  if (isNaN(Number(amount))) return 0;
+
+  const { fee } = method;
+
+  switch (fee.type) {
+    case "flat":
+      return fee.value;
+    case "percentage":
+      return (fee.value / 100) * Number(amount);
+    case "added_percentage":
+      return (fee.value / 100) * Number(amount) + (fee.additional_value ?? 0);
+    case "capped_added_percentage":
+      // const rawFee = (fee.value / 100) * amount;
+      // const additional_value = fee.additional_value ?? 0;
+      // return Math.min(rawFee + additional_value, fee.cap ?? rawFee);
+      return (fee.value / 100) * Number(amount);
+    default:
+      return 0;
+  }
+};
+
 export const getIOMethodDisplayName = (method: IOMethod) => {
   if (method.channel === "mobile_money") {
     return `${method.network_name}`;
@@ -60,4 +88,56 @@ export const getIOMethodRate = (method: IOMethod) => {
   }
 
   return `$1 ~ ${method.currency.symbol}${method.currency.buy_rate}`;
+};
+
+export const normalizeCurrencyInput = (input: string) => {
+  const cleanedAmount = input.replace(/,/g, "");
+  if (isNaN(Number(cleanedAmount))) {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount === "0") {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount === "") {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount === ".") {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount.includes(".")) {
+    const [whole, decimal = ""] = cleanedAmount.split(".");
+
+    console.log({ whole, decimal });
+
+    // Reject multiple dots
+    if (cleanedAmount.split(".").length > 2) {
+      return { amount: "", formattedAmount: "" };
+    }
+
+    // Limit decimals to 2
+    const safeDecimal = decimal.slice(0, 2);
+    const rawAmount = `${whole}.${safeDecimal}`;
+    const formattedWhole = FormatService.formatWithCommas(Number(whole) || 0);
+    const formatted =
+      safeDecimal !== ""
+        ? `${formattedWhole}.${safeDecimal}`
+        : `${formattedWhole}${decimal === "" ? "." : ""}`;
+
+    return {
+      amount: rawAmount,
+      formattedAmount: formatted,
+    };
+  }
+  // Pure integer
+  const rawAmount = String(Number(cleanedAmount) || 0);
+  const formatted = FormatService.formatWithCommas(Number(cleanedAmount) || 0);
+
+  return {
+    amount: rawAmount,
+    formattedAmount: formatted,
+  };
 };
