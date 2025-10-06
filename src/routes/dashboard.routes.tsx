@@ -45,6 +45,7 @@ import FundUsdWithGhsVodafone from "@/pages/dashboard/wallet/deposit/usd/ghs/vod
 import ConvertFunds from "@/pages/dashboard/wallet/convert/convert";
 import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/rise-wallet/fund-with-rise";
 import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
+import ProfileBanksAndCards from "@/pages/dashboard/profile/_components/profile-banks-and-cards";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -229,6 +230,7 @@ export const dashboardRoutes: RouteObject[] = [
               { path: "kyc", element: <ProfileKYC /> },
               { path: "security", element: <ProfileSecurity /> },
               { path: "referrals", element: <ProfileReferrals /> },
+              { path: "banks-and-cards", element: <ProfileBanksAndCards /> },
               {
                 path: "account-statement",
                 element: <ProfileAccountStatement />,

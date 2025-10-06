@@ -17,58 +17,63 @@ import {
 
 const sideBarLinks = [
   {
-    name: "Profile",
+    name: "Overview",
     icon: <RiUser2Fill className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/profile",
+    path: "/admin/account/profile",
   },
   {
-    name: "Leaderboard",
+    name: "Users",
     icon: <RiListOrdered className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/leaderboard",
+    path: "/admin/account/leaderboard",
   },
   {
-    name: "KYC",
+    name: "Assets",
     icon: <RiCheckboxLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/kyc",
+    path: "/admin/account/kyc",
   },
   {
-    name: "Security",
+    name: "Liquidity",
     icon: <RiShieldUserLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/security",
+    path: "/admin/account/security",
+  },
+  {
+    name: "Campaigns",
+    icon: <RiGroupLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/account/referrals",
+  },
+  {
+    name: "Campaigns",
+    icon: <RiBankLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/account/banks-and-cards",
+  },
+  {
+    name: "Analytics",
+    icon: <RiBookletLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/account/account-statement",
   },
   {
     name: "Referrals",
-    icon: <RiGroupLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/referrals",
-  },
-  {
-    name: "Banks and Cards",
-    icon: <RiBankLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/banks-and-cards",
-  },
-  {
-    name: "Account Statment",
-    icon: <RiBookletLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/account-statement",
-  },
-  {
-    name: "Investment Certificate",
     icon: <RiAwardLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/investment-certificate",
+    path: "/admin/account/investment-certificate",
   },
   {
-    name: "Contact Us",
+    name: "Financial Reports",
     icon: <RiPhoneLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/contact-us",
+    path: "/admin/account/contact-us",
   },
   {
-    name: "Delete My Account",
+    name: "Security",
     icon: <RiDeleteBinLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/dashboard/account/delete-account",
+    path: "/admin/account/delete-account",
+  },
+  {
+    name: "Settings",
+    icon: <RiDeleteBinLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/account/delete-account",
   },
 ];
 
-export default function ProfileSideBar() {
+export default function AdminSideBar() {
   const { logout } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
@@ -85,7 +90,6 @@ export default function ProfileSideBar() {
     logout();
     navigate("/login");
   };
-
   return (
     <div
       className={cn(
