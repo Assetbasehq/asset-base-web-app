@@ -189,7 +189,8 @@ export default function FundUsdWithNgnCard() {
     selectedMethod
   );
   const buyRate = selectedMethod?.currency?.buy_rate || 0;
-  const dollarEquivalent = amountToFund
+  const dollarEquivalent = amountToFund ? amountToFund?.amount / buyRate : 0;
+  const dollarEquivalentMinusFee = amountToFund
     ? (amountToFund?.amount - calculatedFee) / buyRate
     : 0;
   const minimumAmount = dollarEquivalent;
@@ -236,7 +237,7 @@ export default function FundUsdWithNgnCard() {
             <h2 className="text-xl font-semibold">Fund With Card</h2>
             <p className="text-muted-foreground text-sm">
               Minimum deposit is{" "}
-              {selectedMethod && FormatService.formatToNaira(buyRate * 10)}
+              {selectedMethod && FormatService.formatToUSD(buyRate * 10)}
             </p>
           </div>
           <div className="flex flex-col gap-2">
@@ -280,7 +281,7 @@ export default function FundUsdWithNgnCard() {
             <div className="flex justify-between">
               <p>Dollar equivalent</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(dollarEquivalent)}
+                {FormatService.formatToUSD(dollarEquivalentMinusFee)}
               </p>
             </div>
           </div>

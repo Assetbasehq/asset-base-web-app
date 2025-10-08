@@ -186,13 +186,13 @@ export default function FundUsdWithUsdCard() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToNaira(amountToFund?.amount || 0)}
+                {FormatService.formatToUSD(amountToFund?.amount || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToNaira(calculatedFee)}
+                {FormatService.formatToUSD(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
@@ -204,7 +204,7 @@ export default function FundUsdWithUsdCard() {
           </div>
 
           <div className="flex flex-col gap-2 ">
-            <p className="text-custom-grey text-xs">Select Funding Card</p>
+            <p className="text-custom-black text-xs">Select Funding Card</p>
             <ExternalWallets
               wallets={externalWallets?.items || []}
               isLoading={isExternalWalletsLoading}
