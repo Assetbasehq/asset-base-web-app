@@ -220,13 +220,13 @@ export default function FundUsdWithKesMpesa() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToGHS(amountToDeduct || 0)}
+                {FormatService.formatToKES(amountToDeduct || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToGHS(calculatedFee)}
+                {FormatService.formatToKES(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
@@ -244,7 +244,7 @@ export default function FundUsdWithKesMpesa() {
           >
             {isPending ? (
               <span className="flex items-center gap-2">
-                <Loader /> Processing...
+                <Loader className="animate-spin" /> Processing...
               </span>
             ) : (
               <span>Pay</span>

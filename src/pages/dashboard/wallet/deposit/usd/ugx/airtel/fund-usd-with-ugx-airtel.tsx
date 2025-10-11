@@ -206,13 +206,13 @@ export default function FundUsdWithUgxAirtel() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToGHS(amountToDeduct || 0)}
+                {FormatService.formatToUGX(amountToDeduct || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToGHS(calculatedFee)}
+                {FormatService.formatToUGX(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">

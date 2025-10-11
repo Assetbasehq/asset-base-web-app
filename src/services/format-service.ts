@@ -44,6 +44,36 @@ export class FormatService {
   }
 
   /**
+   * Formats a number into an Ugandan Shilling currency string
+   * Example: 1234.56 => "USh1,234.56"
+   */
+
+  static formatToUGX(amount: number | null | undefined): string {
+    if (amount == null || isNaN(amount)) return "USh 0.00";
+    return new Intl.NumberFormat("en-UG", {
+      style: "currency",
+      currency: "UGX",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
+  /**
+   * Formats a number into a Kenyan Shilling currency string
+   * Example: 1234.56 => "KSh1,234.56"
+   */
+
+  static formatToKES(amount: number | null | undefined): string {
+    if (amount == null || isNaN(amount)) return "KSh0.00";
+    return new Intl.NumberFormat("en-KE", {
+      style: "currency",
+      currency: "KES",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
+  /**
    * Formats a number with commas (no currency symbol)
    * Example: 1234567 => "1,234,567"
    */
