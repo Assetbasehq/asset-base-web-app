@@ -18,7 +18,7 @@ export default function ReferralCard() {
           <div className="flex justify-center">
             <img
               src={referralSpeaker}
-              className=" w-20 h-20 hidden lg:block"
+              className=" w-fit h-20 hidden lg:block"
               alt=""
             />
           </div>

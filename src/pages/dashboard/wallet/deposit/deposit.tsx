@@ -36,15 +36,11 @@ export default function Deposit() {
     : [];
 
   const handleSelectCurrency = (currencyCode: string) => {
-    // console.log({ currencyCode });
-
     if (!selectedWallet) return;
 
     const selected = availableCurrencies.find(
       (currency) => currency.currencyCode === currencyCode
     );
-
-    // console.log({ selected });
 
     if (selected) {
       setSourceCurrency(selected);
@@ -52,8 +48,6 @@ export default function Deposit() {
   };
 
   const handleNext = () => {
-    // console.log({ destinationWallet, sourceCurrency });
-
     if (!destinationWallet || !sourceCurrency) return;
 
     if (destinationWallet.name.toUpperCase() === "CRYPTO") {

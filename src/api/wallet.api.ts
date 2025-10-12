@@ -35,27 +35,20 @@ class WalletService {
     }
   };
 
-  getNewWalletBalance = async (params?: any) => {
-    try {
-      // const response = await axiosInstance.get(`/wallets`, { params });
-      const response = await axios.get(
-        `${config.WEB3_SERVICE_BASE_URL}/wallet/balance`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          params,
-        }
-      );
-      const data = response.data;
+  // getNewWalletBalance = async (params?: any) => {
+  //   try {
+  //     const response = await web3axiosInstance.get(`/wallet/balance`, {
+  //       params,
+  //     });
+  //     const data = response.data;
 
-      console.log({ data });
+  //     console.log({ data });
 
-      return data || [];
-    } catch (error) {
-      handleAxiosError(error, "failed to create security pin");
-    }
-  };
+  //     return data || [];
+  //   } catch (error) {
+  //     handleAxiosError(error, "failed to create security pin");
+  //   }
+  // };
 
   depositCrypto = async () => {
     try {

@@ -11,6 +11,7 @@ export interface ICurrency {
 
 export interface IOMethod {
   channel: string;
+  provider: string;
   currency: {
     buy_rate: number;
     code: string;
@@ -33,7 +34,6 @@ export interface IOMethod {
   limit: {
     type: string;
   };
-  provider: string;
   timeline: string;
   network_code: string;
   network_name: string;

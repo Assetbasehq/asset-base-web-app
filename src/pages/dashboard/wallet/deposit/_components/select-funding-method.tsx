@@ -40,15 +40,43 @@ export default function SelectFundingMethod({
   });
 
   // Available filtered IO methods
-  const availableOptions = useMemo(
-    () =>
+  const availableOptions = useMemo(() => {
+    const apiMethods =
       getAvailableIOMethods(
         ioMethods || [],
         destinationWalletCode,
         sourceCurrencyCode
-      ),
-    [ioMethods, destinationWalletCode, sourceCurrencyCode]
-  );
+      ) || [];
+
+    // Define your manual method(s)
+    // const manualMethods: IOMethod[] = [
+    //   {
+    //     channel: "yellow-card",
+    //     provider: "yellow-card",
+    //     network_name: "yellow-card",
+    //     currency: {
+    //       buy_rate: 0,
+    //       code: sourceCurrencyCode?.toUpperCase() || "USD",
+    //       flag: "",
+    //       min_first_investment_balance: 0,
+    //       name: sourceCurrencyCode?.toUpperCase() || "USD",
+    //       sell_rate: 0,
+    //       symbol: "$",
+    //       wallet_status: "active",
+    //     },
+    //     destination_wallets: [destinationWalletCode?.toLowerCase() || ""],
+    //     fee: {
+    //       type: "N/A",
+    //       value: 0,
+    //     },
+    //     timeline: "5-10-mins",
+    //   } as IOMethod,
+    // ];
+
+    // Combine manual and API-based methods
+    // return [...manualMethods, ...apiMethods];
+    return apiMethods;
+  }, [ioMethods, destinationWalletCode, sourceCurrencyCode]);
 
   console.log({ ioMethods, availableOptions });
 

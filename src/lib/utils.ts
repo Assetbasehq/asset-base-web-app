@@ -197,6 +197,9 @@ export function generatePaymentURL(
         lastSegment = "rise-wallet";
       }
       break;
+    // case "yellow-card":
+    //   lastSegment = "yellow-card";
+    //   break;
 
     default:
       // fallback for unknown methods
