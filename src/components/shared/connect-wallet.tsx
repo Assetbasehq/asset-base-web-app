@@ -159,13 +159,15 @@ export function ConnectWalletModal({
                 })
               ) : (
                 <div>
-                  Please install Metamask, Trust Wallet or any other wallet
+                  Please install Metamask, Trust Wallet or any other Web3 wallet
                 </div>
               )}
             </div>
+
             {error && (
               <CustomAlert message={error?.message} variant="destructive" />
             )}
+
             <p className="text-custom-grey text-xs">
               By connecting your wallet, you agree to our{" "}
               <small className="text-custom-orange text-sm ">

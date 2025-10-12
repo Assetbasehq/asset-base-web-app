@@ -7,12 +7,12 @@ import { userService } from "@/api/user.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserVerificationStatus } from "@/hooks/useVerification";
 import { cn } from "@/lib/utils";
-import IDVerification from "../../_modals/id-verification";
-import ManualVerification from "../../_modals/manual-verification";
+import IDVerification from "./_modals/id-verification";
 import SuccessModal from "@/components/modals/success-modal";
 import { Skeleton } from "@/components/ui/skeleton";
-import DojahKycModal from "../../_modals/dojah-kyc-modal";
+import DojahKycModal from "./_modals/dojah-kyc-modal";
 import { useNavigate } from "react-router";
+import ManualVerification from "./_modals/manual-verification";
 
 export default function ProfileKYC() {
   const navigate = useNavigate();

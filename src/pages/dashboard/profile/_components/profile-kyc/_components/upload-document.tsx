@@ -1,20 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
-import { ArrowLeft, UploadCloud, FileText } from "lucide-react";
+import { ArrowLeft, UploadCloud, FileText, Loader2, Loader } from "lucide-react";
 import { useRef, useState } from "react";
+import { CustomAlert } from "@/components/custom/custom-alert";
 
 interface UploadDocumentProps {
+  error: string | null;
+  file: File | null;
+  setFile: (file: File | null) => void;
   onSelect: () => void;
   isLoading: boolean;
   goBack?: () => void;
 }
 
 export default function UploadDocument({
+  error,
+  file,
+  setFile,
   onSelect,
   isLoading,
   goBack,
 }: UploadDocumentProps) {
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +55,7 @@ export default function UploadDocument({
       </div>
 
       {/* Header */}
-      <div className="text-center space-y-2">
+      <div className="text-start space-y-2 w-full">
         <h3 className="text-lg font-semibold">Upload Your ID Document</h3>
         <p className="text-sm text-muted-foreground">
           Please upload a clear image or PDF of your ID card or passport.
@@ -56,22 +63,25 @@ export default function UploadDocument({
       </div>
 
       {/* Upload Area */}
-      <div
-        className="border-2 border-dashed rounded-xl w-full h-48 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary/60 transition"
-        onClick={handleUploadClick}
-      >
-        <UploadCloud className="w-10 h-10 text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">
-          Click to upload or drag & drop your file here
-        </p>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*,.pdf"
-          className="hidden"
-          onChange={handleFileChange}
-        />
-      </div>
+      {!file && (
+        <div
+          className="border-2 border-dashed border-custom-orange rounded-xl w-full h-48 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-custom-orange/20 transition"
+          onClick={handleUploadClick}
+        >
+          <UploadCloud className="w-10 h-10 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">
+            Click to upload or drag & drop your file here
+          </p>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*,.pdf"
+            multiple={false}
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
+      )}
 
       {/* File Preview */}
       {file && (
@@ -84,20 +94,29 @@ export default function UploadDocument({
             variant="outline"
             size="sm"
             onClick={() => setFile(null)}
-            className="text-xs"
+            className="text-xs btn-primary py-2 rounded-full"
           >
             Remove
           </Button>
         </div>
       )}
 
+      {error && <CustomAlert variant="destructive" message={error} />}
+
       {/* Submit Button */}
       <Button
-        className="w-full mt-4 rounded-full py-6"
+        className="w-full mt-4 rounded-full py-6 btn-primary"
         disabled={!file || isLoading}
         onClick={onSelect}
       >
-        Finish Verification
+        {isLoading ? (
+          <span className="flex items-center gap-2">
+            <Loader className="animate-spin" />
+            Uploading...
+          </span>
+        ) : (
+          "Submit Document"
+        )}
       </Button>
     </motion.div>
   );

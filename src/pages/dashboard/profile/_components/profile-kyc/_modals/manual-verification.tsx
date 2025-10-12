@@ -1,5 +1,4 @@
 import { verificationService } from "@/api/verification.api";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -27,21 +26,12 @@ import ButtonLoader from "@/components/custom/button-loader";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { CustomAlert } from "@/components/custom/custom-alert";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { identification_types } from "@/constants/identification-types";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "motion/react";
-import Webcam from "react-webcam";
-import { RiArrowLeftLine } from "react-icons/ri";
-import {
-  ArrowLeft,
-  Camera,
-  CheckCircle,
-  RefreshCw,
-  Upload,
-} from "lucide-react";
-import CapturePhoto from "../_components/profile-kyc/_components/capture-photo";
-import UploadDocument from "../_components/profile-kyc/_components/upload-document";
+import CapturePhoto from "../_components/capture-photo";
+import UploadDocument from "../_components/upload-document";
 
 const tempCountries = [
   { name: "Nigeria", code: "NG", flag: "🇳🇬" },
@@ -69,6 +59,8 @@ export default function ManualVerification({
 }: ManualVerificationProps) {
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -96,20 +88,64 @@ export default function ManualVerification({
     },
   });
 
+  const uploadFilesMutation = useMutation({
+    mutationFn: verificationService.uploadVerificationAttachments,
+    onSuccess: (data) => {
+      console.log({ data });
+      console.log(`Upload successful, verification initiated`);
+
+      const payload: Record<string, any> = {
+        request_type: "identity",
+        provider: "system",
+        user_data: {
+          id_type: form.getValues("identification_type"),
+          id_number: form.getValues("identification_number"),
+        },
+      };
+
+      if (form.getValues("identification_type") !== "bvn") {
+        payload.image_urls = [];
+      }
+
+      mutateAsync(payload as any);
+    },
+    onError: (error) => {
+      console.log({ error });
+      setError(error.message);
+    },
+  });
+
   const onSubmit = (data: FormValues) => {
     console.log({ data });
     setStep(2);
+  };
 
-    // const payload = {
-    //   request_type: "identity",
-    //   provider: "system",
-    //   user_data: {
-    //     id_type: "",
-    //     id_number: "",
-    //   },
-    // };
+  const dataURLtoFile = (dataurl: string, mimeType: string) => {
+    const dataURLArr = dataurl.split(",");
+    /* decode the encoded base64 string for the image into a character string for each byte of data */
+    const decodedBinaryStr = atob(dataURLArr[1]);
+    let n = decodedBinaryStr.length;
+    /* Create a Uint8array based on the length of the decoded base64 string  */
+    const u8arr = new Uint8Array(n);
 
-    // mutateAsync(payload);
+    while (n--) {
+      /* Loop through the entire decodedBinaryString and assign each character to the UintArray to create a byte array */
+      u8arr[n] = decodedBinaryStr.charCodeAt(n);
+    }
+
+    return new File([u8arr], "image", { type: mimeType });
+  };
+
+  const handleFinishVerification = async () => {
+    setError(null);
+    if (!photo && !file) {
+      setError("Please provide a photo or upload a document.");
+      return;
+    }
+
+    const newPhoto = dataURLtoFile(photo!, "image/png");
+
+    uploadFilesMutation.mutate([newPhoto, file] as File[]);
   };
 
   if (!isOpen) {
@@ -153,7 +189,7 @@ export default function ManualVerification({
                     <FormField
                       control={form.control}
                       name="country"
-                      rules={{ required: "Country is required" }}
+                      // rules={{ required: "Country is required" }}
                       render={({ field }) => {
                         const error = form.formState.errors.country;
                         return (
@@ -195,9 +231,9 @@ export default function ManualVerification({
                     <FormField
                       control={form.control}
                       name="identification_type"
-                      rules={{
-                        required: "Identification Type is required",
-                      }}
+                      // rules={{
+                      //   required: "Identification Type is required",
+                      // }}
                       render={({ field }) => {
                         const error = form.formState.errors.identification_type;
                         return (
@@ -239,17 +275,17 @@ export default function ManualVerification({
                     <FormField
                       control={form.control}
                       name="identification_number"
-                      rules={{
-                        required: "Identification Number is required",
-                        minLength: {
-                          value: 11,
-                          message: "Must be exactly 11 digits",
-                        },
-                        maxLength: {
-                          value: 11,
-                          message: "Must be exactly 11 digits",
-                        },
-                      }}
+                      // rules={{
+                      //   required: "Identification Number is required",
+                      //   minLength: {
+                      //     value: 11,
+                      //     message: "Must be exactly 11 digits",
+                      //   },
+                      //   maxLength: {
+                      //     value: 11,
+                      //     message: "Must be exactly 11 digits",
+                      //   },
+                      // }}
                       render={({ field }) => (
                         <FormItem>
                           <Label>Identification Number</Label>
@@ -283,11 +319,20 @@ export default function ManualVerification({
             ) : step === 2 ? (
               // ✅ Step 2 — Upload/Capture
               <CapturePhoto
+                photo={photo}
+                setPhoto={setPhoto}
                 onSelect={() => setStep(3)}
                 goBack={() => setStep(1)}
               />
             ) : (
-              <UploadDocument onSelect={onSuccess} isLoading={isPending} />
+              <UploadDocument
+                error={error}
+                file={file}
+                setFile={setFile}
+                onSelect={handleFinishVerification}
+                isLoading={isPending || uploadFilesMutation.isPending}
+                goBack={() => setStep(2)}
+              />
             )}
           </AnimatePresence>
         </div>

@@ -19,6 +19,7 @@ class VerificationService {
     request_type: string;
     provider: string;
     user_data: { id_type: string; id_number: string };
+    image_urls?: [];
   }) => {
     try {
       const response = await axiosInstance.post(`verification-requests`, {
@@ -32,11 +33,24 @@ class VerificationService {
       handleAxiosError(error, "Something went wrong");
     }
   };
-  uploadVerificationAttachments = async (payload: any) => {
+  uploadVerificationAttachments = async (payload: File[]) => {
+    const files = payload.map((file) => ({
+      filename: file.name.replace(/[^a-zA-Z0-9_.-]+/, "-"),
+      size: file.size,
+      mimeType: file.type,
+      id: (crypto as any).randomUUID(),
+    }));
+
+    console.log({ files });
+    
+
     try {
       const response = await axiosInstance.post(
         `verification-requests/attachments`,
-        payload
+        files,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
       console.log({ response });
 

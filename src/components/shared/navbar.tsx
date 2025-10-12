@@ -15,6 +15,8 @@ import {
   RiSearch2Line,
 } from "react-icons/ri";
 import ConnectWallet from "./connect-wallet";
+import Notifications from "./notifications";
+import { useGetNotifications } from "@/hooks/use-notifications";
 
 const links = [
   {
@@ -46,9 +48,21 @@ const links = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+  const { data, isLoading } = useGetNotifications({ limit: 10, offset: "0" });
+
+  console.log({ data });
+  
 
   return (
     <nav className="w-full flex items-center justify-between gap-4 p-4 bg-fixed-base text-white font-geist">
+      <Notifications
+        isOpen={isNotificationsOpen}
+        onOpenChange={setIsNotificationsOpen}
+        isLoading={isLoading}
+        notifications={data || []}
+      />
       <div className="flex items-center gap-6">
         {/* Logo + Title + Beta Badge */}
         <AssetBaseBetaWhite />
@@ -87,6 +101,10 @@ export default function Navbar() {
           {/* <WalletConnection /> */}
 
           <RiNotification2Line
+            onClick={() => {
+              // setIsOpen(false);
+              setIsNotificationsOpen(true);
+            }}
             size={34}
             className="border p-2 rounded-full text-white border-muted-foreground hover:border-primary hover:text-primary transition duration-300 cursor-pointer"
           />
