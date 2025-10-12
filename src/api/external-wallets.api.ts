@@ -32,6 +32,39 @@ class ExternalWalletService {
       handleAxiosError(error, "Failed to create rise wallet");
     }
   };
+
+  createExternalWallet = async (payload: {
+    currency: string;
+    provider: string;
+    wallet_type: "bank_account" | "card" | "api_vendor";
+    details: { token: string };
+  }) => {
+    try {
+      const response = await axiosInstance.post(`/external-wallets`, payload);
+      const data = response.data;
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to create rise wallet");
+    }
+  };
+
+  getWalletToken = async (payload: {
+    currency: string;
+    provider: string;
+    wallet_type: "bank_account" | "card" | "api_vendor";
+    details?: { [key: string]: string };
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/external-wallets/requests`,
+        payload
+      );
+      const data = response.data;
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Somethin went wrong.");
+    }
+  };
 }
 
 export const externalWalletService = new ExternalWalletService();

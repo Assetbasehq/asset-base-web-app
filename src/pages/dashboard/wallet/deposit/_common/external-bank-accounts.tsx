@@ -3,20 +3,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { CardItem } from "@/interfaces/external-wallets";
 import { RiArrowRightSLine, RiBankCardLine } from "react-icons/ri";
 
-interface ExternalWalletProps {
+interface ExternalBankAccountsProps {
   wallets: CardItem[];
   isLoading: boolean;
   isMinimumAmount: boolean;
-  amountToFund: number | null;
-  handleSelectCard: (card: CardItem) => void;
+  handleSelectBankAccount: (card: CardItem) => void;
 }
 
-export default function ExternalWallets({
+export default function ExternalBankAccounts({
   wallets,
   isLoading,
   isMinimumAmount,
-  handleSelectCard,
-}: ExternalWalletProps) {
+  handleSelectBankAccount,
+}: ExternalBankAccountsProps) {
   if (isLoading) {
     return (
       <div className="w-full overflow-x-auto no-scrollbar">
@@ -60,7 +59,7 @@ export default function ExternalWallets({
                 key={card.id}
                 disabled={isMinimumAmount}
                 onClick={() => {
-                  handleSelectCard(card);
+                  handleSelectBankAccount(card);
                 }}
                 className="bg-custom-input-fill border-2 border-custom-input-stroke text-custom-grey hover:bg-custom-input-fill/80 cursor-pointer rounded-xl text-sm py-12 px-4 flex justify-between items-center gap-4 min-w-[200px]"
               >

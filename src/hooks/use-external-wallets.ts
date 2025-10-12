@@ -1,4 +1,4 @@
-import { externalWalletService } from "@/api/external-wallets";
+import { externalWalletService } from "@/api/external-wallets.api";
 import type { CardItem } from "@/interfaces/external-wallets";
 import { useQuery } from "@tanstack/react-query";
 

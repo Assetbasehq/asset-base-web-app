@@ -18,7 +18,7 @@ import Matured from "@/pages/dashboard/portfolio/_components/matured";
 import Profile from "@/pages/dashboard/profile/profile";
 import ProfilePage from "@/pages/dashboard/profile/_components/profile-page";
 import ProfileLeaderboard from "@/pages/dashboard/profile/_components/profile-leaderboard";
-import ProfileKYC from "@/pages/dashboard/profile/_components/profile-kyc";
+import ProfileKYC from "@/pages/dashboard/profile/_components/profile-kyc/profile-kyc";
 import ProfileSecurity from "@/pages/dashboard/profile/_components/profile-security";
 import ProfileReferrals from "@/pages/dashboard/profile/_components/profile-referrals";
 import ProfileAccountStatement from "@/pages/dashboard/profile/_components/profile-account-statement";

@@ -26,11 +26,29 @@ import {
 import ButtonLoader from "@/components/custom/button-loader";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { countryCodes } from "@/constants/countries";
 import { CustomAlert } from "@/components/custom/custom-alert";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { identification_types } from "@/constants/identification-types";
 import { Input } from "@/components/ui/input";
+import { motion, AnimatePresence } from "motion/react";
+import Webcam from "react-webcam";
+import { RiArrowLeftLine } from "react-icons/ri";
+import {
+  ArrowLeft,
+  Camera,
+  CheckCircle,
+  RefreshCw,
+  Upload,
+} from "lucide-react";
+import CapturePhoto from "../_components/profile-kyc/_components/capture-photo";
+import UploadDocument from "../_components/profile-kyc/_components/upload-document";
+
+const tempCountries = [
+  { name: "Nigeria", code: "NG", flag: "🇳🇬" },
+  { name: "Kenya", code: "KE", flag: "🇰🇪" },
+  { name: "Ghana", code: "GH", flag: "🇬🇭" },
+  { name: "Uganda", code: "UG", flag: "🇺🇬" },
+];
 
 interface ManualVerificationProps {
   isOpen: boolean;
@@ -50,6 +68,7 @@ export default function ManualVerification({
   onSuccess,
 }: ManualVerificationProps) {
   const [error, setError] = useState<string | null>(null);
+  const [step, setStep] = useState(1);
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -57,13 +76,15 @@ export default function ManualVerification({
       identification_type: "",
       identification_number: "",
     },
+    mode: "onChange",
   });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: verificationService.initiateSystemVerification,
     onSuccess: (data) => {
       console.log({ data });
-      onSuccess();
+      // onSuccess();
+      setStep(2);
     },
     onError: (error) => {
       console.log({ error });
@@ -77,22 +98,24 @@ export default function ManualVerification({
 
   const onSubmit = (data: FormValues) => {
     console.log({ data });
+    setStep(2);
 
-    const payload = {
-      request_type: "identity",
-      provider: "system",
-      user_data: {
-        id_type: "",
-        id_number: "",
-      },
-    };
+    // const payload = {
+    //   request_type: "identity",
+    //   provider: "system",
+    //   user_data: {
+    //     id_type: "",
+    //     id_number: "",
+    //   },
+    // };
 
-    mutateAsync(payload);
+    // mutateAsync(payload);
   };
 
   if (!isOpen) {
     return null;
   }
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -104,146 +127,170 @@ export default function ManualVerification({
             Manual Verification
           </DialogTitle>
           <DialogDescription className="text-start">
-            Provide the details required to compete your verification
+            {step === 1
+              ? "Provide the details required to complete your verification"
+              : "Capture or upload your identification image"}{" "}
           </DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col w-full gap-6 text-start"
-          >
-            {/* Country */}
-            <FormField
-              control={form.control}
-              name="country"
-              rules={{ required: "Country is required" }}
-              render={({ field }) => {
-                const error = form.formState.errors.country;
-
-                return (
-                  <FormItem>
-                    <Label>Country Of Residence</Label>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        defaultValue="nigeria"
-                      >
-                        <SelectTrigger
-                          className={cn(
-                            "w-full py-6 pr-3 align-text-bottom cursor-pointer capitalize",
-                            error && "border-red-500 text-red-500"
-                          )}
-                        >
-                          <SelectValue placeholder="Select Country" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectContent className="max-h-[300px]">
-                            {countryCodes.map((country) => (
-                              <SelectItem
-                                key={country.name}
-                                value={country.name}
-                                className="capitalize"
+        {/* 🔄 Animated Step Container */}
+        <div className="relative w-full overflow-hidden h-full">
+          <AnimatePresence mode="wait">
+            {step === 1 ? (
+              <motion.div
+                key="step1"
+                initial={{ x: 0, opacity: 1 }}
+                exit={{ x: -200, opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="flex flex-col gap-6"
+              >
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col w-full gap-6 text-start"
+                  >
+                    {/* Country */}
+                    <FormField
+                      control={form.control}
+                      name="country"
+                      rules={{ required: "Country is required" }}
+                      render={({ field }) => {
+                        const error = form.formState.errors.country;
+                        return (
+                          <FormItem>
+                            <Label>Country Of Residence</Label>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
                               >
-                                {country.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            {/* Identification Type */}
-            <FormField
-              control={form.control}
-              name="identification_type"
-              rules={{
-                required: "Identification Type is required",
-              }}
-              render={({ field }) => {
-                const error = form.formState.errors.country;
-                return (
-                  <FormItem>
-                    <Label>Identification Type</Label>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger
-                          className={cn(
-                            "w-full py-6 pr-3 align-text-bottom cursor-pointer",
-                            error && "border-red-500 text-red-500"
-                          )}
-                        >
-                          <SelectValue placeholder="Select Identification Type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectContent className="max-h-[300px]">
-                            {identification_types.map((identification_type) => (
-                              <SelectItem
-                                key={identification_type.shortCode}
-                                value={identification_type.shortCode.toLowerCase()}
-                                className="capitalize"
-                              >
-                                {identification_type.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-
-            <FormField
-              control={form.control}
-              rules={{
-                required: "Identification Number is required",
-                minLength: {
-                  value: 11,
-                  message: "Identification Number must be at least 11 digits",
-                },
-                maxLength: {
-                  value: 11,
-                  message: "Identification Number must be at most 11 digits",
-                },
-              }}
-              name="identification_number"
-              render={({ field }) => (
-                <FormItem>
-                  <Label>Idenification Number</Label>
-                  <FormControl>
-                    <Input
-                      className="py-6  capitalize"
-                      placeholder="Doe"
-                      {...field}
+                                <SelectTrigger
+                                  className={cn(
+                                    "w-full py-6 cursor-pointer capitalize",
+                                    error && "border-red-500 text-red-500"
+                                  )}
+                                >
+                                  <SelectValue placeholder="Select Country" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[300px]">
+                                  {tempCountries.map((country) => (
+                                    <SelectItem
+                                      key={country.name}
+                                      value={country.name}
+                                      className="capitalize"
+                                    >
+                                      {country.flag} {country.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            {error && <CustomAlert variant="destructive" message={error} />}
+                    {/* Identification Type */}
+                    <FormField
+                      control={form.control}
+                      name="identification_type"
+                      rules={{
+                        required: "Identification Type is required",
+                      }}
+                      render={({ field }) => {
+                        const error = form.formState.errors.identification_type;
+                        return (
+                          <FormItem>
+                            <Label>Identification Type</Label>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger
+                                  className={cn(
+                                    "w-full py-6 cursor-pointer",
+                                    error && "border-red-500 text-red-500"
+                                  )}
+                                >
+                                  <SelectValue placeholder="Select Identification Type" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[300px]">
+                                  {identification_types.map((idType) => (
+                                    <SelectItem
+                                      key={idType.shortCode}
+                                      value={idType.shortCode.toLowerCase()}
+                                      className="capitalize"
+                                    >
+                                      {idType.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
+                    />
 
-            <ButtonLoader
-              disabled={isPending}
-              type="submit"
-              className="w-full btn-secondary rounded-full mt-2 py-6"
-            >
-              CLICK HERE TO PROCEED
-            </ButtonLoader>
-          </form>
-        </Form>
+                    {/* Identification Number */}
+                    <FormField
+                      control={form.control}
+                      name="identification_number"
+                      rules={{
+                        required: "Identification Number is required",
+                        minLength: {
+                          value: 11,
+                          message: "Must be exactly 11 digits",
+                        },
+                        maxLength: {
+                          value: 11,
+                          message: "Must be exactly 11 digits",
+                        },
+                      }}
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label>Identification Number</Label>
+                          <FormControl>
+                            <Input
+                              className="py-6"
+                              placeholder="Enter ID number"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {error && (
+                      <CustomAlert variant="destructive" message={error} />
+                    )}
+
+                    <ButtonLoader
+                      // disabled={isPending || !form.formState.isValid}
+
+                      type="submit"
+                      className="w-full btn-secondary rounded-full mt-2 py-6"
+                    >
+                      CLICK HERE TO PROCEED
+                    </ButtonLoader>
+                  </form>
+                </Form>
+              </motion.div>
+            ) : step === 2 ? (
+              // ✅ Step 2 — Upload/Capture
+              <CapturePhoto
+                onSelect={() => setStep(3)}
+                goBack={() => setStep(1)}
+              />
+            ) : (
+              <UploadDocument onSelect={onSuccess} isLoading={isPending} />
+            )}
+          </AnimatePresence>
+        </div>
       </DialogContent>
     </Dialog>
   );

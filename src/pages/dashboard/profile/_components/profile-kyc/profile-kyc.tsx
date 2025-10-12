@@ -1,17 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, Mail, User } from "lucide-react";
-import ConfirmEmailModal from "../_modals/confirm-email-modal";
+import ConfirmEmailModal from "../../_modals/confirm-email-modal";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { userService } from "@/api/user.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserVerificationStatus } from "@/hooks/useVerification";
 import { cn } from "@/lib/utils";
-import IDVerification from "../_modals/id-verification";
-import ManualVerification from "../_modals/manual-verification";
+import IDVerification from "../../_modals/id-verification";
+import ManualVerification from "../../_modals/manual-verification";
 import SuccessModal from "@/components/modals/success-modal";
 import { Skeleton } from "@/components/ui/skeleton";
-import DojahKycModal from "../_modals/dojah-kyc-modal";
+import DojahKycModal from "../../_modals/dojah-kyc-modal";
 import { useNavigate } from "react-router";
 
 export default function ProfileKYC() {
@@ -79,7 +79,9 @@ export default function ProfileKYC() {
           <div className="flex items-center gap-2 w-full p-1 sm:p-2">
             <Mail className="w-2 h-2 " />
             <div className="flex items-center gap-2">
-              <p className="font-medium text-xs sm:text-sm md:text-lg">Email Verification</p>
+              <p className="font-medium text-xs sm:text-sm md:text-lg">
+                Email Verification
+              </p>
               <Badge
                 className={cn(" rounded-full capitalize px-2 text-xs", {
                   "text-green-500 bg-green-500/30":
@@ -105,7 +107,9 @@ export default function ProfileKYC() {
           <div className="flex items-center gap-2 w-full p-1 sm:p-2">
             <User />
             <div className="flex items-center gap-2">
-              <p className="font-medium text-xs sm:text-sm md:text-lg">ID Verification</p>
+              <p className="font-medium text-xs sm:text-sm md:text-lg">
+                ID Verification
+              </p>
               <Badge
                 className={cn(" rounded-full capitalize px-2", {
                   "text-green-500 bg-green-500/30":

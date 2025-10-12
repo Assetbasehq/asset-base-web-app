@@ -1,12 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import DepositWrapper from "../../../_components/deposit-wraper";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
 import { useAuthStore } from "@/store/auth-store";
 import { useMutation } from "@tanstack/react-query";
-import {
-  transactionRequestService,
-  type ITransactionRequest,
-} from "@/api/transaction-request";
 import { useGetExternalWallets } from "@/hooks/use-external-wallets";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -19,11 +15,14 @@ import {
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { useIoMethods } from "@/hooks/useIoMethod";
 import { FormatService } from "@/services/format-service";
-import ExternalWallets from "../../../_common/external-wallets";
 import { Button } from "@/components/ui/button";
-import type { CardItem } from "@/interfaces/external-wallets";
-import SaveCardModal from "../../../_components/save-card-modal";
-import ConfirmCardSelection from "../../../_common/confirm-card-selection";
+import {
+  usePlaidLink,
+  type PlaidLinkOptionsWithLinkToken,
+} from "react-plaid-link";
+import { Loader } from "lucide-react";
+import { externalWalletService } from "@/api/external-wallets.api";
+import ExternalBankAccounts from "../../../_common/external-bank-accounts";
 
 interface IAmountToFund {
   amount: number;
@@ -32,19 +31,55 @@ interface IAmountToFund {
 
 export default function FundUsdWithUsdBankAccount() {
   const [amountToFund, setAmountToFund] = useState<IAmountToFund | null>(null);
-  const [shouldSaveCard, setShouldSaveCard] = useState(false);
-  const [isSavingCard, setIsSavingCard] = useState(false);
-  const [selectedCard, setSelectedCard] = useState<CardItem | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isConfirmingCardSelection, setIsConfirmingCardSelection] =
-    useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isActionRestricted, setIsActionRestricted] = useState(false);
-  const [isPlaidModalOpen, setIsPlaidModalOpen] = useState(false);
+  const [plaidToken, setPlaidToken] = useState<string | null>(null);
 
-  const { user, isUserVerified } = useAuthStore();
+  const { isUserVerified } = useAuthStore();
+
+  const createExternalWalletMutation = useMutation({
+    mutationFn: externalWalletService.createExternalWallet,
+    onSuccess: (data) => {
+      console.log({ data });
+      setIsProcessing(false);
+    },
+    onError: (error) => {
+      console.log({ error });
+      setError(error.message);
+      setIsProcessing(false);
+    },
+  });
+
+  //Config
+  const config: PlaidLinkOptionsWithLinkToken = {
+    onSuccess: (public_token) => {
+      console.log("Plaid link successful:", public_token);
+      createExternalWalletMutation.mutateAsync({
+        currency: "usd",
+        provider: "plaid",
+        wallet_type: "bank_account",
+        details: { token: public_token },
+      });
+      setSuccess("Bank account added successfully.");
+      setIsProcessing(false);
+    },
+    token: plaidToken,
+    onExit: () => {
+      console.log("User exited Plaid Link flow");
+      setIsProcessing(false);
+      setError("You exited the bank linking process.");
+    },
+  };
+
+  const { open, ready } = usePlaidLink(config);
+
+  useEffect(() => {
+    if (plaidToken && ready) {
+      open();
+    }
+  }, [plaidToken, ready, open]);
 
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
@@ -58,15 +93,16 @@ export default function FundUsdWithUsdBankAccount() {
     });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: transactionRequestService.initiateNewTransaction,
+    mutationFn: externalWalletService.getWalletToken,
     onSuccess: (data) => {
       console.log({ data });
       // setClientSecret(data.metadata.client_secret);
-      setIsPlaidModalOpen(true);
+      setPlaidToken(data.token);
     },
     onError: (error) => {
       console.log({ error });
       setError(error.message);
+      setIsProcessing(false);
     },
   });
 
@@ -98,37 +134,16 @@ export default function FundUsdWithUsdBankAccount() {
     }
   };
 
-  const handleOpenSaveCardModal = () => {
-    setError(null);
-    setSelectedCard(null);
-    setIsSavingCard(true);
-  };
-  const handleSelectCard = (card: CardItem) => {
-    setError(null);
-    setShouldSaveCard(true);
-    setSelectedCard(card);
-    setIsConfirmingCardSelection(true);
-  };
-
   const handleSubmit = async () => {
     if (!isUserVerified()) return setIsActionRestricted(true);
 
-    const payload: ITransactionRequest = {
+    setIsProcessing(true);
+
+    const payload = {
       currency: "usd",
-      provider: "stripe",
-      request_type: "funding",
-      wallet_type: "card",
-      amount: amountToFund?.amount as number,
-      dest_wallet_currency: "usd",
+      provider: "plaid",
+      wallet_type: "bank_account" as const,
     };
-
-    // if (selectedCard) {
-    //   payload.external_wallet_id = selectedCard.id;
-    // }
-
-    // if (!selectedCard) {
-    //   payload.external_wallet = { should_save: shouldSaveCard };
-    // }
 
     console.log({ payload });
 
@@ -147,6 +162,8 @@ export default function FundUsdWithUsdBankAccount() {
     // ioMethods,
     // selectedMethod,
     externalWallets,
+    ready,
+    plaidToken,
   });
 
   return (
@@ -184,6 +201,7 @@ export default function FundUsdWithUsdBankAccount() {
           )}
 
           {error && <CustomAlert variant="destructive" message={error} />}
+          {success && <CustomAlert variant="success" message={success} />}
 
           <div className="text-xs text-custom-grey mt-4 flex flex-col gap-2">
             <div className="flex justify-between">
@@ -207,72 +225,86 @@ export default function FundUsdWithUsdBankAccount() {
           </div>
 
           <div className="flex flex-col gap-2 ">
-            <p className="text-custom-black text-xs">Select Funding Card</p>
-            {/* <ExternalWallets
+            {/* <p className="text-custom-white text-sm">Select Funding Card</p> */}
+
+            <ExternalBankAccounts
               wallets={externalWallets?.items || []}
               isLoading={isExternalWalletsLoading}
               isMinimumAmount={!isMinimumAmount}
-              amountToFund={amountToFund?.amount as number}
-              handleSelectCard={handleSelectCard}
-            /> */}
-            {/* <Button
-              disabled={!isMinimumAmount}
-              onClick={handleOpenSaveCardModal}
-              className="mt-1 bg-custom-blue-shade text-custom-white hover:bg-custom-blue-shade/90 cursor-pointer rounded text-sm py-8 px-4 flex justify-between items-center gap-4 w-full"
-            >
-              <div className="flex items-center gap-2">
-                <RiBankCardLine size={40} className="!w-6 !h-6" />
-                <div className="text-start">
-                  <p className="text-sm">Pay with a new card</p>
-                  <p className="text-xs">
-                    We support Visa, Mastercard, Discover and American Express
-                  </p>
-                </div>
-              </div>
-              <RiArrowRightSLine size={20} />
-            </Button> */}
+              handleSelectBankAccount={() => {}}
+            />
 
             <Button
-              disabled={!isMinimumAmount}
-              onClick={handleOpenSaveCardModal}
+              disabled={isProcessing || isPending}
+              onClick={handleSubmit}
               className="btn-primary rounded-full py-6"
             >
-              Pay
+              {isProcessing || isPending ? (
+                <span className="flex items-center justify-center">
+                  <Loader className="animate-spin mr-2" />
+                  Processing...
+                </span>
+              ) : (
+                "Add New Bank Account"
+              )}
             </Button>
           </div>
         </div>
       </div>
 
-      <SaveCardModal
-        isOpen={isSavingCard}
-        isLoading={isPending}
-        onClose={() => setIsSavingCard(false)}
-        onSelect={(shouldSaveCard) => {
-          setShouldSaveCard(shouldSaveCard);
-          setIsSavingCard(false);
-          handleSubmit();
-        }}
-      />
-
-      <ConfirmCardSelection
-        amountToFund={Number(amountToFund?.amount)}
-        card={selectedCard}
-        isLoading={isProcessing || isPending}
-        error={error}
-        isOpen={isConfirmingCardSelection}
-        onClose={() => {
-          setIsConfirmingCardSelection(false);
-          setError(null);
-        }}
-        onConfirm={handleSubmit}
-      />
-
       <ActionRestrictedModal
         isOpen={isActionRestricted}
         onClose={() => setIsActionRestricted(false)}
       />
+
+      {/* <PlaidModal
+        isOpen={ready && isPlaidModalOpen}
+        onClose={() => setIsPlaidModalOpen(false)}
+      /> */}
     </DepositWrapper>
   );
 }
 
-//Design Accounts Swipable grid like external wallets
+// interface PlaidModalProps {
+//   isOpen: boolean;
+//   onClose: () => void;
+// }
+
+// function PlaidModal({ isOpen, onClose }: PlaidModalProps) {
+//   return (
+//     <Dialog open={isOpen} onOpenChange={onClose}>
+//       <DialogContent className="sm:max-w-md">
+//         <DialogHeader>
+//           <DialogTitle>Add New Bank Account</DialogTitle>
+//           <DialogDescription>
+//             Enter your bank account details to continue funding your wallet.
+//           </DialogDescription>
+//         </DialogHeader>
+
+//         <div className="grid gap-4 py-4">
+//           <div className="grid gap-2">
+//             <Label htmlFor="accountName">Account Name</Label>
+//             <Input id="accountName" placeholder="John Doe" />
+//           </div>
+//           <div className="grid gap-2">
+//             <Label htmlFor="accountNumber">Account Number</Label>
+//             <Input id="accountNumber" placeholder="0123456789" />
+//           </div>
+//           <div className="grid gap-2">
+//             <Label htmlFor="bankName">Bank Name</Label>
+//             <Input id="bankName" placeholder="Bank of America" />
+//           </div>
+//         </div>
+
+//         <DialogFooter className="flex justify-end gap-2">
+//           <DialogClose asChild>
+//             <Button variant="outline" onClick={onClose}>
+//               Cancel
+//             </Button>
+//           </DialogClose>
+//           <Button className="btn-primary">Save Bank Account</Button>
+//         </DialogFooter>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// }
