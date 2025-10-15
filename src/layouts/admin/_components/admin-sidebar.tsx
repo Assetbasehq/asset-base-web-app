@@ -3,73 +3,68 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
 import {
   RiUser2Fill,
-  RiListOrdered,
-  RiCheckboxLine,
-  RiShieldUserLine,
   RiGroupLine,
-  RiBookletLine,
-  RiAwardLine,
-  RiPhoneLine,
-  RiDeleteBinLine,
   RiLogoutBoxLine,
-  RiBankLine,
+  RiDashboardLine,
+  RiCoinsLine,
+  RiBox3Line,
+  RiMegaphoneLine,
+  RiBarChart2Line,
+  RiFileChart2Line,
+  RiShieldStarLine,
+  RiSettings3Line,
 } from "react-icons/ri";
 
 const sideBarLinks = [
   {
     name: "Overview",
-    icon: <RiUser2Fill className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/profile",
+    icon: <RiDashboardLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/overview",
   },
   {
     name: "Users",
-    icon: <RiListOrdered className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/leaderboard",
+    icon: <RiUser2Fill className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/users",
   },
   {
     name: "Assets",
-    icon: <RiCheckboxLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/kyc",
+    icon: <RiCoinsLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/assets",
   },
   {
     name: "Liquidity",
-    icon: <RiShieldUserLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/security",
+    icon: <RiBox3Line className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/liquidity",
   },
   {
     name: "Campaigns",
-    icon: <RiGroupLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/referrals",
-  },
-  {
-    name: "Campaigns",
-    icon: <RiBankLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/banks-and-cards",
+    icon: <RiMegaphoneLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/campaigns",
   },
   {
     name: "Analytics",
-    icon: <RiBookletLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/account-statement",
+    icon: <RiBarChart2Line className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/analytics",
   },
   {
     name: "Referrals",
-    icon: <RiAwardLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/investment-certificate",
+    icon: <RiGroupLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/referrals",
   },
   {
     name: "Financial Reports",
-    icon: <RiPhoneLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/contact-us",
+    icon: <RiFileChart2Line className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/financial-reports",
   },
   {
     name: "Security",
-    icon: <RiDeleteBinLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/delete-account",
+    icon: <RiShieldStarLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/security",
   },
   {
     name: "Settings",
-    icon: <RiDeleteBinLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/account/delete-account",
+    icon: <RiSettings3Line className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
+    path: "/admin/dashboard/settings",
   },
 ];
 
@@ -98,6 +93,7 @@ export default function AdminSideBar() {
         shouldShowOnMobile ? "flex md:flex" : "hidden md:flex"
       )}
     >
+      <p className="text-muted-foreground">MAIN</p>
       {sideBarLinks.map((link) => (
         <Link
           key={link.path}
@@ -120,7 +116,7 @@ export default function AdminSideBar() {
       ))}
       <button
         onClick={handleLogout}
-        className="text-lg font-semibold block text-red-700 cursor-pointer bg-transparent"
+        className="text-lg mt-12 font-semibold block text-red-700 cursor-pointer bg-transparent"
       >
         <span className="flex items-center gap-2 text-xs sm:text-lg ">
           <span className={cn("border p-2 border-red-700 rounded-full")}>

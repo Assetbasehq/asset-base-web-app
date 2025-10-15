@@ -16,6 +16,7 @@ import { truncateWalletAddress } from "@/lib/utils";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
 import { USDT_TOKEN } from "@/lib/wagmi.config";
 import DepositWrapper from "../_components/deposit-wraper";
+import { Link } from "react-router";
 
 export default function CryptoDeposit() {
   const [copied, setCopied] = useState(false);
@@ -217,6 +218,22 @@ export default function CryptoDeposit() {
                 </p>
               </div>
             </div>
+          </div>
+
+          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t my-6">
+            <span className="bg-background dark:bg-custom-card text-muted-foreground relative z-10 px-2 text-xs">
+              OR
+            </span>
+          </div>
+
+          <div className="flex gap-1 text-sm justify-center">
+            <p>Got Fiat? Fund with</p>
+            <Link
+              to="/dashboard/wallet/deposit/crypto/usdt/fiat"
+              className="text-custom-orange underline hover:opacity-90 cursor-pointer"
+            >
+              Bank Transfer or Momo
+            </Link>
           </div>
         </div>
 

@@ -1,47 +1,12 @@
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useState } from "react";
 import {
-  RiWalletLine,
-  RiBriefcaseLine,
-  RiStockLine,
-  RiBox3Line,
-  RiLayoutGridLine,
   RiUser2Line,
   RiNotification2Line,
   RiSearch2Line,
 } from "react-icons/ri";
-import { Button } from "@/components/ui/button";
 import { AssetBaseBetaWhite } from "@/components/shared/asset-base-beta";
-
-// const links = [
-//   {
-//     label: "Dashboard",
-//     to: "/dashboard",
-//     icon: <RiLayoutGridLine className="w-4 h-4 md:w-4 md:h-4" />,
-//   },
-//   {
-//     label: "Markets",
-//     to: "/dashboard/markets",
-//     icon: <RiStockLine className="w-4 h-4 md:w-4 md:h-4" />,
-//   },
-//   {
-//     label: "Wallet",
-//     to: "/dashboard/wallet",
-//     icon: <RiWalletLine className="w-4 h-4 md:w-4 md:h-4" />,
-//   },
-//   {
-//     label: "Portfolio",
-//     to: "/dashboard/portfolio",
-//     icon: <RiBriefcaseLine className="w-4 h-4 md:w-4 md:h-4" />,
-//   },
-//   {
-//     label: "Liquidity",
-//     to: "/dashboard/liquidity",
-//     icon: <RiBox3Line className="w-4 h-4 md:w-4 md:h-4" />,
-//   },
-// ];
 
 export default function AdminNavbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -77,7 +42,6 @@ export default function AdminNavbar() {
           <Menu size={22} className="text-white" />
         </button>
       </div>
-      =
     </nav>
   );
 }

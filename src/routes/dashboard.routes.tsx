@@ -46,6 +46,7 @@ import ConvertFunds from "@/pages/dashboard/wallet/convert/convert";
 import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/rise-wallet/fund-with-rise";
 import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
 import ProfileBanksAndCards from "@/pages/dashboard/profile/_components/profile-banks-and-cards";
+import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/fiat/fund-crypto-with-fiat";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -156,6 +157,10 @@ export const dashboardRoutes: RouteObject[] = [
                   {
                     path: "crypto/cngn",
                     element: <CryptoDeposit />,
+                  },
+                  {
+                    path: "crypto/usdt/fiat",
+                    element: <FundCryptoWithFiat />,
                   },
 
                   // --- FALLBACK ---

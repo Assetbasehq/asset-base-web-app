@@ -2,6 +2,56 @@
 
 export class FormatService {
   /**
+   * Formats a number into a currency string for the specified currency code.
+   * Supports USD, NGN, GHS, UGX, KES — and any other ISO 4217 currency code.
+   *
+   * Example:
+   *   FormatService.formatCurrency(1234.56, "USD") => "$1,234.56"
+   *   FormatService.formatCurrency(1234.56, "NGN") => "₦1,234.56"
+   *   FormatService.formatCurrency(1234.56, "UGX") => "USh 1,234.56"
+   */
+  static formatCurrency(
+    amount: number | null | undefined,
+    currencyCode: string = "USD"
+  ): string {
+    if (amount == null || isNaN(amount)) {
+      return this.getCurrencySymbol(currencyCode) + "0.00";
+    }
+
+    const locales: Record<string, string> = {
+      USD: "en-US",
+      NGN: "en-NG",
+      GHS: "en-GH",
+      UGX: "en-UG",
+      KES: "en-KE",
+    };
+
+    const locale = locales[currencyCode.toUpperCase()] || "en-US";
+
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currencyCode.toUpperCase(),
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
+  /**
+   * Returns a currency symbol (fallback for null/invalid amounts).
+   */
+  private static getCurrencySymbol(currencyCode: string): string {
+    const symbols: Record<string, string> = {
+      USD: "$",
+      NGN: "₦",
+      GHS: "₵",
+      UGX: "USh ",
+      KES: "KSh",
+    };
+
+    return symbols[currencyCode.toUpperCase()] || "$";
+  }
+
+  /**
    * Formats a number into a USD currency string
    * Example: 1234.56 => "$1,234.56"
    */

@@ -6,9 +6,11 @@ import {
   Info,
   XCircle,
   AlertTriangle,
+  AlertCircle,
 } from "lucide-react";
 
 export type AlertVariant =
+  | "error"
   | "destructive"
   | "default"
   | "success"
@@ -30,6 +32,7 @@ interface CustomAlertProps {
 
 const variantStyles: Record<AlertVariant, string> = {
   // destructive: "bg-rose-50 border-rose-300 text-rose-700",
+  error: "bg-custom-orange-10 border-custom-orange-10 text-custom-grey",
   destructive: "bg-custom-orange-10 border-custom-orange-10 text-custom-grey",
   default: "bg-blue-50 border-blue-300 text-blue-700",
   success: "bg-green-50 border-green-300 text-green-700",
@@ -39,6 +42,7 @@ const variantStyles: Record<AlertVariant, string> = {
 
 const iconStyles: Record<AlertVariant, string> = {
   // destructive: "bg-rose-50 border-rose-300 text-rose-700",
+  error: "bg-custom-card text-custom-orange",
   destructive: "bg-custom-card text-custom-orange",
   default: "bg-blue-50 border-blue-300 text-blue-700",
   success: "bg-green-50 border-green-300 text-green-700",
@@ -47,6 +51,7 @@ const iconStyles: Record<AlertVariant, string> = {
 };
 
 const variantIcons: Record<AlertVariant, React.ElementType> = {
+  error: AlertCircle,
   destructive: AlertTriangle,
   default: Info,
   success: CircleCheckBig,
