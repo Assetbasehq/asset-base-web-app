@@ -55,7 +55,6 @@ export default function ProfileSecurity() {
     },
     onError: (error) => {
       setError(error.message);
-      console.log({ error });
     },
   });
 
@@ -67,7 +66,6 @@ export default function ProfileSecurity() {
     },
     onError: (error) => {
       setError(error.message);
-      console.log({ error });
     },
   });
 

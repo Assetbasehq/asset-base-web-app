@@ -33,8 +33,6 @@ class TransactionRequestService {
         payload
       );
       const data = response.data;
-      console.log({ data });
-
       return data || [];
     } catch (error) {
       handleAxiosError(error, "Failed to initiate transaction request");

@@ -51,12 +51,10 @@ export default function ChangePinModal({
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.authorizePasswordReset,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       onSuccess();
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
     },
   });

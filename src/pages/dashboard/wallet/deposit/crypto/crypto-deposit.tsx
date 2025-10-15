@@ -38,7 +38,6 @@ export default function CryptoDeposit() {
 
   const { data: depositData, isLoading } = useRequestCryptoDeposit();
 
-  console.log({ depositData });
 
   const getErrorMessage = (err: unknown): string => {
     if (!err) return "An unknown error occurred";
@@ -75,20 +74,6 @@ export default function CryptoDeposit() {
         amountToFund.toString(),
         USDT_TOKEN.decimals
       );
-
-      console.log("=== Transaction Debug ===");
-      console.log("Recipient Address:", depositData?.walletAddress);
-      console.log("USDT Contract Address:", USDT_TOKEN.address);
-      console.log("Final Amount (raw units):", finalAmount);
-      console.log("Wallet Chain:", chain?.id);
-      console.log("=========================");
-
-      console.log("Sending USDT Transfer", {
-        contract: USDT_TOKEN.address,
-        args: [depositData.walletAddress, finalAmount.toString()],
-        abi: USDT_TOKEN.abi,
-        value: finalAmount.toString(),
-      });
 
       await writeContractAsync({
         address: USDT_TOKEN.address as `0x${string}`,

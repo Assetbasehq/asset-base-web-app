@@ -50,14 +50,12 @@ export function LinkRiseModal({ open, onOpenChange }: LinkRiseModalProps) {
     },
     onError: (error) => {
       setError(error.message);
-      console.log({ error });
+      // console.log({ error });
     },
   });
 
   const onSubmit = (values: FormValues) => {
     setError(null);
-    console.log(values);
-
     mutation.mutate(values);
   };
 

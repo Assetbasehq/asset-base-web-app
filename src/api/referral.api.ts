@@ -5,8 +5,6 @@ class ReferralService {
   getUserReferrals = async () => {
     try {
       const response = await axiosInstance.get(`referrals`);
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");

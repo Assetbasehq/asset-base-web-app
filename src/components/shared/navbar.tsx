@@ -50,10 +50,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  const { data, isLoading } = useGetNotifications({ limit: 10, offset: "0" });
-
-  console.log({ data });
-  
+  const { data, isLoading } = useGetNotifications({ limit: 10, offset: "0" });  
 
   return (
     <nav className="w-full flex items-center justify-between gap-4 p-4 bg-fixed-base text-white font-geist">

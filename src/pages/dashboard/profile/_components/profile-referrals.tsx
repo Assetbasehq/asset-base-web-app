@@ -77,8 +77,6 @@ export default function ProfileReferrals() {
     queryFn: () => userService.getUserReferrals(),
   });
 
-  console.log({ data });
-
   const handleCopy = async () => {
     await navigator.clipboard.writeText(`${user?.referral_code}`);
     setCopied(true);

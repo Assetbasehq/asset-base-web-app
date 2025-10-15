@@ -46,7 +46,7 @@ import ConvertFunds from "@/pages/dashboard/wallet/convert/convert";
 import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/rise-wallet/fund-with-rise";
 import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
 import ProfileBanksAndCards from "@/pages/dashboard/profile/_components/profile-banks-and-cards";
-import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/fiat/fund-crypto-with-fiat";
+import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/usdt/yellow-card/fund-crypto-with-usdt-yellow-card";
 
 export const dashboardRoutes: RouteObject[] = [
   {

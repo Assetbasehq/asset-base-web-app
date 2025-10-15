@@ -45,11 +45,9 @@ export default function AssetCard({
   });
 
   const handleAddToWatchlist = async () => {
-    console.log("ddd");
-
     if (isInWatchlist) {
       await removeFromWatchlistMutation.mutateAsync();
-      console.log("removed");
+      // console.log("removed");
       return;
     }
 

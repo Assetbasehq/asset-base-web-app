@@ -27,7 +27,6 @@ export default function ConversionSuccessful({
   dest_currency,
   dest_amount,
 }: ConversionSuccessfulProps) {
-  console.log({ src_currency, src_amount, dest_currency, dest_amount });
 
   if (!isOpen) return null;
 

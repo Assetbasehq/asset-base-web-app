@@ -38,3 +38,20 @@ export interface IOMethod {
   network_code: string;
   network_name: string;
 }
+
+export interface ICryptoWallet {
+  userId: string;
+  pendingBalanceInUsd: string;
+  balanceInUsd: string;
+  assets: {
+    id: string;
+    name: string;
+    symbol: string;
+    tokenAddress: string;
+    network: string;
+    balance: string;
+    pendingBalance: string;
+    logoUrl: string;
+    blockradarAssetId: string;
+  }[];
+}

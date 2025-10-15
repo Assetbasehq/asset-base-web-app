@@ -17,7 +17,6 @@ export default function DojahKycModal({
   userData,
 }: DojahKycModalProps) {
   const { user } = useAuthStore();
-  console.log({ userData, user });
 
   const appID = env.DOJAH_APP_ID;
   const publicKey = env.DOJAH_PUBLIC_KEY;
@@ -61,7 +60,7 @@ export default function DojahKycModal({
   //   mobile: "",
   // };
   const response = (type: string, data: any) => {
-    console.log(type, data);
+    // console.log(type, data);
     if (type === "success") {
       onSuccess();
     } else if (type === "error") {

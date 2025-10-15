@@ -60,12 +60,10 @@ export default function ChangePinRequestModal({
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.authorizePinChange,
     onSuccess: (data) => {
-      console.log({ newToken: data?.token });
       setToken(data?.token);
       onSuccess();
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
     },
   });

@@ -31,7 +31,6 @@ export default function IDVerification({
   const { mutateAsync, isPending } = useMutation({
     mutationFn: verificationService.initiateDojahVerification,
     onSuccess: (data) => {
-      console.log({ data });
 
       setUserData(data);
       switchToDojah();
@@ -42,7 +41,6 @@ export default function IDVerification({
     },
     onError: (error) => {
       setDojahButtonClicked(false);
-      console.log({ error });
     },
   });
 

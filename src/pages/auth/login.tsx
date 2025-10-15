@@ -51,11 +51,9 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: authService.signIn,
     onSuccess: () => {
-      console.log("success");
       navigate("/dashboard");
     },
     onError: (error) => {
-      console.log({ message: error.message });
       setError(error.message);
     },
   });

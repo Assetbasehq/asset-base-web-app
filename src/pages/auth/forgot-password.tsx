@@ -51,19 +51,15 @@ export default function ForgotPassword() {
   const forgotPasswordMutation = useMutation({
     mutationFn: userService.unauthorizedForgotPasswordRequest,
     onSuccess: (data) => {
-      console.log({ data });
       setToken(data?.metadata?.token ?? "");
       toggleModal("resetPassword", true);
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
     },
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log({ data });
-
     forgotPasswordMutation.mutateAsync({ email_address: data.email_address });
   };
 

@@ -49,13 +49,12 @@ export default function UnauthorizedResetPasswordModal({
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.authorizePasswordReset,
+
     onSuccess: (data) => {
-      console.log({ newToken: data?.token });
       setToken(data?.token);
       onSuccess();
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
     },
   });

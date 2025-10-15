@@ -20,8 +20,6 @@ export const getAvailableIOMethods = (
 };
 
 export const getIOMethodFee = (method: IOMethod) => {
-  console.log({ method });
-
   switch (method.fee.type) {
     case "flat":
       if (method.fee.value === 0) return "No Fee";
@@ -110,9 +108,6 @@ export const normalizeCurrencyInput = (input: string) => {
 
   if (cleanedAmount.includes(".")) {
     const [whole, decimal = ""] = cleanedAmount.split(".");
-
-    console.log({ whole, decimal });
-
     // Reject multiple dots
     if (cleanedAmount.split(".").length > 2) {
       return { amount: "", formattedAmount: "" };

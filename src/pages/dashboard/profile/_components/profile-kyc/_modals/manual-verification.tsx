@@ -74,12 +74,12 @@ export default function ManualVerification({
   const { mutateAsync, isPending } = useMutation({
     mutationFn: verificationService.initiateSystemVerification,
     onSuccess: (data) => {
-      console.log({ data });
+      // console.log({ data });
       // onSuccess();
       setStep(2);
     },
     onError: (error) => {
-      console.log({ error });
+      // console.log({ error });
       setError(error.message);
 
       setTimeout(() => {
@@ -91,7 +91,7 @@ export default function ManualVerification({
   const uploadFilesMutation = useMutation({
     mutationFn: verificationService.uploadVerificationAttachments,
     onSuccess: (data) => {
-      console.log({ data });
+      // console.log({ data });
       console.log(`Upload successful, verification initiated`);
 
       const payload: Record<string, any> = {
@@ -110,13 +110,13 @@ export default function ManualVerification({
       mutateAsync(payload as any);
     },
     onError: (error) => {
-      console.log({ error });
+      // console.log({ error });
       setError(error.message);
     },
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log({ data });
+    // console.log({ data });
     setStep(2);
   };
 

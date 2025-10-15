@@ -1,4 +1,5 @@
 import { walletService } from "@/api/wallet.api";
+import type { ICryptoWallet } from "@/interfaces/wallet.interfae";
 import { useQuery } from "@tanstack/react-query";
 
 interface WalletResponse {
@@ -26,7 +27,7 @@ export const useRequestCryptoDeposit = () => {
 };
 
 export const useGetCryptoBalance = () => {
-  return useQuery<any, Error>({
+  return useQuery<ICryptoWallet, Error>({
     queryKey: ["crypto-balance"],
     queryFn: () => walletService.getCryptoWalletBalance(),
   });

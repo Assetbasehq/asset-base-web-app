@@ -102,7 +102,6 @@ export default function FundUsdWithNgnCard() {
 
   const handleBringUpPaymentModal = (ref: string) => {
     if (!ref) {
-      console.log("No transaction ref");
       return;
     }
 
@@ -129,7 +128,7 @@ export default function FundUsdWithNgnCard() {
     handleFlutterPayment({
       callback: (response) => {
         setIsProcessing(false);
-        console.log({ response });
+        // console.log({ response });
 
         if (response.status === "successful") {
           //Open successfull modal
@@ -137,7 +136,7 @@ export default function FundUsdWithNgnCard() {
         }
       },
       onClose: () => {
-        console.log("Payment closed");
+        // console.log("Payment closed");
         setError("You cancelled the transaction");
         setIsProcessing(false);
       },
@@ -145,13 +144,10 @@ export default function FundUsdWithNgnCard() {
   };
 
   const handleSubmit = async () => {
-    console.log({ userv: isUserVerified() });
 
     if (!isUserVerified()) return setIsActionRestricted(true);
 
     setIsProcessing(true);
-    console.log({ shouldSaveCard });
-
     const payload: ITransactionRequest = {
       currency: "ngn",
       provider: "flutterwave",

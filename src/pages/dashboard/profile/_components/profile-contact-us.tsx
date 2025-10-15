@@ -45,7 +45,6 @@ export default function ProfileContactUs() {
   const enquiryMutation = useMutation({
     mutationFn: userService.sendEnquiry,
     onSuccess: (data) => {
-      console.log({ data });
       setAlertData({
         message: "Your message has been sent successfully",
         description: `We will get back to you as soon as possible`,
@@ -54,7 +53,6 @@ export default function ProfileContactUs() {
       form.reset();
     },
     onError: (error) => {
-      console.log({ error });
       setAlertData({
         message: "Something went wrong",
         description: `Please try again later`,
@@ -64,7 +62,6 @@ export default function ProfileContactUs() {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
     enquiryMutation.mutateAsync(data);
   };
 

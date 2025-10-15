@@ -385,7 +385,6 @@ export function AssetInvestModal({
   };
 
   const onSubmit = (data: InvestFormData) => {
-    console.log("Investment Data:", data);
     onClose();
   };
 

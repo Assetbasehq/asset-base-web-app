@@ -198,8 +198,6 @@ class UserService {
     try {
       const response = await axiosInstance.get(`/referrals`);
       const items = response.data?.items;
-      console.log({ items });
-
       return items || [];
     } catch (error) {
       handleAxiosError(error, "Something went wrong");

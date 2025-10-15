@@ -53,7 +53,6 @@ export default function PersonalInformation() {
     mutationFn: (data: any) =>
       userService.updateUserInformation(user?.id as string, data),
     onSuccess: (updatedUser) => {
-      console.log({ updatedUser });
       setError(null);
       setSuccess(`Profile updated successfully`);
       setTimeout(() => setSuccess(null), 2000);
@@ -61,14 +60,12 @@ export default function PersonalInformation() {
       personalInformationForm.reset(updatedUser);
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
       setSuccess(null);
     },
   });
 
   const onSubmit = (data: any) => {
-    console.log({ data });
     upadateUserMutation.mutateAsync(data);
   };
 

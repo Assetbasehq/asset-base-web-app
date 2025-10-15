@@ -30,8 +30,6 @@ export default function CustomSelect({
   className,
   icon,
 }: CustomSelectProps) {
-  console.log({ defaultValue });
-
   return (
     <Select value={defaultValue} onValueChange={onChange}>
       <SelectTrigger

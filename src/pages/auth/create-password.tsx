@@ -34,7 +34,7 @@ export default function CreatePassword() {
   } = useForm<FormValues>();
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
+    // console.log(data);
   };
 
   return (

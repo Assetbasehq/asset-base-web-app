@@ -66,8 +66,6 @@ export default function Assets() {
 
   const navigate = useNavigate();
 
-  console.log({ data, watchlist });
-
   const handleParamsChange = (key: string, value: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
 

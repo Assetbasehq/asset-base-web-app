@@ -53,7 +53,6 @@ export default function NextOfKin() {
     mutationFn: (data: any) =>
       userService.updateUserNextOfKin(user?.id as string, data),
     onSuccess: (updatedData) => {
-      console.log({ updatedData });
       setError(null);
       setSuccess(`Next of kin updated successfully`);
       setTimeout(() => setSuccess(null), 3000);
@@ -61,7 +60,6 @@ export default function NextOfKin() {
       nextOfKinInformation.reset(updatedData);
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
       setSuccess(null);
     },
@@ -70,7 +68,6 @@ export default function NextOfKin() {
   const onSubmit = (data: any) => {
     setError(null);
     setSuccess(null);
-    console.log({ data });
     nextOfKinMutation.mutateAsync(data);
   };
 

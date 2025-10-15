@@ -52,11 +52,9 @@ export default function UnauthorizedPasswordChangeModal({
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.changePassword,
     onSuccess: (data) => {
-      console.log({ data });
       onSuccess();
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
     },
   });
@@ -68,8 +66,6 @@ export default function UnauthorizedPasswordChangeModal({
         setError(null);
       }, 2000);
     }
-
-    console.log({ data, token });
 
     mutateAsync({ password: data.password, token });
   };

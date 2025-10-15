@@ -21,12 +21,10 @@ export default function ProfilePage() {
   const uploadProfilePhotoMutation = useMutation({
     mutationFn: userService.uploadProfilePhoto,
     onSuccess: (data) => {
-      console.log({ data });
       setError(null);
       setTimeout(() => setSuccess(data.message), 3000);
     },
     onError: (error) => {
-      console.log({ error });
       setError(error.message);
       setSuccess(null);
     },

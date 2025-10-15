@@ -8,9 +8,6 @@ class WalletService {
     try {
       const response = await axiosInstance.get(`/wallets`, { params });
       const data = response.data;
-
-      console.log({ data });
-
       return data || [];
     } catch (error) {
       handleAxiosError(error, "Failed to create security pin");
@@ -26,9 +23,6 @@ class WalletService {
     try {
       const response = await axiosInstance.post(`/wallets/exchange`, payload);
       const data = response.data;
-
-      console.log({ data });
-
       return data || [];
     } catch (error) {
       handleAxiosError(error, "Failed to swap currency");
@@ -41,9 +35,6 @@ class WalletService {
   //       params,
   //     });
   //     const data = response.data;
-
-  //     console.log({ data });
-
   //     return data || [];
   //   } catch (error) {
   //     handleAxiosError(error, "failed to create security pin");
@@ -65,8 +56,6 @@ class WalletService {
       const response = await web3axiosInstance.get(`/wallet/balance`);
       const data = response.data?.data;
 
-      console.log({ data });
-
       return data;
     } catch (error) {
       handleAxiosError(error, "Failed to get crypto wallet balance");
@@ -82,9 +71,6 @@ class WalletService {
         }
       );
       const data = response.data?.data;
-
-      console.log({ data });
-
       return data;
     } catch (error) {
       handleAxiosError(error, "Failed to get crypto wallet balance");
@@ -100,9 +86,6 @@ class WalletService {
         }
       );
       const data = response.data?.data;
-
-      console.log({ data });
-
       return data;
     } catch (error) {
       handleAxiosError(error, "Failed to get crypto wallet balance");
@@ -116,13 +99,8 @@ class WalletService {
         `https://scan-testnet.assetchain.org/addresses/${address}/transactions`
       );
       const data = response.data;
-
-      console.log({ data, response });
-
       return data;
     } catch (error) {
-      console.log({ error });
-
       handleAxiosError(error, "Failed to get address transactions");
     }
   };

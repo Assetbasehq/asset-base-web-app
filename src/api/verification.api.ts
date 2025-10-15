@@ -8,8 +8,6 @@ class VerificationService {
         request_type: "identity",
         provider: "dojah",
       });
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -26,8 +24,6 @@ class VerificationService {
         request_type: "identity",
         provider: "dojah",
       });
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -40,8 +36,6 @@ class VerificationService {
       mimeType: file.type,
       id: (crypto as any).randomUUID(),
     }));
-
-    console.log({ files });
     
 
     try {
@@ -52,8 +46,6 @@ class VerificationService {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");

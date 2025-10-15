@@ -19,8 +19,6 @@ export default function ProfileKYC() {
   const queryClient = useQueryClient();
   const { data, isLoading, isError, refetch } = useUserVerificationStatus();
 
-  console.log({ data });
-
   const [token, setToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<Record<string, any> | null>(null);
   const [modals, setModals] = useState({
@@ -44,7 +42,7 @@ export default function ProfileKYC() {
       toggleModal("confirmEmail", true);
     },
     onError: (error) => {
-      console.log({ error });
+      // console.log({ error });
     },
   });
 

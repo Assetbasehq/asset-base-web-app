@@ -96,10 +96,12 @@ export default function ConfirmFundingModal({
           {!isPending && !isError && (
             <div className="text-sm text-custom-grey flex flex-col gap-3">
               <div className="flex justify-between">
-                <p>Amount to deduct</p>
+                <p>Amount to Send</p>
                 <p className="font-semibold">
                   {FormatService.formatCurrency(
-                    summary?.amountToDeduct ?? amountToFund,
+                    summary?.localAmount
+                      ? summary.localAmount / 100
+                      : amountToFund,
                     currency
                   )}
                 </p>

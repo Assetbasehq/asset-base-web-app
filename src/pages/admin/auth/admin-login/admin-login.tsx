@@ -48,12 +48,9 @@ export default function AdminLogin() {
   const loginMutation = useMutation({
     mutationFn: adminAuthService.signIn,
     onSuccess: () => {
-      console.log("success");
       navigate("/admin/dashboard");
     },
-    onError: (error) => {
-      console.log({ message: error.message });
-      setError(error.message);
+    onError: (error) => {     setError(error.message);
     },
   });
 

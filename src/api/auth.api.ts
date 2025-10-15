@@ -48,9 +48,7 @@ class AuthService {
   updateUser = async (payload: Partial<IUser>) => {
     try {
       const response = await axiosInstance.patch(`/auth`, payload);
-
-      console.log({ response });
-
+    
       return response.data?.data;
     } catch (error) {
       handleAxiosError(error, "Failed to update");
@@ -67,9 +65,6 @@ class AuthService {
   resendOTP = async (payload: any) => {
     try {
       const response = await axiosInstance.post(`/auth/send-otp`, payload);
-
-      console.log({ response });
-
       return response.data?.data;
     } catch (error) {
       handleAxiosError(error, "Failed to resen OTP");

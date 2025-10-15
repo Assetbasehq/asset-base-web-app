@@ -56,7 +56,7 @@ export default function CreateAccount() {
       navigate("/onboarding/account-type");
     },
     onError: (error) => {
-      console.log({ error });
+      // console.log({ error });
       setError(error.message);
     },
   });
