@@ -56,7 +56,8 @@ class TransactionService {
   processYellowCardDeposit = async (payload: IYellowCardDeposit) => {
     try {
       const response = await web3axiosInstance.post(
-        `/transaction/yellow-card/deposit`
+        `/transaction/yellow-card/deposit`,
+        payload
       );
 
       return response?.data;

@@ -239,3 +239,17 @@ export const convertToRelativeTime = (timestamp: string) => {
     return seconds === 1 ? "1 second ago" : `${seconds} seconds ago`;
   }
 };
+
+export const currencyToCountry: Record<string, string> = {
+  NGN: "NG",
+  UGX: "UG",
+  GHS: "GH",
+  KES: "KE",
+};
+
+export const countryToCurrencyCode: Record<string, string> = {
+  NG: "NGN",
+  UG: "UGX",
+  GH: "GHS",
+  KE: "KES",
+};

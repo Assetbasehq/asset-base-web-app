@@ -4,13 +4,7 @@ import { FormatService } from "@/services/format-service";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { useQuery } from "@tanstack/react-query";
 import { transactionService } from "@/api/transaction.api";
-
-const currencyToCountry: Record<string, string> = {
-  NGN: "NG",
-  UGX: "UG",
-  GHS: "GH",
-  KES: "KE",
-};
+import { currencyToCountry } from "@/lib/utils";
 
 interface FundingSummaryProps {
   amountToFund: number;

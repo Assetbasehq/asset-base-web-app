@@ -9,8 +9,8 @@ export interface IYellowCardDeposit {
   paymentGateway: string;
   networkId?: string;
   momoNumber?: string;
-  country?: string;
-  assetId?: string;
+  country: string;
+  assetId: string;
   amountCurrency?: string;
 }
 

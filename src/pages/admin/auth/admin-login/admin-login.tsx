@@ -50,7 +50,8 @@ export default function AdminLogin() {
     onSuccess: () => {
       navigate("/admin/dashboard");
     },
-    onError: (error) => {     setError(error.message);
+    onError: (error) => {
+     setError(error.message);
     },
   });
 

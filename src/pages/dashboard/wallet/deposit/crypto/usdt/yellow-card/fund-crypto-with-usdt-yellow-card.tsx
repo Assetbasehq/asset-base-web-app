@@ -22,6 +22,7 @@ import { transactionService } from "@/api/transaction.api";
 import { useGetCryptoBalance } from "@/hooks/useWallet";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentMethods from "./_components/payment-methods";
+import { currencyToCountry } from "@/lib/utils";
 
 const currencies = ["NGN", "UGX", "GHS", "KES"];
 type Currency = "NGN" | "UGX" | "GHS" | "KES";
@@ -117,6 +118,7 @@ export default function FundCryptoWithUsdtYellowCard() {
   const handleFundWallet = async () => {
     setError(null);
     if (!amountToFund?.amount || !currency) return;
+    if (!paymentMethod) return;
     const asset = assets.find((a) => a.symbol === "USDT");
     if (!asset) {
       setError("USDT wallet not found");
@@ -126,8 +128,9 @@ export default function FundCryptoWithUsdtYellowCard() {
     const payload = {
       amount: amountToFund.amount,
       currency,
-      paymentGateway: "bank",
+      country: currencyToCountry[currency],
       amountCurrency: "USD",
+      paymentGateway: paymentMethod,
       assetId: asset?.id,
     };
 
