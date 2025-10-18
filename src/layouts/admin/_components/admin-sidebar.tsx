@@ -93,7 +93,7 @@ export default function AdminSideBar() {
         shouldShowOnMobile ? "flex md:flex" : "hidden md:flex"
       )}
     >
-      <p className="text-muted-foreground">MAIN</p>
+      <p className="text-custom-white">MAIN</p>
       {sideBarLinks.map((link) => (
         <Link
           key={link.path}

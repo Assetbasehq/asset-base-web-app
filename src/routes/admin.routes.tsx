@@ -3,29 +3,40 @@ import AdminLayout from "@/layouts/admin/admin.layout";
 import { AdminGuard } from "@/guards/admin.guard";
 import Overview from "@/pages/admin/overview/overview";
 import AdminLogin from "@/pages/admin/auth/admin-login/admin-login";
+import Users from "@/pages/admin/users/users";
+import Assets from "@/pages/admin/assets/assets";
+import Referrals from "@/pages/admin/referrals/referrals";
 
 export const adminRoutes: RouteObject[] = [
   {
     path: "/admin",
     children: [
       {
-        path: "/admin/login",
+        path: "login",
         element: <AdminLogin />,
       },
       {
-        path: "/admin/dashboard",
+        path: "dashboard",
         element: <AdminGuard />,
         children: [
           {
             element: <AdminLayout />,
             children: [
               {
-                index: true,
+                path: "overview",
                 element: <Overview />,
               },
               {
-                index: true,
-                element: <div>Add Liquidiy</div>,
+                path: "users",
+                element: <Users />,
+              },
+              {
+                path: "assets",
+                element: <Assets />,
+              },
+              {
+                path: "referrals",
+                element: <Referrals />,
               },
               {
                 index: true,

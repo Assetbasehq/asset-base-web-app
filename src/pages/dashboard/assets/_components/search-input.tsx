@@ -4,7 +4,13 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { cn } from "@/lib/utils";
 
-export default function SearchInput({ className }: { className?: string }) {
+export default function SearchInput({
+  className,
+  placeholder = "",
+}: {
+  className?: string;
+  placeholder?: string;
+}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
   const [searchValue, setSearchValue] = useState(initialSearch);
@@ -44,7 +50,7 @@ export default function SearchInput({ className }: { className?: string }) {
       {/* Input Field */}
       <Input
         type="text"
-        placeholder=""
+        placeholder={placeholder}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         className="pl-10 pr-10 rounded focus-visible:ring-1 focus-visible:ring-primary border text-custom-white"
