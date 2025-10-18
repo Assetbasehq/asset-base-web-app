@@ -1,5 +1,8 @@
 import type { IParams } from "@/interfaces/params.interface";
-import type { IYellowCardDeposit } from "@/interfaces/yellow-card.interface";
+import type {
+  IYellowCardDeposit,
+  IYellowCardDepositResponse,
+} from "@/interfaces/yellow-card.interface";
 import { web3axiosInstance } from "@/lib/axios.config";
 import { handleAxiosError } from "@/lib/utils";
 
@@ -55,7 +58,7 @@ class TransactionService {
 
   processYellowCardDeposit = async (payload: IYellowCardDeposit) => {
     try {
-      const response = await web3axiosInstance.post(
+      const response = await web3axiosInstance.post<IYellowCardDepositResponse>(
         `/transaction/yellow-card/deposit`,
         payload
       );

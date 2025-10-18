@@ -15,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ConfirmFundingModal from "./_modals/confirmation-modal";
 import { Checkbox } from "@/components/ui/checkbox";
 import FundingSummary from "./_components/funding-summary";
 import { transactionService } from "@/api/transaction.api";
@@ -23,9 +22,25 @@ import { useGetCryptoBalance } from "@/hooks/useWallet";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentMethods from "./_components/payment-methods";
 import { currencyToCountry } from "@/lib/utils";
+import { Loader } from "lucide-react";
+import DepositAccountDetailsModal from "./_modals/deposit-account-details-modal";
+import type {
+  IMomoNetwork,
+  IYellowCardDeposit,
+  IYellowcardMetaData,
+} from "@/interfaces/yellow-card.interface";
+import MomoNetworks from "./_components/momo-networks";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 const currencies = ["NGN", "UGX", "GHS", "KES"];
 type Currency = "NGN" | "UGX" | "GHS" | "KES";
+
+const countryDialCodes: Record<string, string> = {
+  NGN: "+234",
+  GHS: "+233",
+  UGX: "+256",
+  KES: "+254",
+};
 
 interface IAmountToFund {
   amount: number;
@@ -36,10 +51,17 @@ export default function FundCryptoWithUsdtYellowCard() {
   const [amountToFund, setAmountToFund] = useState<IAmountToFund | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [currency, setCurrency] = useState<Currency | null>(null);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
-  // const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"bank" | "momo" | null>(
+    null
+  );
+  const [momoNetwork, setMomoNetwork] = useState<IMomoNetwork | null>(null);
+  const [momoPhoneNumber, setMomoPhoneNumber] = useState<string>("");
+
+  const [depositMeta, setDepositMeta] = useState<IYellowcardMetaData | null>(
+    null
+  );
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 
   const {
     data: cryptoWalletData,
@@ -59,13 +81,20 @@ export default function FundCryptoWithUsdtYellowCard() {
         type: "buy",
       }),
     enabled: !!currency,
+    staleTime: 60_000, // 1 minute
+    // cacheTime: 5 * 60_000, // 5 minutes
   });
 
   const processFundingMutation = useMutation({
     mutationFn: transactionService.processYellowCardDeposit,
     onSuccess: (data) => {
       console.log({ data });
-      // Handle success (e.g., show a success message, redirect, etc.)
+      console.log({ yellowcardMetaData: data?.data?.yellowcardMetadata });
+
+      // Extract the metadata safely
+      const metadata = data?.data?.yellowcardMetadata || null;
+      setDepositMeta(metadata);
+      setIsDepositModalOpen(true);
     },
     onError: (error: any) => {
       setError(error?.message || "Failed to process deposit");
@@ -81,8 +110,6 @@ export default function FundCryptoWithUsdtYellowCard() {
   const foundRateMemo = useMemo(() => {
     if (!ratesData?.data || !ratesData.data.length) return null;
     const foundRate = ratesData.data[0];
-    console.log({ foundRate });
-
     if (!foundRate) return null;
     return foundRate.amount / 100 || 0;
   }, [ratesData]);
@@ -109,11 +136,15 @@ export default function FundCryptoWithUsdtYellowCard() {
     if (val === currency) return;
     setCurrency(val);
   };
-  // const handleChangeAsset = (val: string) => {
-  //   if (val === selectedAsset) return;
-  //   setSelectedAsset(val);
-  //   setError(null);
-  // };
+
+  const handleMomoPhoneChange = (value: string) => {
+    // Strip all non-numeric characters
+    const numericValue = value.replace(/\D/g, "");
+    setMomoPhoneNumber(numericValue);
+  };
+
+  // Get current dial code from currency
+  const dialCode = currency ? countryDialCodes[currency] || "" : "";
 
   const handleFundWallet = async () => {
     setError(null);
@@ -125,7 +156,7 @@ export default function FundCryptoWithUsdtYellowCard() {
       return;
     }
 
-    const payload = {
+    const payload: IYellowCardDeposit = {
       amount: amountToFund.amount,
       currency,
       country: currencyToCountry[currency],
@@ -134,7 +165,12 @@ export default function FundCryptoWithUsdtYellowCard() {
       assetId: asset?.id,
     };
 
-    console.log({ payload, asset });
+    if (paymentMethod === "momo") {
+      payload.networkId = momoNetwork?.id || undefined;
+      payload.momoNumber = dialCode + momoPhoneNumber;
+    }
+
+    console.log({ payload });
 
     processFundingMutation.mutateAsync(payload);
   };
@@ -142,7 +178,7 @@ export default function FundCryptoWithUsdtYellowCard() {
   const amountToDeduct = amountToFund?.amount ?? 0;
   const isMinimumAmount = amountToDeduct ? amountToDeduct >= 10 : false;
 
-  console.log({ cryptoWalletData, assets });
+  // console.log({ cryptoWalletData, assets });
 
   return (
     <DepositWrapper>
@@ -154,35 +190,6 @@ export default function FundCryptoWithUsdtYellowCard() {
               Minimum deposit is $10
             </p>
           </div>
-
-          {/* <div className="flex flex-col gap-2">
-            <Label className="text-custom-grey text-xs md:text-sm">
-              Select Wallet Type
-            </Label>
-            <Select
-              value={selectedAsset ? selectedAsset : ""}
-              onValueChange={handleChangeAsset}
-            >
-              <SelectTrigger className="w-full py-6 rounded">
-                <SelectValue placeholder="Select an option">
-                  {currency}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {assets.map((asset, i) => {
-                  return (
-                    <SelectItem key={i} value={asset.id}>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium capitalize">
-                          {asset.name} - {asset.symbol}
-                        </p>
-                      </div>
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </div> */}
 
           <div className="flex flex-col gap-2">
             <Label className="text-custom-grey text-xs md:text-sm">
@@ -293,20 +300,71 @@ export default function FundCryptoWithUsdtYellowCard() {
                 amountToFund={amountToFund.amount}
                 currency={currency}
                 selectedPaymentMethod={paymentMethod}
-                handleSelectPaymentMethod={(method) => setPaymentMethod(method)}
+                handleSelectPaymentMethod={(method: "bank" | "momo") =>
+                  setPaymentMethod(method)
+                }
               />
+            </div>
+          )}
+
+          {currency && paymentMethod === "momo" && (
+            <div className="space-y-2">
+              <MomoNetworks
+                currency={currency}
+                selectedMomoNetwork={momoNetwork}
+                handleSelectMomoNetwork={(momoNetwork: IMomoNetwork) =>
+                  setMomoNetwork(momoNetwork)
+                }
+              />
+
+              {/* Dynamic country code input group */}
+              <ButtonGroup className="w-full">
+                <Button
+                  variant="outline"
+                  disabled
+                  className="w-[80px] font-medium py-6 rounded-l-sm"
+                >
+                  {dialCode || "--"}
+                </Button>
+                <Input
+                  placeholder="Enter phone number"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={momoPhoneNumber}
+                  onChange={(e) => handleMomoPhoneChange(e.target.value)}
+                  className="flex-1 py-6 rounded-r-sm"
+                />
+              </ButtonGroup>
             </div>
           )}
 
           <Button
             className="btn-primary rounded-full w-full py-4 mt-4"
             onClick={handleFundWallet}
-            disabled={!isMinimumAmount || !currency || !isConfirmed}
+            disabled={
+              !isMinimumAmount ||
+              !currency ||
+              !isConfirmed ||
+              !amountToFund ||
+              processFundingMutation.isPending
+            }
           >
-            Fund Wallet
+            {processFundingMutation.isPending ? (
+              <span className="flex items-center gap-2">
+                <Loader className=" animate-spin" /> Processing...
+              </span>
+            ) : (
+              <span>Fund Wallet</span>
+            )}
           </Button>
         </div>
       </div>
+
+      <DepositAccountDetailsModal
+        isOpen={isDepositModalOpen}
+        onClose={() => setIsDepositModalOpen(false)}
+        yellowCardMetaData={depositMeta}
+      />
     </DepositWrapper>
   );
 }

@@ -40,8 +40,63 @@ export interface IYellowCardDepositResponse {
     provider: string;
     localAmount: number;
     fee: number;
-    yellowCardMetaData: {
-      [key: string]: string | number | boolean | null;
-    };
+    yellowcardMetadata: IYellowcardMetaData;
   };
+}
+
+export interface IYellowcardMetaData {
+  amount: number;
+  bankInfo?: {
+    name: string;
+    accountNumber: string;
+    accountName: string;
+  };
+  channelId: string;
+  convertedAmount: number;
+  country: string;
+  currency: string;
+  customerUID: string;
+  depositId: string;
+  directSettlement: boolean;
+  expiresAt: string;
+  fiatWallet: string;
+  forceAccept: boolean;
+  id: string;
+  partnerFeeAmountLocal: number;
+  partnerFeeAmountUSD: number;
+  partnerId: string;
+  rate: number;
+  recipient: {
+    country: string;
+    idType: string;
+    address: string;
+    additionalIdNumber: string;
+    phone: string;
+  };
+  reference: string;
+  refundRetry: number;
+  requestSource: string;
+  sequenceId: string;
+  serviceFeeAmountLocal: number;
+  serviceFeeAmountUSD: number;
+  source: {
+    accountNumber: string;
+    accountType: string;
+  };
+  status: string;
+  tier0Active: boolean;
+  updatedAt: string;
+}
+
+export interface IMomoNetwork {
+  accountNumberType: string;
+  channelIds: string[];
+  code: string;
+  country: string;
+  countryAccountNumberType: string;
+  createdAt: string;
+  id: string;
+  name: string;
+  status: string;
+  updatedAt: string;
 }

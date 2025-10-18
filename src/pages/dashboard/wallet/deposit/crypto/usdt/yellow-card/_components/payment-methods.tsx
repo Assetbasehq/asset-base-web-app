@@ -8,20 +8,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-
-const currencyToCountry: Record<string, string> = {
-  NGN: "NG",
-  UGX: "UG",
-  GHS: "GH",
-  KES: "KE",
-};
+import { currencyToCountry } from "@/lib/utils";
 
 interface PaymentMethodsProps {
   amountToFund: number;
   currency: string;
-  selectedPaymentMethod: string | null;
-  handleSelectPaymentMethod: (method: string) => void;
+  selectedPaymentMethod: "bank" | "momo" | null;
+  handleSelectPaymentMethod: (method: "bank" | "momo") => void;
 }
 
 export default function PaymentMethods({
@@ -32,9 +25,9 @@ export default function PaymentMethods({
 }: PaymentMethodsProps) {
   const {
     data: paymentMethodsData,
-    isPending,
-    isError,
-    refetch,
+    // isPending,
+    // isError,
+    // refetch,
   } = useQuery({
     queryKey: ["payment-methods", amountToFund, currency],
     queryFn: async () =>
@@ -45,8 +38,6 @@ export default function PaymentMethods({
     enabled: !!currency && amountToFund > 0,
   });
 
-  console.log({ paymentMethodsData });
-
   const paymentMethods = paymentMethodsData?.data || [];
 
   return (
@@ -55,7 +46,6 @@ export default function PaymentMethods({
         Select Payment Method
       </Label>
       <Select
-        // disabled={isConfirmed}
         defaultValue={selectedPaymentMethod ? selectedPaymentMethod : ""}
         onValueChange={handleSelectPaymentMethod}
       >
