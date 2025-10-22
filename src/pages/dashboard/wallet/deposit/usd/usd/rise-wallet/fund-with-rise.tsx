@@ -13,16 +13,16 @@ import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import { useAuthStore } from "@/store/auth-store";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
 import { LinkRiseWallet } from "@/components/shared/link-rise-wallet";
+import { RiseAccount } from "@/components/shared/rise-account";
 
 export default function FundUsdWithUsdRiseWallet() {
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isRiseAccountLinked, setIsRiseAccountLinked] = useState(false);
 
   const [actionRestricted, setActionRestricted] = useState(false);
   const { user, isUserVerified } = useAuthStore();
 
-  const isLinked = false; // Replace with actual logic later
+  console.log({ user });
 
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
@@ -45,8 +45,6 @@ export default function FundUsdWithUsdRiseWallet() {
 
     return availableOptions.find((m) => m.channel === "api_vendor");
   }, [ioMethods]);
-
-  console.log({ items: data?.items, selectedMethod });
 
   const handleAmountChange = (amount: string) => {
     setError(null);
@@ -96,12 +94,8 @@ export default function FundUsdWithUsdRiseWallet() {
         </div>
       </div>
 
-      <AnimatedWrapper animationKey={String(isRiseAccountLinked)}>
-        <LinkRiseWallet
-          isLinked={isRiseAccountLinked}
-          handleLinkRiseAccount={() => setIsRiseAccountLinked(false)}
-          linkRiseAccount={() => setIsRiseAccountLinked(true)}
-        />
+      <AnimatedWrapper animationKey={String(user?.metadata?.rise_account_id)}>
+        <RiseAccount isLinked={Boolean(user?.metadata?.rise_account_id)} />
       </AnimatedWrapper>
     </DepositWrapper>
   );

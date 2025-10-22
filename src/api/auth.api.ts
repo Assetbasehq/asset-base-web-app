@@ -48,7 +48,7 @@ class AuthService {
   updateUser = async (payload: Partial<IUser>) => {
     try {
       const response = await axiosInstance.patch(`/auth`, payload);
-    
+
       return response.data?.data;
     } catch (error) {
       handleAxiosError(error, "Failed to update");
@@ -106,7 +106,7 @@ class AuthService {
 
   loginWithRise = async (payload: any) => {
     try {
-      const response = await axiosInstance.post(`/sessions/rise`);
+      const response = await axiosInstance.post(`/sessions/rise`, payload);
       return response.data?.data;
     } catch (error) {
       handleAxiosError(error, "Failed to login with Rise");

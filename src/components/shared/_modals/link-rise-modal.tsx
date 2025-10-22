@@ -17,10 +17,11 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api/auth.api";
 import { Label } from "@/components/ui/label";
-import { LockKeyhole, Mail } from "lucide-react";
+import { Loader, LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import riselogo from "@/assets/images/rise-r-logo.png";
 
 interface FormValues {
   email_address: string;
@@ -45,7 +46,9 @@ export function LinkRiseModal({ open, onOpenChange }: LinkRiseModalProps) {
 
   const mutation = useMutation({
     mutationFn: authService.loginWithRise,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log({ data });
+
       onOpenChange(false);
     },
     onError: (error) => {
@@ -55,6 +58,8 @@ export function LinkRiseModal({ open, onOpenChange }: LinkRiseModalProps) {
   });
 
   const onSubmit = (values: FormValues) => {
+    console.log({ values });
+
     setError(null);
     mutation.mutate(values);
   };
@@ -63,7 +68,12 @@ export function LinkRiseModal({ open, onOpenChange }: LinkRiseModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md" showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold">
+          <DialogTitle className="text-lg font-semibold flex items-center gap-2">
+            <img
+              src={riselogo}
+              alt="rise"
+              className="w-12 h-12 bg-custom-card p-2 rounded-full"
+            />
             Link Rise Account
           </DialogTitle>
         </DialogHeader>
@@ -148,7 +158,14 @@ export function LinkRiseModal({ open, onOpenChange }: LinkRiseModalProps) {
               className="w-full py-5 btn-primary rounded-full mt-6"
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Linking..." : "Link Account"}
+              {mutation.isPending ? (
+                <span className="flex items-center gap-2">
+                  {" "}
+                  <Loader className="animate-spin" /> Linking...
+                </span>
+              ) : (
+                "Link Account"
+              )}
             </Button>
           </form>
         </Form>

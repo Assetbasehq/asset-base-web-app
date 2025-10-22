@@ -6,6 +6,10 @@ import AdminLogin from "@/pages/admin/auth/admin-login/admin-login";
 import Users from "@/pages/admin/users/users";
 import Assets from "@/pages/admin/assets/assets";
 import Referrals from "@/pages/admin/referrals/referrals";
+import Liquidity from "@/pages/admin/liquidity/liquidity";
+import Campaigns from "@/pages/admin/campaigns/campaigns";
+import Analytics from "@/pages/admin/analytics/analytics";
+import FinancialReports from "@/pages/admin/financial-reports/financial-reports";
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -23,7 +27,8 @@ export const adminRoutes: RouteObject[] = [
             element: <AdminLayout />,
             children: [
               {
-                path: "overview",
+                index: true,
+                // path: "overview",
                 element: <Overview />,
               },
               {
@@ -35,12 +40,24 @@ export const adminRoutes: RouteObject[] = [
                 element: <Assets />,
               },
               {
+                path: "liquidity",
+                element: <Liquidity />,
+              },
+              {
                 path: "referrals",
                 element: <Referrals />,
               },
               {
-                index: true,
-                element: <div>Reports</div>,
+                path: "campaigns",
+                element: <Campaigns />,
+              },
+              {
+                path: "analytics",
+                element: <Analytics />,
+              },
+              {
+                path: "financial-reports",
+                element: <FinancialReports />,
               },
               {
                 path: "*",

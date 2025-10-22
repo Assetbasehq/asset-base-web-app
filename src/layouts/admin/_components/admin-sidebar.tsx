@@ -19,7 +19,7 @@ const sideBarLinks = [
   {
     name: "Overview",
     icon: <RiDashboardLine className="w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />,
-    path: "/admin/dashboard/overview",
+    path: "/admin/dashboard",
   },
   {
     name: "Users",
