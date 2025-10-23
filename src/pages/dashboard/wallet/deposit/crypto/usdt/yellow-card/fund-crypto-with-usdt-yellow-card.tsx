@@ -185,7 +185,9 @@ export default function FundCryptoWithUsdtYellowCard() {
       <div className="text-custom-white-text flex flex-col gap-4">
         <div className="flex flex-col gap-4 text-start w-full max-w-md mx-auto">
           <div className="mb-8">
-            <h2 className="text-xl font-semibold">Fund With Bank Or Momo</h2>
+            <h2 className="text-xl font-semibold">
+              Fund USD Wallet With Bank Or Momo
+            </h2>
             <p className="text-muted-foreground text-sm">
               Minimum deposit is $10
             </p>
