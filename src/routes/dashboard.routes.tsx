@@ -21,7 +21,7 @@ import ProfileLeaderboard from "@/pages/dashboard/profile/_components/profile-le
 import ProfileKYC from "@/pages/dashboard/profile/_components/profile-kyc/profile-kyc";
 import ProfileSecurity from "@/pages/dashboard/profile/_components/profile-security";
 import ProfileReferrals from "@/pages/dashboard/profile/_components/profile-referrals";
-import ProfileAccountStatement from "@/pages/dashboard/profile/_components/profile-account-statement";
+import ProfileAccountStatement from "@/pages/dashboard/profile/_components/profile-account-statement/profile-account-statement";
 import ProfileInvestmentCertificate from "@/pages/dashboard/profile/_components/profile-investment-certificate";
 import ProfileContactUs from "@/pages/dashboard/profile/_components/profile-contact-us";
 import ProfileDeleteAccount from "@/pages/dashboard/profile/_components/profile-delete-account";

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { Badge } from "../ui/badge";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
+import { cn } from "@/lib/utils";
 
 export default function AssetBaseBeta() {
   return (
@@ -33,5 +34,11 @@ export function AssetBaseBetaWhite() {
         beta
       </Badge>
     </Link>
+  );
+}
+
+export function AssetBaseLogo({ className }: { className?: string }) {
+  return (
+    <img src={assetBaseLogo} alt="asset base" className={cn(``, className)} />
   );
 }

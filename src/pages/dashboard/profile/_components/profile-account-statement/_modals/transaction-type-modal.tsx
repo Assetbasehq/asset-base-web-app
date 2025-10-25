@@ -11,17 +11,17 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 
-interface AccountStatementModalProps {
+interface TransactionTypeProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onApply: (checked: Record<string, boolean>) => void;
 }
 
-export default function AccountStatementModal({
+export default function TransactionTypeModal({
   isOpen,
   onClose,
-  onSuccess,
-}: AccountStatementModalProps) {
+  onApply,
+}: TransactionTypeProps) {
   const [checked, setChecked] = useState({
     all: false,
     wallet: false,
@@ -73,8 +73,7 @@ export default function AccountStatementModal({
   const isAnySelected = Object.values(checked).some(Boolean);
 
   const handleApply = () => {
-    onClose();
-    onSuccess();
+    onApply(checked);
   };
 
   if (!isOpen) return null;
@@ -89,10 +88,6 @@ export default function AccountStatementModal({
           <DialogTitle className="flex items-start gap-2 text-xl text-start">
             Select transaction type
           </DialogTitle>
-          {/* <DialogDescription className="text-start">
-            Select transaction type
-          </DialogDescription> */}
-
           <div className="flex flex-col gap-4 py-4 w-full">
             <div className="flex items-center gap-3">
               <Checkbox
@@ -157,7 +152,7 @@ export default function AccountStatementModal({
           </div>
 
           <Button
-            disabled={!isAnySelected}
+            // disabled={!isAnySelected}
             onClick={handleApply}
             className="mt-4 w-full py-6 btn-secondary"
           >
