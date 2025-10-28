@@ -5,9 +5,6 @@ import Wallet from "@/pages/dashboard/wallet/wallet";
 import WalletPage from "@/pages/dashboard/wallet/_components/wallet-page";
 import Withdraw from "@/pages/dashboard/wallet/withdraw/withdraw";
 import Markets from "@/pages/dashboard/markets/markets";
-import AssetDetails, {
-  AssetDetailsInvest,
-} from "@/pages/dashboard/markets/_components/asset-details";
 import Liquidity from "@/pages/dashboard/liquidity/liquidity";
 import AvailableLiquidity from "@/pages/dashboard/liquidity/_components/available-liquidity";
 import MyInvestments from "@/pages/dashboard/liquidity/_components/my-investments";
@@ -47,6 +44,8 @@ import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/r
 import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
 import ProfileBanksAndCards from "@/pages/dashboard/profile/_components/profile-banks-and-cards";
 import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/usdt/yellow-card/fund-crypto-with-usdt-yellow-card";
+import AssetDetailPrimaryMarket from "@/pages/dashboard/asset-detail-primary-market/asset-detail-primary-market";
+import AssetDetailSecondaryMarket from "@/pages/dashboard/asset-detail-secondary-market/asset-detail-secondary-market";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -69,7 +68,11 @@ export const dashboardRoutes: RouteObject[] = [
               },
               {
                 path: ":assetId",
-                element: <AssetDetailsInvest />,
+                element: <AssetDetailPrimaryMarket />,
+              },
+              {
+                path: "secondary/:assetId",
+                element: <AssetDetailSecondaryMarket />,
               },
             ],
           },
@@ -187,10 +190,10 @@ export const dashboardRoutes: RouteObject[] = [
                 index: true,
                 element: <Markets />,
               },
-              {
-                path: ":assetId",
-                element: <AssetDetails />,
-              },
+              // {
+              //   path: ":assetId",
+              //   element: <AssetDetails />,
+              // },
             ],
           },
           {

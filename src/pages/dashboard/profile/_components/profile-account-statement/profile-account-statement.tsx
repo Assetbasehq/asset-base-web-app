@@ -20,6 +20,10 @@ import { useMutation } from "@tanstack/react-query";
 import { documentRequestService } from "@/api/document-requests.api";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import AccountStatementPreviewModal from "./_modals/account-statement-preview-modal";
+import type {
+  WalletStatement,
+  WalletTransaction,
+} from "@/interfaces/wallet.interfae";
 
 export interface ITransactionType {
   name: string;
@@ -65,19 +69,27 @@ export default function ProfileAccountStatement() {
   );
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [isPreview, setIsPreview] = useState(false);
+
+  const [walletStatements, setWalletStatements] = useState<
+    WalletStatement[] | null
+  >(null);
 
   const [modals, setModals] = useState({
     transactionType: false,
-    preview: true,
+    preview: false,
   });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: documentRequestService.requestAccountStatement,
     onSuccess: (data) => {
       console.log({ data });
-      setSuccess(
-        "Your account statement has been generated and sent to your mail successfully"
-      );
+      setWalletStatements(data.wallet_statements);
+      if (!isPreview) {
+        setSuccess(
+          "Your account statement has been generated and sent to your mail successfully"
+        );
+      }
     },
     onError: (error) => {
       setError(error.message || "Something went wrong");
@@ -194,6 +206,9 @@ export default function ProfileAccountStatement() {
 
     // return;
 
+    setError(null);
+    setSuccess(null);
+
     if (!selectedTransactionTypes || selectedTransactionTypes.length === 0) {
       setError("Please select at least one transaction type");
     }
@@ -211,6 +226,7 @@ export default function ProfileAccountStatement() {
     };
 
     console.log({ payload });
+    setIsPreview(preview);
 
     mutateAsync(payload, {
       onSuccess: () => {
@@ -331,9 +347,9 @@ export default function ProfileAccountStatement() {
               !endDate
             }
             className="flex-1 btn-primary rounded-full py-6"
-            onClick={() => handleGenerateStatement({ preview: true })}
+            onClick={() => handleGenerateStatement({ preview: false })}
           >
-            {isPending ? (
+            {isPending && !isPreview ? (
               <span className="flex items-center gap-2">
                 <Loader className="animate-spin" /> Generating Statement...
               </span>
@@ -351,9 +367,9 @@ export default function ProfileAccountStatement() {
             }
             className="flex-1 rounded-full cursor-pointer py-6"
             variant="outline"
-            onClick={() => toggleModal("preview", true)}
+            onClick={() => handleGenerateStatement({ preview: true })}
           >
-            {isPending ? (
+            {isPending && isPreview ? (
               <span className="flex items-center gap-2">
                 <Loader className="animate-spin" /> Downloading Preview...
               </span>
@@ -370,6 +386,7 @@ export default function ProfileAccountStatement() {
         onApply={handleApply}
       />
       <AccountStatementPreviewModal
+        walletStatements={walletStatements}
         isOpen={modals.preview}
         onClose={() => toggleModal("preview", false)}
         startDate={startDate ? startDate.toISOString() : ""}

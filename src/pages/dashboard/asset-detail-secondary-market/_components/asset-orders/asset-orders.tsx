@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import AssetOpenOrders from "./asset-orders/asset-open-orders";
-import AssetOrderHistory from "./asset-orders/asset-order-history";
+import AssetOpenOrders from "./asset-open-orders";
+import AssetOrderHistory from "./asset-order-history";
 import { motion } from "motion/react";
 
 const tabs = [

@@ -7,7 +7,6 @@ import {
   RiArrowUpLine,
   RiErrorWarningLine,
   RiShareForwardLine,
-  RiTimeLine,
 } from "react-icons/ri";
 
 interface Asset {
@@ -24,9 +23,15 @@ interface Asset {
 
 interface AssetInfoProps {
   asset: Asset;
+  isChecked: boolean;
+  onSwitch: (value: boolean) => void;
 }
 
-export default function AssetInfo({ asset }: AssetInfoProps) {
+export default function AssetInfo({
+  asset,
+  isChecked,
+  onSwitch,
+}: AssetInfoProps) {
   return (
     <Card className="bg-custom-card border-none text-start shadow-none py-0">
       <CardContent className="text-white p-4">
@@ -94,44 +99,6 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
           </div>
 
           <div className="border p-2 sm:p-6 rounded-lg grid grid-cols-2 gap-4 md:grid-cols-4 text-custom-white-text">
-            {/* 24h Open */}
-            {/* <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <RiTimeLine className="md:h-5 md:w-5" />
-                <p className="text-xs md:text-lg">24h Open</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="text-xs md:text-lg">{asset.price}</p>
-                <small
-                  className={cn("text-muted-foreground text-xs", {
-                    "text-green-400": asset.price_change_24hrs.includes("+"),
-                    "text-red-400": asset.price_change_24hrs.includes("-"),
-                  })}
-                >
-                  {asset.price_change_24hrs}
-                </small>
-              </div>
-            </div> */}
-
-            {/* 24h Close */}
-            {/* <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <RiArrowDownLine className="md:h-5 md:w-5 text-red-500" />
-                <p className="text-xs md:text-lg">24h Close</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="text-xs md:text-lg">{asset.price}</p>
-                <small
-                  className={cn("text-muted-foreground text-xs", {
-                    "text-green-400": asset.price_change_24hrs.includes("+"),
-                    "text-red-400": asset.price_change_24hrs.includes("-"),
-                  })}
-                >
-                  {asset.price_change_24hrs}
-                </small>
-              </div>
-            </div> */}
-
             {/* 24h High */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-muted-foreground">
@@ -185,7 +152,16 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
                   <h2 className="text-lg md:text-lg font-medium">
                     Switch to Pro
                   </h2>
-                  <Switch className="border-2" />
+                  <Switch
+                    id="pro-mode"
+                    checked={isChecked}
+                    onCheckedChange={(checked) => {
+                      console.log({ checked });
+
+                      onSwitch(checked);
+                    }}
+                    className="border-2 data-[state=unchecked]:border-white data-[state=checked]:border-custom-orange !data-[state=unchecked]:bg-transparent data-[state=checked]:bg-transparent w-10 h-[1.3rem] cursor-pointer px-1"
+                  />
                 </div>
               </div>
             </div>
@@ -204,7 +180,15 @@ export default function AssetInfo({ asset }: AssetInfoProps) {
                 <h2 className="text-lg md:text-lg font-medium">
                   Switch to Pro
                 </h2>
-                <Switch className="border-2" />
+                <Switch
+                  // checked={isChecked}
+                  onCheckedChange={(checked) => {
+                    console.log({ checked });
+
+                    onSwitch(checked);
+                  }}
+                  className="border-2 data-[state=unchecked]:border-white data-[state=checked]:border-custom-orange !data-[state=unchecked]:bg-transparent data-[state=checked]:bg-transparent w-10 h-[1.3rem] cursor-pointer px-1"
+                />
               </div>
             </div>
           </div>

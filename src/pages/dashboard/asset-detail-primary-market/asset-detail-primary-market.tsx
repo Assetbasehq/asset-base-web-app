@@ -1,14 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Link, useLocation, useNavigate, useParams } from "react-router";
-import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { ArrowLeft } from "lucide-react";
-import AssetInfo from "./asset-info";
-import AssetTabs from "./asset-tabs";
-import AssetTradePanel from "./asset-trade-panel";
-import AssetOrders from "./asset-orders";
 import { calculateRaisePercentage, cn } from "@/lib/utils";
-import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
-import AssetAbout from "./asset-tabs/asset-about";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -30,109 +23,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
+import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
+import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
+import AssetAbout from "../asset-detail-secondary-market/_components/asset-tabs/asset-about";
 
-interface Asset {
-  id: string;
-  name: string;
-  acronym: string;
-  logo: string;
-  amount_raised: string;
-  goal: string;
-  round_closes: string;
-  price: string;
-  price_change_24hrs: string;
-}
-
-interface InvestFormData {
-  quantity: number;
-  currency: string;
-  estimatedAmount: number;
-}
-
-const demoAsset: Asset = {
-  id: "1",
-  name: "Landmark Realty Limited",
-  acronym: "LARL",
-  logo: assetBaseLogo,
-  amount_raised: "$23,500",
-  goal: "$1,200,000",
-  round_closes: "15 days",
-  price: "$3400.00",
-  price_change_24hrs: "+2.33%",
-};
-
-export default function AssetDetails() {
-  const { assetId } = useParams<{ assetId: string }>();
-  const navigate = useNavigate();
-
-  const location = useLocation();
-  const segments = location.pathname.split("/").filter(Boolean);
-
-  const formattedSegments = segments.map((seg) =>
-    seg.toLowerCase() === "dashboard" ? "home" : seg
-  );
-
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <Button
-          onClick={() => navigate(-1)}
-          className=" bg-custom-light-bg text-custom-white-text flex gap-2"
-        >
-          <ArrowLeft />
-          Back
-        </Button>
-
-        {/* <div className=" bg-custom-light-bg text-custom-white px-4 py-2 rounded-sm font-semibold">
-          Home / Markets /{" "}
-          <span className="text-custom-orange">
-            {assetId?.toUpperCase() || "LARL"}
-          </span>
-        </div> */}
-
-        <div className="flex items-center px-2 py-1 bg-custom-light-bg text-custom-white rounded-sm">
-          {formattedSegments.map((seg, idx) => {
-            const isLast = idx === formattedSegments.length - 1;
-            const to = "/" + segments.slice(0, idx + 1).join("/");
-
-            return (
-              <div key={idx} className="flex items-center gap-2 ">
-                <Link
-                  to={to}
-                  className={cn(
-                    "capitalize px-1 py-1 rounded text-sm",
-                    isLast
-                      ? "text-custom-orange font-medium uppercase"
-                      : "hover:text-custom-white-text"
-                  )}
-                >
-                  {seg}
-                </Link>
-                {!isLast && <span className="text-muted-foreground">/</span>}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4 lg:flex-row">
-        <div className="flex flex-col gap-4 lg:w-3/5">
-          <AssetInfo asset={demoAsset} />
-          <div className="hidden lg:block">
-            <AssetTabs />
-          </div>
-        </div>
-        <div className="flex flex-col gap-4 lg:w-2/5 bg-custom-card rounded-xl p-6">
-          <AssetTradePanel />
-          <AssetOrders />
-        </div>
-        <div className="block lg:hidden">
-          <AssetTabs />
-        </div>
-      </div>
-    </div>
-  );
-}
+// Primary Market
+const tabs = [
+  { key: "about", label: "About", component: <AssetAbout /> },
+  { key: "discussions", label: "Discussions", component: <AssetAbout /> },
+  { key: "updates", label: "Updates", component: <AssetAbout /> },
+  { key: "Feedback", label: "Feedback", component: <AssetAbout /> },
+];
 
 const sampleImages = [
   {
@@ -167,14 +68,7 @@ const sampleImages = [
   },
 ];
 
-const tabs = [
-  { key: "about", label: "About", component: <AssetAbout /> },
-  { key: "discussions", label: "Discussions", component: <AssetAbout /> },
-  { key: "updates", label: "Updates", component: <AssetAbout /> },
-  { key: "Feedback", label: "Feedback", component: <AssetAbout /> },
-];
-
-export function AssetDetailsInvest() {
+export default function AssetDetailPrimaryMarket() {
   const [active, setActive] = useState("about");
   const [open, setOpen] = useState(false); // Modal state
   const { assetId } = useParams<{ assetId: string }>();
@@ -191,18 +85,18 @@ export function AssetDetailsInvest() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-2">
         <Button
           onClick={() => navigate(-1)}
-          className=" bg-custom-light-bg text-custom-white-text flex gap-2"
+          className=" bg-custom-light-bg hover:bg-custom-light-bg/80 text-custom-white-text flex gap-2 cursor-pointer"
         >
           <ArrowLeft />
-          Back Home
+          Back
         </Button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 justify-between">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 ">
             <img src={assetBaseLogo} alt="" className="w-12 h-12" />
             <div className="text-start flex flex-col">
@@ -252,7 +146,7 @@ export function AssetDetailsInvest() {
           <Card className="border-none shadow-none bg-transparent p-0 px-0">
             <CardContent className="p-0">
               {/* Tabs header */}
-              <div className="w-full border-b text-custom-white-text">
+              <div className="w-full border-b text-custom-white-text my-4">
                 <div className="relative flex gap-6 justify-start w-fit max-w-md">
                   {tabs.map((tab) => (
                     <button
@@ -294,7 +188,7 @@ export function AssetDetailsInvest() {
             <h2 className="text-sm md:text-lg text-custom-white font-semibold">
               About
             </h2>
-            <p>
+            <p className="text-muted-foreground">
               Founded in 1997 and headquartered in Lagos, Landmark Africa has
               transformed the hospitality landscape in Nigeria through an
               integrated ecosystem of leisure, real estate, and lifestyle
@@ -313,7 +207,7 @@ export function AssetDetailsInvest() {
           </div>
         </div>
 
-        <Card className="border-none shadow-none p-0 px-0 bg-custom-card text-custom-white h-fit md:w-2/3 md:mx-6">
+        <Card className="border-none shadow-none p-0 px-0 bg-custom-card text-custom-white h-fit md:w-2/3">
           <CardContent className="p-4 text-start flex flex-col gap-2">
             <p className="text-xl font-semibold">$234,000</p>
             <Progress
@@ -350,6 +244,12 @@ export function AssetDetailsInvest() {
       <AssetInvestModal isOpen={open} onClose={() => setOpen(false)} />
     </div>
   );
+}
+
+interface InvestFormData {
+  quantity: number;
+  currency: string;
+  estimatedAmount: number;
 }
 
 export function AssetInvestModal({

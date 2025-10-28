@@ -44,3 +44,29 @@ export interface IUpdateUser {
   document?: File[] | null;
   roles?: string[];
 }
+
+export type UserBankAccount = {
+  id: string;
+  created_at: string;
+  user_id: string;
+  status: string;
+  wallet_type: string;
+  currencies: string[];
+  provider: string;
+  details: {
+    accounts?: {
+      id: string;
+      last_digits: string;
+      account_name: string;
+      account_type: string;
+    }[];
+    currency: string;
+    provider: string;
+    bank_name: string;
+    provider_reference: string;
+    bank_code?: string;
+    account_name?: string;
+    account_number?: string;
+    network?: string;
+  };
+};

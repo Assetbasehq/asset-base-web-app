@@ -1,40 +1,41 @@
-import { useState } from "react";
 import { motion } from "motion/react";
 import { Card, CardContent } from "@/components/ui/card";
-import AssetAbout from "./asset-tabs/asset-about";
-import AssetChart from "./asset-tabs/asset-chart";
-import AssetImages from "./asset-tabs/asset-images";
-import AssetTerms from "./asset-tabs/asset-terms";
+
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import AssetTrade from "./asset-trade";
+import AssetFinance from "./asset-finance";
 
 const tabs = [
-  { key: "about", label: "About", component: <AssetAbout /> },
-  { key: "images", label: "Images", component: <AssetImages /> },
-  { key: "terms", label: "Terms", component: <AssetTerms /> },
+  { key: "trade", label: "Trade", component: <AssetTrade /> },
+  { key: "finance", label: "Finance", component: <AssetFinance /> },
 ];
 
-export default function AssetTabs() {
-  const [active, setActive] = useState("about");
+export default function AssetTradePanel() {
+  const [active, setActive] = useState("trade");
 
   return (
-    <Card className="bg-custom-card border-none shadow-none">
-      <CardContent className="">
+    <Card className="border-none shadow-none bg-custom-card p-0 px-0">
+      <CardContent className="p-0">
         {/* Tabs header */}
         <div className="w-full border-b text-custom-white-text">
-          <div className="relative flex w-full max-w-md">
+          <div className="relative flex gap-6 justify-start w-fit max-w-md">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActive(tab.key)}
-                className={`flex-1 py-2 text-center text-sm font-medium relative ${
-                  active === tab.key
-                    ? "text-orange-500"
-                    : "text-custom-white-text"
-                }`}
+                className={cn(
+                  "flex-1 py-2 px-4 text-center text-sm font-medium relative",
+                  {
+                    "text-orange-500": active === tab.key,
+                    "text-custom-white-text": active !== tab.key,
+                  }
+                )}
               >
                 <span className="text-lg">{tab.label}</span>
                 {active === tab.key && (
                   <motion.div
-                    layoutId="underline-2"
+                    layoutId="underlineeee"
                     className="absolute bottom-0 left-0 right-0 h-[2px] bg-orange-500"
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
