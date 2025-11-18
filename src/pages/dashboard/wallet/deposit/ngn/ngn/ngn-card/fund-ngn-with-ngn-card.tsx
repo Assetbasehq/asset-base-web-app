@@ -44,7 +44,7 @@ export default function FundNgnWithNgnCard() {
 
   const [actionRestricted, setActionRestricted] = useState(false);
   const { user, isUserVerified } = useAuthStore();
-  
+
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
     filter_value: "funding",
