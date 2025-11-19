@@ -92,6 +92,33 @@ class WalletService {
     }
   };
 
+  getSupportedNetworks = async (params?: Record<string, any>) => {
+    try {
+      const response = await web3axiosInstance.get(
+        `/wallet/supported-networks`,
+        {
+          params,
+        }
+      );
+      const data = response.data?.data;
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to get supported networks");
+    }
+  };
+
+  getSupportedAssets = async (params?: Record<string, any>) => {
+    try {
+      const response = await web3axiosInstance.get(`/wallet/supported-assets`, {
+        params,
+      });
+      const data = response.data?.data;
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to get supported assets");
+    }
+  };
+
   // BlockChain
   getAddressTransactions = async (address: string) => {
     try {

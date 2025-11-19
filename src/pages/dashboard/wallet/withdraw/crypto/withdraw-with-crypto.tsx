@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { images } from "@/constants/images";
+import { useSupportedAssets, useSupportedNetworks } from "@/hooks/useWallet";
 
 interface WithdrawToCryptoProps {
   //   stage: number;
@@ -8,6 +9,14 @@ interface WithdrawToCryptoProps {
 }
 
 export default function WithdrawToCrypto({ onBack }: WithdrawToCryptoProps) {
+  const { data: supportedNetworks } = useSupportedNetworks({});
+  const { data: supportedAssets } = useSupportedAssets({});
+
+  console.log({
+    supportedNetworks,
+    supportedAssets,
+  });
+
   return (
     <div className="text-start flex flex-col gap-2">
       <p className="text-xs font-light text-custom-grey">
@@ -30,10 +39,6 @@ export default function WithdrawToCrypto({ onBack }: WithdrawToCryptoProps) {
       >
         <img src={images.assetBase.logo} alt={images.assetBase.alt} />
         <span>Send to my connected wallet</span>
-      </Button>
-
-      <Button disabled className="btn-primary rounded-full py-6 mt-4 w-full">
-        Proceed with withdrawal
       </Button>
     </div>
   );

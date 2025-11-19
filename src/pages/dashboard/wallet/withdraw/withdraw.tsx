@@ -9,7 +9,6 @@ import { RiBankLine } from "react-icons/ri";
 import { flags } from "@/constants/images";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import WithdrawToBankAccount from "./bank/continue-with-bank";
-import WithdrawToCrypto from "./crypto/withdraw-with-crypto";
 import WithdrawToRiseWallet from "./rise/withdraw-to-rise";
 import WithdrawBreadCrumb from "./_components/withdraw-bread-crumb";
 import { useGetWallet } from "@/hooks/useWallet";
@@ -17,6 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { FormatService } from "@/services/format-service";
 import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import WithdrawToCrypto from "./crypto/withdraw-with-crypto";
 
 const options = [
   {

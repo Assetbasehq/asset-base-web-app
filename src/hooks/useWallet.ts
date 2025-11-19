@@ -1,4 +1,5 @@
 import { walletService } from "@/api/wallet.api";
+import type { IParams } from "@/interfaces/params.interface";
 import type { ICryptoWallet } from "@/interfaces/wallet.interfae";
 import { useQuery } from "@tanstack/react-query";
 
@@ -38,5 +39,19 @@ export const useGetAddressTransactions = (address: string) => {
     queryKey: ["address-transactions", address],
     queryFn: () => walletService.getAddressTransactions(address),
     enabled: !!address,
+  });
+};
+
+export const useSupportedNetworks = (params: IParams) => {
+  return useQuery<any, Error>({
+    queryKey: ["supported-networks"],
+    queryFn: () => walletService.getSupportedNetworks(params),
+  });
+};
+
+export const useSupportedAssets = (params: IParams) => {
+  return useQuery<any, Error>({
+    queryKey: ["supported-assets"],
+    queryFn: () => walletService.getSupportedAssets(params),
   });
 };
