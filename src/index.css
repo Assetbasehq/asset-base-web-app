@@ -250,7 +250,7 @@
   --custom-input-fill: #ffffff;
   --custom-input-mute: #f0f2f5;
   --custom-input-label: #ffffff;
-  --custom-light-stroke: #CDD0D5;
+  --custom-light-stroke: #cdd0d5;
   --custom-light-bg: #f6f9fa;
   --custom-grey: #31353f;
   --custom-blue-shade: #e6f0fc;
@@ -365,4 +365,8 @@
 
 .no-scrollbar {
   @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+.max-w-custom {
+  @apply max-w-screen-2xl;
 }

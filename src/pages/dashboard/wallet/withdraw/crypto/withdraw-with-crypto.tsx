@@ -10,60 +10,113 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
+import { useMutation } from "@tanstack/react-query";
+import { walletService } from "@/api/wallet.api";
+import { useOutletContext } from "react-router";
+import { Loader } from "lucide-react";
+import { FormatService } from "@/services/format-service";
+import { cn } from "@/lib/utils";
+
+interface WithdrawContext {
+  amountToWithdraw: {
+    amount: number | null;
+    formattedAmount: string;
+  } | null;
+  currency: "usd" | "ngn";
+}
 
 export default function WithdrawToCrypto() {
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
 
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [connectWalletOpen, setConnectWalletOpen] = useState(false);
 
-  // auto-fill states
   const [selectedNetwork, setSelectedNetwork] = useState<any>(null);
+  const [selectedAsset, setSelectedAsset] = useState<any>(null);
   const [recipientAddress, setRecipientAddress] = useState("");
+
+  const { amountToWithdraw, currency } = useOutletContext<WithdrawContext>();
 
   const { data: supportedNetworks } = useSupportedNetworks({});
   const { data: supportedAssets } = useSupportedAssets({});
 
-  const { address, chainId, isConnected } = useAccount();
+  const {
+    address,
+    chainId,
+    isConnected,
+    connector: activeConnector,
+  } = useAccount();
+  const { disconnect } = useDisconnect();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: walletService.sendToExternalAddress,
+    onSuccess: (data) => {
+      console.log({ data });
+      setSuccess(data.message);
+    },
+    onError: (error) => {
+      console.log({ error });
+      setModalError(error.message);
+      setSuccess(null);
+    },
+  });
 
   const handleOpenModal = () => {
     setWithdrawOpen(true);
   };
 
   const handleSelectNetwork = (network: any) => {
+    setError(null);
+    setModalError(null);
     setSelectedNetwork(network);
   };
 
+  const handleSelectAsset = (asset: any) => {
+    setError(null);
+    setModalError(null);
+    setSelectedAsset(asset);
+  };
+
   const handleWithdraw = () => {
+    setModalError(null);
+    setSuccess(null);
     if (!recipientAddress) return setModalError("Enter destination address");
     if (!selectedNetwork) return setModalError("Select a network");
+    if (!amountToWithdraw?.amount) {
+      return setModalError("Please provide an amount to withdraw");
+    }
+    if (selectedAsset.network.chain !== selectedNetwork.chain) {
+      return setModalError("Network mismatch");
+    }
 
     console.log({
       recipientAddress,
       network: selectedNetwork,
     });
 
-    let payload: Record<string, any> = {
-      amount: 0,
-      assetId: "",
+    let payload = {
+      amount: amountToWithdraw?.amount,
+      assetId: selectedAsset.id,
       address: recipientAddress,
-      network: selectedNetwork,
-
+      network: selectedNetwork.chain,
     };
+
+    console.log({ payload });
 
     // Trigger withdrawal logic here
     // e.g. call backend: /wallet/withdraw
 
-    alert("Withdrawal triggered!");
-    setWithdrawOpen(false);
+    mutateAsync(payload);
+    // setWithdrawOpen(false);
   };
 
   const handleUseConnectedWallet = () => {
-    if (!isConnected) {
-      // ❌ Wallet not connected → show connect wallet modal
+    if (!activeConnector) {
+      //  Wallet not connected → show connect wallet modal
       setConnectWalletOpen(true);
       return;
     }
@@ -87,16 +140,23 @@ export default function WithdrawToCrypto() {
     setWithdrawOpen(true);
   };
 
-  console.log({
-    supportedNetworks,
-    supportedAssets,
-  });
+  const btnText = isPending ? (
+    <span className="flex items-center gap-2">
+      <Loader className=" animate-spin" /> Processing...
+    </span>
+  ) : (
+    <span>Withdraw</span>
+  );
 
   return (
     <div className="text-start flex flex-col gap-2">
       <ConnectWalletModal
         open={connectWalletOpen}
         setOpen={setConnectWalletOpen}
+        onSuccess={() => {
+          setConnectWalletOpen(false);
+          setWithdrawOpen(true);
+        }}
       />
       <p className="text-sm font-light text-custom-grey">
         Withdraw to crypto wallet
@@ -105,6 +165,7 @@ export default function WithdrawToCrypto() {
       {error && <CustomAlert variant="warning" message={error} />}
 
       <Button
+        disabled={!amountToWithdraw}
         onClick={handleOpenModal}
         className="py-6 md:py-8 bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer w-full"
       >
@@ -113,6 +174,7 @@ export default function WithdrawToCrypto() {
       </Button>
 
       <Button
+        disabled={!amountToWithdraw}
         onClick={handleUseConnectedWallet}
         className="py-6 md:py-8 bg-custom-light-bg flex justify-start text-custom-grey hover:bg-custom-light-bg/80 cursor-pointer w-full"
       >
@@ -128,7 +190,50 @@ export default function WithdrawToCrypto() {
             </DialogTitle>
           </DialogHeader>
 
-          <div className="flex flex-col gap-4 mt-2">
+          <div className="flex flex-col gap-4 mt-2 font-geist">
+            <p className="">
+              You are about to withdraw{" "}
+              <span className="font-semibold">
+                {FormatService.formatCurrency(amountToWithdraw?.amount)}
+              </span>
+            </p>
+
+            {activeConnector && (
+              <div className="flex justify-between w-full">
+                <div className="flex items-center gap-2">
+                  <p>Connected Wallet - </p>
+                  <div className="flex items-center gap-1">
+                    <p className=" font-medium">{activeConnector.name}</p>
+                    <img
+                      className="w-5"
+                      src={activeConnector.icon}
+                      alt={activeConnector.name}
+                    />
+                  </div>
+                </div>
+                {/* <Button
+                  className="w-50 flex items-center justify-start gap-2 bg-custom-base hover:bg-custom-light-bg text-custom-white cursor-pointer "
+                  key={activeConnector.uid}
+                >
+                  <img
+                    className="w-6 h-6"
+                    src={activeConnector.icon}
+                    alt={activeConnector.name}
+                  />
+                  <div>{activeConnector.name}</div>
+                </Button> */}
+                <Button
+                  className={cn(
+                    `bg-custom-light-bg w-30 text-xs !p-0 cursor-pointer`
+                  )}
+                  variant="destructive"
+                  onClick={() => disconnect()}
+                >
+                  Disconnect
+                </Button>
+              </div>
+            )}
+
             {/* ADDRESS INPUT */}
             <div className="flex flex-col gap-1">
               <label className="text-xs text-custom-grey">
@@ -139,6 +244,7 @@ export default function WithdrawToCrypto() {
                 onChange={(e) => {
                   setRecipientAddress(e.target.value);
                   setModalError(null);
+                  setSuccess(null);
                 }}
                 placeholder="0x..."
                 className="py-6"
@@ -148,6 +254,33 @@ export default function WithdrawToCrypto() {
             {modalError && (
               <CustomAlert variant="warning" message={modalError} />
             )}
+            {success && <CustomAlert variant="success" message={success} />}
+
+            {/* ASSET SELECTION */}
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-custom-grey">Select Asset</p>
+
+              <div className="flex flex-row flex-wrap overflow-x-auto gap-2 scrollbar-thin scrollbar-thumb-custom-grey/30 scrollbar-track-transparent">
+                {supportedAssets?.map((asset: any) => (
+                  <div
+                    key={asset.id}
+                    onClick={() => handleSelectAsset(asset)}
+                    className={`
+                      flex items-center gap-3 px-4 py-2 rounded-md cursor-pointer
+                      bg-custom-light-bg hover:bg-custom-light-bg/70 
+                      ${
+                        selectedAsset?.id === asset.id
+                          ? "border border-custom-orange"
+                          : ""
+                      }
+                    `}
+                  >
+                    <img src={asset.logoUrl} className="w-6 h-6 rounded-full" />
+                    <span className="text-sm w-full">{asset.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {/* NETWORK SELECTION */}
             <div className="flex flex-col gap-1">
@@ -177,11 +310,17 @@ export default function WithdrawToCrypto() {
 
             {/* ACTION BUTTON */}
             <Button
-              disabled={!recipientAddress || !selectedNetwork}
+              disabled={
+                !recipientAddress ||
+                !selectedNetwork ||
+                !selectedAsset ||
+                !amountToWithdraw ||
+                isPending
+              }
               onClick={handleWithdraw}
-              className="py-6 bg-custom-orange hover:bg-custom-orange/80"
+              className=" btn-primary w-full rounded-full py-5 font-geist tracking-wide"
             >
-              Withdraw
+              {btnText}
             </Button>
           </div>
         </DialogContent>

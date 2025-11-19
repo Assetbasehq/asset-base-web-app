@@ -31,9 +31,14 @@ interface FormValues {
 interface LinkRiseModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess: () => void;
 }
 
-export function LinkRiseModal({ open, onOpenChange }: LinkRiseModalProps) {
+export function LinkRiseModal({
+  open,
+  onOpenChange,
+  onSuccess,
+}: LinkRiseModalProps) {
   const [isPasswordVisible, setPasswordVisible] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,8 +53,8 @@ export function LinkRiseModal({ open, onOpenChange }: LinkRiseModalProps) {
     mutationFn: authService.loginWithRise,
     onSuccess: (data) => {
       console.log({ data });
-
       onOpenChange(false);
+      onSuccess();
     },
     onError: (error) => {
       setError(error.message);

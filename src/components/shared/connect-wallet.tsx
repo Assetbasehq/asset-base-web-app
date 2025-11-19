@@ -31,7 +31,6 @@ const ASSET_CHAIN_USDT_CONTRACT = "0x04f868C5b3F0A100a207c7e9312946cC2c48a7a3";
 export default function ConnectWallet({ className }: ConnectWalletProps) {
   const [open, setOpen] = useState(false);
 
-  const { connectors, connect, error } = useConnect();
   const { address, isConnected, chainId } = useAccount();
   const { data: walletBalance } = useBalance({
     address,
@@ -46,12 +45,6 @@ export default function ConnectWallet({ className }: ConnectWalletProps) {
     : FormatService.formatToUSD(0);
 
   const handleOpen = () => setOpen(true);
-
-  // console.log({
-  //   walletBalance,
-  //   isConnected,
-  //   chainId,
-  // });
 
   return (
     <div>
@@ -87,13 +80,17 @@ export default function ConnectWallet({ className }: ConnectWalletProps) {
 export function ConnectWalletModal({
   open,
   setOpen,
+  onSuccess,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  onSuccess?: () => void;
 }) {
   const { connectors, connect, error } = useConnect();
   const { connector: activeConnector, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
+
+  console.log({ activeConnector });
 
   if (!open) {
     return null;
@@ -126,7 +123,16 @@ export function ConnectWalletModal({
                         key={connector.uid}
                         onClick={() => {
                           if (!isCurrent) {
-                            connect({ connector }); // ✅ only connect if not already connected
+                            connect(
+                              { connector },
+                              {
+                                onSuccess: () => {
+                                  if (onSuccess) {
+                                    onSuccess();
+                                  }
+                                },
+                              }
+                            ); 
                           }
                         }}
                       >

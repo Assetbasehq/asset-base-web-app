@@ -36,7 +36,7 @@ export default function WithdrawBreadCrumb({
           const isLast = idx === 2;
           const to =
             "/" +
-            ["dashboard", "wallet", "deposit"].slice(0, idx + 1).join("/");
+            ["dashboard", "wallet", "withdraw"].slice(0, idx + 1).join("/");
 
           return (
             <div key={idx} className="flex items-center gap-2 ">

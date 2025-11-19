@@ -1,11 +1,7 @@
 import { Button } from "@/components/ui/button";
 import riseLink from "@/assets/images/rise-link.svg";
 
-export default function WithdrawToRiseWallet({
-  onBack,
-}: {
-  onBack: () => void;
-}) {
+export default function WithdrawToRiseWallet() {
   const isLinked = false; // Replace with actual logic later
 
   if (!isLinked) {
@@ -26,7 +22,7 @@ export default function WithdrawToRiseWallet({
   return (
     <div className="text-center">
       <h2 className="text-xl font-semibold mb-4">Continue with Rise Wallet</h2>
-      <Button variant="outline" onClick={onBack}>
+      <Button variant="outline" onClick={() => {}}>
         Back
       </Button>
     </div>

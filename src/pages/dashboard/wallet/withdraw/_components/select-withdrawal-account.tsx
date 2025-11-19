@@ -5,6 +5,7 @@ import { RiBankLine } from "react-icons/ri";
 import { flags } from "@/constants/images";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { cn } from "@/lib/utils";
 
 const options = [
   {
@@ -47,12 +48,14 @@ export default function SelectWithdrawAccount() {
         {options.map((option) => (
           <Card
             key={option.name}
-            className="p-4 bg-custom-input-stroke w-1/3 cursor-pointer"
+            className={cn(`p-4 bg-custom-card w-1/3 cursor-pointer`, {
+              "border-custom-orange": selectedWallet === option.name,
+            })}
             onClick={() => {
               setSelectedWallet(option.name);
             }}
           >
-            <span className="bg-custom-card w-fit p-2 rounded-full">
+            <span className="bg-custom-base w-fit p-2 rounded-full">
               {option.icon}
             </span>
             <p>{option.label}</p>

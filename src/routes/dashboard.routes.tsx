@@ -48,6 +48,8 @@ import AssetDetailPrimaryMarket from "@/pages/dashboard/asset-detail-primary-mar
 import AssetDetailSecondaryMarket from "@/pages/dashboard/asset-detail-secondary-market/asset-detail-secondary-market";
 import SelectWithdrawalAccount from "@/pages/dashboard/wallet/withdraw/_components/select-withdrawal-account";
 import WithdrawToCrypto from "@/pages/dashboard/wallet/withdraw/crypto/withdraw-with-crypto";
+import WithdrawToBankAccount from "@/pages/dashboard/wallet/withdraw/bank/withdraw-to-bank";
+import WithdrawToRiseWallet from "@/pages/dashboard/wallet/withdraw/rise/withdraw-to-rise";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -182,6 +184,14 @@ export const dashboardRoutes: RouteObject[] = [
                   {
                     index: true,
                     element: <SelectWithdrawalAccount />,
+                  },
+                  {
+                    path: "bank",
+                    element: <WithdrawToBankAccount />,
+                  },
+                  {
+                    path: "rise",
+                    element: <WithdrawToRiseWallet />,
                   },
                   {
                     path: "crypto",

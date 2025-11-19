@@ -49,11 +49,15 @@ export default function TotalBalance() {
 
     // Add crypto wallet balances
     if (cryptoWalletBalance?.assets?.length) {
-      total += cryptoWalletBalance.assets.reduce(
+      const totalCryptoBalance = cryptoWalletBalance.assets.reduce(
         (sum: number, asset: { balance: string | number }) =>
           sum + Number(asset.balance || 0),
         0
       );
+
+      console.log({ totalCryptoBalance });
+
+      total += totalCryptoBalance;
     }
 
     // Add fiat wallet balance

@@ -12,7 +12,6 @@ import { FormatService } from "@/services/format-service";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import { useAuthStore } from "@/store/auth-store";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
-import { LinkRiseWallet } from "@/components/shared/link-rise-wallet";
 import { RiseAccount } from "@/components/shared/rise-account";
 
 export default function FundUsdWithUsdRiseWallet() {
@@ -95,7 +94,12 @@ export default function FundUsdWithUsdRiseWallet() {
       </div>
 
       <AnimatedWrapper animationKey={String(user?.metadata?.rise_account_id)}>
-        <RiseAccount isLinked={Boolean(user?.metadata?.rise_account_id)} />
+        <RiseAccount
+          isLinked={Boolean(user?.metadata?.rise_account_id)}
+          onSuccess={() => {
+            //Invalidate auth user or refetch user
+          }}
+        />
       </AnimatedWrapper>
     </DepositWrapper>
   );

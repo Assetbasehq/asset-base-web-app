@@ -5,14 +5,17 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import { CustomAlert } from "../custom/custom-alert";
 import { useState } from "react";
 import { LinkRiseModal } from "./_modals/link-rise-modal";
+import { useAuthStore } from "@/store/auth-store";
 
 interface RiseAccountProps {
   isLinked: boolean;
-  onSelect?: () => void;
+  onSuccess: () => void;
 }
 
-export function RiseAccount({ isLinked }: RiseAccountProps) {
+export function RiseAccount({ isLinked, onSuccess }: RiseAccountProps) {
   const [open, setOpen] = useState(false);
+
+  const { user } = useAuthStore();
 
   if (!isLinked) {
     return (
@@ -28,7 +31,11 @@ export function RiseAccount({ isLinked }: RiseAccountProps) {
         >
           Link Rise Account
         </Button>
-        <LinkRiseModal open={open} onOpenChange={setOpen} />
+        <LinkRiseModal
+          open={open}
+          onOpenChange={setOpen}
+          onSuccess={onSuccess}
+        />
       </div>
     );
   }
@@ -42,10 +49,11 @@ export function RiseAccount({ isLinked }: RiseAccountProps) {
             alt="rise"
             className="w-12 h-12 bg-custom-card p-2 rounded-full"
           />
-          <p>johndoe@gmail.com</p>
+          <p className="font-medium">
+            {user?.metadata?.rise_username || user?.email_address}
+          </p>
         </div>
         <Button
-          onClick={() => setOpen(true)}
           variant="ghost"
           className="flex items-center gap-2 cursor-pointer"
         >
@@ -53,11 +61,6 @@ export function RiseAccount({ isLinked }: RiseAccountProps) {
           <RiArrowDownSLine className="text-custom-grey" />
         </Button>
       </Button>
-      <CustomAlert
-        variant="warning"
-        message="You can fund a minimun of $10 with your Rise Account"
-        className="text-xs"
-      />
     </div>
   );
 }

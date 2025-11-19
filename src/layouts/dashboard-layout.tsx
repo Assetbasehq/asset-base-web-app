@@ -6,10 +6,12 @@ import { Outlet } from "react-router";
 export default function DashboardLayout() {
   return (
     <div className="bg-custom-base pb-22 lg:pb-0">
-      <div className="flex flex-col min-h-screen bg-custom-white text-white w-full max-w-[1440px] mx-auto">
+      <div className="flex flex-col min-h-screen bg-custom-white text-white w-full">
         <Navbar />
-        <main className="flex-1 p-4 bg-custom-base">
-          <Outlet />
+        <main className=" bg-custom-base flex-1">
+          <div className="p-4 max-w-custom mx-auto">
+            <Outlet />
+          </div>
         </main>
         <ThemeSwitcher />
         <ScrollToTop />
