@@ -17,6 +17,14 @@ import { FormatService } from "@/services/format-service";
 import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import WithdrawToCrypto from "./crypto/withdraw-with-crypto";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Outlet, useLocation } from "react-router";
 
 const options = [
   {
@@ -50,15 +58,18 @@ interface IAmountToWithdraw {
 export default function Withdraw() {
   const [amountToWithdraw, setAmountToWithdraw] =
     useState<IAmountToWithdraw | null>(null);
-  const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [stage, setStage] = useState(1);
   const [error, setError] = useState<string | null>(null);
+
+  const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
+
+  const location = useLocation();
 
   const {
     data: walletData,
     isLoading: isWalletLoading,
     isError: isWalletError,
-  } = useGetWallet({ currency: "usd" });
+  } = useGetWallet({ currency });
 
   const handleMaxAmount = () => {
     if (!walletData?.balance) {
@@ -93,6 +104,11 @@ export default function Withdraw() {
     }
   };
 
+  const handleCurrencyChange = (value: string) => {
+    setCurrency(value as "usd" | "ngn");
+    setAmountToWithdraw(null);
+  };
+
   const handleGoBack = () => {
     setStage(stage - 1);
   };
@@ -115,21 +131,49 @@ export default function Withdraw() {
 
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground">Amount to withdraw</Label>
-            <div className="relative">
-              <Input
-                value={amountToWithdraw?.formattedAmount || ""}
-                inputMode="numeric"
-                onChange={(e) => handleAmountChange(e.target.value)}
-                type="text"
-                className="py-6 w-full"
-                placeholder="10"
-              />{" "}
-              <Button
-                onClick={handleMaxAmount}
-                className="absolute text-xs p-2 top-1/2 right-4 -translate-y-1/2 bg-custom-light-bg hover:bg-custom-light-bg text-muted-foreground cursor-pointer"
+            <div className="w-full flex items-center justify-center ">
+              <div className="relative w-full">
+                <Input
+                  value={amountToWithdraw?.formattedAmount || ""}
+                  inputMode="numeric"
+                  onChange={(e) => handleAmountChange(e.target.value)}
+                  type="text"
+                  className="py-6 w-full rounded-r-none"
+                  placeholder="10"
+                />{" "}
+                <Button
+                  onClick={handleMaxAmount}
+                  className="absolute text-xs p-2 top-1/2 right-2 -translate-y-1/2 bg-custom-light-bg hover:bg-custom-light-bg text-muted-foreground cursor-pointer"
+                >
+                  max
+                </Button>
+              </div>
+              <Select
+                defaultValue={currency}
+                onValueChange={handleCurrencyChange}
               >
-                max
-              </Button>
+                <SelectTrigger className="w-fit shadow-none border-none bg-gray-100 py-6 rounded-l-none">
+                  <SelectValue placeholder="USD" className="text-white" />
+                </SelectTrigger>
+                <SelectContent className="min-w-fit">
+                  <SelectItem value="usd">
+                    <img
+                      className="w-6 h-6"
+                      src={flags.usa.flag}
+                      alt={flags.usa.alt}
+                    />
+                    {/* <span className="hidden md:inline">USD</span> */}
+                  </SelectItem>
+                  <SelectItem value="ngn">
+                    <img
+                      className="w-5 h-5"
+                      src={flags.nigeria.flag}
+                      alt={flags.nigeria.alt}
+                    />
+                    {/* <span className="hidden md:inline">NGN</span> */}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="text-xs text-muted-foreground mt-1">
               {isWalletLoading ? (
@@ -154,8 +198,9 @@ export default function Withdraw() {
 
           <Separator />
 
-          <AnimatedWrapper animationKey={String(stage)}>
-            {stage === 1 && (
+          <AnimatedWrapper animationKey={location.pathname}>
+            <Outlet />
+            {/* {stage === 1 && (
               <div>
                 <h2>Select account to withdraw to</h2>
                 <div className="flex  items-center gap-4 mt-4 w-full">
@@ -187,7 +232,6 @@ export default function Withdraw() {
             {stage === 2 && selectedWallet === "Rise" && (
               <WithdrawToRiseWallet
                 onBack={() => setSelectedWallet(null)}
-                // setStage={setStage}
               />
             )}
             {stage === 2 && selectedWallet === "Bank" && (
@@ -198,7 +242,7 @@ export default function Withdraw() {
                 onBack={() => setSelectedWallet(null)}
                 setStage={setStage}
               />
-            )}
+            )} */}
           </AnimatedWrapper>
         </div>
       </AnimatedWrapper>

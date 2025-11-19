@@ -112,10 +112,35 @@ class WalletService {
       const response = await web3axiosInstance.get(`/wallet/supported-assets`, {
         params,
       });
+
+      // console.log({ response });
+
       const data = response.data?.data;
       return data;
     } catch (error) {
       handleAxiosError(error, "Failed to get supported assets");
+    }
+  };
+
+  sendToExternalAddress = async (payload: {
+    amount: number;
+    assetId: string;
+    address: string;
+    network: string;
+    note?: string;
+  }) => {
+    try {
+      const response = await web3axiosInstance.post(
+        `/wallet/initiate-onchain-withdrawal`,
+        payload
+      );
+
+      console.log({ response });
+
+      const data = response.data?.data;
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to send to external wallet address");
     }
   };
 

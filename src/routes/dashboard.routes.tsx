@@ -46,6 +46,8 @@ import ProfileBanksAndCards from "@/pages/dashboard/profile/_components/profile-
 import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/usdt/yellow-card/fund-crypto-with-usdt-yellow-card";
 import AssetDetailPrimaryMarket from "@/pages/dashboard/asset-detail-primary-market/asset-detail-primary-market";
 import AssetDetailSecondaryMarket from "@/pages/dashboard/asset-detail-secondary-market/asset-detail-secondary-market";
+import SelectWithdrawalAccount from "@/pages/dashboard/wallet/withdraw/_components/select-withdrawal-account";
+import WithdrawToCrypto from "@/pages/dashboard/wallet/withdraw/crypto/withdraw-with-crypto";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -176,6 +178,20 @@ export const dashboardRoutes: RouteObject[] = [
               {
                 path: "withdraw",
                 element: <Withdraw />,
+                children: [
+                  {
+                    index: true,
+                    element: <SelectWithdrawalAccount />,
+                  },
+                  {
+                    path: "crypto",
+                    element: <WithdrawToCrypto />,
+                  },
+                  {
+                    path: "*",
+                    element: <WithdrawToCrypto />,
+                  },
+                ],
               },
               {
                 path: "swap",
