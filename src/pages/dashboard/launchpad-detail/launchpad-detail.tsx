@@ -25,14 +25,14 @@ import {
 import { useForm } from "react-hook-form";
 import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
-import AssetAbout from "../asset-detail-secondary-market/_components/asset-tabs/asset-about";
+import AboutLaunchpad from "./_components/about-launchpad";
 
 // Primary Market
 const tabs = [
-  { key: "about", label: "About", component: <AssetAbout /> },
-  { key: "discussions", label: "Discussions", component: <AssetAbout /> },
-  { key: "updates", label: "Updates", component: <AssetAbout /> },
-  { key: "Feedback", label: "Feedback", component: <AssetAbout /> },
+  { key: "about", label: "About", component: <AboutLaunchpad /> },
+  { key: "discussions", label: "Discussions", component: <AboutLaunchpad /> },
+  { key: "updates", label: "Updates", component: <AboutLaunchpad /> },
+  { key: "Feedback", label: "Feedback", component: <AboutLaunchpad /> },
 ];
 
 const sampleImages = [
@@ -68,7 +68,7 @@ const sampleImages = [
   },
 ];
 
-export default function AssetDetailPrimaryMarket() {
+export default function LaunchpadDetail() {
   const [active, setActive] = useState("about");
   const [open, setOpen] = useState(false); // Modal state
   const { assetId } = useParams<{ assetId: string }>();

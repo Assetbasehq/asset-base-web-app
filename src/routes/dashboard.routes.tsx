@@ -44,12 +44,13 @@ import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/r
 import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
 import ProfileBanksAndCards from "@/pages/dashboard/profile/_components/profile-banks-and-cards";
 import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/usdt/yellow-card/fund-crypto-with-usdt-yellow-card";
-import AssetDetailPrimaryMarket from "@/pages/dashboard/asset-detail-primary-market/asset-detail-primary-market";
-import AssetDetailSecondaryMarket from "@/pages/dashboard/asset-detail-secondary-market/asset-detail-secondary-market";
 import SelectWithdrawalAccount from "@/pages/dashboard/wallet/withdraw/_components/select-withdrawal-account";
 import WithdrawToCrypto from "@/pages/dashboard/wallet/withdraw/crypto/withdraw-with-crypto";
 import WithdrawToBankAccount from "@/pages/dashboard/wallet/withdraw/bank/withdraw-to-bank";
 import WithdrawToRiseWallet from "@/pages/dashboard/wallet/withdraw/rise/withdraw-to-rise";
+import Launchpad from "@/pages/dashboard/launchpad/launchpad";
+import LaunchpadDetail from "@/pages/dashboard/launchpad-detail/launchpad-detail";
+import AssetDetail from "@/pages/dashboard/asset-detail/asset-detail";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -64,6 +65,19 @@ export const dashboardRoutes: RouteObject[] = [
             element: <DashboardHome />,
           },
           {
+            path: "launchpad",
+            children: [
+              {
+                index: true,
+                element: <Launchpad />,
+              },
+              {
+                path: ":assetId",
+                element: <LaunchpadDetail />,
+              },
+            ],
+          },
+          {
             path: "assets",
             children: [
               {
@@ -72,11 +86,7 @@ export const dashboardRoutes: RouteObject[] = [
               },
               {
                 path: ":assetId",
-                element: <AssetDetailPrimaryMarket />,
-              },
-              {
-                path: "secondary/:assetId",
-                element: <AssetDetailSecondaryMarket />,
+                element: <AssetDetail />,
               },
             ],
           },

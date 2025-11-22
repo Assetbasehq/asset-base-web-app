@@ -76,7 +76,7 @@ export default function AssetInfo({
                   24hr Volume
                 </small>
                 <p className="font-semibold text-custom-white-text text-sm sm:text-lg">
-                  {FormatService.formatToCompactAmount(23000, "USD", 2)}
+                  {FormatService.formatToCompactAmount(23000, "usd", 2)}
                 </p>
               </div>
               <div className="flex flex-col gap-1 bg-custom-light-bg rounded-lg px-4 py-1 w-fit">
@@ -92,7 +92,7 @@ export default function AssetInfo({
                   Market Cap
                 </small>
                 <p className="font-semibold text-custom-white-text text-sm sm:text-lg">
-                  {FormatService.formatToCompactAmount(145000, "USD", 2)}
+                  {FormatService.formatToCompactAmount(145000, "usd", 2)}
                 </p>
               </div>
             </div>

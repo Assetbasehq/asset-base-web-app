@@ -1,13 +1,13 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useGetTrendingAssets } from "@/hooks/useAssets";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { IAsset } from "@/interfaces/asset.interface";
 import AssetCard from "@/components/shared/asset/asset-card";
+import { useTrendingAssets } from "@/hooks/useAssets";
 
-export default function LaunchPad() {
-  const { data, isLoading, isError } = useGetTrendingAssets();
+export default function LaunchPadOverview() {
+  const { data, isLoading, isError } = useTrendingAssets();
 
   // if (isLoading) return <LaunchPadSkeleton />;
 
@@ -21,7 +21,7 @@ export default function LaunchPad() {
           </p>
         </div>
         <Link
-          to="/dashboard/assets"
+          to="/dashboard/launchpad"
           className="text-custom-orange font-semibold cursor-pointer underline text-xs md:text-sm"
         >
           view all

@@ -177,11 +177,11 @@ export default function AccountSummary() {
 
 function AccountSummarySkeleton() {
   return (
-    <Card className="border-none">
-      <CardContent>
-        <div className="text-start flex flex-col gap-4">
+    <Card className=" p-0 bg-custom-card border-none text-start shadow-none">
+      <CardContent className=" p-0 text-custom-white">
+        <div className="flex items-center justify-between p-4">
           {/* Main Card */}
-          <div className="flex items-center justify-between bg-custom-card rounded-lg">
+          <div className="flex flex-col md:flex-row items-start md:items-end gap-4 w-full">
             <div className="flex flex-col gap-6 w-full">
               {/* Currency Select */}
               <Skeleton className="h-10 w-20 rounded-md" />

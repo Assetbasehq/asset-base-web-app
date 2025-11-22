@@ -58,7 +58,7 @@ export default function AssetCard({
     return (
       <Link
         key={asset.id}
-        to={`/dashboard/assets/secondary/${asset?.slug}`}
+        to={`/dashboard/launchpad/${asset?.slug}`}
         className="cursor-pointer"
       >
         <Card className="p-0 border-none shadwo-none">
@@ -176,7 +176,7 @@ export default function AssetCard({
               />
             </div>
             <Link
-              to={`/dashboard/assets/secondary/${asset?.slug}`}
+              to={`/dashboard/launchpad/${asset?.slug}`}
               className="text-xs text-custom-orange font-light underline w-fit"
             >
               See More Details
@@ -192,7 +192,7 @@ export default function AssetCard({
     <Link
       key={asset?.id}
       // to={`/dashboard/markets/${asset.slug}`}
-      to={`/dashboard/assets/secondary/${asset?.slug}`}
+      to={`/dashboard/launchpad/${asset?.slug}`}
       className="cursor-pointer"
     >
       <div

@@ -1,10 +1,10 @@
 import { useAuthStore } from "@/store/auth-store";
 import AccountSummary from "./_components/account-summary";
 import KYCReminder from "./_components/kyc-reminder";
-import LaunchPad from "./_components/launch-pad";
 import Notifications from "./_components/notifications";
 import ReferralCard from "./_components/referral-card";
 import TrendingSecurities from "./_components/trending-securities";
+import LaunchPadOverview from "./_components/launch-pad-overview";
 
 export default function DashboardHome() {
   const { user } = useAuthStore();
@@ -31,7 +31,7 @@ export default function DashboardHome() {
         {/* Left Column */}
         <div className="w-full lg:w-3/5 flex flex-col space-y-4 ">
           <AccountSummary />
-          <LaunchPad />
+          <LaunchPadOverview />
           <TrendingSecurities />
         </div>
 

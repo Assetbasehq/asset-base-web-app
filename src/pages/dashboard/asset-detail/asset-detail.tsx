@@ -10,7 +10,8 @@ import AssetOrders from "./_components/asset-orders/asset-orders";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo, useState } from "react";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
-import AssetDetailPro from "./asset-detail-pro/asset-detail-pro";
+import AssetDetailPro from "../asset-detail-pro/asset-detail-pro";
+// import AssetDetailPro from "./asset-detail-pro/asset-detail-pro";
 
 interface Asset {
   id: string;
@@ -36,7 +37,7 @@ const demoAsset: Asset = {
   price_change_24hrs: "+2.33%",
 };
 
-export default function AssetDetailSecondaryMarket() {
+export default function AssetDetail() {
   const { assetId } = useParams<{ assetId: string }>();
   const navigate = useNavigate();
 
@@ -65,6 +66,7 @@ export default function AssetDetailSecondaryMarket() {
       </AnimatedWrapper>
     );
   }
+  
   return (
     <AnimatedWrapper animationKey={String(isPro)}>
       <div className="flex flex-col gap-4">

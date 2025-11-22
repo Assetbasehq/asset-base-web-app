@@ -66,7 +66,7 @@ export default function HottestLaunchpad() {
       <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
         {securitiesData.map((item) => (
           <Link
-            to={`/dashboard/assets/${item.acronym.toLowerCase()}`}
+            to={`/dashboard/launchpad/${item.acronym.toLowerCase()}`}
             key={item.id}
           >
             <div className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2">
