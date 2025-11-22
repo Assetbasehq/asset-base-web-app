@@ -17,7 +17,7 @@ import {
   RiEyeOffLine,
 } from "react-icons/ri";
 import { useMemo, useState } from "react";
-import { useGetCryptoBalance, useGetWallet } from "@/hooks/useWallet";
+import { useCryptoWallets, useWallet } from "@/hooks/useWallet";
 import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
 // import { Skeleton } from "@/components/ui/skeleton";
@@ -30,13 +30,13 @@ export default function AccountSummary() {
     data: walletData,
     isLoading: isWalletLoading,
     isError: isWalletError,
-  } = useGetWallet({ currency });
+  } = useWallet({ currency });
 
   const {
     data: cryptoWalletBalance,
     isLoading: isCryptoLoading,
     isError: isCryptoError,
-  } = useGetCryptoBalance();
+  } = useCryptoWallets();
 
   const isLoading = isWalletLoading || isCryptoLoading;
 
@@ -181,7 +181,7 @@ function AccountSummarySkeleton() {
       <CardContent>
         <div className="text-start flex flex-col gap-4">
           {/* Main Card */}
-          <div className="flex items-center justify-between bg-custom-gray-muted rounded-lg">
+          <div className="flex items-center justify-between bg-custom-card rounded-lg">
             <div className="flex flex-col gap-6 w-full">
               {/* Currency Select */}
               <Skeleton className="h-10 w-20 rounded-md" />

@@ -90,7 +90,6 @@ export function ConnectWalletModal({
   const { connector: activeConnector, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
 
-  console.log({ activeConnector });
 
   if (!open) {
     return null;

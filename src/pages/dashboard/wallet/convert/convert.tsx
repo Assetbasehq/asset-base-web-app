@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { flags } from "@/constants/images";
 import { RiArrowLeftRightLine } from "react-icons/ri";
-import { useGetCryptoBalance, useGetWallet } from "@/hooks/useWallet";
+import {  useCryptoWallets, useWallet } from "@/hooks/useWallet";
 import { FormatService } from "@/services/format-service";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CustomAlert } from "@/components/custom/custom-alert";
@@ -44,13 +44,13 @@ export default function ConvertFunds() {
     data: walletData,
     isLoading: isWalletLoading,
     isError: isWalletError,
-  } = useGetWallet({ currency });
+  } = useWallet({ currency });
 
   const {
     data: cryptoWalletBalance,
     isLoading: isCryptoLoading,
     isError: isCryptoError,
-  } = useGetCryptoBalance();
+  } = useCryptoWallets();
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: walletService.walletExchange,

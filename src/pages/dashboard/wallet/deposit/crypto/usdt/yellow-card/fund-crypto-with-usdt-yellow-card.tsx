@@ -18,7 +18,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import FundingSummary from "./_components/funding-summary";
 import { transactionService } from "@/api/transaction.api";
-import { useGetCryptoBalance } from "@/hooks/useWallet";
 import { Skeleton } from "@/components/ui/skeleton";
 import PaymentMethods from "./_components/payment-methods";
 import { currencyToCountry } from "@/lib/utils";
@@ -31,6 +30,7 @@ import type {
 } from "@/interfaces/yellow-card.interface";
 import MomoNetworks from "./_components/momo-networks";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { useCryptoWallets } from "@/hooks/useWallet";
 
 const currencies = ["NGN", "UGX", "GHS", "KES"];
 type Currency = "NGN" | "UGX" | "GHS" | "KES";
@@ -67,7 +67,7 @@ export default function FundCryptoWithUsdtYellowCard() {
     data: cryptoWalletData,
     isLoading: isCryptoWalletLoading,
     isError: isCryptoWalletError,
-  } = useGetCryptoBalance();
+  } = useCryptoWallets();
 
   const {
     data: ratesData,

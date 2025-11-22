@@ -1,9 +1,12 @@
 export interface IParams {
-  page?: number | string;
-  limit?: number | string;
+  page?: string;
+  limit?: string;
   search?: string;
   type?: string;
   offset?: string;
+  start_date?: string;
+  end_date?: string;
+  currency?: string;
   [key: string]: any;
   //   availability?: string[];
   //   pricingModel?: "hourly" | "daily" | "weekly" | "monthly";

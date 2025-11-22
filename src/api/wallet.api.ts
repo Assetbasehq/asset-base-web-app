@@ -1,10 +1,11 @@
 import config from "@/config";
+import type { IParams } from "@/interfaces/params.interface";
 import axiosInstance, { web3axiosInstance } from "@/lib/axios.config";
 import { handleAxiosError } from "@/lib/utils";
 import axios from "axios";
 
 class WalletService {
-  getWalletBalance = async (params?: any) => {
+  getWallets = async (params?: any) => {
     try {
       const response = await axiosInstance.get(`/wallets`, { params });
       const data = response.data;
@@ -22,6 +23,18 @@ class WalletService {
   }) => {
     try {
       const response = await axiosInstance.post(`/wallets/exchange`, payload);
+      const data = response.data;
+      return data || [];
+    } catch (error) {
+      handleAxiosError(error, "Failed to swap currency");
+    }
+  };
+
+  getWalletTransactions = async (params?: IParams) => {
+    try {
+      const response = await axiosInstance.get(`/wallets/transactions`, {
+        params,
+      });
       const data = response.data;
       return data || [];
     } catch (error) {
@@ -51,7 +64,7 @@ class WalletService {
     }
   };
 
-  getCryptoWalletBalance = async () => {
+  getCryptoWallets = async () => {
     try {
       const response = await web3axiosInstance.get(`/wallet/balance`);
       const data = response.data?.data;

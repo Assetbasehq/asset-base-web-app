@@ -8,10 +8,32 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { flags } from "@/constants/images";
+import { useGetPortfolioOverview } from "@/hooks/use-portfolio";
 import { FormatService } from "@/services/format-service";
+import { useState } from "react";
 
 export default function TotalAssets() {
+  const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
+
   const balance = "450000";
+
+  const {
+    data: portfolioOverview,
+    isLoading: isPortfolioLoading,
+    isError: isPortfolioError,
+  } = useGetPortfolioOverview({
+    currency,
+  });
+
+  const handleCurrencyChange = (value: string) => {
+    setCurrency(value as "usd" | "ngn");
+  };
+
+  const InvestmentBalance = FormatService.formatToCompactAmount(
+    portfolioOverview?.balance,
+    currency,
+    2
+  );
 
   // if (true) {
   //   return <TotalAssetsSkeleton />;
@@ -24,10 +46,8 @@ export default function TotalAssets() {
           <CardTitle className="text-sm font-medium">Total Assets</CardTitle>
         </CardHeader>
         <div className="flex items-center justify-between gap-6 w-full">
-          <p className="text-lg md:text-2xl font-bold">
-            {FormatService.formatToCompactAmount(balance, "USD", 2)}
-          </p>
-          <Select defaultValue="usd">
+          <p className="text-lg md:text-2xl font-bold">{InvestmentBalance}</p>
+          <Select defaultValue={currency} onValueChange={handleCurrencyChange}>
             <SelectTrigger className="w-fit">
               <SelectValue placeholder="USD" className="text-custom-white" />
             </SelectTrigger>
@@ -52,8 +72,8 @@ export default function TotalAssets() {
           </Select>
         </div>
         <div className="flex gap-2 text-sm md:text-lg">
-          <p className="text-green-400 text-sm">+1.25%</p>
-          <p className="text-custome-grey text-sm">+34,000 this week</p>
+          {/* <p className="text-green-400 text-sm">+1.25%</p> */}
+          {/* <p className="text-custome-grey text-sm">+34,000 this week</p> */}
         </div>
 
         <div className="text-start grid grid-cols-2 gap-2 w-full mt-4">

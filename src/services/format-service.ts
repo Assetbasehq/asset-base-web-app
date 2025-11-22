@@ -142,7 +142,7 @@ export class FormatService {
    */
   static formatToCompactAmount(
     amount: number | string | null | undefined,
-    currency: "USD" | "NGN" = "USD",
+    currency: "usd" | "ngn" = "usd",
     decimals = 1
   ): string {
     const numericAmount =
@@ -150,11 +150,13 @@ export class FormatService {
         ? parseFloat(amount.replace(/,/g, ""))
         : amount;
 
+    console.log({ amount, numericAmount });
+    
     if (numericAmount == null || isNaN(numericAmount)) {
-      return currency === "USD" ? "$0" : "₦0";
+      return currency === "usd" ? "$0" : "₦0";
     }
 
-    return new Intl.NumberFormat(currency === "USD" ? "en-US" : "en-NG", {
+    return new Intl.NumberFormat(currency === "usd" ? "en-US" : "en-NG", {
       style: "currency",
       currency: currency,
       notation: "compact",

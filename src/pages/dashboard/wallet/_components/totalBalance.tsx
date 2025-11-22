@@ -16,46 +16,68 @@ import {
 } from "react-icons/ri";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router";
-import { useGetCryptoBalance, useGetWallet } from "@/hooks/useWallet";
+import { useCryptoWallets, useWallet } from "@/hooks/useWallet";
 import { useMemo, useState } from "react";
 import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
+import { useGetPortfolioOverview } from "@/hooks/use-portfolio";
 
-export default function TotalBalance() {
+interface TotalBalanceProps {
+  currency: "usd" | "ngn";
+  setCurrency: (value: "usd" | "ngn") => void;
+}
+
+export default function TotalBalance({
+  currency,
+  setCurrency,
+}: TotalBalanceProps) {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-  const [currency, setCurrency] = useState<"usd" | "ngn">("usd");
 
   const {
     data: walletData,
     isLoading: isWalletLoading,
     isError: isWalletError,
-  } = useGetWallet({ currency });
+  } = useWallet({ currency });
 
   const {
-    data: cryptoWalletBalance,
-    isLoading: isCryptoLoading,
+    data: cryptoWallets,
+    isLoading: isCryptoWalletLoading,
     isError: isCryptoError,
-  } = useGetCryptoBalance();
+  } = useCryptoWallets();
 
-  const isLoading = isWalletLoading || isCryptoLoading;
+  const {
+    data: portfolioOverview,
+    isLoading: isPortfolioLoading,
+    isError: isPortfolioError,
+  } = useGetPortfolioOverview({
+    currency,
+  });
+
+  console.log({ portfolioOverview });
+
+  const handleCurrencyChange = (value: string) => {
+    setCurrency(value as "usd" | "ngn");
+  };
+
+  const isLoading = isWalletLoading || isCryptoWalletLoading;
 
   /**
    * Utility to calculate and format the total balance
    */
   const formattedTotalBalance = useMemo(() => {
-    if (!walletData && !cryptoWalletBalance) return 0;
+    if (!walletData && !cryptoWallets) return 0;
 
     let total = 0;
 
     // Add crypto wallet balances
-    if (cryptoWalletBalance?.assets?.length) {
-      const totalCryptoBalance = cryptoWalletBalance.assets.reduce(
+    if (cryptoWallets?.assets?.length) {
+      const totalCryptoBalance = cryptoWallets.assets.reduce(
         (sum: number, asset: { balance: string | number }) =>
           sum + Number(asset.balance || 0),
         0
       );
 
-      console.log({ totalCryptoBalance });
+      // console.log({ totalCryptoBalance });
 
       total += totalCryptoBalance;
     }
@@ -65,15 +87,46 @@ export default function TotalBalance() {
       total += walletData.balance;
     }
 
-    // Format based on selected currency
-    return currency === "usd"
-      ? FormatService.formatToUSD(total)
-      : FormatService.formatToNaira(total);
-  }, [cryptoWalletBalance, walletData, currency]);
+    // Add portfolio balance
+    if (portfolioOverview?.balance) {
+      total += portfolioOverview.balance;
+    }
 
-  const handleCurrencyChange = (value: string) => {
-    setCurrency(value as "usd" | "ngn");
-  };
+    // Format based on selected currency
+    return FormatService.formatCurrency(total, currency);
+  }, [cryptoWallets, walletData, portfolioOverview, currency]);
+
+  const walletBalance = useMemo(() => {
+    if (!walletData && !cryptoWallets) return 0;
+
+    let total = 0;
+
+    // Add crypto wallet balances
+    if (cryptoWallets?.assets?.length) {
+      const totalCryptoBalance = cryptoWallets.assets.reduce(
+        (sum: number, asset: { balance: string | number }) =>
+          sum + Number(asset.balance || 0),
+        0
+      );
+
+      // console.log({ totalCryptoBalance });
+
+      total += totalCryptoBalance;
+    }
+
+    // Add fiat wallet balance
+    if (walletData?.balance) {
+      total += walletData?.balance;
+    }
+
+    // Format based on selected currency
+    return FormatService.formatCurrency(total, currency);
+  }, [cryptoWallets, walletData, portfolioOverview, currency]);
+
+  const InvestmentBalance = FormatService.formatCurrency(
+    portfolioOverview?.balance,
+    currency
+  );
 
   // if (true) {
   //   return <AccountSummarySkeleton />;
@@ -84,7 +137,7 @@ export default function TotalBalance() {
       <CardContent className="flex flex-col gap-2 md:gap-4 p-2 md:p-4">
         <CardTitle className="text-sm font-medium p-0">Total Balance</CardTitle>
 
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start mb-2">
           <div className="flex flex-col gap-10 w-full">
             <div className="w-full flex flex-col items-start gap-6 md:flex-row md:items-center justify-between text-custom-white-text">
               <div className="flex flex-col gap-1">
@@ -108,13 +161,13 @@ export default function TotalBalance() {
                     />
                   )}
                 </div>
-                {isLoading ? (
+                {/* {isLoading ? (
                   <Skeleton className="h-4 w-20 mt-1 rounded-md" />
                 ) : isBalanceVisible ? (
                   <p className="text-green-400">+1,966 (2.4%)</p>
                 ) : (
                   "*****"
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -153,24 +206,30 @@ export default function TotalBalance() {
                     <Skeleton className="h-6 w-24 rounded-md" />
                   ) : (
                     <h2 className="text-md md:text-xl font-medium">
-                      {isBalanceVisible ? formattedTotalBalance : "******"}
+                      {isBalanceVisible ? walletBalance : "******"}
                     </h2>
                   )}
                 </div>
-                <small className="text-green-400">+0.4%</small>
+                {/* <small className="text-green-400">+0.4%</small> */}
               </div>
             </div>
             <Separator orientation="vertical" className="hidden md:block" />
             <div className="flex flex-col gap-1  md:bg-custom-light-bg md:px-4 md:py-2 rounded-md">
               <h2 className="text-sm">Investment Balance</h2>
               <div className="flex items-center gap-2">
-                <h2 className="text-md md:text-xl font-medium">$30,000.00</h2>
-                <small className="text-green-400">+1.5%</small>
+                {isPortfolioLoading ? (
+                  <Skeleton className="h-8 w-28 rounded-md" />
+                ) : (
+                  <h2 className="text-md md:text-xl font-medium">
+                    {isBalanceVisible ? InvestmentBalance : "******"}
+                  </h2>
+                )}
+                {/* <small className="text-green-400">+1.5%</small> */}
               </div>
             </div>
           </div>
 
-          <div className="flex justify-around md:justify-end w-full gap-4 md:gap-12">
+          <div className="flex justify-around md:justify-end w-fit gap-4 md:gap-12">
             <Link to="/dashboard/wallet/deposit">
               <div className="flex flex-col gap-2 text-primary items-center">
                 <RiAddLine className="w-12 h-12 p-3 rounded-full text-white bg-custom-orange border border-custom-orange" />

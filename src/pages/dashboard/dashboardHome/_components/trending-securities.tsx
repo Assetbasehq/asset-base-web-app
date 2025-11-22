@@ -7,9 +7,7 @@ export default function TrendingSecurities() {
     <Card className="p-4 md:p-4  bg-custom-card border-none shadow-none text-start ">
       <CardHeader className=" p-0 flex items-center justify-between">
         <div className="flex flex-col">
-          <h2 className="text-xl md:text-2xl font-semibold">
-            Trending Securities
-          </h2>
+          <h2 className="text-md md:text-lg">Trending Securities</h2>
           <p className="text-xs md:text-sm text-custom-grey">
             Top Performing securites on AssetBase
           </p>
@@ -18,7 +16,7 @@ export default function TrendingSecurities() {
           to="#"
           className="text-custom-orange font-semibold cursor-pointer underline text-xs md:text-sm"
         >
-          View All
+          view all
         </Link>
       </CardHeader>
       <CardContent className="p-0">

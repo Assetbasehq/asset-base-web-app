@@ -2,13 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import riseIcon from "@/assets/icons/rise-icon.svg";
 import { useState } from "react";
-import { RiBankLine } from "react-icons/ri";
 import { flags } from "@/constants/images";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import WithdrawBreadCrumb from "./_components/withdraw-bread-crumb";
-import { useGetWallet } from "@/hooks/useWallet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FormatService } from "@/services/format-service";
 import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
@@ -21,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Outlet, useLocation } from "react-router";
+import { useWallet } from "@/hooks/useWallet";
 
 interface IAmountToWithdraw {
   amount: number | null;
@@ -41,7 +39,7 @@ export default function Withdraw() {
     data: walletData,
     isLoading: isWalletLoading,
     isError: isWalletError,
-  } = useGetWallet({ currency });
+  } = useWallet({ currency });
 
   const handleMaxAmount = () => {
     if (!walletData?.balance) {

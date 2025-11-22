@@ -6,7 +6,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-  SheetClose,
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "../ui/separator";
@@ -26,8 +25,6 @@ export default function Notifications({
   notifications = [],
   isLoading = false,
 }: NotificationsProps) {
-  console.log({ notifications });
-
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
