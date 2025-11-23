@@ -2,13 +2,14 @@ import type { IAsset } from "@/interfaces/asset.interface";
 import { cn } from "@/lib/utils";
 import AssetCard from "@/components/shared/asset/asset-card";
 import AssetCardSkeleton from "@/components/shared/asset/asset-card-skeleton";
+import type { IWatchlist } from "@/interfaces/watchlist.interface";
 
 interface AssetGridProps {
   assets: IAsset[];
   isLoading: boolean;
   isError: boolean;
   isGrid?: boolean;
-  userWatchlist?: { asset: IAsset }[];
+  userWatchlist?: IWatchlist[];
 }
 
 export default function AssetGrid({

@@ -8,7 +8,7 @@ class WatchlistService {
       const data = response.data;
       return data || [];
     } catch (error) {
-      handleAxiosError(error, "failed to create security pin");
+      handleAxiosError(error, "failed to get user watchlist");
     }
   };
   addToUserWatchlist = async (payload: { asset_id: string }) => {
@@ -17,16 +17,23 @@ class WatchlistService {
       const items = response.data?.items;
       return items || [];
     } catch (error) {
-      handleAxiosError(error, "failed to create security pin");
+      handleAxiosError(error, "failed to add asset to watchlist");
     }
   };
   removeFromUserWatchlist = async (payload: { asset_id: string }) => {
+    console.log({ payload });
+
     try {
-      const response = await axiosInstance.delete(`/watchlist/${payload.asset_id}`);
+      const response = await axiosInstance.delete(
+        `/watchlist/${payload.asset_id}`
+      );
+
+      console.log({ response });
+
       const items = response.data?.items;
       return items || [];
     } catch (error) {
-      handleAxiosError(error, "failed to create security pin");
+      handleAxiosError(error, "failed to remove asset from watchlist");
     }
   };
 }

@@ -33,7 +33,7 @@ export default function AssetCardSkeleton({ variant = "card" }: Props) {
           <img
             src={assetBaseLogo}
             alt=""
-            className="absolute w-35 top-0 -right-5 opacity-10"
+            className="absolute w-35 top-0 -right-20 opacity-10"
           />
           <div className="flex items-center gap-2">
             <Skeleton className="w-10 h-10 rounded-full" />

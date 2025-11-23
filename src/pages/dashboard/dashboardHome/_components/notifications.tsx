@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetNotifications } from "@/hooks/use-notifications";
+import { useNotifications } from "@/hooks/use-notifications";
+import type { INotification } from "@/interfaces/notification.interface";
 import { convertToRelativeTime } from "@/lib/utils";
 import { Link } from "react-router";
 
 export default function Notifications() {
-  const { data, isLoading } = useGetNotifications({ limit: 5, offset: "0" });
+  const { data, isLoading } = useNotifications({ limit: "5", offset: "0" });
 
   return (
     <Card className="flex-col gap-4 text-start p-4 rounded-3xl hidden lg:flex w-full border-none shadow-none bg-custom-card">
@@ -24,7 +25,7 @@ function NotificationsList({
   notifications,
   isLoading,
 }: {
-  notifications: any[];
+  notifications: INotification[];
   isLoading: boolean;
 }) {
   if (isLoading) {
@@ -44,11 +45,11 @@ function NotificationsList({
             new Date(b.asset.created_at).getTime() -
             new Date(a.asset.created_at).getTime()
         )
-        .map((notification: any, index: number) => {
+        .map((notification, index: number) => {
           return (
-            <div>
+            <div key={notification.asset.id}>
               {/* {index === 0 && <Separator className="my-2" />} */}
-              <div key={index} className="flex items-center gap-2 w-full">
+              <div className="flex items-center gap-2 w-full">
                 <img
                   src={notification?.asset?.image_urls[0]}
                   alt=""

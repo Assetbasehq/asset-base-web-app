@@ -12,17 +12,16 @@ export default function SearchInput({
   placeholder?: string;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialSearch = searchParams.get("search") || "";
+  const initialSearch = searchParams.get("asset_name") || "";
   const [searchValue, setSearchValue] = useState(initialSearch);
 
-  // Update URL whenever the input changes
   const updateURL = (value: string) => {
     const newParams = new URLSearchParams(searchParams);
 
     if (value.trim()) {
-      newParams.set("search", value); // set search param
+      newParams.set("asset_name", value);
     } else {
-      newParams.delete("search"); // remove if empty
+      newParams.delete("asset_name");
     }
 
     setSearchParams(newParams, { replace: true }); // avoid stacking browser history
@@ -39,7 +38,7 @@ export default function SearchInput({
 
   const handleClear = () => {
     setSearchValue("");
-    updateURL(""); // instantly clear URL
+    updateURL("");
   };
 
   return (
@@ -61,7 +60,7 @@ export default function SearchInput({
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-custom-grey transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-custom-grey transition-colors cursor-pointer"
         >
           <RiCloseLine className="text-lg" />
         </button>

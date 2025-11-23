@@ -16,7 +16,7 @@ import {
 } from "react-icons/ri";
 import ConnectWallet from "./connect-wallet";
 import Notifications from "./notifications";
-import { useGetNotifications } from "@/hooks/use-notifications";
+import { useNotifications } from "@/hooks/use-notifications";
 
 const links = [
   {
@@ -50,7 +50,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  const { data, isLoading } = useGetNotifications({ limit: 10, offset: "0" });
+  const { data, isLoading } = useNotifications({ limit: "10", offset: "0" });
 
   return (
     <nav className="bg-fixed-base text-white font-geist">

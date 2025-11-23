@@ -60,11 +60,13 @@ export default function Launchpad() {
   const type = searchParams.get("type") || "all";
   const location = searchParams.get("location") || "";
   const category = searchParams.get("category") || "";
+  const asset_name = searchParams.get("asset_name") || "";
 
   const { data, isLoading, isError } = useGetAssets({
     type: type === "all" ? undefined : type,
     location: location === "" ? undefined : location,
     category: category === "" ? undefined : category,
+    asset_name: asset_name === "" ? undefined : asset_name,
   });
 
   const { data: watchlist, isLoading: isWatchlistLoading } = useUserWatchlist();
@@ -88,7 +90,7 @@ export default function Launchpad() {
       <div className="flex items-center justify-between">
         <div className="flex justify-start items-start">
           <Button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/dashboard")}
             asChild
             className="flex items-center gap-2 cursor-pointer !px-4 py-2 bg-custom-light-bg text-custom-white-text rounded-lg hover:bg-custom-light-bg/80 transition-all duration-300 ease-in-out"
           >

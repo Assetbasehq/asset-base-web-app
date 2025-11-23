@@ -72,7 +72,7 @@ export const dashboardRoutes: RouteObject[] = [
                 element: <Launchpad />,
               },
               {
-                path: ":assetId",
+                path: ":asset_symbol",
                 element: <LaunchpadDetail />,
               },
             ],

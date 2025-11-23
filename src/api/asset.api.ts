@@ -21,12 +21,12 @@ class AssetService {
       handleAxiosError(error, "failed to get assets");
     }
   };
-  getAsset = async (assetId: string) => {
+  getAsset = async (asset_symbol: string) => {
     try {
-      const response = await axiosInstance.get(`/assets/${assetId}`);
+      const response = await axiosInstance.get(`/assets/${asset_symbol}`);
       return response.data;
     } catch (error) {
-      handleAxiosError(error, "failed to = get asset");
+      handleAxiosError(error, "failed to get asset");
     }
   };
 }
