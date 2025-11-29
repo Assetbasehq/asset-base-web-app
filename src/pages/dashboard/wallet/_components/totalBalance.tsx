@@ -49,9 +49,7 @@ export default function TotalBalance({
     data: portfolioOverview,
     isLoading: isPortfolioLoading,
     isError: isPortfolioError,
-  } = useGetPortfolioOverview({
-    currency,
-  });
+  } = useGetPortfolioOverview({ currency: currency == "usd" ? "usdt" : "cngn" });
 
   console.log({ portfolioOverview });
 
@@ -70,17 +68,17 @@ export default function TotalBalance({
     let total = 0;
 
     // Add crypto wallet balances
-    if (cryptoWallets?.assets?.length) {
-      const totalCryptoBalance = cryptoWallets.assets.reduce(
-        (sum: number, asset: { balance: string | number }) =>
-          sum + Number(asset.balance || 0),
-        0
-      );
+    // if (cryptoWallets?.assets?.length) {
+    //   const totalCryptoBalance = cryptoWallets.assets.reduce(
+    //     (sum: number, asset: { balance: string | number }) =>
+    //       sum + Number(asset.balance || 0),
+    //     0
+    //   );
 
-      // console.log({ totalCryptoBalance });
+    //   // console.log({ totalCryptoBalance });
 
-      total += totalCryptoBalance;
-    }
+    //   total += totalCryptoBalance;
+    // }
 
     // Add fiat wallet balance
     if (walletData?.balance) {
@@ -88,9 +86,9 @@ export default function TotalBalance({
     }
 
     // Add portfolio balance
-    if (portfolioOverview?.balance) {
-      total += portfolioOverview.balance;
-    }
+    // if (portfolioOverview?.balance) {
+    //   total += portfolioOverview.balance;
+    // }
 
     // Format based on selected currency
     return FormatService.formatCurrency(total, currency);
@@ -102,17 +100,17 @@ export default function TotalBalance({
     let total = 0;
 
     // Add crypto wallet balances
-    if (cryptoWallets?.assets?.length) {
-      const totalCryptoBalance = cryptoWallets.assets.reduce(
-        (sum: number, asset: { balance: string | number }) =>
-          sum + Number(asset.balance || 0),
-        0
-      );
+    // if (cryptoWallets?.assets?.length) {
+    //   const totalCryptoBalance = cryptoWallets.assets.reduce(
+    //     (sum: number, asset: { balance: string | number }) =>
+    //       sum + Number(asset.balance || 0),
+    //     0
+    //   );
 
-      // console.log({ totalCryptoBalance });
+    //   // console.log({ totalCryptoBalance });
 
-      total += totalCryptoBalance;
-    }
+    //   total += totalCryptoBalance;
+    // }
 
     // Add fiat wallet balance
     if (walletData?.balance) {

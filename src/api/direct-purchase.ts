@@ -8,7 +8,7 @@ class DirectPurchaseService {
     pin: string;
   }) => {
     try {
-      const response = await axiosInstance.post(`/direct-purchase`, payload);
+      const response = await axiosInstance.post(`/direct-purchases`, payload);
       return response?.data;
     } catch (error) {
       handleAxiosError(error, "Failed to initiate direct purchase");
