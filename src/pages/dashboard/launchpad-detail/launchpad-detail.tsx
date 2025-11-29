@@ -11,6 +11,9 @@ import AboutLaunchpad from "./_components/about-launchpad";
 import { useAsset } from "@/hooks/useAssets";
 import { LaunchpadInvestModal } from "./_modals/launchpad-invest-modal";
 import { FormatService } from "@/services/format-service";
+import { useMutation } from "@tanstack/react-query";
+import { directPurchaseService } from "@/api/direct-purchase";
+import ConfirmationPinModal from "./_modals/confirmation-pin-modal";
 
 // Primary Market
 const tabs = [
@@ -20,42 +23,13 @@ const tabs = [
   { key: "Feedback", label: "Feedback", component: <AboutLaunchpad /> },
 ];
 
-const sampleImages = [
-  {
-    id: 1,
-    name: "Mountain View",
-    url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-    alt: "Beautiful mountain landscape with sunrise",
-  },
-  {
-    id: 2,
-    name: "City Skyline",
-    url: "https://images.unsplash.com/photo-1494526585095-c41746248156",
-    alt: "City skyline during sunset",
-  },
-  {
-    id: 3,
-    name: "Forest Path",
-    url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3",
-    alt: "Pathway surrounded by lush forest",
-  },
-  {
-    id: 4,
-    name: "Ocean Waves",
-    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-    alt: "Waves crashing on the beach",
-  },
-  {
-    id: 5,
-    name: "Desert Dunes",
-    url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-    alt: "Golden desert dunes under a clear sky",
-  },
-];
-
 export default function LaunchpadDetail() {
+  const [numberOfShares, setNumberOfShares] = useState(0);
   const [active, setActive] = useState("about");
   const [open, setOpen] = useState(false); // Modal state
+  const [isConfirmationPinModalOpen, setIsConfirmationPinModalOpen] =
+    useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { asset_symbol } = useParams<{ asset_symbol: string }>();
   const navigate = useNavigate();
 
@@ -67,6 +41,17 @@ export default function LaunchpadDetail() {
     isLoading,
     isError,
   } = useAsset({ asset_symbol: asset_symbol as string });
+
+  const mutation = useMutation({
+    mutationFn: directPurchaseService.initiaiteDirectPurchase,
+    onSuccess: (data) => {
+      console.log({ data });
+    },
+    onError: (error) => {
+      setError(error.message);
+      // console.log({ error });
+    },
+  });
 
   const formattedSegments = segments.map((seg) =>
     seg.toLowerCase() === "dashboard" ? "home" : seg
@@ -257,7 +242,25 @@ export default function LaunchpadDetail() {
         </Card>
       </div>
 
-      <LaunchpadInvestModal isOpen={open} onClose={() => setOpen(false)} />
+      <LaunchpadInvestModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onSuccess={() => {
+          setOpen(true);
+          setIsConfirmationPinModalOpen(true);
+        }}
+        asset={asset}
+        setNumberOfShares={setNumberOfShares}
+      />
+
+      <ConfirmationPinModal
+        isOpen={isConfirmationPinModalOpen}
+        onClose={() => setIsConfirmationPinModalOpen(false)}
+        onSuccess={() => setIsConfirmationPinModalOpen(false)}
+        isLoading={isLoading}
+        asset={asset}
+        numberOfShares={numberOfShares}
+      />
     </div>
   );
 }

@@ -62,7 +62,7 @@ class ExternalWalletService {
       const data = response.data;
       return data;
     } catch (error) {
-      handleAxiosError(error, "Somethin went wrong.");
+      handleAxiosError(error, "Something went wrong.");
     }
   };
 }
