@@ -14,6 +14,7 @@ import { FormatService } from "@/services/format-service";
 import { useMutation } from "@tanstack/react-query";
 import { directPurchaseService } from "@/api/direct-purchase";
 import ConfirmationPinModal from "./_modals/confirmation-pin-modal";
+import SuccessModal from "./_modals/success-modal";
 
 // Primary Market
 const tabs = [
@@ -30,6 +31,7 @@ export default function LaunchpadDetail() {
   const [isConfirmationPinModalOpen, setIsConfirmationPinModalOpen] =
     useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const { asset_symbol } = useParams<{ asset_symbol: string }>();
   const navigate = useNavigate();
 
@@ -41,17 +43,6 @@ export default function LaunchpadDetail() {
     isLoading,
     isError,
   } = useAsset({ asset_symbol: asset_symbol as string });
-
-  const mutation = useMutation({
-    mutationFn: directPurchaseService.initiaiteDirectPurchase,
-    onSuccess: (data) => {
-      console.log({ data });
-    },
-    onError: (error) => {
-      setError(error.message);
-      // console.log({ error });
-    },
-  });
 
   const formattedSegments = segments.map((seg) =>
     seg.toLowerCase() === "dashboard" ? "home" : seg
@@ -256,10 +247,24 @@ export default function LaunchpadDetail() {
       <ConfirmationPinModal
         isOpen={isConfirmationPinModalOpen}
         onClose={() => setIsConfirmationPinModalOpen(false)}
-        onSuccess={() => setIsConfirmationPinModalOpen(false)}
+        onSuccess={() => {
+          setIsConfirmationPinModalOpen(false);
+          setOpen(false);
+          setIsSuccessModalOpen(true);
+        }}
         isLoading={isLoading}
         asset={asset}
         numberOfShares={numberOfShares}
+      />
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => {
+          setIsSuccessModalOpen(false);
+          setNumberOfShares(0);
+        }}
+        numberOfShares={numberOfShares}
+        asset={asset}
       />
     </div>
   );

@@ -39,11 +39,11 @@ export default function ConfirmationPinModal({
   const [error, setError] = useState<string | null>(null);
   const [pin, setPin] = useState<string>("");
 
-    useEffect(() => {
-      if (pin && pin.length === 6) {
-        handleSubmit();
-      }
-    }, [pin]);
+  useEffect(() => {
+    if (pin && pin.length === 6) {
+      handleSubmit();
+    }
+  }, [pin]);
 
   const mutation = useMutation({
     mutationFn: directPurchaseService.initiaiteDirectPurchase,
@@ -68,40 +68,6 @@ export default function ConfirmationPinModal({
     });
   };
 
-  async function test() {
-    try {
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append(
-        "Authorization",
-        "Bearer 2e4f43aaeb0c260570a67ae32ae904ad65258d0715002ef67938f6d44693c794"
-      );
-
-      const raw = JSON.stringify({
-        asset_id: "9bd3c2a5-241b-4262-b279-3367b8e3cc7a",
-        number_of_shares: 1,
-        pin: "123456",
-      });
-
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        // redirect: "follow",
-      };
-
-      const response = await fetch(
-        "https://xapi.assetbase.capital/api/v1/direct-purchases",
-        requestOptions
-      );
-
-      const data = await response.json();
-      console.log(data, "direct purchase");
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -116,7 +82,7 @@ export default function ConfirmationPinModal({
         </DialogHeader>
 
         <InputOTP
-          disabled={isLoading}
+          disabled={isLoading || mutation.isPending}
           maxLength={6}
           value={pin}
           onChange={(value) => {
@@ -151,8 +117,6 @@ export default function ConfirmationPinModal({
             <p>Verifying...</p>
           </div>
         ) : null}
-
-        <Button onClick={() => test()}>Submit</Button>
       </DialogContent>
     </Dialog>
   );
