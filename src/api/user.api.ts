@@ -203,6 +203,27 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
+
+  deleteUserAccount = async (payload: {
+    metadata: {
+      reason?: string;
+      other_reason?: string;
+      improvement: string;
+      recomendation?: string;
+      delete_type: string;
+    };
+    password: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/users/delete-requests`,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "Something went wrong");
+    }
+  };
 }
 
 export const userService = new UserService();
