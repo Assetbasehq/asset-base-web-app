@@ -9,8 +9,8 @@ import { useMutation } from "@tanstack/react-query";
 import { userService } from "@/api/user.api";
 import { useState } from "react";
 import { CustomAlert } from "@/components/custom/custom-alert";
-import PersonalInformation from "./personal-information";
-import NextOfKin from "./next-of-kin";
+import PersonalInformation from "./_components/personal-information";
+import NextOfKin from "./_components/next-of-kin";
 import { cn } from "@/lib/utils";
 
 export default function ProfilePage() {

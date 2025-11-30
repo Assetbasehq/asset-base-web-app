@@ -48,22 +48,19 @@ export default function TransactionHistory({ currency }: { currency: string }) {
           className="flex flex-col my-4 max-h-[400px] overflow-y-auto mb-16 no-scrollbar"
         >
           <div className="flex flex-col gap-4 no-scrollbar">
-            {transactions?.map((transaction: any) => (
-              <div className="relative" key={transaction.id}>
-                <TransactionDetail
-                  currency={currency}
-                  transaction={transaction}
-                />
-                {/* <button
-                className="absolute inset-0  w-full bg-transparent"
-                onClick={() => {
-                  navigate(`transactions/${currency}/all?id=${transaction.id}`);
-                }}
-              >
-                <span className="sr-only">view transaction details</span>
-              </button> */}
-              </div>
-            ))}
+            {transactions &&
+              transactions?.map((transaction: any) => (
+                <div className="relative" key={transaction.id}>
+                  <TransactionDetail
+                    currency={currency}
+                    transaction={transaction}
+                  />
+                </div>
+              ))}
+
+            {transactions && transactions?.length === 0 && (
+              <div>You don&apos;t have any transactions yet.</div>
+            )}
             {isFetchingNextPage && (
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center justify-between border p-2 rounded-lg w-full">

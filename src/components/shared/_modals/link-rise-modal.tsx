@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/api/auth.api";
 import { Label } from "@/components/ui/label";
 import { Loader, LockKeyhole, Mail } from "lucide-react";
@@ -42,6 +42,8 @@ export function LinkRiseModal({
   const [isPasswordVisible, setPasswordVisible] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const queryClient = useQueryClient();
+
   const form = useForm<FormValues>({
     defaultValues: {
       email_address: "",
@@ -54,6 +56,7 @@ export function LinkRiseModal({
     onSuccess: (data) => {
       console.log({ data });
       onOpenChange(false);
+      queryClient.invalidateQueries({ queryKey: ["auth-user"] });
       onSuccess();
     },
     onError: (error) => {

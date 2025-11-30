@@ -26,7 +26,7 @@ export interface AlertMessage {
   type: AlertVariant; // Determines styling
 }
 
-export default function ProfileContactUs() {
+export default function ContactUs() {
   const [copied, setCopied] = useState(false);
   const [alertData, setAlertData] = useState<AlertMessage | null>(null);
 

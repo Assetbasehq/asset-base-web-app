@@ -2,12 +2,12 @@ import { userService } from "@/api/user.api";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { ChevronRight, Lock, LockKeyhole } from "lucide-react";
-import PasswordResetModal from "../_modals/password-reset-modal";
+import PasswordResetModal from "./_modals/password-reset-modal";
 import { useState } from "react";
-import PasswordChangeModal from "../_modals/password-change-modal";
+import PasswordChangeModal from "./_modals/password-change-modal";
 import SuccessModal from "@/components/modals/success-modal";
-import ChangePinRequestModal from "../_modals/change-pin-request-modal";
-import ChangePinModal from "../_modals/change-pin-modal";
+import ChangePinRequestModal from "./_modals/change-pin-request-modal";
+import ChangePinModal from "./_modals/change-pin-modal";
 import { CustomAlert } from "@/components/custom/custom-alert";
 
 interface ModalState {
@@ -19,7 +19,7 @@ interface ModalState {
   pinSuccess: boolean;
 }
 
-export default function ProfileSecurity() {
+export default function Security() {
   const [modals, setModals] = useState<ModalState>({
     passwordReset: false,
     passwordChange: false,

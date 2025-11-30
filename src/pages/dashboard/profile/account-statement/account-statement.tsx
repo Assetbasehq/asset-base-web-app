@@ -57,7 +57,7 @@ export const transactionTypes: ITransactionType[] = [
   },
 ];
 
-export default function ProfileAccountStatement() {
+export default function AccountStatement() {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
   const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<

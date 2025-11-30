@@ -16,7 +16,7 @@ import { Loader } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 
-export default function ProfileInvestmentCertificate() {
+export default function InvestmentCertificate() {
   const [error, setError] = useState<string | null>("");
   const [success, setSuccess] = useState<string | null>("");
   const [selectedAsset, setSelectedAsset] = useState<string | null>(null);

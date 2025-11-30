@@ -100,7 +100,7 @@ const leaderboardData = [
   },
 ];
 
-export default function ProfileLeaderboard() {
+export default function Leaderboard() {
   return (
     <div>
       <div className="flex flex-col gap-6 text-start p-4">

@@ -21,8 +21,6 @@ export default function FundUsdWithUsdRiseWallet() {
   const [actionRestricted, setActionRestricted] = useState(false);
   const { user, isUserVerified } = useAuthStore();
 
-  console.log({ user });
-
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
     filter_value: "funding",
@@ -34,6 +32,8 @@ export default function FundUsdWithUsdRiseWallet() {
     // wallet_type: "api_vendor",
     // provider: "api_vendor",
   });
+
+  // console.log({ data });
 
   const selectedMethod = useMemo(() => {
     const availableOptions = getAvailableIOMethods(

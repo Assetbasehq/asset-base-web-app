@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, Mail, User } from "lucide-react";
-import ConfirmEmailModal from "../../_modals/confirm-email-modal";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { userService } from "@/api/user.api";
@@ -13,8 +12,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import DojahKycModal from "./_modals/dojah-kyc-modal";
 import { useNavigate } from "react-router";
 import ManualVerification from "./_modals/manual-verification";
+import ConfirmEmailModal from "./_modals/confirm-email-modal";
 
-export default function ProfileKYC() {
+export default function KYC() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data, isLoading, isError, refetch } = useUserVerificationStatus();

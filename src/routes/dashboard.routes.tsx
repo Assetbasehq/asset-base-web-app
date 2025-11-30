@@ -13,15 +13,7 @@ import MyAssets from "@/pages/dashboard/portfolio/_components/my-assets";
 import Watchlist from "@/pages/dashboard/portfolio/_components/watchlist";
 import Matured from "@/pages/dashboard/portfolio/_components/matured";
 import Profile from "@/pages/dashboard/profile/profile";
-import ProfilePage from "@/pages/dashboard/profile/_components/profile-page";
-import ProfileLeaderboard from "@/pages/dashboard/profile/_components/profile-leaderboard";
-import ProfileKYC from "@/pages/dashboard/profile/_components/profile-kyc/profile-kyc";
-import ProfileSecurity from "@/pages/dashboard/profile/_components/profile-security";
-import ProfileReferrals from "@/pages/dashboard/profile/_components/profile-referrals";
-import ProfileAccountStatement from "@/pages/dashboard/profile/_components/profile-account-statement/profile-account-statement";
-import ProfileInvestmentCertificate from "@/pages/dashboard/profile/_components/profile-investment-certificate";
-import ProfileContactUs from "@/pages/dashboard/profile/_components/profile-contact-us";
-import ProfileDeleteAccount from "@/pages/dashboard/profile/_components/profile-delete-account";
+import ProfilePage from "@/pages/dashboard/profile/profile-page/profile-page";
 import Onboarding404 from "@/pages/onboarding/onboarding404";
 import { AuthGuard } from "@/guards/auth.guard";
 import type { RouteObject } from "react-router";
@@ -42,7 +34,6 @@ import FundUsdWithGhsVodafone from "@/pages/dashboard/wallet/deposit/usd/ghs/vod
 import ConvertFunds from "@/pages/dashboard/wallet/convert/convert";
 import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/rise-wallet/fund-with-rise";
 import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
-import ProfileBanksAndCards from "@/pages/dashboard/profile/_components/profile-banks-and-cards";
 import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/usdt/yellow-card/fund-crypto-with-usdt-yellow-card";
 import SelectWithdrawalAccount from "@/pages/dashboard/wallet/withdraw/_components/select-withdrawal-account";
 import WithdrawToCrypto from "@/pages/dashboard/wallet/withdraw/crypto/withdraw-with-crypto";
@@ -51,6 +42,15 @@ import WithdrawToRiseWallet from "@/pages/dashboard/wallet/withdraw/rise/withdra
 import Launchpad from "@/pages/dashboard/launchpad/launchpad";
 import LaunchpadDetail from "@/pages/dashboard/launchpad-detail/launchpad-detail";
 import AssetDetail from "@/pages/dashboard/asset-detail/asset-detail";
+import Leaderboard from "@/pages/dashboard/profile/leaderboard/leaderboard";
+import KYC from "@/pages/dashboard/profile/kyc/kyc";
+import Security from "@/pages/dashboard/profile/security/security";
+import Referrals from "@/pages/admin/referrals/referrals";
+import BanksAndCards from "@/pages/dashboard/profile/banks-and-cards/banks-and-cards";
+import AccountStatement from "@/pages/dashboard/profile/account-statement/account-statement";
+import InvestmentCertificate from "@/pages/dashboard/profile/investment-certificate/investment-certificate";
+import ContactUs from "@/pages/dashboard/profile/contact-us/contact-us";
+import DeleteAccount from "@/pages/dashboard/profile/delete-account/delete-account";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -270,21 +270,21 @@ export const dashboardRoutes: RouteObject[] = [
             children: [
               { path: "profile", element: <ProfilePage /> },
               { path: "user", element: <ProfilePage /> },
-              { path: "leaderboard", element: <ProfileLeaderboard /> },
-              { path: "kyc", element: <ProfileKYC /> },
-              { path: "security", element: <ProfileSecurity /> },
-              { path: "referrals", element: <ProfileReferrals /> },
-              { path: "banks-and-cards", element: <ProfileBanksAndCards /> },
+              { path: "leaderboard", element: <Leaderboard /> },
+              { path: "kyc", element: <KYC /> },
+              { path: "security", element: <Security /> },
+              { path: "referrals", element: <Referrals /> },
+              { path: "banks-and-cards", element: <BanksAndCards /> },
               {
                 path: "account-statement",
-                element: <ProfileAccountStatement />,
+                element: <AccountStatement />,
               },
               {
                 path: "investment-certificate",
-                element: <ProfileInvestmentCertificate />,
+                element: <InvestmentCertificate />,
               },
-              { path: "contact-us", element: <ProfileContactUs /> },
-              { path: "delete-account", element: <ProfileDeleteAccount /> },
+              { path: "contact-us", element: <ContactUs /> },
+              { path: "delete-account", element: <DeleteAccount /> },
             ],
           },
           {

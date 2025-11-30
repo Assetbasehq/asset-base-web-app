@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RiAddLine } from "react-icons/ri";
 
-export default function ProfileBanksAndCards() {
+export default function BanksAndCards() {
   return (
     <div className="flex flex-col gap-4 text-start p-4">
       <div className="mb-4">

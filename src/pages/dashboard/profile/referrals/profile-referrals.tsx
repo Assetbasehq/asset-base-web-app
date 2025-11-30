@@ -68,7 +68,7 @@ const columns = [
   // },
 ];
 
-export default function ProfileReferrals() {
+export default function Referrals() {
   const [copied, setCopied] = useState(false);
   const { user } = useAuthStore();
 

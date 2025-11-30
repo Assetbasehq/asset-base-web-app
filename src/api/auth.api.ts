@@ -107,6 +107,8 @@ class AuthService {
   loginWithRise = async (payload: any) => {
     try {
       const response = await axiosInstance.post(`/sessions/rise`, payload);
+      console.log({ response });
+
       return response.data?.data;
     } catch (error) {
       handleAxiosError(error, "Failed to login with Rise");
