@@ -42,8 +42,6 @@ export function LinkRiseModal({
   const [isPasswordVisible, setPasswordVisible] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const queryClient = useQueryClient();
-
   const form = useForm<FormValues>({
     defaultValues: {
       email_address: "",
@@ -56,7 +54,6 @@ export function LinkRiseModal({
     onSuccess: (data) => {
       console.log({ data });
       onOpenChange(false);
-      queryClient.invalidateQueries({ queryKey: ["auth-user"] });
       onSuccess();
     },
     onError: (error) => {

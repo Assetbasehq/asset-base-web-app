@@ -8,7 +8,7 @@ export default function RiseLoginButton() {
   return (
     <Button
       onClick={() => {
-        navigate("/onboarding/account-type");
+        navigate("/login/rise");
       }}
       variant="outline"
       className="w-full flex gap-1 items-center py-6 cursor-pointer border-2 text-rise border-rise hover:bg-white hover:text-rise hover:border-rise dark:bg-white dark:border-rise dark:hover:bg-white transition-all ease-in-out duration-300"

@@ -17,4 +17,5 @@ export interface CardItem {
     provider_reference: string;
     network?: string;
   };
+  balance?: number;
 }

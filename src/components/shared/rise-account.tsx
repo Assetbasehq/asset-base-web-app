@@ -2,22 +2,36 @@ import riselogo from "@/assets/images/rise-r-logo.png";
 import { Button } from "@/components/ui/button";
 import riseLink from "@/assets/images/rise-link.svg";
 import { RiArrowDownSLine } from "react-icons/ri";
-import { CustomAlert } from "../custom/custom-alert";
 import { useState } from "react";
 import { LinkRiseModal } from "./_modals/link-rise-modal";
 import { useAuthStore } from "@/store/auth-store";
+import { useGetExternalWallets } from "@/hooks/use-external-wallets";
+import { FormatService } from "@/services/format-service";
+import { useNavigate } from "react-router";
 
-interface RiseAccountProps {
-  isLinked: boolean;
-  onSuccess: () => void;
-}
-
-export function RiseAccount({ isLinked, onSuccess }: RiseAccountProps) {
+export function RiseAccount() {
   const [open, setOpen] = useState(false);
 
   const { user } = useAuthStore();
 
-  if (!isLinked) {
+  const navigate = useNavigate();
+
+  const { data: riseWallet, isLoading } = useGetExternalWallets({
+    fetch_balance: "true",
+    currency: "usd",
+    wallet_type: "api_vendor",
+    provider: "risevest",
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (riseWallet && riseWallet?.items?.length < 1) {
     return (
       <div className="flex flex-col items-center gap-4 text-center my-12">
         <img src={riseLink} alt="rise" className="w-28 h-28" />
@@ -34,7 +48,7 @@ export function RiseAccount({ isLinked, onSuccess }: RiseAccountProps) {
         <LinkRiseModal
           open={open}
           onOpenChange={setOpen}
-          onSuccess={onSuccess}
+          onSuccess={() => {}}
         />
       </div>
     );
@@ -43,23 +57,28 @@ export function RiseAccount({ isLinked, onSuccess }: RiseAccountProps) {
   return (
     <div className="flex flex-col items-center text-center my-12">
       <Button className="flex items-center justify-between gap-4 w-full bg-custom-rise-green py-10 hover:bg-custom-rise-green/90">
-        <div className="flex items-center gap-2 text-custom-grey">
-          <img
-            src={riselogo}
-            alt="rise"
-            className="w-12 h-12 bg-custom-card p-2 rounded-full"
-          />
-          <p className="font-medium">
-            {user?.metadata?.rise_username || user?.email_address}
+        <div>
+          <div className="flex items-center gap-2 text-custom-grey">
+            <img
+              src={riselogo}
+              alt="rise"
+              className="w-12 h-12 bg-custom-card p-2 rounded-full"
+            />
+            <p className="font-medium">
+              {user?.metadata?.rise_username || user?.email_address}
+            </p>
+          </div>
+          <p className="">
+            {FormatService.formatCurrency(riseWallet?.items[0]?.balance, "usd")}
           </p>
         </div>
-        <Button
+        {/* <Button
           variant="ghost"
           className="flex items-center gap-2 cursor-pointer"
         >
           <p className="text-custom-grey">Logout</p>
           <RiArrowDownSLine className="text-custom-grey" />
-        </Button>
+        </Button> */}
       </Button>
     </div>
   );

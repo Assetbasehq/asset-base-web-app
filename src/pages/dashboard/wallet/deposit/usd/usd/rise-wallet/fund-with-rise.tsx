@@ -21,19 +21,21 @@ export default function FundUsdWithUsdRiseWallet() {
   const [actionRestricted, setActionRestricted] = useState(false);
   const { user, isUserVerified } = useAuthStore();
 
+  console.log({ user });
+
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
     filter_value: "funding",
   });
 
-  const { data, isLoading } = useGetExternalWallets({
+  const { data: riseWallet, isLoading } = useGetExternalWallets({
     fetch_balance: "true",
     currency: "usd",
-    // wallet_type: "api_vendor",
-    // provider: "api_vendor",
+    wallet_type: "api_vendor",
+    provider: "risevest",
   });
 
-  // console.log({ data });
+  console.log({ riseWallet });
 
   const selectedMethod = useMemo(() => {
     const availableOptions = getAvailableIOMethods(
@@ -94,12 +96,7 @@ export default function FundUsdWithUsdRiseWallet() {
       </div>
 
       <AnimatedWrapper animationKey={String(user?.metadata?.rise_account_id)}>
-        <RiseAccount
-          isLinked={Boolean(user?.metadata?.rise_account_id)}
-          onSuccess={() => {
-            //Invalidate auth user or refetch user
-          }}
-        />
+        <RiseAccount />
       </AnimatedWrapper>
     </DepositWrapper>
   );

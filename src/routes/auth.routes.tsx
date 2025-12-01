@@ -4,6 +4,7 @@ import CreateAccount from "@/pages/auth/create-account";
 import ForgotPassword from "@/pages/auth/forgot-password";
 import CreatePassword from "@/pages/auth/create-password";
 import type { RouteObject } from "react-router";
+import LoginWithRise from "@/pages/auth/login-with-rise";
 
 export const authRoutes: RouteObject[] = [
   {
@@ -16,6 +17,10 @@ export const authRoutes: RouteObject[] = [
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "login/rise",
+        element: <LoginWithRise />,
       },
       {
         path: "register",
