@@ -11,7 +11,7 @@ export const useTrendingAssets = (params?: IParams) => {
 };
 
 export const useGetAssets = (params?: IParams) => {
-  return useQuery<{ asset: IAsset; number_of_investors: number }[], Error>({
+  return useQuery<IAsset[], Error>({
     queryKey: ["assets", params],
     queryFn: () => assetService.getAssets(params),
   });
