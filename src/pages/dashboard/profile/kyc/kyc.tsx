@@ -38,6 +38,8 @@ export default function KYC() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: userService.makeEmailVerificationRequest,
     onSuccess: (res) => {
+      console.log({ res });
+
       setToken(res?.metadata?.token ?? "");
       toggleModal("confirmEmail", true);
     },
@@ -97,7 +99,11 @@ export default function KYC() {
 
         <Button
           // disabled={isPending || data?.id_status === "verified" || isError}
-          disabled={isPending || data?.id_status === "verified"}
+          disabled={
+            isPending ||
+            data?.id_status === "verified" ||
+            data?.id_status === "pending"
+          }
           onClick={() => toggleModal("idVerification", true)}
           variant="outline"
           className="border rounded-2xl flex items-center justify-between cursor-pointer h-full w-full"

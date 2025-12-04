@@ -161,7 +161,7 @@ class UserService {
   };
   makeEmailVerificationRequest = async () => {
     try {
-      const response = await axiosInstance.post(`verification-requests`, {
+      const response = await axiosInstance.post(`/verification-requests`, {
         request_type: "email",
       });
       return response.data;
@@ -186,7 +186,7 @@ class UserService {
   };
   getUserVerificationStatus = async () => {
     try {
-      const response = await axiosInstance.get(`verifications`);
+      const response = await axiosInstance.get(`/verifications`);
       const storeState = useAuthStore.getState();
       storeState.setVerificationStatus(response?.data);
       return response.data;

@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import type { IAsset } from "@/interfaces/asset.interface";
 import { cn } from "@/lib/utils";
 import { FormatService } from "@/services/format-service";
 import {
@@ -9,20 +10,8 @@ import {
   RiShareForwardLine,
 } from "react-icons/ri";
 
-interface Asset {
-  id: string;
-  name: string;
-  acronym: string;
-  logo: string;
-  amount_raised: string;
-  goal: string;
-  round_closes: string;
-  price: string;
-  price_change_24hrs: string;
-}
-
 interface AssetInfoProps {
-  asset: Asset;
+  asset: IAsset;
   isChecked: boolean;
   onSwitch: (value: boolean) => void;
 }
@@ -37,11 +26,17 @@ export default function AssetInfo({
       <CardContent className="text-white p-4">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex gap-4">
-              <img src={asset.logo} alt={asset.name} className="w-8 sm:w-12" />
+            <div className="flex items-center gap-4">
+              <img
+                src={asset.logo}
+                alt={asset.asset_symbol}
+                className="w-8 sm:w-12"
+              />
               <div>
-                <p className="font-semibold text-lg">{asset.acronym}</p>
-                <p className="text-muted-foreground text-sm">{asset.name}</p>
+                <p className="font-semibold text-lg">{asset.asset_symbol}</p>
+                <p className="text-muted-foreground text-sm">
+                  {asset.asset_name}
+                </p>
               </div>
             </div>
             <RiShareForwardLine className="w-12 h-12 sm:h-14 sm:w-14 bg-custom-light-bg p-4 rounded-full" />
@@ -51,21 +46,24 @@ export default function AssetInfo({
             <div className="flex flex-col gap-2 mb-2 md:mb-0">
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-xl  sm:text-3xl text-custom-white-text">
-                  {asset.price}
+                  {FormatService.formatCurrency(
+                    asset.price_per_share,
+                    asset.currency
+                  )}
                 </p>
                 <small
                   className={cn("text-muted-foreground", {
-                    "text-green-400": asset.price_change_24hrs.includes("+"),
-                    "text-red-400": asset.price_change_24hrs.includes("-"),
+                    // "text-green-400": asset.price_change_24hrs.includes("+"),
+                    // "text-red-400": asset.price_change_24hrs.includes("-"),
                   })}
                 >
-                  {asset.price_change_24hrs}
+                  {/* {asset.price_change_24hrs} */}
                 </small>
               </div>
               <p className="text-muted-foreground text-sm hidden md:block">
                 At close:{" "}
                 <span className="font-semibold text-custom-white-text">
-                  {asset.round_closes}
+                  {/* {asset.round_closes} */}
                 </span>
               </p>
             </div>
@@ -106,15 +104,15 @@ export default function AssetInfo({
                 <p className="text-xs md:text-lg">24h High</p>
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-xs md:text-lg">{asset.price}</p>
-                <small
+                <p className="text-xs md:text-lg">{asset.price_per_share}</p>
+                {/* <small
                   className={cn("text-muted-foreground text-xs", {
                     "text-green-400": asset.price_change_24hrs.includes("+"),
                     "text-red-400": asset.price_change_24hrs.includes("-"),
                   })}
                 >
                   {asset.price_change_24hrs}
-                </small>
+                </small> */}
               </div>
             </div>
 
@@ -125,15 +123,15 @@ export default function AssetInfo({
                 <p className="text-xs md:text-lg">24h Low</p>
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-xs md:text-lg">{asset.price}</p>
-                <small
+                <p className="text-xs md:text-lg">{asset.price_per_share}</p>
+                {/* <small
                   className={cn("text-muted-foreground text-xs", {
                     "text-green-400": asset.price_change_24hrs.includes("+"),
                     "text-red-400": asset.price_change_24hrs.includes("-"),
                   })}
                 >
                   {asset.price_change_24hrs}
-                </small>
+                </small> */}
               </div>
             </div>
           </div>

@@ -96,7 +96,7 @@ export default function FundUsdWithUsdRiseWallet() {
       </div>
 
       <AnimatedWrapper animationKey={String(user?.metadata?.rise_account_id)}>
-        <RiseAccount />
+        <RiseAccount currency="usd" />
       </AnimatedWrapper>
     </DepositWrapper>
   );

@@ -45,12 +45,12 @@ import AssetDetail from "@/pages/dashboard/asset-detail/asset-detail";
 import Leaderboard from "@/pages/dashboard/profile/leaderboard/leaderboard";
 import KYC from "@/pages/dashboard/profile/kyc/kyc";
 import Security from "@/pages/dashboard/profile/security/security";
-import Referrals from "@/pages/admin/referrals/referrals";
 import BanksAndCards from "@/pages/dashboard/profile/banks-and-cards/banks-and-cards";
 import AccountStatement from "@/pages/dashboard/profile/account-statement/account-statement";
 import InvestmentCertificate from "@/pages/dashboard/profile/investment-certificate/investment-certificate";
 import ContactUs from "@/pages/dashboard/profile/contact-us/contact-us";
 import DeleteAccount from "@/pages/dashboard/profile/delete-account/delete-account";
+import Referrals from "@/pages/dashboard/profile/referrals/profile-referrals";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -85,7 +85,7 @@ export const dashboardRoutes: RouteObject[] = [
                 element: <Assets />,
               },
               {
-                path: ":assetId",
+                path: ":asset_symbol",
                 element: <AssetDetail />,
               },
             ],

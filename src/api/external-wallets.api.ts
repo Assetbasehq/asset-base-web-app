@@ -14,7 +14,7 @@ class ExternalWalletService {
       const data = response.data;
       return data;
     } catch (error) {
-      handleAxiosError(error, "Failed to create rise wallet");
+      handleAxiosError(error, "Failed to get wallets");
     }
   };
 
@@ -37,14 +37,14 @@ class ExternalWalletService {
     currency: string;
     provider: string;
     wallet_type: "bank_account" | "card" | "api_vendor";
-    details: { token: string };
+    details?: { token: string };
   }) => {
     try {
       const response = await axiosInstance.post(`/external-wallets`, payload);
       const data = response.data;
       return data;
     } catch (error) {
-      handleAxiosError(error, "Failed to create rise wallet");
+      handleAxiosError(error, "Failed to create external wallet");
     }
   };
 

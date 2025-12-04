@@ -5,13 +5,22 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import AssetTrade from "./asset-trade";
 import AssetFinance from "./asset-finance";
+import type { IAsset } from "@/interfaces/asset.interface";
 
 const tabs = [
-  { key: "trade", label: "Trade", component: <AssetTrade /> },
-  { key: "finance", label: "Finance", component: <AssetFinance /> },
+  {
+    key: "trade",
+    label: "Trade",
+    component: (asset: IAsset) => <AssetTrade asset={asset} />,
+  },
+  {
+    key: "finance",
+    label: "Finance",
+    component: (asset: IAsset) => <AssetFinance asset={asset} />,
+  },
 ];
 
-export default function AssetTradePanel() {
+export default function AssetTradePanel({ asset }: { asset: IAsset }) {
   const [active, setActive] = useState("trade");
 
   return (
@@ -47,7 +56,7 @@ export default function AssetTradePanel() {
 
         {/* Tab content */}
         <div className="mt-4">
-          {tabs.find((tab) => tab.key === active)?.component}
+          {tabs.find((tab) => tab.key === active)?.component(asset)}
         </div>
       </CardContent>
     </Card>

@@ -75,8 +75,8 @@ export default function ManualVerification({
     mutationFn: verificationService.initiateSystemVerification,
     onSuccess: (data) => {
       // console.log({ data });
-      // onSuccess();
-      setStep(2);
+      onSuccess();
+      // setStep(2);
     },
     onError: (error) => {
       // console.log({ error });
@@ -91,9 +91,6 @@ export default function ManualVerification({
   const uploadFilesMutation = useMutation({
     mutationFn: verificationService.uploadVerificationAttachments,
     onSuccess: (data) => {
-      // console.log({ data });
-      console.log(`Upload successful, verification initiated`);
-
       const payload: Record<string, any> = {
         request_type: "identity",
         provider: "system",
@@ -104,7 +101,11 @@ export default function ManualVerification({
       };
 
       if (form.getValues("identification_type") !== "bvn") {
-        payload.image_urls = [];
+        if (data && data?.length > 0) {
+          payload.user_data.image_urls = data.map(
+            (item: any) => item.object_url
+          );
+        }
       }
 
       mutateAsync(payload as any);

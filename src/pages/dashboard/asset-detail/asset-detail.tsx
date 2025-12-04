@@ -7,10 +7,10 @@ import AssetInfo from "./_components/asset-info/asset-info";
 import AssetTabs from "./_components/asset-tabs/asset-tabs";
 import AssetTradePanel from "./_components/asset-trade/asset-trade-panel";
 import AssetOrders from "./_components/asset-orders/asset-orders";
-import { motion, AnimatePresence } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import AssetDetailPro from "../asset-detail-pro/asset-detail-pro";
+import { useAsset } from "@/hooks/useAssets";
 // import AssetDetailPro from "./asset-detail-pro/asset-detail-pro";
 
 interface Asset {
@@ -38,9 +38,12 @@ const demoAsset: Asset = {
 };
 
 export default function AssetDetail() {
-  const { assetId } = useParams<{ assetId: string }>();
-  const navigate = useNavigate();
+  const [isPro, setIsPro] = useState(false);
+  const { asset_symbol } = useParams<{ asset_symbol: string }>();
 
+  console.log({ asset_symbol });
+
+  const navigate = useNavigate();
   const location = useLocation();
   const segments = location.pathname.split("/").filter(Boolean);
 
@@ -48,8 +51,18 @@ export default function AssetDetail() {
     seg.toLowerCase() === "dashboard" ? "home" : seg
   );
 
-  const [isPro, setIsPro] = useState(false);
-  const asset = useMemo(() => demoAsset, []);
+  const {
+    data: asset,
+    isLoading,
+    isError,
+  } = useAsset({ asset_symbol: asset_symbol as string });
+
+  console.log({ asset });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error</p>;
+
+  if (!asset) return <p>Asset not found</p>;
 
   if (isPro) {
     return (
@@ -66,7 +79,7 @@ export default function AssetDetail() {
       </AnimatedWrapper>
     );
   }
-  
+
   return (
     <AnimatedWrapper animationKey={String(isPro)}>
       <div className="flex flex-col gap-4">
@@ -114,7 +127,7 @@ export default function AssetDetail() {
         <div className="flex flex-col gap-4 lg:flex-row">
           <div className="flex flex-col gap-4 lg:w-3/5">
             <AssetInfo
-              asset={demoAsset}
+              asset={asset}
               isChecked={isPro}
               onSwitch={(value) => {
                 setTimeout(() => {
@@ -127,7 +140,7 @@ export default function AssetDetail() {
             </div>
           </div>
           <div className="flex flex-col gap-4 lg:w-2/5 bg-custom-card rounded-xl p-6">
-            <AssetTradePanel />
+            <AssetTradePanel asset={asset} />
             <AssetOrders />
           </div>
           <div className="block lg:hidden">

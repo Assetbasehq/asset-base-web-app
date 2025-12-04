@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 interface IUserVerificationStatus {
   account_id: string;
   email_status: "verified" | "unverified";
-  id_status: "verified" | "unverified";
+  id_status: "verified" | "unverified" | "pending";
 }
 
 export const useUserVerificationStatus = () => {

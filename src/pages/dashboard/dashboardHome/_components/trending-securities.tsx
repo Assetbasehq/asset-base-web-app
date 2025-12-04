@@ -1,8 +1,15 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useTrendingAssets } from "@/hooks/useAssets";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { IAsset } from "@/interfaces/asset.interface";
 
 export default function TrendingSecurities() {
+  const { data, isLoading, isError } = useTrendingAssets();
+
+  console.log({ data });
+
   return (
     <Card className="p-4 md:p-4  bg-custom-card border-none shadow-none text-start ">
       <CardHeader className=" p-0 flex items-center justify-between">
@@ -20,87 +27,85 @@ export default function TrendingSecurities() {
         </Link>
       </CardHeader>
       <CardContent className="p-0">
-        <Securities />
+        <Securities data={data || []} isLoading={isLoading} isError={isError} />
       </CardContent>
     </Card>
   );
 }
 
-function Securities() {
-  const securitiesData = [
-    {
-      id: "1",
-      name: "Landmark Realty Limited",
-      acronym: "LARL",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$3400.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "2",
-      name: "Tesla",
-      acronym: "TSLA",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "3",
-      name: "TajBank Mudarabah Sukuk",
-      acronym: "TAJM",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "4",
-      name: "TajBank Mudarabah Sukuk",
-      acronym: "TAJM",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-    {
-      id: "4",
-      name: "TajBank Mudarabah Sukuk",
-      acronym: "TAJM",
-      logo: assetBaseLogo,
-      amount_raised: "$23,500",
-      goal: "$1,200,000",
-      round_closes: "15 days",
-      price: "$5.00",
-      price_change_24hrs: "+2.33%",
-    },
-  ];
+function Securities({
+  data,
+  isLoading,
+  isError,
+}: {
+  data: { asset: IAsset; number_of_investors: number }[] | undefined;
+  isLoading: boolean;
+  isError: boolean;
+}) {
+  if (isLoading) return <SecuritiesSkeleton />;
+
+  if (isError)
+    return (
+      <div>
+        <p>Something went wrong</p>
+      </div>
+    );
+
+  if (!data) return <p>No data</p>;
+
+  console.log({ data });
 
   return (
     <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
-      {securitiesData.map((item, i) => (
+      {data.map((item, i) => (
+        <Link
+          to={`/dashboard/assets/${item?.asset.slug}`}
+          key={i}
+          className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2"
+        >
+          <div className="flex items-end text-start gap-16 w-full">
+            <div className="flex items-center gap-2">
+              <img
+                src={item?.asset.image_urls[0]}
+                alt=""
+                className="w-10 h-10"
+              />
+              <div>
+                <h2 className="font-semibold">{item?.asset.asset_symbol}</h2>
+                <small className="text-xs">{item?.asset.price_per_share}</small>
+              </div>
+            </div>
+            {/* <p className="text-green-400 text-xs">{item.price_change_24hrs}</p> */}
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function SecuritiesSkeleton() {
+  return (
+    <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
         <div
           key={i}
           className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2"
         >
           <div className="flex items-end text-start gap-16 w-full">
             <div className="flex items-center gap-2">
-              <img src={item.logo} alt="" className="w-10 h-10" />
+              <img src={assetBaseLogo} alt="" className="w-10 h-10" />
               <div>
-                <h2 className="font-semibold">{item.acronym}</h2>
-                <small className="text-xs">{item.price}</small>
+                <h2 className="font-semibold">
+                  <Skeleton className="h-3 w-20 rounded-full" />
+                </h2>
+                <small className="text-xs">
+                  <Skeleton className="h-3 w-20 rounded-full" />
+                </small>
               </div>
             </div>
-            <p className="text-green-400 text-xs">{item.price_change_24hrs}</p>
+            <p className="text-green-400 text-xs">
+              <Skeleton className="h-3 w-20 rounded-full" />
+            </p>
           </div>
         </div>
       ))}

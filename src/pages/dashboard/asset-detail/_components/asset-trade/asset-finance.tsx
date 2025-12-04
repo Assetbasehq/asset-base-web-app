@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import type { IAsset } from "@/interfaces/asset.interface";
 import { RiFlashlightFill } from "react-icons/ri";
 
-export default function AssetFinance() {
+export default function AssetFinance({ asset }: { asset: IAsset }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="bg-custom-light-bg p-6 rounded-xl flex flex-col gap-4">

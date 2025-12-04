@@ -141,12 +141,7 @@ export default function FundNgnWithNgnRiseWallet() {
       </div>
 
       <AnimatedWrapper animationKey={String(isRiseAccountLinked)}>
-        <RiseAccount
-          isLinked={isRiseAccountLinked}
-          onSuccess={() => {
-            //Invalidate auth user or refetch user
-          }}
-        />
+        <RiseAccount currency="ngn" />
       </AnimatedWrapper>
     </DepositWrapper>
   );

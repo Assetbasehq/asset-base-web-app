@@ -4,14 +4,14 @@ import type { IParams } from "@/interfaces/params.interface";
 import { useQuery } from "@tanstack/react-query";
 
 export const useTrendingAssets = (params?: IParams) => {
-  return useQuery<any, Error>({
+  return useQuery<{ asset: IAsset; number_of_investors: number }[], Error>({
     queryKey: ["trending-assets", params],
     queryFn: () => assetService.getTrendingAssets(params),
   });
 };
 
 export const useGetAssets = (params?: IParams) => {
-  return useQuery<any, Error>({
+  return useQuery<{ asset: IAsset; number_of_investors: number }[], Error>({
     queryKey: ["assets", params],
     queryFn: () => assetService.getAssets(params),
   });

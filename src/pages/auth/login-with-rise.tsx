@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,17 +16,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeClosed, Loader, LockKeyhole, Mail } from "lucide-react";
+import { LockKeyhole, Mail } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import AssetBaseBeta from "@/components/shared/asset-base-beta";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api/auth.api";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import ButtonLoader from "@/components/custom/button-loader";
 import { Label } from "@/components/ui/label";
-import { RiEyeFill, RiEyeLine, RiEyeOffLine } from "react-icons/ri";
+import { RiArrowLeftLine, RiEyeLine, RiEyeOffLine } from "react-icons/ri";
+import riselogo from "@/assets/images/rise-r-logo.png";
+import { Button } from "@/components/ui/button";
 
 interface FormValues {
   email_address: string;
@@ -49,7 +50,7 @@ export default function LoginWithRise() {
   });
 
   const loginMutation = useMutation({
-    mutationFn: authService.signIn,
+    mutationFn: authService.loginWithRise,
     onSuccess: () => {
       navigate("/dashboard");
     },
@@ -65,14 +66,30 @@ export default function LoginWithRise() {
 
   return (
     <div className="w-full px-6 min-h-screen flex flex-col items-center justify-center gap-18 font-geist bg-gradient-to-tr from-white via-pink-50 to-pink-100 dark:from-black dark:via-black dark:to-black">
-      <AssetBaseBeta />
+      {/* <AssetBaseBeta /> */}
 
       <Card className="w-full max-w-lg border text-black bg-white dark:bg-custom-card dark:text-white font-neue">
         <CardHeader className="text-start flex flex-col gap-1">
-          <CardTitle className="text-xl font-medium">Login with Rise</CardTitle>
-          <CardDescription className="font-neue">
-            Login with your Rise account
-          </CardDescription>
+          <div className="flex flex-col justify-center items-center w-full text-center col-span-2 relative">
+            <Button
+              variant={"ghost"}
+              onClick={() => navigate(-1)}
+              className="absolute left-0 top-0 cursor-pointer"
+            >
+              <RiArrowLeftLine />
+            </Button>
+            <img
+              src={riselogo}
+              alt="rise"
+              className="w-12 h-12 bg-custom-card p-2 rounded-full"
+            />
+            <CardTitle className="text-xl font-medium">
+              Login with Rise
+            </CardTitle>
+            <CardDescription className="font-neue">
+              Login with your Rise account
+            </CardDescription>
+          </div>
         </CardHeader>
 
         <CardContent>
@@ -167,19 +184,11 @@ export default function LoginWithRise() {
               {/* Error Alert */}
               {error && <CustomAlert variant="destructive" message={error} />}
 
-              {/* Forgot password link */}
-              <Link
-                to="/forgot-password"
-                className="text-sm underline text-muted-foreground text-left w-fit"
-              >
-                Forgot password?
-              </Link>
-
               <ButtonLoader
                 isLoading={loginMutation.isPending}
                 disabled={loginMutation.isPending || !form.formState.isValid}
                 type="submit"
-                className="w-full btn-primary py-6 mt-6 font-medium cursor-pointer"
+                className="w-full btn-rise py-6 mt-6 font-medium"
                 loadingText="Please wait..."
               >
                 Log In
@@ -187,18 +196,6 @@ export default function LoginWithRise() {
             </form>
           </Form>
         </CardContent>
-
-        <CardFooter className="flex-col gap-2">
-          <p className="mt-4 text-muted-foreground">
-            Don't have an AssetBase account?
-            <Link
-              to="/register"
-              className="text-custom-orange font-medium pl-1"
-            >
-              Sign up
-            </Link>
-          </p>
-        </CardFooter>
       </Card>
     </div>
   );

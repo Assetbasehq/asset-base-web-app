@@ -107,7 +107,13 @@ class AuthService {
   loginWithRise = async (payload: any) => {
     try {
       const response = await axiosInstance.post(`/sessions/rise`, payload);
-      console.log({ response });
+
+      const user = response.data;
+
+      const storeState = useAuthStore.getState();
+      storeState.setUser(user);
+
+      localStorage.setItem("accessToken", user.token);
 
       return response.data?.data;
     } catch (error) {

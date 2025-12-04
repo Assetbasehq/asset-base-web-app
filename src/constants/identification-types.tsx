@@ -1,14 +1,18 @@
 export const identification_types = [
-  //   { value: "International Passport", label: "Passport", shortCode: "Passport" },
-  //   { value: "Driving License", label: "Driving License", shortCode: "DL" },
+  {
+    value: "National Identity Card",
+    label: "National Identity Card",
+    shortCode: "NIN",
+  },
+  { value: "Driver's License", label: "Driver's License", shortCode: "DL" },
+  {
+    value: "International Passport",
+    label: "International Passport",
+    shortCode: "Passport",
+  },
   {
     value: "Bank Verification Number",
     label: "Bank Verification Number",
     shortCode: "BVN",
-  },
-  {
-    value: "National Identification Number",
-    label: "National Identification Number",
-    shortCode: "NIN",
   },
 ];

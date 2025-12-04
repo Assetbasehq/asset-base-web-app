@@ -11,8 +11,6 @@ import AboutLaunchpad from "./_components/about-launchpad";
 import { useAsset } from "@/hooks/useAssets";
 import { LaunchpadInvestModal } from "./_modals/launchpad-invest-modal";
 import { FormatService } from "@/services/format-service";
-import { useMutation } from "@tanstack/react-query";
-import { directPurchaseService } from "@/api/direct-purchase";
 import ConfirmationPinModal from "./_modals/confirmation-pin-modal";
 import SuccessModal from "./_modals/success-modal";
 
@@ -30,7 +28,6 @@ export default function LaunchpadDetail() {
   const [open, setOpen] = useState(false); // Modal state
   const [isConfirmationPinModalOpen, setIsConfirmationPinModalOpen] =
     useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const { asset_symbol } = useParams<{ asset_symbol: string }>();
   const navigate = useNavigate();

@@ -20,31 +20,36 @@ class VerificationService {
     image_urls?: [];
   }) => {
     try {
-      const response = await axiosInstance.post(`verification-requests`, {
-        request_type: "identity",
-        provider: "dojah",
-      });
+      const response = await axiosInstance.post(
+        `verification-requests`,
+        payload
+      );
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
     }
   };
   uploadVerificationAttachments = async (payload: File[]) => {
+    // const files = payload.map((file) => ({
+    //   filename: file.name.replace(/[^a-zA-Z0-9_.-]+/, "-"),
+    //   size: file.size,
+    //   mimeType: file.type,
+    //   id: (crypto as any).randomUUID(),
+    // }));
     const files = payload.map((file) => ({
-      filename: file.name.replace(/[^a-zA-Z0-9_.-]+/, "-"),
+      filename: file.name.replace(/[^a-zA-Z0-9_.-]+/g, "-"),
       size: file.size,
       mimeType: file.type,
-      id: (crypto as any).randomUUID(),
+      id: crypto.randomUUID(), // UNIQUE ID PER FILE
     }));
-    
 
     try {
       const response = await axiosInstance.post(
         `verification-requests/attachments`,
-        files,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        files
+        // {
+        //   headers: { "Content-Type": "multipart/form-data" },
+        // }
       );
       return response.data;
     } catch (error) {

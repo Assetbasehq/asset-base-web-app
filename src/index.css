@@ -347,9 +347,20 @@
 }
 
 .btn-secondary {
-  @apply border border-custom-black bg-custom-black text-white 
+  @apply border-2 border-custom-black bg-custom-black text-white 
    dark:bg-custom-orange dark:text-custom-white 
    dark:border-custom-orange
+   cursor-pointer
+   transition-all ease-in-out duration-300;
+}
+
+.btn-rise {
+  @apply border-2 border-custom-rise-green bg-custom-rise-green text-custom-white 
+   hover:bg-custom-rise-green/80
+   dark:bg-custom-rise-green dark:text-custom-white 
+   dark:border-custom-rise-green
+   dark:hover:bg-custom-rise-green/80
+   
    cursor-pointer
    transition-all ease-in-out duration-300;
 }
