@@ -16,6 +16,14 @@ export const currencyToFlag: Record<string, string> = {
   ugx: flags.uganda.flag,
 };
 
+export const currencyToSymbol: Record<string, string> = {
+  ngn: "₦",
+  usd: "$",
+  ghs: "₵",
+  kes: "KSh",
+  ugx: "USh",
+};
+
 export const CurrencyService = {
   /**
    * Get the full currency name from its code.
@@ -35,5 +43,10 @@ export const CurrencyService = {
   getCurrencyFlag: (code: string): string | undefined => {
     if (!code) return undefined;
     return currencyToFlag[code.toLowerCase()] || undefined;
+  },
+
+  getCurrencySymbol: (code: string): string | undefined => {
+    if (!code) return undefined;
+    return currencyToSymbol[code.toLowerCase()] || undefined;
   },
 };

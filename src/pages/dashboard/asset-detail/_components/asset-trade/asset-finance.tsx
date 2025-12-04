@@ -3,16 +3,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import type { IAsset } from "@/interfaces/asset.interface";
+import { calculateRaisePercentage } from "@/lib/utils";
+import { FormatService } from "@/services/format-service";
 import { RiFlashlightFill } from "react-icons/ri";
 
 export default function AssetFinance({ asset }: { asset: IAsset }) {
+  const raisePercentage = calculateRaisePercentage(
+    asset?.number_of_shares,
+    asset?.available_shares
+  );
+
   return (
     <div className="flex flex-col gap-6">
       <div className="bg-custom-light-bg p-6 rounded-xl flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <p>Price Per Share</p>
-            <p>$500</p>
+            <p>
+              {FormatService.formatCurrency(
+                asset.price_per_share,
+                asset.currency
+              )}
+            </p>
           </div>
           <div className="flex justify-between">
             <p>Price Per Share</p>
@@ -26,17 +38,19 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
 
         <div className="flex flex-col gap-2 items-start w-full pb-1">
           <Progress
-            value={40}
-            className="w-full bg-white [&>div]:bg-custom-orange"
+            value={raisePercentage}
+            className="w-full bg-custom-input-stroke [&>div]:bg-custom-orange h-2"
           />
           <div className="flex justify-between items-center w-full">
             <div className="flex gap-1 items-center">
               <RiFlashlightFill className="text-custom-orange" />
               <small className="font-semibold text-custom-orange">
-                {4}% raised
+                {raisePercentage}% raised
               </small>
             </div>
-            <small className="font-semibold">100 available</small>
+            <small className="font-semibold">
+              {asset.available_shares} available
+            </small>
           </div>
         </div>
 

@@ -136,3 +136,54 @@ export const normalizeCurrencyInput = (input: string) => {
     formattedAmount: formatted,
   };
 };
+export const normalizeInput = (input: string) => {
+  const clean = input.replace(/,/g, "");
+
+  const cleanedAmount = clean.replace(/[^0-9.]/g, "");
+
+  if (isNaN(Number(cleanedAmount))) {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount === "0") {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount === "") {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount === ".") {
+    return { amount: "", formattedAmount: "" };
+  }
+
+  if (cleanedAmount.includes(".")) {
+    const [whole, decimal = ""] = cleanedAmount.split(".");
+    // Reject multiple dots
+    if (cleanedAmount.split(".").length > 2) {
+      return { amount: "", formattedAmount: "" };
+    }
+
+    // Limit decimals to 2
+    const safeDecimal = decimal.slice(0, 2);
+    const rawAmount = `${whole}.${safeDecimal}`;
+    const formattedWhole = FormatService.formatWithCommas(Number(whole) || 0);
+    const formatted =
+      safeDecimal !== ""
+        ? `${formattedWhole}.${safeDecimal}`
+        : `${formattedWhole}${decimal === "" ? "." : ""}`;
+
+    return {
+      amount: rawAmount,
+      formattedAmount: formatted,
+    };
+  }
+  // Pure integer
+  const rawAmount = String(Number(cleanedAmount) || 0);
+  const formatted = FormatService.formatWithCommas(Number(cleanedAmount) || 0);
+
+  return {
+    amount: rawAmount,
+    formattedAmount: formatted,
+  };
+};

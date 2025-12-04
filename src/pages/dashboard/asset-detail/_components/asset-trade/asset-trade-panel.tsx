@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
 import { Card, CardContent } from "@/components/ui/card";
-
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import AssetTrade from "./asset-trade";
@@ -34,7 +33,7 @@ export default function AssetTradePanel({ asset }: { asset: IAsset }) {
                 key={tab.key}
                 onClick={() => setActive(tab.key)}
                 className={cn(
-                  "flex-1 py-2 px-4 text-center text-sm font-medium relative",
+                  "flex-1 py-2 px-4 text-center text-sm font-medium relative cursor-pointer",
                   {
                     "text-orange-500": active === tab.key,
                     "text-custom-white-text": active !== tab.key,
