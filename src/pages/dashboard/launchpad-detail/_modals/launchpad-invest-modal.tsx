@@ -12,6 +12,8 @@ import { useForm } from "react-hook-form";
 import type { IAsset } from "@/interfaces/asset.interface";
 import { FormatService } from "@/services/format-service";
 import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
+import { useWallet } from "@/hooks/useWallet";
+import { CustomAlert } from "@/components/custom/custom-alert";
 
 interface InvestFormData {
   quantity: number;
@@ -24,6 +26,7 @@ interface LaunchpadInvestModalProps {
   onSuccess: () => void;
   asset: IAsset;
   setNumberOfShares: (amount: number) => void;
+  walletBalance: number;
 }
 
 export function LaunchpadInvestModal({
@@ -32,6 +35,7 @@ export function LaunchpadInvestModal({
   asset,
   onSuccess,
   setNumberOfShares,
+  walletBalance,
 }: LaunchpadInvestModalProps) {
   const { register, handleSubmit, setValue, watch } = useForm<InvestFormData>({
     defaultValues: {
@@ -77,40 +81,63 @@ export function LaunchpadInvestModal({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="">
           {/* Quantity Input */}
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-custom-grey">
-              Quantity of Shares
-            </label>
-            <Input
-              type="text"
-              {...register("quantityFormatted")}
-              value={quantityFormatted}
-              onChange={handleQuantityChange}
-              className="bg-custom-light-bg border-custom-input-stroke text-custom-white py-6"
-              placeholder="Enter number of shares"
-            />
+          <div className="space-y-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-custom-grey">
+                Quantity of Shares
+              </label>
+              <Input
+                type="text"
+                {...register("quantityFormatted")}
+                value={quantityFormatted}
+                onChange={handleQuantityChange}
+                className="bg-custom-light-bg border-custom-input-stroke text-custom-white py-6"
+                placeholder="Enter number of shares"
+              />
+            </div>
+
+            {/* Estimated Amount Display */}
+            <div className="relative">
+              <label className="text-sm text-custom-grey">
+                Estimated Amount
+              </label>
+              <Input
+                type="text"
+                readOnly
+                value={FormatService.formatCurrency(
+                  estimatedAmount || 0,
+                  asset.currency
+                )}
+                className="bg-custom-light-bg border-custom-input-stroke text-custom-white pr-20 py-6 tracking-wide"
+              />
+            </div>
           </div>
 
-          {/* Estimated Amount Display */}
-          <div className="relative">
-            <label className="text-sm text-custom-grey">Estimated Amount</label>
-            <Input
-              type="text"
-              readOnly
-              value={FormatService.formatCurrency(
-                estimatedAmount || 0,
-                asset.currency
-              )}
-              className="bg-custom-light-bg border-custom-input-stroke text-custom-white pr-20 py-6 tracking-wide"
+          {estimatedAmount > walletBalance && (
+            <CustomAlert
+              variant="warning"
+              message="Insufficient Balance"
+              className="my-2"
             />
+          )}
+
+          <div className="my-1">
+            <small>
+              Available Balance:{" "}
+              {FormatService.formatCurrency(walletBalance, asset.currency)}
+            </small>
           </div>
 
           {/* Modal Footer */}
           <DialogFooter>
             <Button
-              disabled={quantity <= 0}
+              disabled={
+                quantity <= 0 ||
+                estimatedAmount > walletBalance ||
+                walletBalance <= 0
+              }
               type="submit"
               className="btn-primary w-full rounded-full py-5"
             >

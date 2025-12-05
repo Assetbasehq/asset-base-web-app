@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 import { useCryptoWallets, useWallet } from "@/hooks/useWallet";
 import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
@@ -15,7 +14,7 @@ import {
 
 const tabs = [
   { key: "fiat", label: "Fiat" },
-  { key: "stable", label: "Stablecoins" },
+  // { key: "stable", label: "Stablecoins" },
   // { key: "stocks", label: "Stocks" },
 ];
 
@@ -25,7 +24,7 @@ export default function Options() {
   return (
     <Card className=" p-0 bg-custom-card border-none text-start shadow-none w-full md:w-3/5">
       <CardContent className="p-2 md:p-4">
-        <div className="border-b relative">
+        {/* <div className="border-b relative">
           <div className="flex items-center justify-start">
             {tabs.map((tab) => (
               <button
@@ -38,7 +37,6 @@ export default function Options() {
               >
                 {tab.label}
 
-                {/* Underline for active tab */}
                 {activeTab === tab.key && (
                   <motion.div
                     layoutId="underline"
@@ -48,7 +46,7 @@ export default function Options() {
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Tab Content */}
         {activeTab === "fiat" && <FiatTab />}

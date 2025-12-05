@@ -74,7 +74,7 @@ export default function PinConfirmationModal({
       >
         <DialogHeader className="flex flex-col items-start justify-start gap-0">
           <DialogTitle className="flex items-start gap-2 text-xl text-start">
-            Confirm your email address
+            Authorize Transaction
           </DialogTitle>
           <DialogDescription className="text-start">
             Please provide your security pin to authorize this transaction.

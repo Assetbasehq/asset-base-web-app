@@ -13,6 +13,7 @@ import { LaunchpadInvestModal } from "./_modals/launchpad-invest-modal";
 import { FormatService } from "@/services/format-service";
 import ConfirmationPinModal from "./_modals/confirmation-pin-modal";
 import SuccessModal from "./_modals/success-modal";
+import { useWallet } from "@/hooks/useWallet";
 
 // Primary Market
 const tabs = [
@@ -40,6 +41,14 @@ export default function LaunchpadDetail() {
     isLoading,
     isError,
   } = useAsset({ asset_symbol: asset_symbol as string });
+
+  const {
+    data: walletData,
+    isLoading: isLoadingWallet,
+    isError: isErrorWallet,
+  } = useWallet({ currency: asset?.currency || "usd" });
+
+  console.log({ walletData });
 
   const formattedSegments = segments.map((seg) =>
     seg.toLowerCase() === "dashboard" ? "home" : seg
@@ -239,6 +248,7 @@ export default function LaunchpadDetail() {
         }}
         asset={asset}
         setNumberOfShares={setNumberOfShares}
+        walletBalance={walletData?.balance || 0}
       />
 
       <ConfirmationPinModal
