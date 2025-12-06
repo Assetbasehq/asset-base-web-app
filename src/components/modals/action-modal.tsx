@@ -8,14 +8,20 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import doubleCheckImage from "@/assets/images/check-double-line.svg";
+import { CustomAlert } from "../custom/custom-alert";
+import { AlertTriangle, Loader } from "lucide-react";
 
 interface ActionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  isLoading: boolean;
+  onConfirm: () => void;
   title: string;
   description: string;
   buttonText: string;
+  loadingButtonText: string;
   iconImage?: string;
+  error?: string | null;
 }
 
 export default function ActionModal({
@@ -25,6 +31,10 @@ export default function ActionModal({
   title,
   description,
   buttonText,
+  onConfirm,
+  isLoading,
+  loadingButtonText,
+  error,
 }: ActionModalProps) {
   if (!isOpen) return null;
 
@@ -35,13 +45,7 @@ export default function ActionModal({
         className="max-w-md rounded-lg p-6 text-center"
       >
         <div className="flex justify-center">
-          <div className="rounded-full bg-green-50 p-4">
-            <img
-              src={iconImage || doubleCheckImage}
-              className="h-10 w-10"
-              alt=""
-            />
-          </div>
+          <AlertTriangle className="h-10 w-10 text-custom-ticker-red" />
         </div>
         <DialogHeader className="pb-8 flex flex-col gap-0">
           <DialogTitle className="text-lg font-bold text-center">
@@ -51,14 +55,28 @@ export default function ActionModal({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex justify-center">
+        {error && <CustomAlert variant="error" message={error} />}
+        <div className="flex w-full gap-3">
           <Button
             onClick={onClose}
-            className="w-full font-medium py-5 rounded-full btn-secondary"
+            className="flex-1 font-medium py-5 rounded-full border-2 cursor-pointer"
           >
-            {buttonText}
+            Close
           </Button>
-        </DialogFooter>
+
+          <Button
+            onClick={onConfirm}
+            className="flex-1 font-medium py-5 rounded-full btn-primary"
+          >
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <Loader className="animate-spin" /> {loadingButtonText}
+              </span>
+            ) : (
+              buttonText
+            )}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

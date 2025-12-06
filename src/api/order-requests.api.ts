@@ -18,15 +18,6 @@ class OrderRequestService {
       handleAxiosError(error, "Failed to make order request");
     }
   };
-  getOrderRequests = async (params: IParams) => {
-    try {
-      const response = await axiosInstance.get(`/order-requests`, { params });
-      const data = response.data;
-      return data;
-    } catch (error) {
-      handleAxiosError(error, "Failed to get order request");
-    }
-  };
 }
 
 export const orderRequestService = new OrderRequestService();

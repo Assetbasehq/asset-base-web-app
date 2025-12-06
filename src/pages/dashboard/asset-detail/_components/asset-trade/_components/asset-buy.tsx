@@ -25,6 +25,7 @@ import { PinConfirmationModal } from "@/components/modals/pin-confirmation";
 import { useState } from "react";
 import { normalizeInput } from "@/helpers/deposit-methods";
 import SuccessModal from "@/components/modals/success-modal";
+import { CustomAlert } from "@/components/custom/custom-alert";
 
 type BuyFormValues = {
   orderType: "ask" | "bid" | "buy_limit_order" | "sell_limit_order" | string;
@@ -38,12 +39,13 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
   const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-//   const { data: orderRequests } = useOrderRequests({});
+  //   const { data: orderRequests } = useOrderRequests({});
 
-//   console.log({ orderRequests });
+  //   console.log({ orderRequests });
 
   const form = useForm<BuyFormValues>({
     defaultValues: {
+      orderType: "market",
       quantity: "1",
       price_per_share: asset.price_per_share.toString(),
       number_of_shares: "1",
@@ -79,27 +81,8 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
     },
   });
 
-  async function onSubmit(values: BuyFormValues) {
-    const payload = {
-      asset_id: asset.id,
-      price_per_share:
-        values.orderType === "market"
-          ? asset.price_per_share.toString()
-          : values.price_per_share?.toString() || undefined,
-      number_of_shares:
-        values.orderType === "market"
-          ? values.quantity.toString()
-          : values.number_of_shares?.toString(),
-      //   order_type: values.orderType === "market" ? "ask" : "buy_limit_order",
-      order_type:
-        values.orderType === "limit" ? "ask" : ("buy_limit_order" as string),
-    };
-
-    // console.log({ payload });
-
+  async function onSubmit() {
     setPinModalOpen(true);
-
-    // mutateAsync(payload);
   }
 
   const handlePinConfirm = async (pin: string) => {
@@ -109,7 +92,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
       ...values,
       asset_id: asset.id,
       order_type:
-        values.orderType === "limit" ? "ask" : ("buy_limit_order" as string),
+        values.orderType === "limit" ? "bid" : ("buy_limit_order" as string),
       pin,
     };
 
@@ -266,6 +249,13 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
             />
           )}
 
+          {orderType === "market" && (
+            <CustomAlert
+              variant="warning"
+              message="Market orders are currently not available."
+            />
+          )}
+
           {/* ----------------------------
             SUBMIT
           ----------------------------- */}
@@ -273,7 +263,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
             disabled={isPending}
             className="w-full py-5 rounded-full text-custom-white bg-custom-ticker-green hover:bg-custom-ticker-green/90 cursor-pointer"
           >
-            {isPending ? "Processing..." : "Buy Code"}
+            {isPending ? "Processing..." : `Buy ${asset.asset_symbol}`}
           </Button>
         </form>
       </Form>
@@ -282,8 +272,8 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
         isOpen={isPinModalOpen}
         onClose={() => setPinModalOpen(false)}
         onConfirm={handlePinConfirm}
-        title="Confirm Purchase"
-        description="Enter your 6-digit PIN to complete this transaction"
+        title="Authorize Transaction"
+        description="Enter your 6-digit PIN to authorize this transaction"
         error={error}
         btnText="Confirm"
         btnLoadingText="Processing..."
