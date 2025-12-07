@@ -261,7 +261,7 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
           ----------------------------- */}
           <Button
             disabled={isPending}
-            className="w-full py-5 rounded-full text-custom-white bg-custom-ticker-red hover:bg-custom-ticker-green/90 cursor-pointer"
+            className="w-full py-5 rounded-full text-custom-white bg-custom-ticker-red hover:bg-custom-ticker-red/90 cursor-pointer"
           >
             {isPending ? "Processing..." : `Sell ${asset.asset_symbol}`}
           </Button>

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,9 +10,15 @@ import { useOrders } from "@/hooks/use-orders";
 import type { IOrder } from "@/interfaces/order.interface";
 import { dateTimeService } from "@/services/date-time-service";
 import { FormatService } from "@/services/format-service";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function AssetOrderHistory() {
-  const { data: orders, isLoading, isError } = useOrders({ sort: "asc" });
+  const { user } = useAuthStore();
+  const {
+    data: orders,
+    isLoading,
+    isError,
+  } = useOrders({ sort: "asc", account_id: user?.account_id });
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
@@ -38,9 +43,9 @@ export default function AssetOrderHistory() {
             <TableHead className="text-left text-muted-foreground">
               Amount
             </TableHead>
-            <TableHead className="text-left text-muted-foreground">
+            {/* <TableHead className="text-left text-muted-foreground">
               Status
-            </TableHead>
+            </TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>

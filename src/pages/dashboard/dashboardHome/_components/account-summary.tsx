@@ -49,13 +49,13 @@ export default function AccountSummary() {
     let total = 0;
 
     // Add crypto wallet balances
-    if (cryptoWalletBalance?.assets?.length) {
-      total += cryptoWalletBalance.assets.reduce(
-        (sum: number, asset: { balance: string | number }) =>
-          sum + Number(asset.balance || 0),
-        0
-      );
-    }
+    // if (cryptoWalletBalance?.assets?.length) {
+    //   total += cryptoWalletBalance.assets.reduce(
+    //     (sum: number, asset: { balance: string | number }) =>
+    //       sum + Number(asset.balance || 0),
+    //     0
+    //   );
+    // }
 
     // Add fiat wallet balance
     if (walletData?.balance) {

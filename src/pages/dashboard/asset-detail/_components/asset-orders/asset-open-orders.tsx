@@ -14,6 +14,7 @@ import { useOrders } from "@/hooks/use-orders";
 import type { IOrder } from "@/interfaces/order.interface";
 import { dateTimeService } from "@/services/date-time-service";
 import { FormatService } from "@/services/format-service";
+import { useAuthStore } from "@/store/auth-store";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -23,11 +24,17 @@ export default function AssetOpenOrders() {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const { user } = useAuthStore();
+
   const {
     data: orders,
     isLoading,
     isError,
-  } = useOrders({ status: "pending", sort: "asc" });
+  } = useOrders({
+    status: "pending",
+    sort: "asc",
+    account_id: user?.account_id,
+  });
 
   const deleteOrderMutation = useMutation({
     mutationFn: (orderId: string) => ordersService.deletePendingOrder(orderId),

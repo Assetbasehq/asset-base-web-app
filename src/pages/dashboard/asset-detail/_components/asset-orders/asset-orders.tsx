@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AssetOpenOrders from "./asset-open-orders";
 import AssetOrderHistory from "./asset-order-history";
 import { motion } from "motion/react";

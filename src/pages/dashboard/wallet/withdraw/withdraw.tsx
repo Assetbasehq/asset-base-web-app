@@ -152,7 +152,7 @@ export default function Withdraw() {
                 <h2 className="text-base font-meduim">
                   {FormatService.formatCurrency(
                     walletData?.balance || 0,
-                    "USD"
+                    currency
                   )}
                 </h2>
               )}
