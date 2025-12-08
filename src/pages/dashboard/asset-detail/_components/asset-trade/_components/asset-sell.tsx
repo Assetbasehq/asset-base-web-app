@@ -6,7 +6,7 @@ import {
   FormMessage,
   FormControl,
 } from "@/components/ui/form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, useWatch } from "react-hook-form";
 import { orderRequestService } from "@/api/order-requests.api";
 import type { IAsset } from "@/interfaces/asset.interface";
@@ -39,9 +39,7 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
   const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  //   const { data: orderRequests } = useOrderRequests({});
-
-  //   console.log({ orderRequests });
+  const queryClient = useQueryClient();
 
   const form = useForm<BuyFormValues>({
     defaultValues: {
@@ -73,7 +71,9 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
       setPinModalOpen(false);
       setSuccessModalOpen(true);
 
-      // form.reset();
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+
+      form.reset();
     },
     onError: (error) => {
       console.log({ error });

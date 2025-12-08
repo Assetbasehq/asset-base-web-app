@@ -27,6 +27,7 @@ import { CustomAlert } from "@/components/custom/custom-alert";
 import ExternalWallets from "../../../_common/external-wallets";
 import ConfirmCardSelection from "../../../_common/confirm-card-selection";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
+import SuccessModal from "@/components/modals/success-modal";
 
 interface IAmountToFund {
   amount: number;
@@ -42,6 +43,8 @@ export default function FundUsdWithNgnCard() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isConfirmingCardSelection, setIsConfirmingCardSelection] =
     useState(false);
+
+  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
 
   const [isActionRestricted, setIsActionRestricted] = useState(false);
 
@@ -128,11 +131,12 @@ export default function FundUsdWithNgnCard() {
     handleFlutterPayment({
       callback: (response) => {
         setIsProcessing(false);
-        // console.log({ response });
+        console.log({ response });
 
         if (response.status === "successful") {
           //Open successfull modal
           closePaymentModal();
+          setSuccessModalOpen(true);
         }
       },
       onClose: () => {
@@ -144,7 +148,6 @@ export default function FundUsdWithNgnCard() {
   };
 
   const handleSubmit = async () => {
-
     if (!isUserVerified()) return setIsActionRestricted(true);
 
     setIsProcessing(true);
@@ -225,6 +228,19 @@ export default function FundUsdWithNgnCard() {
           setIsActionRestricted(false);
           setIsSavingCard(false);
         }}
+      />
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => {
+          setSuccessModalOpen(false);
+        }}
+        title="Funding Successful"
+        description={`You have successfully funded your wallet with ${FormatService.formatCurrency(
+          dollarEquivalentMinusFee,
+          "usd"
+        )} `}
+        buttonText="Close"
       />
 
       <div className="text-custom-white-text flex flex-col gap-4">

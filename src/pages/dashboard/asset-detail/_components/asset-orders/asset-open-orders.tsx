@@ -15,7 +15,7 @@ import type { IOrder } from "@/interfaces/order.interface";
 import { dateTimeService } from "@/services/date-time-service";
 import { FormatService } from "@/services/format-service";
 import { useAuthStore } from "@/store/auth-store";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function AssetOpenOrders() {
@@ -23,6 +23,8 @@ export default function AssetOpenOrders() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const queryClient = useQueryClient();
 
   const { user } = useAuthStore();
 
@@ -34,6 +36,7 @@ export default function AssetOpenOrders() {
     status: "pending",
     sort: "asc",
     account_id: user?.account_id,
+    limit: "5",
   });
 
   const deleteOrderMutation = useMutation({
@@ -41,6 +44,8 @@ export default function AssetOpenOrders() {
     onSuccess: () => {
       setIsDeleteModalOpen(false);
       setIsSuccessModalOpen(true);
+
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
     onError: (error) => {
       console.log({ error });
@@ -107,7 +112,7 @@ export default function AssetOpenOrders() {
                 <Button
                   onClick={() => {
                     setError(null);
-                    setOrderId(order.transaction_id);
+                    setOrderId(order.id);
                     setIsDeleteModalOpen(true);
                   }}
                   className="cursor-pointer bg-fixed-ticker-red hover:bg-fixed-ticker-red/80 text-white"

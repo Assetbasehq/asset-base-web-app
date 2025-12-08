@@ -43,11 +43,11 @@ export default function SuccessModal({
             />
           </div>
         </div>
-        <DialogHeader className="pb-8 flex flex-col gap-0">
-          <DialogTitle className="text-lg font-bold text-center">
+        <DialogHeader className="pb-4 flex flex-col gap-0">
+          <DialogTitle className="text-xl font-medium text-center">
             {title}
           </DialogTitle>
-          <DialogDescription className="text-gray-500 text-center">
+          <DialogDescription className="text-gray-500 text-center text-md">
             {description}
           </DialogDescription>
         </DialogHeader>

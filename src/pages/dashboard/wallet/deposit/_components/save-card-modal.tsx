@@ -30,7 +30,7 @@ export default function SaveCardModal({
 
   const btnText = isLoading ? (
     <span className="flex items-center gap-2">
-      <Loader /> Processing...
+      <Loader className="animate-spin" /> Processing...
     </span>
   ) : (
     <span>Save Card</span>

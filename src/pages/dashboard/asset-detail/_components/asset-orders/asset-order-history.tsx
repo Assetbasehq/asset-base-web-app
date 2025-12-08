@@ -18,7 +18,11 @@ export default function AssetOrderHistory() {
     data: orders,
     isLoading,
     isError,
-  } = useOrders({ sort: "asc", account_id: user?.account_id });
+  } = useOrders({
+    sort: "asc",
+    account_id: user?.account_id,
+    limit: "5",
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
@@ -43,9 +47,9 @@ export default function AssetOrderHistory() {
             <TableHead className="text-left text-muted-foreground">
               Amount
             </TableHead>
-            {/* <TableHead className="text-left text-muted-foreground">
+            <TableHead className="text-left text-muted-foreground">
               Status
-            </TableHead> */}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -68,6 +72,9 @@ export default function AssetOrderHistory() {
                   order.number_of_shares * order.price_per_share,
                   "usd"
                 )}
+              </TableCell>
+              <TableCell className="text-left capitalize">
+                {order.status}
               </TableCell>
             </TableRow>
           ))}
