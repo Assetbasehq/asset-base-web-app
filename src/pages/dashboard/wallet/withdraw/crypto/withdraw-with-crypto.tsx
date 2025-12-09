@@ -220,7 +220,10 @@ export default function WithdrawToCrypto() {
             <p className="">
               You are about to withdraw{" "}
               <span className="font-semibold">
-                {FormatService.formatCurrency(amountToWithdraw?.amount)}
+                {FormatService.formatCurrency(
+                  amountToWithdraw?.amount,
+                  currency
+                )}
               </span>
             </p>
 
@@ -237,17 +240,6 @@ export default function WithdrawToCrypto() {
                     />
                   </div>
                 </div>
-                {/* <Button
-                  className="w-50 flex items-center justify-start gap-2 bg-custom-base hover:bg-custom-light-bg text-custom-white cursor-pointer "
-                  key={activeConnector.uid}
-                >
-                  <img
-                    className="w-6 h-6"
-                    src={activeConnector.icon}
-                    alt={activeConnector.name}
-                  />
-                  <div>{activeConnector.name}</div>
-                </Button> */}
                 <Button
                   className={cn(
                     `bg-custom-light-bg w-30 text-xs !p-0 cursor-pointer`
