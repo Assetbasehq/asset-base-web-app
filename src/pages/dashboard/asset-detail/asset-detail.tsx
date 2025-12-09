@@ -13,29 +13,7 @@ import AssetDetailPro from "../asset-detail-pro/asset-detail-pro";
 import { useAsset } from "@/hooks/useAssets";
 // import AssetDetailPro from "./asset-detail-pro/asset-detail-pro";
 
-interface Asset {
-  id: string;
-  name: string;
-  acronym: string;
-  logo: string;
-  amount_raised: string;
-  goal: string;
-  round_closes: string;
-  price: string;
-  price_change_24hrs: string;
-}
 
-const demoAsset: Asset = {
-  id: "1",
-  name: "Landmark Realty Limited",
-  acronym: "LARL",
-  logo: assetBaseLogo,
-  amount_raised: "$23,500",
-  goal: "$1,200,000",
-  round_closes: "15 days",
-  price: "$3400.00",
-  price_change_24hrs: "+2.33%",
-};
 
 export default function AssetDetail() {
   const [isPro, setIsPro] = useState(false);
@@ -68,7 +46,7 @@ export default function AssetDetail() {
     return (
       <AnimatedWrapper animationKey={String(isPro)}>
         <AssetDetailPro
-          asset={demoAsset}
+          asset={asset}
           isChecked={isPro}
           onSwitch={(value) => {
             setTimeout(() => {

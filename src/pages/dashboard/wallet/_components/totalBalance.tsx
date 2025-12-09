@@ -49,7 +49,7 @@ export default function TotalBalance({
     data: portfolioOverview,
     isLoading: isPortfolioLoading,
     isError: isPortfolioError,
-  } = useGetPortfolioOverview({ currency: currency == "usd" ? "usdt" : "cngn" });
+  } = useGetPortfolioOverview({ currency });
 
   console.log({ portfolioOverview });
 

@@ -10,14 +10,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount, useBalance, useConnect, useDisconnect } from "wagmi";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { walletService } from "@/api/wallet.api";
 import { useOutletContext } from "react-router";
 import { Loader } from "lucide-react";
 import { FormatService } from "@/services/format-service";
 import { cn } from "@/lib/utils";
+import SuccessModal from "@/components/modals/success-modal";
+import { ASSETCHAIN_USDT_TOKEN } from "@/lib/wagmi.config";
 
 interface WithdrawContext {
   amountToWithdraw: {
@@ -31,6 +33,7 @@ export default function WithdrawToCrypto() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [connectWalletOpen, setConnectWalletOpen] = useState(false);
@@ -52,11 +55,26 @@ export default function WithdrawToCrypto() {
   } = useAccount();
   const { disconnect } = useDisconnect();
 
+  const queryClient = useQueryClient();
+
+  const { data: balanceData, refetch: refetchBalance } = useBalance({
+    address: address,
+    token: ASSETCHAIN_USDT_TOKEN.address as `0x${string}`,
+    chainId: chainId,
+  });
+
+  console.log({ balanceData, activeConnector, refetchBalance });
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: walletService.sendToExternalAddress,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log({ data });
       setSuccess(data.message);
+      setWithdrawOpen(false);
+      setIsSuccessModalOpen(true);
+      const newB = await refetchBalance();
+
+      console.log({ newB });
     },
     onError: (error) => {
       console.log({ error });
@@ -181,6 +199,14 @@ export default function WithdrawToCrypto() {
         <img src={images.assetBase.logo} alt={images.assetBase.alt} />
         <span>Send to my connected wallet</span>
       </Button>
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title="Withdrawal Successful"
+        description="Your withdrawal request has been successfully processed."
+        buttonText="Close"
+      />
 
       <Dialog open={withdrawOpen} onOpenChange={setWithdrawOpen}>
         <DialogContent className="bg-custom-card border border-border">

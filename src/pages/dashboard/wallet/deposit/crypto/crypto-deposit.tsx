@@ -14,9 +14,9 @@ import {
 import { BaseError, parseUnits } from "viem";
 import { truncateWalletAddress } from "@/lib/utils";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
-import { USDT_TOKEN } from "@/lib/wagmi.config";
 import DepositWrapper from "../_components/deposit-wraper";
 import { Link } from "react-router";
+import { ASSETCHAIN_USDT_TOKEN } from "@/lib/wagmi.config";
 
 export default function CryptoDeposit() {
   const [copied, setCopied] = useState(false);
@@ -37,7 +37,6 @@ export default function CryptoDeposit() {
   const { isConnected, chain } = useAccount();
 
   const { data: depositData, isLoading } = useRequestCryptoDeposit();
-
 
   const getErrorMessage = (err: unknown): string => {
     if (!err) return "An unknown error occurred";
@@ -72,12 +71,12 @@ export default function CryptoDeposit() {
     try {
       const finalAmount = parseUnits(
         amountToFund.toString(),
-        USDT_TOKEN.decimals
+        ASSETCHAIN_USDT_TOKEN.decimals
       );
 
       await writeContractAsync({
-        address: USDT_TOKEN.address as `0x${string}`,
-        abi: USDT_TOKEN.abi,
+        address: ASSETCHAIN_USDT_TOKEN.address as `0x${string}`,
+        abi: ASSETCHAIN_USDT_TOKEN.abi,
         functionName: "transfer",
         args: [depositData.walletAddress, finalAmount.toString()],
       });

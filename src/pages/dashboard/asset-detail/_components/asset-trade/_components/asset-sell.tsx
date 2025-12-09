@@ -26,6 +26,7 @@ import { useState } from "react";
 import { normalizeInput } from "@/helpers/deposit-methods";
 import SuccessModal from "@/components/modals/success-modal";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import { Label } from "@/components/ui/label";
 
 type BuyFormValues = {
   orderType: "ask" | "bid" | "buy_limit_order" | "sell_limit_order" | string;
@@ -100,6 +101,10 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
 
     mutateAsync(payload);
   };
+  const isPriceAboveMarketPrice =
+    orderType === "limit" && price && asset.price_per_share
+      ? Number(price) < Number(asset.price_per_share)
+      : false;
 
   return (
     <div>
@@ -155,9 +160,9 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
                 rules={{ required: "Price per share is required" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-muted-foreground text-sm">
+                    <Label className="text-muted-foreground text-sm">
                       Price per Share
-                    </FormLabel>
+                    </Label>
                     <FormControl>
                       <Input
                         className="w-full py-6"
@@ -172,10 +177,17 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-right" />
                   </FormItem>
                 )}
               />
+
+              {isPriceAboveMarketPrice && (
+                <CustomAlert
+                  variant="warning"
+                  message="Price per share is below market price"
+                />
+              )}
 
               {/* NUMBER OF SHARES */}
               <FormField
@@ -184,9 +196,9 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
                 rules={{ required: "Number of shares is required" }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-muted-foreground text-sm">
+                    <Label className="text-muted-foreground text-sm">
                       Number of Shares
-                    </FormLabel>
+                    </Label>
                     <FormControl>
                       <Input
                         className="w-full py-6"
@@ -201,16 +213,16 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-right" />
                   </FormItem>
                 )}
               />
 
               {/* TOTAL AMOUNT (Disabled) */}
               <FormItem>
-                <FormLabel className="text-muted-foreground text-sm">
+                <Label className="text-muted-foreground text-sm">
                   Total Amount in {currencyToSymbol[asset.currency]}
-                </FormLabel>
+                </Label>
                 <Input
                   className="w-full py-6 bg-muted cursor-not-allowed"
                   value={FormatService.formatCurrency(
@@ -232,18 +244,24 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
               name="quantity"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-muted-foreground text-sm">
+                  <Label className="text-muted-foreground text-sm">
                     Quantity
-                  </FormLabel>
+                  </Label>
                   <FormControl>
                     <Input
                       className="w-full py-6"
-                      type="number"
+                      type="text"
                       {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        const { formattedAmount } = normalizeInput(value);
+
+                        field.onChange(formattedAmount);
+                      }}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-right" />
                 </FormItem>
               )}
             />
@@ -260,7 +278,9 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
             SUBMIT
           ----------------------------- */}
           <Button
-            disabled={isPending}
+            disabled={
+              isPending || isPriceAboveMarketPrice || orderType === "market"
+            }
             className="w-full py-5 rounded-full text-custom-white bg-custom-ticker-red hover:bg-custom-ticker-red/90 cursor-pointer"
           >
             {isPending ? "Processing..." : `Sell ${asset.asset_symbol}`}
@@ -275,6 +295,7 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
         title="Authorize Transaction"
         description="Enter your 6-digit PIN to authorize this transaction"
         error={error}
+        setError={setError}
         btnText="Confirm"
         btnLoadingText="Processing..."
         isLoading={isPending}

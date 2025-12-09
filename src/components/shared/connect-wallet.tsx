@@ -20,13 +20,11 @@ import {
   type Connector,
 } from "wagmi";
 import { formatEther } from "viem";
+import { ASSETCHAIN_USDT_TOKEN } from "@/lib/wagmi.config";
 
 export interface ConnectWalletProps {
   className?: string;
 }
-
-// const ASSET_CHAIN_ID = 12345;
-const ASSET_CHAIN_USDT_CONTRACT = "0x04f868C5b3F0A100a207c7e9312946cC2c48a7a3";
 
 export default function ConnectWallet({ className }: ConnectWalletProps) {
   const [open, setOpen] = useState(false);
@@ -34,8 +32,9 @@ export default function ConnectWallet({ className }: ConnectWalletProps) {
   const { address, isConnected, chainId } = useAccount();
   const { data: walletBalance } = useBalance({
     address,
-    token: ASSET_CHAIN_USDT_CONTRACT,
+    token: ASSETCHAIN_USDT_TOKEN.address as `0x${string}`,
     chainId: chainId,
+    blockTag: "latest",
   });
 
   const formattedBalance = walletBalance
@@ -81,15 +80,16 @@ export function ConnectWalletModal({
   open,
   setOpen,
   onSuccess,
+  queryKey,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
+  queryKey?: string;
 }) {
   const { connectors, connect, error } = useConnect();
   const { connector: activeConnector, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-
 
   if (!open) {
     return null;
@@ -131,7 +131,7 @@ export function ConnectWalletModal({
                                   }
                                 },
                               }
-                            ); 
+                            );
                           }
                         }}
                       >

@@ -209,6 +209,7 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
         title="Authorize Transaction"
         description="Enter your 6-digit PIN to authorize this transaction"
         error={error}
+        setError={setError}
         btnText="Confirm"
         btnLoadingText="Processing..."
         isLoading={mutation.isPending}

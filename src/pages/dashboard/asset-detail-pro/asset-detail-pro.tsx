@@ -3,9 +3,10 @@ import AssetChart from "./_components/asset-chart";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FormatService } from "@/services/format-service";
 import { cn } from "@/lib/utils";
+import type { IAsset } from "@/interfaces/asset.interface";
 
 type AssetDetailsProProps = {
-  asset: any;
+  asset: IAsset;
   isChecked: boolean;
   onSwitch: (value: boolean) => void;
 };
@@ -19,10 +20,14 @@ export default function AssetDetailPro({
     <div className="flex flex-col gap-4 py-4 min-h-screen">
       <div className="flex items-center justify-between">
         <div className="flex text-start items-start gap-4">
-          <img src={asset.logo} alt={asset.name} className="w-8 sm:w-12" />
+          <img
+            src={asset.logo}
+            alt={asset.asset_name}
+            className="w-8 sm:w-12"
+          />
           <div>
-            <p className="font-semibold text-lg">{asset.acronym}</p>
-            <p className="text-muted-foreground text-sm">{asset.name}</p>
+            <p className="font-semibold text-lg">{asset.asset_symbol}</p>
+            <p className="text-muted-foreground text-sm">{asset.asset_name}</p>
           </div>
         </div>
         <div className="flex items-center gap-6">
@@ -47,22 +52,20 @@ export default function AssetDetailPro({
         <div className="flex flex-col gap-2 mb-2 md:mb-0">
           <div className="flex items-center gap-2">
             <p className="font-semibold text-sm  md:text-2xl text-custom-white-text">
-              {asset.price}
+              {asset.price_per_share}
             </p>
             <small
               className={cn("text-muted-foreground", {
-                "text-green-400": asset.price_change_24hrs.includes("+"),
-                "text-red-400": asset.price_change_24hrs.includes("-"),
+                // "text-green-400": asset.price_change_24hrs.includes("+"),
+                // "text-red-400": asset.price_change_24hrs.includes("-"),
               })}
             >
-              {asset.price_change_24hrs}
+              {asset.price_per_share}
             </small>
           </div>
           <p className="text-muted-foreground text-sm hidden md:block">
             At close:{" "}
-            <span className="font-semibold text-custom-white-text">
-              {asset.round_closes}
-            </span>
+            <span className="font-semibold text-custom-white-text">24</span>
           </p>
         </div>
       </div>

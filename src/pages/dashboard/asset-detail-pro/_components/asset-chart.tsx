@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, memo } from "react";
+import type { IAsset } from "@/interfaces/asset.interface";
+import { useEffect, useRef, memo } from "react";
 
 interface AssetChartProps {
-  asset: {
-    symbol?: string;
-    name?: string;
-  };
+  asset: IAsset;
 }
 
 const AssetChart = memo(function AssetChart({ asset }: AssetChartProps) {
@@ -22,7 +20,7 @@ const AssetChart = memo(function AssetChart({ asset }: AssetChartProps) {
     script.type = "text/javascript";
     script.async = true;
 
-    const symbol = asset?.symbol || "NASDAQ:AAPL";
+    const symbol = asset?.asset_symbol || "NASDAQ:AAPL";
 
     script.innerHTML = JSON.stringify({
       allow_symbol_change: true,
@@ -54,7 +52,7 @@ const AssetChart = memo(function AssetChart({ asset }: AssetChartProps) {
         containerRef.current.innerHTML = "";
       }
     };
-  }, [asset?.symbol]);
+  }, [asset?.asset_symbol]);
 
   return (
     <div
@@ -69,13 +67,13 @@ const AssetChart = memo(function AssetChart({ asset }: AssetChartProps) {
       <div className="tradingview-widget-copyright text-xs text-muted-foreground mt-1">
         <a
           href={`https://www.tradingview.com/symbols/${(
-            asset?.symbol || "NASDAQ-AAPL"
+            asset?.asset_symbol || "NASDAQ-AAPL"
           ).replace(":", "-")}/`}
           rel="noopener noreferrer"
           target="_blank"
           className="text-custom-orange hover:underline"
         >
-          {asset?.name || "AAPL"} chart
+          {asset?.asset_name || "AAPL"} chart
         </a>{" "}
         by TradingView
       </div>

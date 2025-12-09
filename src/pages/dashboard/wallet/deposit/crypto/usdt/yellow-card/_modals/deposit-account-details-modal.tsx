@@ -16,12 +16,14 @@ import { useNavigate } from "react-router";
 interface DepositAccountDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
   yellowCardMetaData: IYellowcardMetaData | null;
 }
 
 export default function DepositAccountDetailsModal({
   isOpen,
   onClose,
+  onSuccess,
   yellowCardMetaData,
 }: DepositAccountDetailsModalProps) {
   const [copied, setCopied] = useState(false);
@@ -148,8 +150,11 @@ export default function DepositAccountDetailsModal({
         )}
 
         <DialogFooter className="mt-2">
-          <Button onClick={onClose} className="btn-primary w-full sm:w-auto">
-            Done
+          <Button onClick={onClose} className="w-full sm:w-auto">
+            Close
+          </Button>
+          <Button onClick={onSuccess} className="btn-primary w-full sm:w-auto">
+            I have sent it
           </Button>
         </DialogFooter>
       </DialogContent>

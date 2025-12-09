@@ -14,9 +14,10 @@ import {
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { Loader } from "lucide-react";
+import ShakeWrapper from "../animations/shake-wrapper";
+import { useEffect, useState } from "react";
 
 type PinConfirmationModalProps = {
   isOpen: boolean;
@@ -24,7 +25,8 @@ type PinConfirmationModalProps = {
   onConfirm: (pin: string) => void;
   title?: string;
   description?: string;
-  error?: string | null;
+  error: string | null;
+  setError: (error: string | null) => void;
   btnText?: string;
   btnLoadingText?: string;
   isLoading?: boolean;
@@ -41,10 +43,24 @@ export function PinConfirmationModal({
   title = "Enter PIN",
   description = "Provide your 6-digit PIN to continue",
   error,
+  setError,
   btnText = "Confirm",
   btnLoadingText = "Please wait...",
   isLoading = false,
 }: PinConfirmationModalProps) {
+  console.log({ error });
+
+  const [shakeKey, setShakeKey] = useState("no-error");
+  const [pin, setPin] = useState("");
+
+  useEffect(() => {
+    if (error) {
+      setShakeKey(`shake-${Date.now()}`); // trigger shake once when error appears
+    }
+  }, [error]);
+
+  const mask = (val: string) => "●".repeat(val.length);
+
   const form = useForm<FormValues>({
     defaultValues: { pin: "" },
   });
@@ -62,38 +78,41 @@ export function PinConfirmationModal({
         </DialogHeader>
 
         <Form {...form}>
-          <form className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6">
             <FormField
               control={form.control}
               name="pin"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <InputOTP
-                      value={field.value}
-                      onChange={(val) => {
-                        field.onChange(val);
+                    <ShakeWrapper animationKey={shakeKey}>
+                      <InputOTP
+                        value={field.value}
+                        onChange={(val) => {
+                          field.onChange(val);
+                          // if (error) setError(null);
 
-                        // Auto-submit ONLY when 6 digits are filled
-                        if (val.length === 6 && !isLoading) {
-                          form.handleSubmit(handlePinSubmit)();
-                        }
-                      }}
-                      maxLength={6}
-                      disabled={isLoading}
-                      pattern={REGEXP_ONLY_DIGITS}
-                      className="flex justify-center"
-                    >
-                      <InputOTPGroup className=" flex justify-center items-center gap-2 md:gap-3">
-                        {[...Array(6)].map((_, i) => (
-                          <InputOTPSlot
-                            key={i}
-                            index={i}
-                            className="w-10 h-10 sm:h-12 sm:w-12 rounded-lg border"
-                          />
-                        ))}
-                      </InputOTPGroup>
-                    </InputOTP>
+                          // Auto-submit ONLY when 6 digits are filled
+                          if (val.length === 6 && !isLoading) {
+                            form.handleSubmit(handlePinSubmit)();
+                          }
+                        }}
+                        maxLength={6}
+                        disabled={isLoading}
+                        pattern={REGEXP_ONLY_DIGITS}
+                        className="flex justify-center"
+                      >
+                        <InputOTPGroup className=" flex justify-center items-center gap-2 md:gap-3">
+                          {[...Array(6)].map((_, i) => (
+                            <InputOTPSlot
+                              key={i}
+                              index={i}
+                              className="w-10 h-10 sm:h-12 sm:w-12 rounded-lg border"
+                            />
+                          ))}
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </ShakeWrapper>
                   </FormControl>
                 </FormItem>
               )}
@@ -115,7 +134,7 @@ export function PinConfirmationModal({
                 btnText
               )}
             </Button>
-          </form>
+          </div>
         </Form>
       </DialogContent>
     </Dialog>

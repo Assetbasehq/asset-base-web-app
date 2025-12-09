@@ -1,7 +1,5 @@
-// wagmiConfig.ts
 import { createConfig, createStorage, http } from "wagmi";
 import { mainnet, sepolia } from "wagmi/chains";
-import { metaMask, coinbaseWallet, walletConnect } from "wagmi/connectors";
 
 export const assetChain = {
   id: 42421,
@@ -13,7 +11,7 @@ export const assetChain = {
   },
   rpcUrls: {
     default: {
-      http: ["https://enugu-rpc.assetchain.org"], // Replace with the actual RPC URL
+      http: ["https://enugu-rpc.assetchain.org"],
     },
   },
   blockExplorers: {
@@ -24,8 +22,7 @@ export const assetChain = {
   },
 };
 
-// constants/tokens.ts
-export const USDT_TOKEN = {
+export const ASSETCHAIN_USDT_TOKEN = {
   symbol: "USDT",
   name: "Tether USD",
   address: "0x04f868C5b3F0A100a207c7e9312946cC2c48a7a3",

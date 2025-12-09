@@ -31,6 +31,7 @@ import type {
 import MomoNetworks from "./_components/momo-networks";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useCryptoWallets } from "@/hooks/useWallet";
+import SuccessModal from "@/components/modals/success-modal";
 
 const currencies = ["NGN", "UGX", "GHS", "KES"];
 type Currency = "NGN" | "UGX" | "GHS" | "KES";
@@ -62,6 +63,8 @@ export default function FundCryptoWithUsdtYellowCard() {
     null
   );
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const {
     data: cryptoWalletData,
@@ -269,6 +272,7 @@ export default function FundCryptoWithUsdtYellowCard() {
               disabled={!currency || isConfirmed}
             />
           </div>
+
           {amountToFund && !isMinimumAmount && (
             <CustomAlert variant="warning" message="Minimum deposit is $10" />
           )}
@@ -365,7 +369,19 @@ export default function FundCryptoWithUsdtYellowCard() {
       <DepositAccountDetailsModal
         isOpen={isDepositModalOpen}
         onClose={() => setIsDepositModalOpen(false)}
+        onSuccess={() => {
+          setIsDepositModalOpen(false);
+          setIsSuccessModalOpen(true);
+        }}
         yellowCardMetaData={depositMeta}
+      />
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title="Hang tight!"
+        description="Your funds will be processed soon and will be credited to your wallet."
+        buttonText="Close"
       />
     </DepositWrapper>
   );

@@ -102,6 +102,11 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
     mutateAsync(payload);
   };
 
+  const isPriceBelowMarketPrice =
+    orderType === "limit" && price && asset.price_per_share
+      ? Number(price) > Number(asset.price_per_share)
+      : false;
+
   return (
     <div>
       <Form {...form}>
@@ -139,7 +144,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                     <SelectItem value="limit">Limit</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-right" />
               </FormItem>
             )}
           />
@@ -173,10 +178,17 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-right" />
                   </FormItem>
                 )}
               />
+
+              {isPriceBelowMarketPrice && (
+                <CustomAlert
+                  variant="warning"
+                  message="Price per share is above market price"
+                />
+              )}
 
               {/* NUMBER OF SHARES */}
               <FormField
@@ -202,7 +214,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-right" />
                   </FormItem>
                 )}
               />
@@ -239,12 +251,18 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                   <FormControl>
                     <Input
                       className="w-full py-6"
-                      type="number"
+                      type="text"
                       {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        const { formattedAmount } = normalizeInput(value);
+
+                        field.onChange(formattedAmount);
+                      }}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-right" />
                 </FormItem>
               )}
             />
@@ -261,7 +279,9 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
             SUBMIT
           ----------------------------- */}
           <Button
-            disabled={isPending}
+            disabled={
+              isPending || isPriceBelowMarketPrice || orderType === "market"
+            }
             className="w-full py-5 rounded-full text-custom-white bg-custom-ticker-green hover:bg-custom-ticker-green/90 cursor-pointer"
           >
             {isPending ? "Processing..." : `Buy ${asset.asset_symbol}`}
@@ -276,6 +296,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
         title="Authorize Transaction"
         description="Enter your 6-digit PIN to authorize this transaction"
         error={error}
+        setError={setError}
         btnText="Confirm"
         btnLoadingText="Processing..."
         isLoading={isPending}
