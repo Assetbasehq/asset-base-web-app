@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useAccount, useBalance, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useBalance, useDisconnect } from "wagmi";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { walletService } from "@/api/wallet.api";

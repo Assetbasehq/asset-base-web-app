@@ -9,13 +9,20 @@ import { FormatService } from "@/services/format-service";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { externalWalletService } from "@/api/external-wallets.api";
+import { RiArrowRightSLine } from "react-icons/ri";
 
-export function RiseAccount({ currency }: { currency: "ngn" | "usd" }) {
+export function RiseAccount({
+  currency,
+  disabled,
+  onSelect,
+}: {
+  currency: "ngn" | "usd";
+  disabled: boolean;
+  onSelect: (external_wallet_id: string) => void;
+}) {
   const [open, setOpen] = useState(false);
 
   const { user } = useAuthStore();
-
-  const navigate = useNavigate();
 
   const {
     data: riseWallet,
@@ -24,10 +31,12 @@ export function RiseAccount({ currency }: { currency: "ngn" | "usd" }) {
     refetch,
   } = useGetExternalWallets({
     fetch_balance: "true",
-    currency: "usd",
+    currency,
     wallet_type: "api_vendor",
     provider: "risevest",
   });
+
+  console.log({ riseWallet });
 
   const createRiseWalletMutation = useMutation({
     mutationFn: () =>
@@ -64,32 +73,6 @@ export function RiseAccount({ currency }: { currency: "ngn" | "usd" }) {
     );
   }
 
-  if (riseWallet && riseWallet?.items?.length < 1) {
-    return (
-      <div className="flex flex-col items-center gap-4 text-center my-12">
-        <img src={riseLink} alt="rise" className="w-28 h-28" />
-        <h2 className="text-sm font-medium max-w-sm text-custom-grey">
-          Your Rise account is not yet linked. Link your account to have access
-          to your wallet
-        </h2>
-        <Button
-          onClick={() => setOpen(true)}
-          className="btn-primary rounded-full py-6 w-full"
-        >
-          Link Rise Account
-        </Button>
-        <LinkRiseModal
-          open={open}
-          onOpenChange={setOpen}
-          onSuccess={() => {
-            createRiseWalletMutation.mutateAsync();
-            refetch();
-          }}
-        />
-      </div>
-    );
-  }
-
   if (!riseWallet || riseWallet?.items?.length < 1) {
     return (
       <div className="flex flex-col items-center gap-4 text-center my-12">
@@ -118,7 +101,11 @@ export function RiseAccount({ currency }: { currency: "ngn" | "usd" }) {
 
   return (
     <div className="flex flex-col items-center text-center my-12">
-      <Button className="flex items-center justify-between gap-4 w-full bg-custom-rise-green py-10 hover:bg-custom-rise-green/90">
+      <Button
+        onClick={() => onSelect(riseWallet?.items[0]?.id)}
+        disabled={disabled}
+        className="flex items-center cursor-pointer justify-between gap-4 w-full bg-custom-rise-green py-10 hover:bg-custom-rise-green/90"
+      >
         <div>
           <div className="flex items-center gap-2 text-custom-grey">
             <img
@@ -126,21 +113,20 @@ export function RiseAccount({ currency }: { currency: "ngn" | "usd" }) {
               alt="rise"
               className="w-12 h-12 bg-custom-card p-2 rounded-full"
             />
-            <p className="font-medium">
-              {user?.metadata?.rise_username || user?.email_address}
-            </p>
+            <div className="text-start">
+              <p className="font-medium">
+                {user?.metadata?.rise_username || user?.email_address}
+              </p>
+              <p className="text-white">
+                {FormatService.formatCurrency(
+                  riseWallet?.items[0]?.balance,
+                  currency
+                )}
+              </p>
+            </div>
           </div>
-          <p className="">
-            {FormatService.formatCurrency(riseWallet?.items[0]?.balance, "usd")}
-          </p>
         </div>
-        {/* <Button
-          variant="ghost"
-          className="flex items-center gap-2 cursor-pointer"
-        >
-          <p className="text-custom-grey">Logout</p>
-          <RiArrowDownSLine className="text-custom-grey" />
-        </Button> */}
+        <RiArrowRightSLine className="text-white w-12 h-8" />
       </Button>
     </div>
   );

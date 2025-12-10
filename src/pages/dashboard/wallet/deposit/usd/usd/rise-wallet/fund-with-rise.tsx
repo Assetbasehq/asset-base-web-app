@@ -13,29 +13,29 @@ import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import { useAuthStore } from "@/store/auth-store";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
 import { RiseAccount } from "@/components/shared/rise-account";
+import { PinConfirmationModal } from "@/components/modals/pin-confirmation";
+import { useMutation } from "@tanstack/react-query";
+import SuccessModal from "@/components/modals/success-modal";
+import {
+  transactionRequestService,
+  type ITransactionRequest,
+} from "@/api/transaction-request";
 
 export default function FundUsdWithUsdRiseWallet() {
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isConfirmationPinModalOpen, setIsConfirmationPinModalOpen] =
+    useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [externalWalletId, setExternalWalletId] = useState<string | null>(null);
 
   const [actionRestricted, setActionRestricted] = useState(false);
   const { user, isUserVerified } = useAuthStore();
-
-  console.log({ user });
 
   const { data: ioMethods } = useIoMethods({
     filter_key: "intent",
     filter_value: "funding",
   });
-
-  const { data: riseWallet, isLoading } = useGetExternalWallets({
-    fetch_balance: "true",
-    currency: "usd",
-    wallet_type: "api_vendor",
-    provider: "risevest",
-  });
-
-  console.log({ riseWallet });
 
   const selectedMethod = useMemo(() => {
     const availableOptions = getAvailableIOMethods(
@@ -47,11 +47,52 @@ export default function FundUsdWithUsdRiseWallet() {
     return availableOptions.find((m) => m.channel === "api_vendor");
   }, [ioMethods]);
 
+  const mutation = useMutation({
+    mutationFn: transactionRequestService.initiateNewTransaction,
+    onSuccess: (data) => {
+      console.log({ data });
+      setIsConfirmationPinModalOpen(false);
+      setIsSuccessModalOpen(true);
+      setAmountToFund(0);
+    },
+    onError: (error) => {
+      setError(error.message);
+      // console.log({ error });
+    },
+  });
+
   const handleAmountChange = (amount: string) => {
     setError(null);
     const amountNumber = Number(amount);
     if (!isNaN(amountNumber)) setAmountToFund(amountNumber);
   };
+
+  const onConfirm = async (pin: string) => {
+    //Send request
+
+    if (!amountToFund) {
+      setError("Please provide an amount");
+    }
+    if (!externalWalletId) {
+      setError("Something went wrong");
+    }
+
+    const payload: ITransactionRequest = {
+      amount: amountToFund as number,
+      currency: "usd",
+      dest_wallet_currency: "usd",
+      external_wallet_id: externalWalletId as string,
+      request_type: "funding",
+      wallet_type: "api_vendor",
+      credential: pin,
+    };
+
+    mutation.mutateAsync(payload);
+  };
+
+  const isMinimumAmount = amountToFund ? amountToFund >= 10 : false;
+
+  // console.log({ isMinimumAmount, v: !isUserVerified() });
 
   return (
     <DepositWrapper>
@@ -96,8 +137,41 @@ export default function FundUsdWithUsdRiseWallet() {
       </div>
 
       <AnimatedWrapper animationKey={String(user?.metadata?.rise_account_id)}>
-        <RiseAccount currency="usd" />
+        <RiseAccount
+          currency="usd"
+          disabled={!isUserVerified() || !isMinimumAmount}
+          onSelect={(externalWalletId: string) => {
+            setExternalWalletId(externalWalletId);
+            setIsConfirmationPinModalOpen(true);
+          }}
+        />
       </AnimatedWrapper>
+
+      <PinConfirmationModal
+        isOpen={isConfirmationPinModalOpen}
+        onClose={() => setIsConfirmationPinModalOpen(false)}
+        onConfirm={onConfirm}
+        title="Authorize Transaction"
+        description="Enter your Rise 6-digit PIN to authorize this transaction"
+        error={error}
+        setError={setError}
+        btnText="Confirm"
+        btnLoadingText="Processing..."
+        isLoading={mutation.isPending}
+      />
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => {
+          setIsSuccessModalOpen(false);
+        }}
+        title="Funnding Successful"
+        description={`You have successfully funded your wallet with ${FormatService.formatCurrency(
+          amountToFund,
+          "usd"
+        )}.`}
+        buttonText="Close"
+      />
     </DepositWrapper>
   );
 }
