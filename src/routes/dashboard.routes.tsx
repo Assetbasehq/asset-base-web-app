@@ -18,7 +18,6 @@ import Onboarding404 from "@/pages/onboarding/onboarding404";
 import { AuthGuard } from "@/guards/auth.guard";
 import type { RouteObject } from "react-router";
 import Deposit404 from "@/pages/dashboard/wallet/deposit/deposit-404";
-import CryptoDeposit from "@/pages/dashboard/wallet/deposit/crypto/crypto-deposit";
 import Deposit from "@/pages/dashboard/wallet/deposit/deposit";
 import FundUsdWithUsdCard from "@/pages/dashboard/wallet/deposit/usd/usd/usd-card/fund-usd-with-usd-card";
 import FundUsdWithBankAccount from "@/pages/dashboard/wallet/deposit/usd/usd/bank-account/fund-usd-with-bank-account";
@@ -34,7 +33,6 @@ import FundUsdWithGhsVodafone from "@/pages/dashboard/wallet/deposit/usd/ghs/vod
 import ConvertFunds from "@/pages/dashboard/wallet/convert/convert";
 import FundUsdWithUsdRiseWallet from "@/pages/dashboard/wallet/deposit/usd/usd/rise-wallet/fund-with-rise";
 import FundUsdWithNgnCard from "@/pages/dashboard/wallet/deposit/usd/ngn/ngn-card/fund-usd-with-ngn-card";
-import FundCryptoWithFiat from "@/pages/dashboard/wallet/deposit/crypto/usdt/yellow-card/fund-crypto-with-usdt-yellow-card";
 import SelectWithdrawalAccount from "@/pages/dashboard/wallet/withdraw/_components/select-withdrawal-account";
 import WithdrawToCrypto from "@/pages/dashboard/wallet/withdraw/crypto/withdraw-with-crypto";
 import WithdrawToBankAccount from "@/pages/dashboard/wallet/withdraw/bank/withdraw-to-bank";
@@ -51,6 +49,10 @@ import InvestmentCertificate from "@/pages/dashboard/profile/investment-certific
 import ContactUs from "@/pages/dashboard/profile/contact-us/contact-us";
 import DeleteAccount from "@/pages/dashboard/profile/delete-account/delete-account";
 import Referrals from "@/pages/dashboard/profile/referrals/profile-referrals";
+import FundWithUsdt from "@/pages/dashboard/wallet/deposit/usd/usdt/fund-with-usdt";
+import FundWithUsdc from "@/pages/dashboard/wallet/deposit/usd/usdc/fund-with-usdc";
+import FundWithCNGN from "@/pages/dashboard/wallet/deposit/ngn/cngn/fund-with-cngn";
+import FundWithYellowcard from "@/pages/dashboard/wallet/deposit/usd/ngn/yellow-card/fund-with-yellowcard";
 
 export const dashboardRoutes: RouteObject[] = [
   {
@@ -164,20 +166,20 @@ export const dashboardRoutes: RouteObject[] = [
 
                   // --- CRYPTO BASED ROUTES ---
                   {
-                    path: "crypto/usdt",
-                    element: <CryptoDeposit />,
+                    path: "usd/usdt",
+                    element: <FundWithUsdt />,
                   },
                   {
-                    path: "crypto/usdc",
-                    element: <CryptoDeposit />,
+                    path: "usd/usdc",
+                    element: <FundWithUsdc />,
                   },
                   {
-                    path: "crypto/cngn",
-                    element: <CryptoDeposit />,
+                    path: "ngn/cngn",
+                    element: <FundWithCNGN />,
                   },
                   {
-                    path: "crypto/usdt/fiat",
-                    element: <FundCryptoWithFiat />,
+                    path: "usd/fiat",
+                    element: <FundWithYellowcard />,
                   },
 
                   // --- FALLBACK ---

@@ -36,6 +36,8 @@ export default function SelectWallet({
   onSelectCurrency,
   handleNext,
 }: SelectWalletProps) {
+  // console.log({ sourceCurrency });
+
   return (
     <div>
       <div>
@@ -45,7 +47,7 @@ export default function SelectWallet({
             <Card
               key={option.name}
               className={cn(
-                "p-2 md:p-4 items-center border-2 bg-custon-input-fill border-custom-input-stroke w-1/3 cursor-pointer",
+                "p-2 md:p-4 items-center border-2 bg-custon-input-fill border-custom-input-stroke w-1/2 cursor-pointer",
                 {
                   "border-custom-orange":
                     selectedWallet === option.name.toUpperCase(),
@@ -81,22 +83,37 @@ export default function SelectWallet({
                 placeholder={
                   selectedWallet
                     ? "Choose a currency"
-                    : "Please select a wallet first"
+                    : "Please select a wallet"
                 }
-              />
+              >
+                <img
+                  src={sourceCurrency?.logo || ""}
+                  alt={sourceCurrency?.name || ""}
+                  className="w-5"
+                />
+                {sourceCurrency ? sourceCurrency.name : ""}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              {availableCurrencies.map((option) => (
-                <SelectItem
-                  key={option.currencyCode}
-                  value={option.currencyCode}
-                >
-                  <div className="flex items-center gap-2">
-                    <img src={option.logo} alt={option.name} className="w-5" />
-                    <span>{option.name}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              {availableCurrencies.map((option) => {
+                console.log({ option });
+
+                return (
+                  <SelectItem
+                    key={`${option.currencyCode}-${option.type}`}
+                    value={`${option.currencyCode}-${option.type}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={option.logo}
+                        alt={option.name}
+                        className="w-5"
+                      />
+                      <span>{option.name}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </div>

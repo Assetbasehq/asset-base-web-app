@@ -16,22 +16,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import FundingSummary from "./_components/funding-summary";
 import { transactionService } from "@/api/transaction.api";
 import { Skeleton } from "@/components/ui/skeleton";
-import PaymentMethods from "./_components/payment-methods";
 import { currencyToCountry } from "@/lib/utils";
 import { Loader } from "lucide-react";
-import DepositAccountDetailsModal from "./_modals/deposit-account-details-modal";
 import type {
   IMomoNetwork,
   IYellowCardDeposit,
   IYellowcardMetaData,
 } from "@/interfaces/yellow-card.interface";
-import MomoNetworks from "./_components/momo-networks";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useCryptoWallets } from "@/hooks/useWallet";
 import SuccessModal from "@/components/modals/success-modal";
+import FundingSummary from "./_components/funding-summary";
+import PaymentMethods from "./_components/payment-methods";
+import MomoNetworks from "./_components/momo-networks";
+import DepositAccountDetailsModal from "./_modals/deposit-account-details-modal";
 
 const currencies = ["NGN", "UGX", "GHS", "KES"];
 type Currency = "NGN" | "UGX" | "GHS" | "KES";
@@ -48,7 +48,7 @@ interface IAmountToFund {
   formattedAmount: string;
 }
 
-export default function FundCryptoWithUsdtYellowCard() {
+export default function FundWithYellowcard() {
   const [amountToFund, setAmountToFund] = useState<IAmountToFund | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [currency, setCurrency] = useState<Currency | null>(null);

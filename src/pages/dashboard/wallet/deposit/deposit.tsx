@@ -35,11 +35,14 @@ export default function Deposit() {
     ? destinationWalletCurrencies[selectedWallet] || []
     : [];
 
-  const handleSelectCurrency = (currencyCode: string) => {
+  const handleSelectCurrency = (currencyCodeAndType: string) => {
     if (!selectedWallet) return;
 
+    const [currencyCode, type] = currencyCodeAndType.split("-");
+
     const selected = availableCurrencies.find(
-      (currency) => currency.currencyCode === currencyCode
+      (currency) =>
+        currency.currencyCode === currencyCode && currency.type === type
     );
 
     if (selected) {
@@ -48,13 +51,22 @@ export default function Deposit() {
   };
 
   const handleNext = () => {
+    console.log({ destinationWallet, sourceCurrency });
+
     if (!destinationWallet || !sourceCurrency) return;
 
-    if (destinationWallet.name.toUpperCase() === "CRYPTO") {
+    if (sourceCurrency.type === "crypto") {
       navigate(
         `/dashboard/wallet/deposit/${destinationWallet.name.toLowerCase()}/${sourceCurrency.currencyCode.toLowerCase()}`
       );
+      return;
     }
+
+    // if (destinationWallet.name.toUpperCase() === "CRYPTO") {
+    //   navigate(
+    //     `/dashboard/wallet/deposit/${destinationWallet.name.toLowerCase()}/${sourceCurrency.currencyCode.toLowerCase()}`
+    //   );
+    // }
 
     //bring up stage 2
     setStage(2);

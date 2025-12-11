@@ -14,11 +14,10 @@ import {
 import { BaseError, parseUnits } from "viem";
 import { truncateWalletAddress } from "@/lib/utils";
 import { ConnectWalletModal } from "@/components/shared/connect-wallet";
-import DepositWrapper from "../_components/deposit-wraper";
-import { Link } from "react-router";
-import { ASSETCHAIN_USDT_TOKEN } from "@/lib/wagmi.config";
+import DepositWrapper from "../../_components/deposit-wraper";
+import { ASSETCHAIN_CNGN_TOKEN } from "@/lib/wagmi.config";
 
-export default function CryptoDeposit() {
+export default function FundWithCNGN() {
   const [copied, setCopied] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amountToFund, setAmountToFund] = useState<number | null>(null);
@@ -71,17 +70,17 @@ export default function CryptoDeposit() {
     try {
       const finalAmount = parseUnits(
         amountToFund.toString(),
-        ASSETCHAIN_USDT_TOKEN.decimals
+        ASSETCHAIN_CNGN_TOKEN.decimals
       );
 
       await writeContractAsync({
-        address: ASSETCHAIN_USDT_TOKEN.address as `0x${string}`,
-        abi: ASSETCHAIN_USDT_TOKEN.abi,
+        address: ASSETCHAIN_CNGN_TOKEN.address as `0x${string}`,
+        abi: ASSETCHAIN_CNGN_TOKEN.abi,
         functionName: "transfer",
         args: [depositData.walletAddress, finalAmount.toString()],
       });
     } catch (err) {
-      console.error("USDT Transaction error:", err);
+      console.error("cNGN Transaction error:", err);
     }
 
     // sendTransaction?.({ to, value, gas: BigInt(21000) });
@@ -94,7 +93,7 @@ export default function CryptoDeposit() {
     <DepositWrapper>
       <div className="flex flex-col gap-4 max-w-4xl">
         <div className="mb-8">
-          <h2 className="text-xl font-semibold">Fund With Crypto</h2>
+          <h2 className="text-xl font-semibold">Fund With cNGN</h2>
           <p className="text-muted-foreground text-sm">
             Fund your wallet to start trading
           </p>
@@ -141,7 +140,7 @@ export default function CryptoDeposit() {
 
         <div className="flex flex-col gap-2">
           <p className="text-custom-grey text-xs md:text-sm">
-            Fund to crypto wallet
+            Fund to NGN wallet
           </p>
 
           <Button
@@ -202,22 +201,6 @@ export default function CryptoDeposit() {
                 </p>
               </div>
             </div>
-          </div>
-
-          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t my-6">
-            <span className="bg-background dark:bg-custom-card text-muted-foreground relative z-10 px-2 text-xs">
-              OR
-            </span>
-          </div>
-
-          <div className="flex gap-1 text-sm justify-center">
-            <p>Got Fiat? Fund with</p>
-            <Link
-              to="/dashboard/wallet/deposit/crypto/usdt/fiat"
-              className="text-custom-orange underline hover:opacity-90 cursor-pointer"
-            >
-              Bank Transfer or Momo
-            </Link>
           </div>
         </div>
 
