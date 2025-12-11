@@ -7,6 +7,7 @@ import { useIoMethods } from "@/hooks/useIoMethod";
 import {
   getAvailableIOMethods,
   getIOMethodRate,
+  normalizeCurrencyInput,
 } from "@/helpers/deposit-methods";
 import { FormatService } from "@/services/format-service";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
@@ -20,15 +21,21 @@ import {
   transactionRequestService,
   type ITransactionRequest,
 } from "@/api/transaction-request";
+import { CustomAlert } from "@/components/custom/custom-alert";
+
+interface IAmountToFund {
+  amount: number;
+  formattedAmount: string;
+}
 
 export default function FundUsdWithUsdRiseWallet() {
-  const [amountToFund, setAmountToFund] = useState<number | null>(null);
+  const [amountToFund, setAmountToFund] = useState<IAmountToFund | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isConfirmationPinModalOpen, setIsConfirmationPinModalOpen] =
     useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [externalWalletId, setExternalWalletId] = useState<string | null>(null);
-
+  
   const [actionRestricted, setActionRestricted] = useState(false);
   const { user, isUserVerified } = useAuthStore();
 
@@ -53,7 +60,7 @@ export default function FundUsdWithUsdRiseWallet() {
       console.log({ data });
       setIsConfirmationPinModalOpen(false);
       setIsSuccessModalOpen(true);
-      setAmountToFund(0);
+      setAmountToFund({ amount: 0, formattedAmount: "" });
     },
     onError: (error) => {
       setError(error.message);
@@ -61,10 +68,22 @@ export default function FundUsdWithUsdRiseWallet() {
     },
   });
 
-  const handleAmountChange = (amount: string) => {
+  const handleAmountChange = (val: string) => {
     setError(null);
-    const amountNumber = Number(amount);
-    if (!isNaN(amountNumber)) setAmountToFund(amountNumber);
+
+    if (val === "") {
+      setAmountToFund(null);
+      return;
+    }
+
+    const { amount, formattedAmount } = normalizeCurrencyInput(val);
+
+    if (amount) {
+      setAmountToFund({
+        amount: Number(amount),
+        formattedAmount,
+      });
+    }
   };
 
   const onConfirm = async (pin: string) => {
@@ -78,7 +97,7 @@ export default function FundUsdWithUsdRiseWallet() {
     }
 
     const payload: ITransactionRequest = {
-      amount: amountToFund as number,
+      amount: amountToFund?.amount as number,
       currency: "usd",
       dest_wallet_currency: "usd",
       external_wallet_id: externalWalletId as string,
@@ -90,7 +109,7 @@ export default function FundUsdWithUsdRiseWallet() {
     mutation.mutateAsync(payload);
   };
 
-  const isMinimumAmount = amountToFund ? amountToFund >= 10 : false;
+  const isMinimumAmount = amountToFund ? amountToFund?.amount >= 10 : false;
 
   // console.log({ isMinimumAmount, v: !isUserVerified() });
 
@@ -131,10 +150,14 @@ export default function FundUsdWithUsdRiseWallet() {
         <div className="flex justify-between">
           <p>Amount to deduct</p>
           <p className="font-semibold">
-            {FormatService.formatToUSD(amountToFund || 0)}
+            {FormatService.formatToUSD(amountToFund?.amount || 0)}
           </p>
         </div>
       </div>
+
+      {amountToFund && !isMinimumAmount && (
+        <CustomAlert variant="warning" message={"Minimum deposit is $10"} />
+      )}
 
       <AnimatedWrapper animationKey={String(user?.metadata?.rise_account_id)}>
         <RiseAccount
@@ -167,7 +190,7 @@ export default function FundUsdWithUsdRiseWallet() {
         }}
         title="Funnding Successful"
         description={`You have successfully funded your wallet with ${FormatService.formatCurrency(
-          amountToFund,
+          amountToFund?.amount,
           "usd"
         )}.`}
         buttonText="Close"

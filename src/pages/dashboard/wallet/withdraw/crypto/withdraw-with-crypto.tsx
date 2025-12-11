@@ -125,9 +125,6 @@ export default function WithdrawToCrypto() {
 
     console.log({ payload });
 
-    // Trigger withdrawal logic here
-    // e.g. call backend: /wallet/withdraw
-
     mutateAsync(payload);
     // setWithdrawOpen(false);
   };

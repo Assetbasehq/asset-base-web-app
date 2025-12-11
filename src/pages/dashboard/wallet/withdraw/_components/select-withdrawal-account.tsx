@@ -4,8 +4,16 @@ import riseIcon from "@/assets/icons/rise-icon.svg";
 import { RiBankLine } from "react-icons/ri";
 import { flags } from "@/constants/images";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useOutletContext } from "react-router";
 import { cn } from "@/lib/utils";
+
+interface IWithdrawContext {
+  amountToWithdraw: {
+    amount: number | null;
+    formattedAmount: string;
+  } | null;
+  currency: "usd" | "ngn";
+}
 
 const options = [
   {
@@ -32,6 +40,8 @@ const options = [
 ];
 export default function SelectWithdrawAccount() {
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
+
+  const { amountToWithdraw, currency } = useOutletContext<IWithdrawContext>();
 
   const navigate = useNavigate();
 
@@ -64,7 +74,11 @@ export default function SelectWithdrawAccount() {
       </div>
       <Button
         onClick={handleProceed}
-        disabled={!selectedWallet}
+        disabled={
+          !selectedWallet
+          // !amountToWithdraw?.amount ||
+          // amountToWithdraw.amount < 10
+        }
         className="btn-primary rounded-full py-6 mt-4 w-full"
       >
         PROCEED TO WITHDRAWAL

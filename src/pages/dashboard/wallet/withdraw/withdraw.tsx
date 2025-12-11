@@ -85,6 +85,15 @@ export default function Withdraw() {
 
   const maxAmount = walletData?.balance || 0;
   const amountToWithdrawAsNumber = Number(amountToWithdraw?.amount || 0);
+  const isMaxAmount = amountToWithdraw
+    ? amountToWithdrawAsNumber > maxAmount
+    : false;
+
+  const isMinimumAmount = amountToWithdraw
+    ? amountToWithdrawAsNumber >= 10
+    : true;
+
+  // console.log({ amountToWithdraw: !!amountToWithdraw });
 
   return (
     <div className="text-custom-white-text flex flex-col gap-4">
@@ -159,12 +168,19 @@ export default function Withdraw() {
             </div>
           </div>
 
-          {amountToWithdraw && amountToWithdrawAsNumber > maxAmount ? (
+          {isMaxAmount && (
             <CustomAlert
               variant="warning"
               message={`You don't have enough funds to withdraw ${amountToWithdrawAsNumber} USD.`}
             />
-          ) : null}
+          )}
+
+          {!isMinimumAmount && (
+            <CustomAlert
+              variant="warning"
+              message={`Minimum withdrawal amount is $10`}
+            />
+          )}
 
           <Separator />
 
