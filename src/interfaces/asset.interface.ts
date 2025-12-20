@@ -46,4 +46,7 @@ export interface IAsset {
   updated_at: string;
   video_url: string | null;
   number_of_investors: number;
+
+  web3_service_id: string;
+  trading_type: "primary" | "secondary";
 }

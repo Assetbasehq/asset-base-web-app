@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
-import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AssetInfo from "./_components/asset-info/asset-info";
@@ -11,9 +10,8 @@ import { useState } from "react";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import AssetDetailPro from "../asset-detail-pro/asset-detail-pro";
 import { useAsset } from "@/hooks/useAssets";
+import { useAssetMarketPrice } from "@/hooks/use-trade";
 // import AssetDetailPro from "./asset-detail-pro/asset-detail-pro";
-
-
 
 export default function AssetDetail() {
   const [isPro, setIsPro] = useState(false);
@@ -34,8 +32,6 @@ export default function AssetDetail() {
     isLoading,
     isError,
   } = useAsset({ asset_symbol: asset_symbol as string });
-
-  console.log({ asset });
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;

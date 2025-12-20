@@ -1,12 +1,12 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useTrendingAssets } from "@/hooks/useAssets";
+import { useAsset, useGetAssets } from "@/hooks/useAssets";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { IAsset } from "@/interfaces/asset.interface";
 
 export default function TrendingSecurities() {
-  const { data, isLoading, isError } = useTrendingAssets();
+  const { data, isLoading, isError } = useGetAssets();
 
   console.log({ data });
 
@@ -38,7 +38,8 @@ function Securities({
   isLoading,
   isError,
 }: {
-  data: { asset: IAsset; number_of_investors: number }[] | undefined;
+  // data: { asset: IAsset; number_of_investors: number }[] | undefined;
+  data: IAsset[] | undefined;
   isLoading: boolean;
   isError: boolean;
 }) {
@@ -57,22 +58,18 @@ function Securities({
 
   return (
     <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
-      {data.map((item, i) => (
+      {data.map((asset, i) => (
         <Link
-          to={`/dashboard/assets/${item?.asset.slug}`}
+          to={`/dashboard/assets/${asset.slug}`}
           key={i}
-          className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2"
+          className=" bg-custom-light-bg flex gap-2 s-center justify-between rounded-lg p-2"
         >
-          <div className="flex items-end text-start gap-16 w-full">
-            <div className="flex items-center gap-2">
-              <img
-                src={item?.asset.image_urls[0]}
-                alt=""
-                className="w-10 h-10"
-              />
+          <div className="flex s-end text-start gap-16 w-full">
+            <div className="flex s-center gap-2">
+              <img src={asset.image_urls[0]} alt="" className="w-10 h-10" />
               <div>
-                <h2 className="font-semibold">{item?.asset.asset_symbol}</h2>
-                <small className="text-xs">{item?.asset.price_per_share}</small>
+                <h2 className="font-semibold">{asset.asset_symbol}</h2>
+                <small className="text-xs">{asset.price_per_share}</small>
               </div>
             </div>
             {/* <p className="text-green-400 text-xs">{item.price_change_24hrs}</p> */}

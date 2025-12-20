@@ -44,8 +44,12 @@ export default function WithdrawToCrypto() {
 
   const { amountToWithdraw, currency } = useOutletContext<WithdrawContext>();
 
-  const { data: supportedNetworks } = useSupportedNetworks({});
   const { data: supportedAssets } = useSupportedAssets({});
+  const { data: supportedNetworks } = useSupportedNetworks({
+    asset: selectedAsset ? selectedAsset?.symbol : undefined,
+  });
+
+  // console.log({ supportedAssets, supportedNetworks, selectedAsset });
 
   const {
     address,
@@ -72,6 +76,7 @@ export default function WithdrawToCrypto() {
       setSuccess(data.message);
       setWithdrawOpen(false);
       setIsSuccessModalOpen(true);
+      queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
       const newB = await refetchBalance();
 
       console.log({ newB });

@@ -1,5 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import { useAssetMarketPrice } from "@/hooks/use-trade";
 import type { IAsset } from "@/interfaces/asset.interface";
 import { cn } from "@/lib/utils";
 import { FormatService } from "@/services/format-service";
@@ -21,6 +23,18 @@ export default function AssetInfo({
   isChecked,
   onSwitch,
 }: AssetInfoProps) {
+  const { data: assetMarketPriceData, isLoading: isLoadingMarketPrice } =
+    useAssetMarketPrice({
+      assetWeb3ServiceId: asset?.web3_service_id || "",
+    });
+
+  const assetMarketPrice =
+    !isLoadingMarketPrice && assetMarketPriceData
+      ? assetMarketPriceData?.data?.buyingPrice
+      : 0;
+
+  console.log({ assetMarketPrice });
+
   return (
     <Card className="bg-custom-card border-none text-start shadow-none py-0">
       <CardContent className="text-white p-4">
@@ -46,9 +60,15 @@ export default function AssetInfo({
             <div className="flex flex-col gap-2 mb-2 md:mb-0">
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-xl  sm:text-3xl text-custom-white-text">
-                  {FormatService.formatCurrency(
-                    asset.price_per_share,
-                    asset.currency
+                  {isLoadingMarketPrice ? (
+                    <Skeleton className="h-8 w-full rounded-md" />
+                  ) : (
+                    <span className="font-semibold text-xl  sm:text-3xl text-custom-white-text">
+                      {FormatService.formatCurrency(
+                        assetMarketPrice,
+                        asset.currency
+                      )}
+                    </span>
                   )}
                 </p>
                 <small

@@ -1,4 +1,3 @@
-import type { IParams } from "@/interfaces/params.interface";
 import axiosInstance from "@/lib/axios.config";
 import { handleAxiosError } from "@/lib/utils";
 

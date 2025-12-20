@@ -85,7 +85,7 @@ export const useGetAddressTransactions = (address: string) => {
 
 export const useSupportedNetworks = (params: IParams) => {
   return useQuery<any, Error>({
-    queryKey: ["supported-networks"],
+    queryKey: ["supported-networks", params],
     queryFn: () => walletService.getSupportedNetworks(params),
   });
 };
