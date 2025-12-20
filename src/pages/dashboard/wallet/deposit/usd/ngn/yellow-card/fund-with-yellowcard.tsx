@@ -4,7 +4,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
-import { FormatService } from "@/services/format-service";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { commonService } from "@/api/common.api";
@@ -32,6 +31,7 @@ import FundingSummary from "./_components/funding-summary";
 import PaymentMethods from "./_components/payment-methods";
 import MomoNetworks from "./_components/momo-networks";
 import DepositAccountDetailsModal from "./_modals/deposit-account-details-modal";
+import { formatService } from "@/services/format-service";
 
 const currencies = ["NGN", "UGX", "GHS", "KES"];
 type Currency = "NGN" | "UGX" | "GHS" | "KES";
@@ -232,7 +232,7 @@ export default function FundWithYellowcard() {
               <div className="font-semibold">
                 {currency &&
                   foundRateMemo &&
-                  FormatService.formatCurrency(
+                  formatService.formatCurrency(
                     foundRateMemo,
                     currency || "USD"
                   )}
@@ -291,7 +291,7 @@ export default function FundWithYellowcard() {
               className="text-xs md:text-sm text-muted-foreground"
             >
               I want to fund{" "}
-              {FormatService.formatCurrency(amountToDeduct, "USD")}
+              {formatService.formatCurrency(amountToDeduct, "USD")}
             </Label>
           </div>
 

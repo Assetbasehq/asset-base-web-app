@@ -9,7 +9,7 @@ import {
 import { useOrders } from "@/hooks/use-orders";
 import type { IOrder } from "@/interfaces/order.interface";
 import { dateTimeService } from "@/services/date-time-service";
-import { FormatService } from "@/services/format-service";
+import { formatService } from "@/services/format-service";
 import { useAuthStore } from "@/store/auth-store";
 
 export default function AssetOrderHistory() {
@@ -68,7 +68,7 @@ export default function AssetOrderHistory() {
                 {order.price_per_share}
               </TableCell>
               <TableCell className="text-left">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   order.number_of_shares * order.price_per_share,
                   "usd"
                 )}

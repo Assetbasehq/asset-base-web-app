@@ -11,6 +11,8 @@ import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import AssetDetailPro from "../asset-detail-pro/asset-detail-pro";
 import { useAsset } from "@/hooks/useAssets";
 import { useAssetMarketPrice } from "@/hooks/use-trade";
+import { Card, CardContent } from "@/components/ui/card";
+
 // import AssetDetailPro from "./asset-detail-pro/asset-detail-pro";
 
 export default function AssetDetail() {
@@ -37,6 +39,42 @@ export default function AssetDetail() {
   if (isError) return <p>Error</p>;
 
   if (!asset) return <p>Asset not found</p>;
+
+  if (asset && asset.trading_type === "primary") {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Card className="bg-custom-card border-none shadow-none max-w-md w-full">
+          <CardContent className="p-6 flex flex-col gap-4 text-center">
+            <div className="flex flex-col items-center gap-2 justify-center">
+              {/* <RiFlashlightFill className="text-custom-orange w-10 h-10" /> */}
+              <img
+                src={asset.logo}
+                alt={asset.asset_description}
+                className="h-12 rounded"
+              />
+              <h2 className=" font-semibold text-xl">{asset.asset_symbol}</h2>
+            </div>
+
+            <h2 className="text-lg font-semibold text-custom-white">
+              Available in Primary Market
+            </h2>
+
+            <p className="text-sm text-custom-grey">
+              This asset is currently available in the primary market. You can
+              invest directly at the offering price.
+            </p>
+
+            <Button
+              onClick={() => navigate(`/dashboard/launchpad/${asset.slug}`)}
+              className="btn-primary py-5 rounded-full mt-2"
+            >
+              Invest in Primary Market
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isPro) {
     return (

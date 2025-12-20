@@ -3,9 +3,9 @@ import { twMerge } from "tailwind-merge";
 import { AxiosError } from "axios";
 import { v4 as uuidv4 } from "uuid";
 import type { IOMethod, WalletTransaction } from "@/interfaces/wallet.interfae";
-import { FormatService } from "@/services/format-service";
 import type { CardItem } from "@/interfaces/external-wallets";
 import type { UserBankAccount } from "@/interfaces/user.interface";
+import { formatService } from "@/services/format-service";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -271,30 +271,30 @@ export function getTransactionDescription(
         transaction.metadata.number_of_shares > 1 ? "s" : ""
       } of ${transaction.metadata.asset_name} ${
         transaction.transaction_type == "credit" ? "for" : "at"
-      } ${FormatService.formatCurrency(
+      } ${formatService.formatCurrency(
         transaction.metadata.price_per_share,
         currency ?? transaction.metadata.currency
       )} per share`;
 
     case "assets.exchange.fee":
-      return `${FormatService.formatCurrency(
+      return `${formatService.formatCurrency(
         transaction.amount,
         currency ?? transaction.metadata.currency
       )} processing fee on ${transaction.metadata.asset_name} asset exchange`;
 
     case "wallets.exchange":
       return transaction.transaction_type == "credit"
-        ? `You have successfully received ${FormatService.formatCurrency(
+        ? `You have successfully received ${formatService.formatCurrency(
             transaction.amount,
             transaction.metadata.dest_currency
           )} from your ${transaction.metadata.src_currency} wallet`
-        : `You have successfully transferred ${FormatService.formatCurrency(
+        : `You have successfully transferred ${formatService.formatCurrency(
             transaction.amount,
             transaction.metadata.src_currency
           )} to your ${transaction.metadata.dest_currency} wallet`;
 
     case "moneyio.funding":
-      return `Your wallet was funded with ${FormatService.formatCurrency(
+      return `Your wallet was funded with ${formatService.formatCurrency(
         transaction.amount,
         currency ??
           transaction.metadata.details.currency ??
@@ -303,7 +303,7 @@ export function getTransactionDescription(
 
     case "moneyio.withdrawal":
       return transaction.metadata.provider === "assetbase"
-        ? `You have successfully transferred ${FormatService.formatCurrency(
+        ? `You have successfully transferred ${formatService.formatCurrency(
             transaction.amount,
             transaction.metadata.details.currency
           )} to a user `
@@ -311,7 +311,7 @@ export function getTransactionDescription(
             transaction.status === "pending"
               ? "You have a pending withdrawal of"
               : "Your wallet was debited with"
-          } ${FormatService.formatCurrency(
+          } ${formatService.formatCurrency(
             transaction.amount,
             currency ??
               transaction.metadata.details.currency ??
@@ -360,19 +360,19 @@ function getReturnsDescription(transaction: WalletTransaction) {
   if (transaction.reason === "asset.distribution.returns") {
     if (isAdmin) {
       return transaction.transaction_type == "credit"
-        ? `You received a left over of profit distribution of ${FormatService.formatCurrency(
+        ? `You received a left over of profit distribution of ${formatService.formatCurrency(
             transaction.amount,
             transaction.metadata.currency
           )} on ${transaction.metadata?.asset_name} asset`
         : transaction.transaction_type == "debit"
-        ? `You paid returns of ${FormatService.formatCurrency(
+        ? `You paid returns of ${formatService.formatCurrency(
             transaction.amount,
             transaction.metadata.currency
           )} on ${transaction.metadata?.asset_name} asset`
         : transaction.description;
     } else {
       return transaction.transaction_type == "credit"
-        ? `You received a return of ${FormatService.formatCurrency(
+        ? `You received a return of ${formatService.formatCurrency(
             transaction.amount,
             transaction.metadata.currency
           )} on your investment in ${transaction.metadata?.asset_name}`

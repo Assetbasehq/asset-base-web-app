@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/dialog";
 import type { CardItem } from "@/interfaces/external-wallets";
 import doubleCheckImage from "@/assets/images/check-double-line.svg";
-import { FormatService } from "@/services/format-service";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import { formatService } from "@/services/format-service";
 
 interface CardSelectionModalProps {
   card: CardItem | null;
@@ -37,7 +37,7 @@ export default function ConfirmCardSelection({
       <Loader /> Processing...
     </span>
   ) : (
-    <span> Fund with {FormatService.formatToNaira(amountToFund)}</span>
+    <span> Fund with {formatService.formatToNaira(amountToFund)}</span>
   );
 
   if (!isOpen) return null;
@@ -62,7 +62,7 @@ export default function ConfirmCardSelection({
             </span>{" "}
             to fund wallet with{" "}
             <span className="font-medium">
-              {FormatService.formatToNaira(amountToFund)}
+              {formatService.formatToNaira(amountToFund)}
             </span>
             . Are you sure you want to proceed with this transaction?
           </DialogDescription>

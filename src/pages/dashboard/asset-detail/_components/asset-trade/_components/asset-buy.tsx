@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormatService } from "@/services/format-service";
 import { currencyToSymbol } from "@/services/currency-service";
 import { PinConfirmationModal } from "@/components/modals/pin-confirmation";
 import { useState } from "react";
@@ -31,6 +30,7 @@ import {
   useEstimatePaymentAmount,
 } from "@/hooks/use-trade";
 import { tradeService } from "@/api/trade-service.api";
+import { formatService } from "@/services/format-service";
 
 type BuyFormValues = {
   orderType: "ask" | "bid" | "buy_limit_order" | "sell_limit_order" | string;
@@ -39,19 +39,19 @@ type BuyFormValues = {
   quantity: string;
 };
 
+type ModalState = {
+  isOpen: boolean;
+  title: string;
+  description: string;
+  buttonText: string;
+};
+
 export default function AssetBuy({ asset }: { asset: IAsset }) {
   const [isPinModalOpen, setPinModalOpen] = useState(false);
   const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successModal, setSuccessModal] = useState<{
-    isOpen: boolean;
-    onClose: () => void;
-    title: string;
-    description: string;
-    buttonText: string;
-  }>({
+  const [successModal, setSuccessModal] = useState<ModalState>({
     isOpen: false,
-    onClose: () => {},
     title: "",
     description: "",
     buttonText: "",
@@ -59,10 +59,13 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
 
   const queryClient = useQueryClient();
 
-  const { data: assetMarketPriceData, isLoading: isLoadingMarketPrice } =
-    useAssetMarketPrice({
-      assetWeb3ServiceId: asset?.web3_service_id || "",
-    });
+  const {
+    data: assetMarketPriceData,
+    isLoading: isLoadingMarketPrice,
+    isError,
+  } = useAssetMarketPrice({
+    assetWeb3ServiceId: asset?.web3_service_id || "",
+  });
 
   const assetMarketPrice =
     !isLoadingMarketPrice && assetMarketPriceData
@@ -74,9 +77,9 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
   const form = useForm<BuyFormValues>({
     defaultValues: {
       orderType: "market",
-      quantity: "1",
+      quantity: "",
       price_per_share: assetMarketPrice.toString(),
-      number_of_shares: "1",
+      number_of_shares: "",
     },
   });
 
@@ -111,14 +114,16 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
       // setSuccessModalOpen(true);
       setSuccessModal({
         isOpen: true,
-        onClose: () => setSuccessModal({ ...successModal, isOpen: false }),
-        title: "Order placed successfully",
-        description: "Your order has been placed successfully.",
+
+        title: "Buy Order placed successfully",
+        description: `You've successfully placed a buy order for ${quantity} shares of ${asset.asset_symbol}.`,
         buttonText: "Close",
       });
 
-      // invalidate asset to update available shares and order history
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      // invalidate asset market price and history to update market price and order history
+      queryClient.invalidateQueries({
+        queryKey: ["orders", "asset-market-price"],
+      });
 
       form.reset();
     },
@@ -141,9 +146,8 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
 
       setSuccessModal({
         isOpen: true,
-        onClose: () => setSuccessModal({ ...successModal, isOpen: false }),
-        title: `Order placed successfully`,
-        description: `Your order for ${quantity} shares has been placed successfully.`,
+        title: `Buy order placed successfully`,
+        description: `You've successfully placed a buy order for ${quantity} shares of ${asset.asset_symbol}.`,
         buttonText: "Close",
       });
 
@@ -177,8 +181,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
     const payload = {
       ...values,
       asset_id: asset.id,
-      order_type:
-        values.orderType === "limit" ? "bid" : ("buy_limit_order" as string),
+      order_type: values.orderType === "limit" ? "bid" : "",
       pin,
     };
 
@@ -190,12 +193,12 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
       ? Number(price) > Number(assetMarketPrice)
       : false;
 
-  const isPriceBelowZero =
+  const isQuantityLessThanZero =
     orderType === "market" && Number(quantity) <= 0 ? true : false;
 
   const marketQuantityToBuy =
     !estimatedAmountLoading && estimatedAmountData
-      ? FormatService.formatCurrency(estimatedAmountData?.data?.paymentAmount)
+      ? formatService.formatCurrency(estimatedAmountData?.data?.paymentAmount)
       : "...";
 
   return (
@@ -295,6 +298,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                       <Input
                         className="w-full py-6"
                         type="text"
+                        placeholder="0"
                         {...field}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -317,7 +321,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                 </FormLabel>
                 <Input
                   className="w-full py-6 bg-muted cursor-not-allowed"
-                  value={FormatService.formatCurrency(
+                  value={formatService.formatCurrency(
                     totalAmount,
                     asset.currency
                   )}
@@ -343,6 +347,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                     <Input
                       className="w-full py-6"
                       type="text"
+                      placeholder="0"
                       {...field}
                       onChange={(e) => {
                         const value = e.target.value;
@@ -366,7 +371,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
             />
           )} */}
 
-          {orderType === "market" && !isPriceBelowZero && (
+          {orderType === "market" && !isQuantityLessThanZero && (
             <CustomAlert
               variant="warning"
               message={`Estimated amount: ${marketQuantityToBuy}`}
@@ -377,7 +382,9 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
             SUBMIT
           ----------------------------- */}
           <Button
-            disabled={isPending || isPriceBelowMarketPrice || isPriceBelowZero}
+            disabled={
+              isPending || isPriceBelowMarketPrice || isQuantityLessThanZero
+            }
             className="w-full py-5 rounded-full text-custom-white bg-custom-ticker-green hover:bg-custom-ticker-green/90 cursor-pointer"
           >
             {isPending ? "Processing..." : `Buy ${asset.asset_symbol}`}
@@ -399,18 +406,11 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
       />
 
       <SuccessModal
-        isOpen={successModal.isOpen}
-        onClose={successModal.onClose}
-        title={successModal.title}
-        description={successModal.description}
-        buttonText={successModal.buttonText}
-        // isOpen={isSuccessModalOpen}
-        // onClose={() => {
-        //   setSuccessModalOpen(false);
-        // }}
-        // title="Order Successful"
-        // description="Your order has been placed successfully."
-        // buttonText="Close"
+        isOpen={successModal?.isOpen}
+        onClose={() => setSuccessModal({ ...successModal, isOpen: false })}
+        title={successModal?.title}
+        description={successModal?.description}
+        buttonText={successModal?.buttonText}
       />
     </div>
   );

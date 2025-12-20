@@ -18,9 +18,9 @@ import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router";
 import { useCryptoWallets, useWallet } from "@/hooks/useWallet";
 import { useMemo, useState } from "react";
-import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
 import { useGetPortfolioOverview } from "@/hooks/use-portfolio";
+import { formatService } from "@/services/format-service";
 
 interface TotalBalanceProps {
   currency: "usd" | "ngn";
@@ -91,7 +91,7 @@ export default function TotalBalance({
     // }
 
     // Format based on selected currency
-    return FormatService.formatCurrency(total, currency);
+    return formatService.formatCurrency(total, currency);
   }, [cryptoWallets, walletData, portfolioOverview, currency]);
 
   const walletBalance = useMemo(() => {
@@ -118,10 +118,10 @@ export default function TotalBalance({
     }
 
     // Format based on selected currency
-    return FormatService.formatCurrency(total, currency);
+    return formatService.formatCurrency(total, currency);
   }, [cryptoWallets, walletData, portfolioOverview, currency]);
 
-  const InvestmentBalance = FormatService.formatCurrency(
+  const InvestmentBalance = formatService.formatCurrency(
     portfolioOverview?.balance,
     currency
   );

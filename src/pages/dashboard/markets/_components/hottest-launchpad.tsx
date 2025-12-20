@@ -1,5 +1,5 @@
 import { useTrendingAssets } from "@/hooks/useAssets";
-import { FormatService } from "@/services/format-service";
+import { formatService } from "@/services/format-service";
 import { Link } from "react-router";
 
 export default function HottestLaunchpad() {
@@ -41,7 +41,7 @@ export default function HottestLaunchpad() {
                       {item.asset.asset_name}
                     </h2>
                     <small className="text-xs font-normal">
-                      {FormatService.formatCurrency(
+                      {formatService.formatCurrency(
                         item.asset.price_per_share,
                         item.asset.currency
                       )}

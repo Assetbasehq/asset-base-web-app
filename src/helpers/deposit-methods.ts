@@ -1,5 +1,5 @@
 import type { IOMethod } from "@/interfaces/wallet.interfae";
-import { FormatService } from "@/services/format-service";
+import { formatService } from "@/services/format-service";
 
 export const getAvailableIOMethods = (
   ioMethods: IOMethod[] = [],
@@ -90,8 +90,9 @@ export const getIOMethodRate = (method: IOMethod) => {
 
 export const normalizeCurrencyInput = (input: string) => {
   const cleanedAmount = input.replace(/,/g, "");
-  if (isNaN(Number(cleanedAmount))) {
-    return { amount: "", formattedAmount: "" };
+  const prev = cleanedAmount.split("").slice(-1)[0];
+  if (!/^[\d.]*$/.test(cleanedAmount)) {
+    return { amount: prev, formattedAmount: prev };
   }
 
   if (cleanedAmount === "0") {
@@ -107,29 +108,36 @@ export const normalizeCurrencyInput = (input: string) => {
   }
 
   if (cleanedAmount.includes(".")) {
-    const [whole, decimal = ""] = cleanedAmount.split(".");
-    // Reject multiple dots
-    if (cleanedAmount.split(".").length > 2) {
-      return { amount: "", formattedAmount: "" };
-    }
+    const firstDotIndex = cleanedAmount.indexOf(".");
 
-    // Limit decimals to 2
+    console.log({ firstDotIndex });
+
+    const whole = cleanedAmount.slice(0, firstDotIndex);
+    const decimal = cleanedAmount.slice(firstDotIndex + 1).replace(/\./g, "");
+
     const safeDecimal = decimal.slice(0, 2);
-    const rawAmount = `${whole}.${safeDecimal}`;
-    const formattedWhole = FormatService.formatWithCommas(Number(whole) || 0);
+
+    const rawAmount =
+      safeDecimal !== "" ? `${whole}.${safeDecimal}` : `${whole}.`;
+
+    const formattedWhole = formatService.formatWithCommas(Number(whole) || 0);
+
     const formatted =
       safeDecimal !== ""
         ? `${formattedWhole}.${safeDecimal}`
-        : `${formattedWhole}${decimal === "" ? "." : ""}`;
+        : `${formattedWhole}.`;
+
+    console.log({ rawAmount, formatted });
 
     return {
       amount: rawAmount,
       formattedAmount: formatted,
     };
   }
+
   // Pure integer
   const rawAmount = String(Number(cleanedAmount) || 0);
-  const formatted = FormatService.formatWithCommas(Number(cleanedAmount) || 0);
+  const formatted = formatService.formatWithCommas(Number(cleanedAmount) || 0);
 
   return {
     amount: rawAmount,
@@ -167,7 +175,7 @@ export const normalizeInput = (input: string) => {
     // Limit decimals to 2
     const safeDecimal = decimal.slice(0, 2);
     const rawAmount = `${whole}.${safeDecimal}`;
-    const formattedWhole = FormatService.formatWithCommas(Number(whole) || 0);
+    const formattedWhole = formatService.formatWithCommas(Number(whole) || 0);
     const formatted =
       safeDecimal !== ""
         ? `${formattedWhole}.${safeDecimal}`
@@ -180,7 +188,7 @@ export const normalizeInput = (input: string) => {
   }
   // Pure integer
   const rawAmount = String(Number(cleanedAmount) || 0);
-  const formatted = FormatService.formatWithCommas(Number(cleanedAmount) || 0);
+  const formatted = formatService.formatWithCommas(Number(cleanedAmount) || 0);
 
   return {
     amount: rawAmount,

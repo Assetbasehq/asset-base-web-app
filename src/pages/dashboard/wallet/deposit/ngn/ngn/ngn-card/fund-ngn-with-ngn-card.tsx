@@ -17,7 +17,6 @@ import {
   type ITransactionRequest,
 } from "@/api/transaction-request";
 import { Button } from "@/components/ui/button";
-import { FormatService } from "@/services/format-service";
 import { useGetExternalWallets } from "@/hooks/use-external-wallets";
 import { RiArrowRightSLine, RiBankCardLine } from "react-icons/ri";
 import SaveCardModal from "../../../_components/save-card-modal";
@@ -26,6 +25,7 @@ import { CustomAlert } from "@/components/custom/custom-alert";
 import ConfirmCardSelection from "../../../_common/confirm-card-selection";
 import ExternalWallets from "../../../_common/external-wallets";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToFund {
   amount: number | null;
@@ -237,7 +237,7 @@ export default function FundNgnWithNgnCard() {
             <h2 className="text-xl font-semibold">Fund With Naira Card</h2>
             <p className="text-muted-foreground text-sm">
               Minimum deposit is{" "}
-              {selectedMethod && FormatService.formatToNaira(minimumAmount)}
+              {selectedMethod && formatService.formatToNaira(minimumAmount)}
             </p>
           </div>
           <div className="flex flex-col gap-2">
@@ -257,7 +257,7 @@ export default function FundNgnWithNgnCard() {
           {amountToFund && !isMinimumAmount ? (
             <CustomAlert
               variant="warning"
-              message={`Minimum deposit is ${FormatService.formatToNaira(
+              message={`Minimum deposit is ${formatService.formatToNaira(
                 minimumAmount
               )}`}
             />
@@ -269,19 +269,19 @@ export default function FundNgnWithNgnCard() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToNaira(amountToFund?.amount)}
+                {formatService.formatToNaira(amountToFund?.amount)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToNaira(calculatedFee)}
+                {formatService.formatToNaira(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Amount you'll receive</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToNaira(amountToReceive)}
+                {formatService.formatToNaira(amountToReceive)}
               </p>
             </div>
           </div>

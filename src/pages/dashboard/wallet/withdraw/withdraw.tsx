@@ -7,7 +7,6 @@ import { flags } from "@/constants/images";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import WithdrawBreadCrumb from "./_components/withdraw-bread-crumb";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FormatService } from "@/services/format-service";
 import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import {
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Outlet, useLocation } from "react-router";
 import { useWallet } from "@/hooks/useWallet";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToWithdraw {
   amount: number | null;
@@ -159,7 +159,7 @@ export default function Withdraw() {
                 <Skeleton className="h-8 w-32 rounded-md" />
               ) : (
                 <h2 className="text-base font-meduim">
-                  {FormatService.formatCurrency(
+                  {formatService.formatCurrency(
                     walletData?.balance || 0,
                     currency
                   )}

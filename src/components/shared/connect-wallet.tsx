@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FormatService } from "@/services/format-service";
 import { useState } from "react";
 import shieldImage from "@/assets/images/shield-fingerprint.svg";
 import { cn } from "@/lib/utils";
@@ -21,6 +20,7 @@ import {
 } from "wagmi";
 import { formatEther } from "viem";
 import { ASSETCHAIN_USDT_TOKEN } from "@/lib/wagmi.config";
+import { formatService } from "@/services/format-service";
 
 export interface ConnectWalletProps {
   className?: string;
@@ -38,10 +38,10 @@ export default function ConnectWallet({ className }: ConnectWalletProps) {
   });
 
   const formattedBalance = walletBalance
-    ? FormatService.formatToUSD(
+    ? formatService.formatToUSD(
         parseFloat(formatEther(walletBalance.value)) || 0
       )
-    : FormatService.formatToUSD(0);
+    : formatService.formatToUSD(0);
 
   const handleOpen = () => setOpen(true);
 

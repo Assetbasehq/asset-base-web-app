@@ -10,8 +10,8 @@ import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
 import { useWallet } from "@/hooks/useWallet";
 import type { IAsset } from "@/interfaces/asset.interface";
 import { calculateRaisePercentage } from "@/lib/utils";
-import { FormatService } from "@/services/format-service";
-import { useMutation } from "@tanstack/react-query";
+import { formatService } from "@/services/format-service";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { RiFlashlightFill } from "react-icons/ri";
@@ -27,6 +27,9 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
     useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pinError, setPinError] = useState<string | null>(null);
+
+  const queryClient = useQueryClient();
 
   const { register, handleSubmit, setValue, watch, reset } =
     useForm<InvestFormData>({
@@ -53,19 +56,34 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
       setIsConfirmationPinModalOpen(false);
       setIsSuccessModalOpen(true);
       reset();
+      setError(null);
+      setPinError(null);
+      queryClient.invalidateQueries({
+        queryKey: ["wallet-balance"],
+      });
 
       // invalidate asset to update available shares
     },
     onError: (error) => {
-      setError(error.message);
+      setPinError(error.message);
       // console.log({ error });
     },
   });
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     const value = e.target.value;
 
     const { amount, formattedAmount } = normalizeCurrencyInput(value);
+
+    const isInteger = Number.isInteger(Number(amount));
+
+    if (!isInteger || amount.includes(".")) {
+      setError("Quantity must be an integer");
+      return;
+    }
+
+    console.log({ value, isInteger });
 
     setValue("quantity", Number(amount || 0));
     setValue("quantityFormatted", formattedAmount);
@@ -100,7 +118,7 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
           <div className="flex justify-between">
             <p>Price Per Share</p>
             <p className=" font-medium">
-              {FormatService.formatCurrency(
+              {formatService.formatCurrency(
                 asset.price_per_share,
                 asset.currency
               )}
@@ -109,13 +127,13 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
           <div className="flex justify-between">
             <p>Available Shares</p>
             <p className=" font-medium">
-              {FormatService.formatWithCommas(asset?.available_shares)}
+              {formatService.formatWithCommas(asset?.available_shares)}
             </p>
           </div>
           <div className="flex justify-between">
             <p>Price Per Share</p>
             <p className=" font-medium">
-              {FormatService.formatCurrency(
+              {formatService.formatCurrency(
                 asset?.price_per_share,
                 asset.currency
               )}
@@ -164,7 +182,7 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
             type="text"
             readOnly
             disabled
-            value={FormatService.formatCurrency(
+            value={formatService.formatCurrency(
               estimatedAmount || 0,
               asset.currency
             )}
@@ -176,7 +194,7 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
           <small>
             <span className=""> Available Balance: </span>
             <span className="font-medium">
-              {FormatService.formatCurrency(walletBalance, asset.currency)}
+              {formatService.formatCurrency(walletBalance, asset.currency)}
             </span>
           </small>
         </div>
@@ -187,6 +205,10 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
             message="Insufficient Balance"
             className="my-2"
           />
+        )}
+
+        {error && (
+          <CustomAlert variant="warning" message={error} className="my-2" />
         )}
 
         <Button
@@ -208,8 +230,8 @@ export default function AssetFinance({ asset }: { asset: IAsset }) {
         onConfirm={onConfirm}
         title="Authorize Transaction"
         description="Enter your 6-digit PIN to authorize this transaction"
-        error={error}
-        setError={setError}
+        error={pinError}
+        setError={setPinError}
         btnText="Confirm"
         btnLoadingText="Processing..."
         isLoading={mutation.isPending}

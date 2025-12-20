@@ -14,7 +14,6 @@ import {
 } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { useIoMethods } from "@/hooks/useIoMethod";
-import { FormatService } from "@/services/format-service";
 import { Button } from "@/components/ui/button";
 import {
   usePlaidLink,
@@ -23,6 +22,7 @@ import {
 import { Loader } from "lucide-react";
 import { externalWalletService } from "@/api/external-wallets.api";
 import ExternalBankAccounts from "../../../_common/external-bank-accounts";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToFund {
   amount: number;
@@ -207,19 +207,19 @@ export default function FundUsdWithUsdBankAccount() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(amountToFund?.amount || 0)}
+                {formatService.formatToUSD(amountToFund?.amount || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToUSD(calculatedFee)}
+                {formatService.formatToUSD(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>You'll receive</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(amountToReceive || 0)}
+                {formatService.formatToUSD(amountToReceive || 0)}
               </p>
             </div>
           </div>

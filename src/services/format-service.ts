@@ -1,6 +1,6 @@
 // src/services/format.service.ts
 
-export class FormatService {
+class FormatService {
   /**
    * Formats a number into a currency string for the specified currency code.
    * Supports USD, NGN, GHS, UGX, KES — and any other ISO 4217 currency code.
@@ -10,7 +10,7 @@ export class FormatService {
    *   FormatService.formatCurrency(1234.56, "NGN") => "₦1,234.56"
    *   FormatService.formatCurrency(1234.56, "UGX") => "USh 1,234.56"
    */
-  static formatCurrency(
+  formatCurrency(
     amount: number | null | undefined,
     currencyCode: string = "USD"
   ): string {
@@ -39,7 +39,7 @@ export class FormatService {
   /**
    * Returns a currency symbol (fallback for null/invalid amounts).
    */
-  private static getCurrencySymbol(currencyCode: string): string {
+  private getCurrencySymbol(currencyCode: string): string {
     const symbols: Record<string, string> = {
       USD: "$",
       NGN: "₦",
@@ -55,7 +55,7 @@ export class FormatService {
    * Formats a number into a USD currency string
    * Example: 1234.56 => "$1,234.56"
    */
-  static formatToUSD(amount: number | null | undefined): string {
+  formatToUSD(amount: number | null | undefined): string {
     if (amount == null || isNaN(amount)) return "$0.00";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -69,7 +69,7 @@ export class FormatService {
    * Formats a number into a Nigerian Naira currency string
    * Example: 1234.56 => "₦1,234.56"
    */
-  static formatToNaira(amount: number | null | undefined): string {
+  formatToNaira(amount: number | null | undefined): string {
     if (amount == null || isNaN(amount)) return "₦0.00";
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -83,7 +83,7 @@ export class FormatService {
    * Formats a number into a Ghanaian Cedis currency string
    * Example: 1234.56 => "₵1,234.56"
    */
-  static formatToGHS(amount: number | null | undefined): string {
+  formatToGHS(amount: number | null | undefined): string {
     if (amount == null || isNaN(amount)) return "₵0.00";
     return new Intl.NumberFormat("en-GH", {
       style: "currency",
@@ -98,7 +98,7 @@ export class FormatService {
    * Example: 1234.56 => "USh1,234.56"
    */
 
-  static formatToUGX(amount: number | null | undefined): string {
+  formatToUGX(amount: number | null | undefined): string {
     if (amount == null || isNaN(amount)) return "USh 0.00";
     return new Intl.NumberFormat("en-UG", {
       style: "currency",
@@ -113,7 +113,7 @@ export class FormatService {
    * Example: 1234.56 => "KSh1,234.56"
    */
 
-  static formatToKES(amount: number | null | undefined): string {
+  formatToKES(amount: number | null | undefined): string {
     if (amount == null || isNaN(amount)) return "KSh0.00";
     return new Intl.NumberFormat("en-KE", {
       style: "currency",
@@ -127,7 +127,7 @@ export class FormatService {
    * Formats a number with commas (no currency symbol)
    * Example: 1234567 => "1,234,567"
    */
-  static formatWithCommas(amount: number | null | undefined): string {
+  formatWithCommas(amount: number | null | undefined): string {
     if (amount == null || isNaN(amount)) return "0";
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
@@ -140,9 +140,9 @@ export class FormatService {
    * Example:
    * 1234 => "1.2K", 1234567 => "1.2M", 1500000000 => "1.5B"
    */
-  static formatToCompactAmount(
+  formatToCompactAmount(
     amount: number | string | null | undefined,
-    currency: "usd" | "ngn" = "usd",
+    currency: "ngn" | "usd",
     decimals = 1
   ): string {
     const numericAmount =
@@ -151,7 +151,7 @@ export class FormatService {
         : amount;
 
     console.log({ amount, numericAmount });
-    
+
     if (numericAmount == null || isNaN(numericAmount)) {
       return currency === "usd" ? "$0" : "₦0";
     }
@@ -169,7 +169,7 @@ export class FormatService {
    * Calculates the percentage of shares raised
    * Example: totalShares = 1000, availableShares = 250 => 75
    */
-  static calculateRaisedSharesPercentage(
+  calculateRaisedSharesPercentage(
     totalShares: number | null | undefined,
     availableShares: number | null | undefined
   ): number {
@@ -190,7 +190,7 @@ export class FormatService {
   /**
    * formats a name that takes the name and return the name or name and ... if it is more than 15 chars
    */
-  static formatName(name: string | null | undefined): string {
+  formatName(name: string | null | undefined): string {
     if (name == null) {
       return "";
     }
@@ -203,7 +203,7 @@ export class FormatService {
     return `${trimmedName.substring(0, 12)}...`;
   }
 
-  static truncateString(str: string, maxLength: number): string {
+  truncateString(str: string, maxLength: number): string {
     if (str.length > maxLength) {
       return str.substring(0, maxLength - 3) + "...";
     }
@@ -219,7 +219,7 @@ export class FormatService {
    *   "bank_transfer" -> "Bank Transfer"
    *   "MOBILE_MONEY" -> "MOBILE_MONEY"
    */
-  static formatSelectText(text: string): string {
+  formatSelectText(text: string): string {
     if (!text) return "";
 
     // If the entire text is already uppercase, return as is
@@ -235,3 +235,5 @@ export class FormatService {
       .join(" ");
   }
 }
+
+export const formatService = new FormatService();

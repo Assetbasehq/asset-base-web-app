@@ -9,7 +9,6 @@ import {
   normalizeCurrencyInput,
 } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
-import { FormatService } from "@/services/format-service";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import { useAuthStore } from "@/store/auth-store";
 import { RiseAccount } from "@/components/shared/rise-account";
@@ -20,6 +19,7 @@ import {
 } from "@/api/transaction-request";
 import { useMutation } from "@tanstack/react-query";
 import SuccessModal from "@/components/modals/success-modal";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToFund {
   amount: number | null;
@@ -132,7 +132,7 @@ export default function FundNgnWithNgnRiseWallet() {
           <h2 className="text-xl font-semibold">Fund With Rise Wallet</h2>
           <p className="text-muted-foreground text-sm">
             Minimum deposit is{" "}
-            {selectedMethod && FormatService.formatToNaira(minimumAmount)}
+            {selectedMethod && formatService.formatToNaira(minimumAmount)}
           </p>
         </div>
         <div className="flex flex-col gap-2">
@@ -159,7 +159,7 @@ export default function FundNgnWithNgnRiseWallet() {
       {amountToFund && !isMinimumAmount ? (
         <CustomAlert
           variant="warning"
-          message={`Minimum deposit is ${FormatService.formatToNaira(
+          message={`Minimum deposit is ${formatService.formatToNaira(
             minimumAmount
           )}`}
         />
@@ -171,19 +171,19 @@ export default function FundNgnWithNgnRiseWallet() {
         <div className="flex justify-between">
           <p>Amount to deduct</p>
           <p className="font-semibold tracking-wide">
-            {FormatService.formatToNaira(amountToFund?.amount)}
+            {formatService.formatToNaira(amountToFund?.amount)}
           </p>
         </div>
         <div className="flex justify-between">
           <p>Fee</p>
           <p className="font-semibold tracking-wide">
-            {FormatService.formatToNaira(calculatedFee)}
+            {formatService.formatToNaira(calculatedFee)}
           </p>
         </div>
         <div className="flex justify-between">
           <p>Amount you'll receive</p>
           <p className="font-semibold tracking-wide">
-            {FormatService.formatToNaira(amountToReceive)}
+            {formatService.formatToNaira(amountToReceive)}
           </p>
         </div>
       </div>
@@ -218,7 +218,7 @@ export default function FundNgnWithNgnRiseWallet() {
           setIsSuccessModalOpen(false);
         }}
         title="Funnding Successful"
-        description={`You have successfully funded your wallet with ${FormatService.formatCurrency(
+        description={`You have successfully funded your wallet with ${formatService.formatCurrency(
           amountToFund?.amount,
           "ngn"
         )}.`}

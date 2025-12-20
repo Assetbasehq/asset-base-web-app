@@ -16,10 +16,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { walletService } from "@/api/wallet.api";
 import { useOutletContext } from "react-router";
 import { Loader } from "lucide-react";
-import { FormatService } from "@/services/format-service";
 import { cn } from "@/lib/utils";
 import SuccessModal from "@/components/modals/success-modal";
 import { ASSETCHAIN_USDT_TOKEN } from "@/lib/wagmi.config";
+import { formatService } from "@/services/format-service";
 
 interface WithdrawContext {
   amountToWithdraw: {
@@ -222,7 +222,7 @@ export default function WithdrawToCrypto() {
             <p className="">
               You are about to withdraw{" "}
               <span className="font-semibold">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   amountToWithdraw?.amount,
                   currency
                 )}

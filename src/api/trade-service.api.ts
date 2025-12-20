@@ -43,6 +43,21 @@ class TradeService {
     }
   };
 
+  estimateAmountToReceive = async (payload: {
+    assetWeb3ServiceId: string;
+    amountToBuy: string;
+  }) => {
+    try {
+      const response = await web3axiosInstance.get(
+        `/trade/market-order/estimate-amount-to-receive/${payload.assetWeb3ServiceId}/${payload.amountToBuy}`
+      );
+      const data = response.data;
+      return data;
+    } catch (error) {
+      handleAxiosError(error, "Failed to estimate amount to receive");
+    }
+  };
+
   initiateMarketOrder = async (payload: {
     type: "buy" | "sell";
     amount: number;

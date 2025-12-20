@@ -9,7 +9,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { flags } from "@/constants/images";
 import { useGetPortfolioOverview } from "@/hooks/use-portfolio";
-import { FormatService } from "@/services/format-service";
+import { formatService } from "@/services/format-service";
 import { useState } from "react";
 
 export default function TotalAssets() {
@@ -29,7 +29,7 @@ export default function TotalAssets() {
     setCurrency(value as "usd" | "ngn");
   };
 
-  const InvestmentBalance = FormatService.formatToCompactAmount(
+  const InvestmentBalance = formatService.formatToCompactAmount(
     portfolioOverview?.balance,
     currency,
     2

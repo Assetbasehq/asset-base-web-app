@@ -18,7 +18,6 @@ import {
   type ITransactionRequest,
 } from "@/api/transaction-request";
 import { Button } from "@/components/ui/button";
-import { FormatService } from "@/services/format-service";
 import { useGetExternalWallets } from "@/hooks/use-external-wallets";
 import { RiArrowRightSLine, RiBankCardLine } from "react-icons/ri";
 import SaveCardModal from "../../../_components/save-card-modal";
@@ -28,6 +27,7 @@ import ExternalWallets from "../../../_common/external-wallets";
 import ConfirmCardSelection from "../../../_common/confirm-card-selection";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
 import SuccessModal from "@/components/modals/success-modal";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToFund {
   amount: number;
@@ -236,7 +236,7 @@ export default function FundUsdWithNgnCard() {
           setSuccessModalOpen(false);
         }}
         title="Funding Successful"
-        description={`You have successfully funded your wallet with ${FormatService.formatCurrency(
+        description={`You have successfully funded your wallet with ${formatService.formatCurrency(
           dollarEquivalentMinusFee,
           "usd"
         )} `}
@@ -249,7 +249,7 @@ export default function FundUsdWithNgnCard() {
             <h2 className="text-xl font-semibold">Fund With Card</h2>
             <p className="text-muted-foreground text-sm">
               Minimum deposit is{" "}
-              {selectedMethod && FormatService.formatToUSD(buyRate * 10)}
+              {selectedMethod && formatService.formatToUSD(buyRate * 10)}
             </p>
           </div>
           <div className="flex flex-col gap-2">
@@ -281,19 +281,19 @@ export default function FundUsdWithNgnCard() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToNaira(amountToDeduct || 0)}
+                {formatService.formatToNaira(amountToDeduct || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToNaira(calculatedFee)}
+                {formatService.formatToNaira(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Dollar equivalent</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(dollarEquivalentMinusFee)}
+                {formatService.formatToUSD(dollarEquivalentMinusFee)}
               </p>
             </div>
           </div>

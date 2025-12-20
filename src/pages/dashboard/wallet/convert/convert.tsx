@@ -15,7 +15,6 @@ import {
 import { flags } from "@/constants/images";
 import { RiArrowLeftRightLine } from "react-icons/ri";
 import {  useCryptoWallets, useWallet } from "@/hooks/useWallet";
-import { FormatService } from "@/services/format-service";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import type { ICurrency } from "@/interfaces/wallet.interfae";
@@ -24,6 +23,7 @@ import { walletService } from "@/api/wallet.api";
 import PinConfirmationModal from "./_components/pin-confirmation";
 import ConversionSuccessful from "./_components/conversion-successful";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
+import { formatService } from "@/services/format-service";
 
 export default function ConvertFunds() {
   const [amountToSwap, setAmountToSwap] = useState<number | null>(null);
@@ -97,8 +97,8 @@ export default function ConvertFunds() {
 
     // Format based on selected currency
     return currency === "usd"
-      ? FormatService.formatToUSD(total)
-      : FormatService.formatToNaira(total);
+      ? formatService.formatToUSD(total)
+      : formatService.formatToNaira(total);
   }, [cryptoWalletBalance, walletData, currency]);
 
   const handleAmountChange = (amount: string) => {
@@ -315,7 +315,7 @@ export default function ConvertFunds() {
             <p>Amount to deduct</p>
             <p className="font-semibold">
               {sourceCurrency &&
-                `${sourceCurrency.symbol}${FormatService.formatWithCommas(
+                `${sourceCurrency.symbol}${formatService.formatWithCommas(
                   amountToSwap
                 )}`}
             </p>

@@ -11,7 +11,6 @@ import {
   normalizeCurrencyInput,
 } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
-import { FormatService } from "@/services/format-service";
 import { Button } from "@/components/ui/button";
 import { RiArrowRightSLine, RiBankCardLine } from "react-icons/ri";
 import SaveCardModal from "../../../_components/save-card-modal";
@@ -26,6 +25,7 @@ import ExternalWallets from "../../../_common/external-wallets";
 import ConfirmCardSelection from "../../../_common/confirm-card-selection";
 import { useAuthStore } from "@/store/auth-store";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToFund {
   amount: number;
@@ -186,19 +186,19 @@ export default function FundUsdWithUsdCard() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(amountToFund?.amount || 0)}
+                {formatService.formatToUSD(amountToFund?.amount || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToUSD(calculatedFee)}
+                {formatService.formatToUSD(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>You'll receive</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(amountToReceive || 0)}
+                {formatService.formatToUSD(amountToReceive || 0)}
               </p>
             </div>
           </div>

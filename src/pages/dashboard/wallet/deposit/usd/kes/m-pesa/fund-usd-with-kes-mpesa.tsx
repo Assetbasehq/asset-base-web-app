@@ -11,7 +11,6 @@ import {
   normalizeCurrencyInput,
 } from "@/helpers/deposit-methods";
 import { CustomAlert } from "@/components/custom/custom-alert";
-import { FormatService } from "@/services/format-service";
 import { Button } from "@/components/ui/button";
 import {
   transactionRequestService,
@@ -21,6 +20,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToFund {
   amount: number | null;
@@ -220,19 +220,19 @@ export default function FundUsdWithKesMpesa() {
             <div className="flex justify-between">
               <p>Amount to deduct</p>
               <p className="font-semibold">
-                {FormatService.formatToKES(amountToDeduct || 0)}
+                {formatService.formatToKES(amountToDeduct || 0)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold tracking-wide">
-                {FormatService.formatToKES(calculatedFee)}
+                {formatService.formatToKES(calculatedFee)}
               </p>
             </div>
             <div className="flex justify-between">
               <p>Dollar equivalent</p>
               <p className="font-semibold">
-                {FormatService.formatToUSD(dollarEquivalent)}
+                {formatService.formatToUSD(dollarEquivalent)}
               </p>
             </div>
           </div>

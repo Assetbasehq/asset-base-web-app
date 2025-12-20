@@ -9,7 +9,6 @@ import {
   getIOMethodRate,
   normalizeCurrencyInput,
 } from "@/helpers/deposit-methods";
-import { FormatService } from "@/services/format-service";
 import AnimatedWrapper from "@/components/animations/animated-wrapper";
 import { useAuthStore } from "@/store/auth-store";
 import ActionRestrictedModal from "@/components/shared/_modals/action-restricted";
@@ -22,6 +21,7 @@ import {
   type ITransactionRequest,
 } from "@/api/transaction-request";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import { formatService } from "@/services/format-service";
 
 interface IAmountToFund {
   amount: number;
@@ -35,7 +35,7 @@ export default function FundUsdWithUsdRiseWallet() {
     useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [externalWalletId, setExternalWalletId] = useState<string | null>(null);
-  
+
   const [actionRestricted, setActionRestricted] = useState(false);
   const { user, isUserVerified } = useAuthStore();
 
@@ -150,7 +150,7 @@ export default function FundUsdWithUsdRiseWallet() {
         <div className="flex justify-between">
           <p>Amount to deduct</p>
           <p className="font-semibold">
-            {FormatService.formatToUSD(amountToFund?.amount || 0)}
+            {formatService.formatToUSD(amountToFund?.amount || 0)}
           </p>
         </div>
       </div>
@@ -189,7 +189,7 @@ export default function FundUsdWithUsdRiseWallet() {
           setIsSuccessModalOpen(false);
         }}
         title="Funnding Successful"
-        description={`You have successfully funded your wallet with ${FormatService.formatCurrency(
+        description={`You have successfully funded your wallet with ${formatService.formatCurrency(
           amountToFund?.amount,
           "usd"
         )}.`}

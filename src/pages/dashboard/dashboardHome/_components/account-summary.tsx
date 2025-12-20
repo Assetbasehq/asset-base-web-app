@@ -18,8 +18,8 @@ import {
 } from "react-icons/ri";
 import { useMemo, useState } from "react";
 import { useCryptoWallets, useWallet } from "@/hooks/useWallet";
-import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
+import { formatService } from "@/services/format-service";
 // import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AccountSummary() {
@@ -64,8 +64,8 @@ export default function AccountSummary() {
 
     // Format based on selected currency
     return currency === "usd"
-      ? FormatService.formatToUSD(total)
-      : FormatService.formatToNaira(total);
+      ? formatService.formatToUSD(total)
+      : formatService.formatToNaira(total);
   }, [cryptoWalletBalance, walletData, currency]);
 
   const handleCurrencyChange = (value: string) => {

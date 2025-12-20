@@ -10,10 +10,10 @@ import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import AboutLaunchpad from "./_components/about-launchpad";
 import { useAsset } from "@/hooks/useAssets";
 import { LaunchpadInvestModal } from "./_modals/launchpad-invest-modal";
-import { FormatService } from "@/services/format-service";
 import ConfirmationPinModal from "./_modals/confirmation-pin-modal";
 import SuccessModal from "./_modals/success-modal";
 import { useWallet } from "@/hooks/useWallet";
+import { formatService } from "@/services/format-service";
 
 // Primary Market
 const tabs = [
@@ -63,6 +63,43 @@ export default function LaunchpadDetail() {
   if (isError) return <p>Error</p>;
 
   if (!asset) return <p>Asset not found</p>;
+
+  if (asset && asset.trading_type === "secondary") {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Card className="bg-custom-card border-none shadow-none max-w-md w-full">
+          <CardContent className="p-6 flex flex-col gap-4 text-center">
+            <div className="flex flex-col items-center gap-2 justify-center">
+              {/* <RiFlashlightFill className="text-custom-orange w-10 h-10" /> */}
+              <img
+                src={asset.logo}
+                alt={asset.asset_description}
+                className="h-12 rounded"
+              />
+              <h2 className=" font-semibold text-xl">{asset.asset_symbol}</h2>
+            </div>
+
+            <h2 className="text-lg font-semibold text-custom-white">
+              Trading on the Secondary Market
+            </h2>
+
+            <p className="text-sm text-custom-grey">
+              This asset is currently trading on the secondary market. You can
+              buy or sell shares at the current market price and also create
+              limit orders.
+            </p>
+
+            <Button
+              onClick={() => navigate(`/dashboard/assets/${asset.slug}`)}
+              className="btn-primary py-5 rounded-full mt-2"
+            >
+              Go to Market
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -191,7 +228,7 @@ export default function LaunchpadDetail() {
         <Card className="border-none shadow-none p-0 px-0 bg-custom-card text-custom-white h-fit md:w-2/3">
           <CardContent className="p-4 text-start flex flex-col gap-2">
             <p className="text-xl font-semibold">
-              {FormatService.formatCurrency(
+              {formatService.formatCurrency(
                 asset?.price_per_share,
                 asset?.currency
               )}
@@ -207,7 +244,7 @@ export default function LaunchpadDetail() {
             <div className="bg-custom-light-bg px-4 py-2 rounded-xl flex justify-between">
               <small className="text-custom-grey">Price per share</small>
               <small className="text-custom-grey">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   asset?.price_per_share,
                   asset?.currency
                 )}
@@ -216,13 +253,13 @@ export default function LaunchpadDetail() {
             <div className="px-4 py-2 flex justify-between">
               <small className="text-custom-grey">Available Shares</small>
               <small className="text-custom-grey">
-                {FormatService.formatWithCommas(asset?.available_shares)}
+                {formatService.formatWithCommas(asset?.available_shares)}
               </small>
             </div>
             <div className="bg-custom-light-bg px-4 py-2 rounded-xl flex justify-between">
               <small className="text-custom-grey">Raising goal</small>
               <small className="text-custom-grey">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   asset?.price_per_share * asset?.number_of_shares,
                   asset?.currency
                 )}

@@ -9,7 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import type { WalletStatement } from "@/interfaces/wallet.interfae";
 import { getTransactionDescription } from "@/lib/utils";
-import { FormatService } from "@/services/format-service";
+import { formatService } from "@/services/format-service";
 import { useAuthStore } from "@/store/auth-store";
 import { format } from "date-fns";
 
@@ -99,7 +99,7 @@ export default function AccountStatementPreviewModal({
               <p>
                 OPENING BALANCE:{" "}
                 <span className=" capitalize font-bold">
-                  {FormatService.formatCurrency(
+                  {formatService.formatCurrency(
                     usdWalletStatements[0]?.opening_balance,
                     usdWalletStatements[0]?.currency
                   )}
@@ -110,7 +110,7 @@ export default function AccountStatementPreviewModal({
               <p>
                 CLOSING BALANCE:{" "}
                 <span className=" capitalize font-bold">
-                  {FormatService.formatCurrency(
+                  {formatService.formatCurrency(
                     usdWalletStatements[0]?.closing_balance,
                     usdWalletStatements[0]?.currency
                   )}
@@ -161,7 +161,7 @@ export default function AccountStatementPreviewModal({
                             )}
                       </td>
                       <td className="text-right pr-6">
-                        {FormatService.formatCurrency(
+                        {formatService.formatCurrency(
                           transaction.amount,
                           transaction.currency
                         )}

@@ -15,7 +15,6 @@ import {
 } from "react-icons/ri";
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
-import { FormatService } from "@/services/format-service";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   useAddToWatchlist,
@@ -28,6 +27,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatService } from "@/services/format-service";
 
 interface Props {
   asset: IAsset;
@@ -87,7 +87,7 @@ export default function AssetCard({
                 <div>
                   <h2 className="font-semibold">{asset?.asset_symbol}</h2>
                   <small className="text-sm">
-                    {FormatService.formatName(asset?.asset_name)}
+                    {formatService.formatName(asset?.asset_name)}
                   </small>
                 </div>
               </div>
@@ -239,13 +239,13 @@ export default function AssetCard({
             <div className="flex flex-col">
               <h2 className="font-light">{asset?.asset_symbol}</h2>
               <small className="text-custom-grey font-light text-xs">
-                {FormatService.formatName(asset?.asset_name)}
+                {formatService.formatName(asset?.asset_name)}
               </small>
             </div>
           </div>
         </div>
         <p className="text-xs sm:text-sm text-custom-grey font-light">
-          {FormatService.truncateString(asset?.asset_description, 30)}
+          {formatService.truncateString(asset?.asset_description, 30)}
         </p>
         <div className="flex flex-col gap-1 items-start w-full">
           <Progress

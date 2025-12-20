@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useCryptoWallets, useWallet } from "@/hooks/useWallet";
-import { FormatService } from "@/services/format-service";
 import { flags } from "@/constants/images";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RiErrorWarningLine } from "react-icons/ri";
@@ -11,6 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatService } from "@/services/format-service";
 
 const tabs = [
   { key: "fiat", label: "Fiat" },
@@ -64,7 +64,7 @@ function FiatTab() {
     isError: isUsdWalletError,
   } = useWallet({ currency: "usd" });
 
-  const usdWalletBalance = FormatService.formatCurrency(
+  const usdWalletBalance = formatService.formatCurrency(
     usdWallet?.balance,
     "usd"
   );
@@ -75,7 +75,7 @@ function FiatTab() {
     isError: isNgnWalletError,
   } = useWallet({ currency: "ngn" });
 
-  const ngnWalletBalance = FormatService.formatCurrency(
+  const ngnWalletBalance = formatService.formatCurrency(
     ngnWallet?.balance,
     "ngn"
   );
@@ -170,7 +170,7 @@ function StableTab() {
             </div>
             <div className="flex items-center gap-1">
               <span>
-                {FormatService.formatCurrency(Number(asset.balance), "usd")}
+                {formatService.formatCurrency(Number(asset.balance), "usd")}
               </span>
             </div>
           </div>

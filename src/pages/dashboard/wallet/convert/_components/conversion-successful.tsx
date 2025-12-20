@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { images } from "@/constants/images";
 import type { ICurrency } from "@/interfaces/wallet.interfae";
-import { FormatService } from "@/services/format-service";
+import { formatService } from "@/services/format-service";
 
 interface ConversionSuccessfulProps {
   src_currency: ICurrency;
@@ -46,9 +46,9 @@ export default function ConversionSuccessful({
             Conversion Successful
           </DialogTitle>
           <DialogDescription className="text-start font-semibold text-md">
-            {`${src_currency?.symbol}${FormatService.formatWithCommas(
+            {`${src_currency?.symbol}${formatService.formatWithCommas(
               src_amount
-            )} = ${dest_currency?.symbol}${FormatService.formatWithCommas(
+            )} = ${dest_currency?.symbol}${formatService.formatWithCommas(
               dest_amount
             )}.`}
           </DialogDescription>
@@ -59,7 +59,7 @@ export default function ConversionSuccessful({
             <p className="md:text-sm font-semibold">Convert</p>
             <p className="font-semibold">
               {src_currency &&
-                `${src_currency?.symbol || ""}${FormatService.formatWithCommas(
+                `${src_currency?.symbol || ""}${formatService.formatWithCommas(
                   src_amount
                 )}`}
             </p>

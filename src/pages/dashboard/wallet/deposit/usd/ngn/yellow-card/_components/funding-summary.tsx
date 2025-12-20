@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FormatService } from "@/services/format-service";
 import { CustomAlert } from "@/components/custom/custom-alert";
 import { useQuery } from "@tanstack/react-query";
 import { transactionService } from "@/api/transaction.api";
 import { currencyToCountry } from "@/lib/utils";
+import { formatService } from "@/services/format-service";
 
 interface FundingSummaryProps {
   amountToFund: number;
@@ -65,7 +65,7 @@ export default function FundingSummary({
             <div className="flex justify-between">
               <p>Amount to Fund</p>
               <p className="font-semibold">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   summary?.localAmount
                     ? summary.localAmount / 100
                     : amountToFund,
@@ -76,7 +76,7 @@ export default function FundingSummary({
             <div className="flex justify-between">
               <p>Fee</p>
               <p className="font-semibold">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   summary?.fee ? summary.feeInLocal / 100 : 0,
                   currency
                 )}
@@ -85,7 +85,7 @@ export default function FundingSummary({
             <div className="flex justify-between">
               <p>Total amount to send</p>
               <p className="font-semibold">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   summary?.totalAmountInLocal
                     ? summary.totalAmountInLocal / 100
                     : 0,

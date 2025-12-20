@@ -5,11 +5,11 @@ import { useState } from "react";
 import { LinkRiseModal } from "./_modals/link-rise-modal";
 import { useAuthStore } from "@/store/auth-store";
 import { useGetExternalWallets } from "@/hooks/use-external-wallets";
-import { FormatService } from "@/services/format-service";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { externalWalletService } from "@/api/external-wallets.api";
 import { RiArrowRightSLine } from "react-icons/ri";
+import { formatService } from "@/services/format-service";
 
 export function RiseAccount({
   currency,
@@ -118,7 +118,7 @@ export function RiseAccount({
                 {user?.metadata?.rise_username || user?.email_address}
               </p>
               <p className="text-white">
-                {FormatService.formatCurrency(
+                {formatService.formatCurrency(
                   riseWallet?.items[0]?.balance,
                   currency
                 )}

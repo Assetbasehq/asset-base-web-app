@@ -12,7 +12,6 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { generatePaymentURL } from "@/lib/utils";
 import type { IOMethod } from "@/interfaces/wallet.interfae";
-import { FormatService } from "@/services/format-service";
 import { useIoMethods } from "@/hooks/useIoMethod";
 import {
   getAvailableIOMethods,
@@ -20,6 +19,7 @@ import {
   getIOMethodFee,
   getIOMethodRate,
 } from "@/helpers/deposit-methods";
+import { formatService } from "@/services/format-service";
 
 interface FundingMethodProps {
   destinationWalletCode: string | null;
@@ -178,7 +178,7 @@ export default function SelectFundingMethod({
               {selectedMethod
                 ? selectedMethod.channel === "mobile_money"
                   ? selectedMethod.network_name
-                  : FormatService.formatSelectText(
+                  : formatService.formatSelectText(
                       getIOMethodDisplayName(selectedMethod)
                     )
                 : "Select an option"}
@@ -195,7 +195,7 @@ export default function SelectFundingMethod({
                 <SelectItem key={i} value={value}>
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium capitalize">
-                      {FormatService.formatSelectText(
+                      {formatService.formatSelectText(
                         getIOMethodDisplayName(method)
                       )}
                     </p>

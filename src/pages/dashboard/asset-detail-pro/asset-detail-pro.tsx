@@ -1,7 +1,6 @@
 import { Switch } from "@/components/ui/switch";
 import AssetChart from "./_components/asset-chart";
 import { RiShareForwardLine } from "react-icons/ri";
-import { FormatService } from "@/services/format-service";
 import { cn } from "@/lib/utils";
 import type { IAsset } from "@/interfaces/asset.interface";
 

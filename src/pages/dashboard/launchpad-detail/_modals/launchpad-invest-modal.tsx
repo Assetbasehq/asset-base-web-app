@@ -10,10 +10,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import type { IAsset } from "@/interfaces/asset.interface";
-import { FormatService } from "@/services/format-service";
 import { normalizeCurrencyInput } from "@/helpers/deposit-methods";
 import { useWallet } from "@/hooks/useWallet";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import { formatService } from "@/services/format-service";
 
 interface InvestFormData {
   quantity: number;
@@ -106,7 +106,7 @@ export function LaunchpadInvestModal({
               <Input
                 type="text"
                 readOnly
-                value={FormatService.formatCurrency(
+                value={formatService.formatCurrency(
                   estimatedAmount || 0,
                   asset.currency
                 )}
@@ -126,7 +126,7 @@ export function LaunchpadInvestModal({
           <div className="my-1">
             <small>
               Available Balance:{" "}
-              {FormatService.formatCurrency(walletBalance, asset.currency)}
+              {formatService.formatCurrency(walletBalance, asset.currency)}
             </small>
           </div>
 
