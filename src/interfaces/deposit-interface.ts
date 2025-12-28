@@ -1,7 +1,7 @@
 import { flags, images } from "@/constants/images";
 
 // Type of wallet where funds will be sent
-export type DestinationWalletType = "USD" | "NGN";
+export type DestinationWalletType = "usd" | "ngn";
 
 // Represents a currency option
 export interface ICurrencyOption {
@@ -38,7 +38,7 @@ export const destinationWalletCurrencies: Record<
   DestinationWalletType,
   ICurrencyOption[]
 > = {
-  USD: [
+  usd: [
     {
       name: "USDT",
       countryCode: "US",
@@ -89,7 +89,7 @@ export const destinationWalletCurrencies: Record<
       type: "fiat",
     },
   ],
-  NGN: [
+  ngn: [
     {
       name: "Nigerian Naira",
       countryCode: "NG",
