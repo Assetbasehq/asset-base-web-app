@@ -25,8 +25,7 @@ export default function Deposit() {
   const navigate = useNavigate();
 
   const handleSelectWallet = (wallet: IWalletType) => {
-    console.log({ wallet });
-    setSelectedWallet(wallet.name.toUpperCase() as DestinationWalletType);
+    setSelectedWallet(wallet.name.toLowerCase() as DestinationWalletType);
     setDestinationWallet(wallet);
     setSourceCurrency(null);
   };
@@ -34,6 +33,8 @@ export default function Deposit() {
   const availableCurrencies = selectedWallet
     ? destinationWalletCurrencies[selectedWallet] || []
     : [];
+
+  console.log({ availableCurrencies, selectedWallet });
 
   const handleSelectCurrency = (currencyCodeAndType: string) => {
     if (!selectedWallet) return;

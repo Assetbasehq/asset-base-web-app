@@ -43,28 +43,36 @@ export default function SelectWallet({
       <div>
         <h2>Wallet to fund</h2>
         <div className="flex items-stretch gap-4 mt-1 w-full">
-          {walletTypes.map((option) => (
-            <Card
-              key={option.name}
-              className={cn(
-                "p-2 md:p-4 items-center border-2 bg-custon-input-fill border-custom-input-stroke w-1/2 cursor-pointer",
-                {
-                  "border-custom-orange":
-                    selectedWallet === option.name.toUpperCase(),
-                }
-              )}
-              onClick={() => {
-                onSelectWallet(option);
-              }}
-            >
-              <span className="bg-custom-card w-fit p-2 rounded-full">
-                <img src={option.logo} alt={option.name} className="w-6" />
-              </span>
-              <p className="text-xs md:text-sm font-semibold mt-auto">
-                {option.name} Wallet
-              </p>
-            </Card>
-          ))}
+          {walletTypes.map((option) => {
+            console.log({
+              test: selectedWallet === option.name,
+              selectedWallet,
+              optionName: option.name,
+            });
+
+            return (
+              <Card
+                key={option.name}
+                className={cn(
+                  "p-2 md:p-4 items-center border-2 bg-custon-input-fill border-custom-input-stroke w-1/2 cursor-pointer",
+                  {
+                    "border-custom-orange":
+                      selectedWallet === option.name.toLowerCase(),
+                  }
+                )}
+                onClick={() => {
+                  onSelectWallet(option);
+                }}
+              >
+                <span className="bg-custom-card w-fit p-2 rounded-full">
+                  <img src={option.logo} alt={option.name} className="w-6" />
+                </span>
+                <p className="text-xs md:text-sm font-semibold mt-auto">
+                  {option.name} Wallet
+                </p>
+              </Card>
+            );
+          })}
         </div>
       </div>
 
