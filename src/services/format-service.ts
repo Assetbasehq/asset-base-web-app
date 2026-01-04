@@ -12,7 +12,8 @@ class FormatService {
    */
   formatCurrency(
     amount: number | null | undefined,
-    currencyCode: string = "USD"
+    currencyCode: string = "USD",
+    decimals = 2
   ): string {
     if (amount == null || isNaN(amount)) {
       return this.getCurrencySymbol(currencyCode) + "0.00";
@@ -31,8 +32,8 @@ class FormatService {
     return new Intl.NumberFormat(locale, {
       style: "currency",
       currency: currencyCode.toUpperCase(),
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
     }).format(amount);
   }
 

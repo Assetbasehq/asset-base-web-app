@@ -69,7 +69,8 @@ export default function AssetInfo({
                     <span className="font-semibold text-xl sm:text-3xl text-custom-white-text">
                       {formatService.formatCurrency(
                         assetMarketPrice,
-                        asset.currency
+                        asset.currency,
+                        6
                       )}
                     </span>
                   )}
