@@ -13,12 +13,12 @@ import { motion } from "motion/react";
 
 const tabs = [
   {
-    key: "company-specific",
+    key: "COMPANY",
     label: "Company Specific",
     component: <CompanySpecific />,
   },
   {
-    key: "asset-base-pool",
+    key: "ASSETBASE",
     label: "Asset Base Pool",
     component: <AssetBasePool />,
   },
@@ -35,7 +35,7 @@ export default function AddLiquidityModal({
   onClose,
   onSuccess,
 }: ModalProps) {
-  const [active, setActive] = useState("company-specific");
+  const [active, setActive] = useState("COMPANY");
 
   if (!isOpen) return null;
 

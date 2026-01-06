@@ -1,9 +1,12 @@
 import { Link, Outlet, useLocation } from "react-router";
 import AddLiquidity from "./_components/add-liquidity";
 import { cn } from "@/lib/utils";
+import { useUserLiquidity } from "@/hooks/use-liquidity";
 
 export default function Liquidity() {
   const location = useLocation();
+
+  const {} = useUserLiquidity({});
 
   const isActiveLink = (path: string) => {
     return location.pathname === path;

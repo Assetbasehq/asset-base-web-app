@@ -175,9 +175,11 @@ export default function Launchpad() {
               }))}
               placeholder="Select a country"
               value={location || ""}
-              onChange={(value: string) => {
+              onChange={({ value, label }) => {
                 handleParamsChange("location", value.toLowerCase());
               }}
+              cancelButton={true}
+              contentWidth="w-[200px]"
             />
           </div>
         </div>
