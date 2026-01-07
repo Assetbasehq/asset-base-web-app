@@ -11,7 +11,7 @@ import { Skeleton } from "../ui/skeleton";
 
 interface Column {
   header: string;
-  render: (row: any, index?: number) => React.ReactNode;
+  render: (row: any, index: number) => React.ReactNode;
 }
 
 interface TableProps<T> {

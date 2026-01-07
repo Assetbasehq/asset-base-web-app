@@ -1,18 +1,8 @@
 import type { IAsset } from "@/interfaces/asset.interface";
 import { Progress } from "@/components/ui/progress";
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
-import {
-  calculateRaisePercentage,
-  cn,
-  formatNumber,
-  formatUSD,
-} from "@/lib/utils";
-import {
-  RiBookmarkLine,
-  RiErrorWarningLine,
-  RiFlashlightFill,
-  RiShareLine,
-} from "react-icons/ri";
+import { calculateRaisePercentage, cn, formatNumber } from "@/lib/utils";
+import { RiBookmarkLine, RiFlashlightFill, RiShareLine } from "react-icons/ri";
 import { Link } from "react-router";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
@@ -40,7 +30,6 @@ export default function AssetCard({
   userWatchlist = [],
   variant = "card",
 }: Props) {
-
   const raisePercentage = calculateRaisePercentage(
     asset?.number_of_shares,
     asset?.available_shares
@@ -52,6 +41,11 @@ export default function AssetCard({
 
   const addToWatchlistMutation = useAddToWatchlist({ asset_id: asset.id });
   const removeFromWatchlistMutation = useRemoveFromWatchlist();
+
+  const assetLink =
+    asset.trading_type === "primary"
+      ? `/dashboard/launchpad/${asset?.slug}`
+      : `/dashboard/assets/${asset?.slug}`;
 
   const handleWatchlistToggle = async () => {
     const watchlistItem = userWatchlist?.find(
@@ -70,24 +64,20 @@ export default function AssetCard({
 
   if (variant === "compact") {
     return (
-      <Link
-        key={asset.id}
-        to={`/dashboard/launchpad/${asset?.slug}`}
-        className="cursor-pointer"
-      >
+      <Link key={asset.id} to={assetLink} className="cursor-pointer">
         <Card className="p-0 border-none shadwo-none">
           <CardContent className="bg-custom-light-bg text-custom-white flex items-center justify-between rounded-xl p-4 gap-4">
             <div className="text-start">
               <div className="flex items-center gap-3">
                 <img
-                  src={asset?.image_urls[0]}
-                  alt=""
+                  src={asset?.logo}
+                  alt={asset.asset_name}
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
                   <h2 className="font-semibold">{asset?.asset_symbol}</h2>
                   <small className="text-sm">
-                    {formatService.formatName(asset?.asset_name)}
+                    {formatService.formatName(asset?.asset_name, 30)}
                   </small>
                 </div>
               </div>
@@ -117,12 +107,12 @@ export default function AssetCard({
           <div className="relative overflow-hidden flex flex-col gap-4 items-start text-start w-full p-2 rounded-lg bg-[#93939417]">
             <img
               src={assetBaseLogo}
-              alt=""
+              alt="assetbase logo"
               className=" absolute w-35 -top-3 -right-20 opacity-10"
             />
             <div className="flex items-center gap-2">
               <img
-                src={asset?.image_urls[0]}
+                src={asset?.logo}
                 alt=""
                 className="w-10 h-10 rounded-full"
               />
@@ -131,17 +121,28 @@ export default function AssetCard({
                 <small>{asset?.asset_name}</small>
               </div>
             </div>
-            <div className="w-full flex flex-col gap-1">
-              <div className="flex justify-between items-center w-full">
-                <small>Price per share</small>
-                <small className="font-semibold">
-                  {formatUSD(asset?.price_per_share)}
+            <div className="w-full flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <small className="text-custom-grey">Price per share</small>
+                <small className="font-medium">
+                  {formatService.formatCurrency(
+                    asset?.price_per_share,
+                    asset.currency
+                  )}
                 </small>
               </div>
-              <div className="flex justify-between items-center w-full">
-                <small>Funding round closes</small>
-                <small className="font-semibold">
-                  In <span className="font-bold">15 days</span>
+              <div className="flex justify-between items-center">
+                <small className="text-custom-grey">Minimum holding days</small>
+                <small className="font-medium">
+                  <span className="font-semibold">
+                    {asset.min_hold_days} days
+                  </span>
+                </small>
+              </div>
+              <div className="flex justify-between items-center">
+                <small className="text-custom-grey">Funding round closes</small>
+                <small className="font-medium">
+                  in <span className="font-semibold">15 days</span>
                 </small>
               </div>
             </div>
@@ -207,7 +208,7 @@ export default function AssetCard({
               )}
             </div>
             <Link
-              to={`/dashboard/launchpad/${asset?.slug}`}
+              to={assetLink}
               className="text-xs text-custom-orange font-light underline w-fit"
             >
               See More Details
@@ -220,22 +221,14 @@ export default function AssetCard({
 
   // Default "card" variant
   return (
-    <Link
-      key={asset?.id}
-      to={`/dashboard/launchpad/${asset?.slug}`}
-      className="cursor-pointer"
-    >
+    <Link key={asset?.id} to={assetLink} className="cursor-pointer">
       <div
         key={asset?.id}
         className="bg-custom-light-bg text-custom-white flex flex-col gap-2 items-start rounded-2xl p-2 min-w-76 shadow-lg h-full"
       >
         <div className="relative overflow-hidden flex justify-between gap-2 items-start text-start w-full rounded-lg">
           <div className="flex items-center gap-2">
-            <img
-              src={asset?.image_urls[0]}
-              alt=""
-              className="w-10 h-10 rounded-full"
-            />
+            <img src={asset?.logo} alt="" className="w-10 h-10 rounded-full" />
             <div className="flex flex-col">
               <h2 className="font-light">{asset?.asset_symbol}</h2>
               <small className="text-custom-grey font-light text-xs">
@@ -272,12 +265,25 @@ export default function AssetCard({
             className=" absolute w-35 top-0 -right-5 opacity-10"
           />
 
-          <div className="w-full flex flex-col text-sm">
-            <div className="flex justify-between items-center w-full">
+          <div className="w-full flex flex-col text-sm gap-2">
+            <div className="flex justify-between items-center">
               <small className="text-custom-grey">Price per share</small>
-              <small className="">{formatUSD(asset?.price_per_share)}</small>
+              <small className="font-medium">
+                {formatService.formatCurrency(
+                  asset?.price_per_share,
+                  asset.currency
+                )}
+              </small>
             </div>
-            <div className="flex justify-between items-center w-full">
+            <div className="flex justify-between items-center">
+              <small className="text-custom-grey">Minimum holding days</small>
+              <small className="font-medium">
+                <span className="font-semibold">
+                  {asset.min_hold_days} days
+                </span>
+              </small>
+            </div>
+            <div className="flex justify-between items-center">
               <small className="text-custom-grey">Funding round closes</small>
               <small className="font-medium">
                 in <span className="font-semibold">15 days</span>

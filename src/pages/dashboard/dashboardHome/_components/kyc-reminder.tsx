@@ -24,6 +24,8 @@ export default function KYCReminder() {
   // if (isLoading) return <KYCReminderSkeleton />;
   // if (isError) return <KYCReminderError />;
 
+  if (completedSteps === totalSteps) return null;
+
   return (
     <Link to="/dashboard/account/kyc">
       <Card className="p-0 bg-custom-orange-10 rounded-3xl min-w-[350px] lg:w-full md:w-full border-none shadow-none">

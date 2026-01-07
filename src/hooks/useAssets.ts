@@ -10,7 +10,7 @@ export const useTrendingAssets = (params?: IParams) => {
   });
 };
 
-export const useGetAssets = (params?: IParams) => {
+export const useAssets = (params?: IParams) => {
   return useQuery<IAsset[], Error>({
     queryKey: ["assets", params],
     queryFn: () => assetService.getAssets(params),

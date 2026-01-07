@@ -42,8 +42,8 @@ export default function AddLiquidityModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        // showCloseButton={false}
-        className="sm:max-w-lg rounded-2xl p-6 md:p-8 text-start h-[550px]"
+        showCloseButton={false}
+        className="rounded-2xl p-6 md:p-8 text-start max-h-[90vh] overflow-y-auto overflow-x-hidden"
       >
         <DialogHeader className="flex flex-col items-start justify-start gap-0">
           <DialogTitle className="flex items-start gap-2 text-xl text-start">

@@ -1,14 +1,13 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useAsset, useGetAssets } from "@/hooks/useAssets";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { IAsset } from "@/interfaces/asset.interface";
+import { formatService } from "@/services/format-service";
+import { useAssets } from "@/hooks/useAssets";
 
 export default function TrendingSecurities() {
-  const { data, isLoading, isError } = useGetAssets();
-
-  console.log({ data });
+  const { data, isLoading, isError } = useAssets();
 
   return (
     <Card className="p-4 md:p-4  bg-custom-card border-none shadow-none text-start ">
@@ -58,24 +57,40 @@ function Securities({
 
   return (
     <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
-      {data.map((asset, i) => (
-        <Link
-          to={`/dashboard/assets/${asset.slug}`}
-          key={i}
-          className=" bg-custom-light-bg flex gap-2 s-center justify-between rounded-lg p-2"
-        >
-          <div className="flex s-end text-start gap-16 w-full">
-            <div className="flex s-center gap-2">
-              <img src={asset.image_urls[0]} alt="" className="w-10 h-10" />
-              <div>
-                <h2 className="font-semibold">{asset.asset_symbol}</h2>
-                <small className="text-xs">{asset.price_per_share}</small>
+      {data.map((asset, i) => {
+        const assetLink =
+          asset.trading_type === "primary"
+            ? `/dashboard/launchpad/${asset?.slug}`
+            : `/dashboard/assets/${asset?.slug}`;
+
+        return (
+          <Link
+            to={assetLink}
+            key={i}
+            className=" bg-custom-light-bg flex gap-2 s-center justify-between rounded-lg p-2"
+          >
+            <div className="flex s-end text-start w-full">
+              <div className="flex items-center gap-4">
+                <img
+                  src={asset.logo}
+                  alt={asset.asset_name}
+                  className="w-10 h-10 rounded-full"
+                />
+                <div>
+                  <h2 className="font-semibold">{asset.asset_symbol}</h2>
+                  <small className="text-xs">
+                    {formatService.formatCurrency(
+                      asset.price_per_share,
+                      asset.currency
+                    )}
+                  </small>
+                </div>
               </div>
+              {/* <p className="text-green-400 text-xs">{item.price_change_24hrs}</p> */}
             </div>
-            {/* <p className="text-green-400 text-xs">{item.price_change_24hrs}</p> */}
-          </div>
-        </Link>
-      ))}
+          </Link>
+        );
+      })}
     </div>
   );
 }

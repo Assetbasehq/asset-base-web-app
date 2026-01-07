@@ -191,17 +191,17 @@ class FormatService {
   /**
    * formats a name that takes the name and return the name or name and ... if it is more than 15 chars
    */
-  formatName(name: string | null | undefined): string {
+  formatName(name: string | null | undefined, length = 15): string {
     if (name == null) {
       return "";
     }
 
     const trimmedName = name.trim();
-    if (trimmedName.length <= 15) {
+    if (trimmedName.length <= length) {
       return trimmedName;
     }
 
-    return `${trimmedName.substring(0, 12)}...`;
+    return `${trimmedName.substring(0, length)}...`;
   }
 
   truncateString(str: string, maxLength: number): string {

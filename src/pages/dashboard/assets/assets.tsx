@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useGetAssets } from "@/hooks/useAssets";
 import {
   RiArrowLeftLine,
   RiLayoutGridLine,
@@ -17,6 +16,7 @@ import { RiFileList3Line } from "react-icons/ri";
 import { SearchableSelect } from "@/components/custom/searchable-select";
 import countries from "@/data/countries";
 import { useUserWatchlist } from "@/hooks/useWatchlist";
+import { useAssets } from "@/hooks/useAssets";
 
 interface FilterOption {
   key: string;
@@ -61,7 +61,7 @@ export default function Assets() {
   const location = searchParams.get("location") || "";
   const category = searchParams.get("category") || "";
 
-  const { data, isLoading, isError } = useGetAssets();
+  const { data, isLoading, isError } = useAssets();
   const { data: watchlist, isLoading: isWatchlistLoading } = useUserWatchlist();
 
   const navigate = useNavigate();
@@ -168,7 +168,7 @@ export default function Assets() {
               }))}
               placeholder="Select a country"
               value={location || ""}
-              onChange={(value: string) => {
+              onChange={({ value }) => {
                 handleParamsChange("location", value.toLowerCase());
               }}
             />

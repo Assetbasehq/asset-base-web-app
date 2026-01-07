@@ -70,28 +70,27 @@ export function CustomAlert({
   return (
     <Alert
       className={cn(
-        "rounded flex items-center w-full py-2 gap-1",
+        "rounded flex items-start w-full py-2 gap-2 max-w-full overflow-hidden",
         className,
         variantStyles[variant]
       )}
     >
       <div
         className={cn(
-          "p-1 rounded-full flex items-center justify-center",
+          "p-1 rounded-full flex items-center justify-center shrink-0",
           iconStyles[variant]
         )}
       >
         <Icon className="!h-3 !w-3" />
       </div>
 
-      <div className="flex flex-col">
-        <AlertTitle className="text-xs font-medium tracking-wide">
+      <div className="flex flex-col min-w-0 w-full">
+        <AlertTitle className="text-xs font-medium tracking-wide whitespace-normal break-all wrap-anywhere max-w-full">
           {message}
         </AlertTitle>
+
         {description && (
-          <AlertDescription
-            className={cn(`text-xs opacity-90`, variantStyles[variant])}
-          >
+          <AlertDescription className="text-xs opacity-9 whitespace-normal break-all wrap-anywhere max-w-full">
             {description}
           </AlertDescription>
         )}

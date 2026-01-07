@@ -1,199 +1,116 @@
 import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import DataTable from "@/components/custom/data-table";
-
-type Asset = {
-  id: string;
-  name: string;
-  logo: string;
-  price: number;
-  change1h: number;
-  change24h: number;
-  change7d: number;
-  marketCap: number;
-  volume24h: number;
-};
-
-const assets: Asset[] = [
-  {
-    id: "1",
-    name: "Bitcoin",
-    logo: assetBaseLogo,
-    price: 58432.12,
-    change1h: -0.12,
-    change24h: 1.45,
-    change7d: -3.24,
-    marketCap: 1148239456123,
-    volume24h: 28412345678,
-  },
-  {
-    id: "2",
-    name: "Ethereum",
-    logo: assetBaseLogo,
-    price: 3124.87,
-    change1h: 0.34,
-    change24h: 2.11,
-    change7d: 5.18,
-    marketCap: 374823945612,
-    volume24h: 12412345678,
-  },
-  {
-    id: "3",
-    name: "BNB",
-    logo: assetBaseLogo,
-    price: 412.55,
-    change1h: 0.05,
-    change24h: -0.87,
-    change7d: 1.25,
-    marketCap: 63482394561,
-    volume24h: 2412345678,
-  },
-  {
-    id: "4",
-    name: "Cardano",
-    logo: assetBaseLogo,
-    price: 1.25,
-    change1h: -0.04,
-    change24h: 1.15,
-    change7d: -0.85,
-    marketCap: 39823945612,
-    volume24h: 912345678,
-  },
-  {
-    id: "5",
-    name: "Solana",
-    logo: assetBaseLogo,
-    price: 23.55,
-    change1h: 0.02,
-    change24h: -0.45,
-    change7d: 0.75,
-    marketCap: 823945612,
-    volume24h: 12345678,
-  },
-  {
-    id: "6",
-    name: "Dogecoin",
-    logo: assetBaseLogo,
-    price: 0.05,
-    change1h: -0.01,
-    change24h: 0.25,
-    change7d: -0.35,
-    marketCap: 823945612,
-    volume24h: 12345678,
-  },
-  {
-    id: "7",
-    name: "Avalanche",
-    logo: assetBaseLogo,
-    price: 23.55,
-    change1h: 0.02,
-    change24h: -0.45,
-    change7d: 0.75,
-    marketCap: 823945612,
-    volume24h: 12345678,
-  },
-];
+import { useAssets } from "@/hooks/useAssets";
+import type { IAsset } from "@/interfaces/asset.interface";
+import { formatService } from "@/services/format-service";
 
 export default function AllAssets() {
+  const { data, isLoading, isError } = useAssets({});
+
+  console.log({ data });
+
   const columns = [
     {
       header: "#",
-      render: (row: Asset) => (
+      render: (row: IAsset, index: number) => (
         <div className="flex items-center gap-2">
-          <span>{row.id}</span>
+          <span>{index + 1}</span>
         </div>
       ),
     },
     {
       header: "Name",
-      render: (row: Asset) => (
+      render: (row: IAsset) => (
         <div className="flex items-center gap-2">
-          <img src={row.logo} alt={row.name} className="w-8 h-8" />
-          <span>{row.name}</span>
+          <img src={row.logo} alt={row.asset_name} className="w-8 h-8" />
+          <span>{row.asset_symbol}</span>
         </div>
       ),
     },
     {
       header: "Price",
-      render: (row: Asset) => (
-        <span className="text-primary">${row.price.toFixed(2)}</span>
+      render: (row: IAsset) => (
+        <span className="text-primary">${row.price_per_share}</span>
       ),
     },
     {
       header: "1h %",
-      render: (row: Asset) => (
+      render: (row: IAsset) => (
         <span
-          className={`${
-            row.change1h.toString().includes("-")
-              ? "text-green-400"
-              : "text-red-400"
-          }`}
+        // className={`${
+        //   row.change1h.toString().includes("-")
+        //     ? "text-green-400"
+        //     : "text-red-400"
+        // }`}
         >
-          {row.change1h.toFixed(2)}%
+          -
         </span>
       ),
     },
     {
       header: "24h %",
-      render: (row: Asset) => (
+      render: (row: IAsset) => (
         <span
-          className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
+        // className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
         >
-          {row.change24h.toFixed(2)}%
+          -
         </span>
       ),
     },
     {
       header: "7d %",
-      render: (row: Asset) => (
+      render: (row: IAsset) => (
         <span
-          className={`${row.change7d > 0 ? "text-green-400" : "text-red-400"}`}
+        // className={`${row.change7d > 0 ? "text-green-400" : "text-red-400"}`}
         >
-          {row.change7d.toFixed(2)}%
+          -
         </span>
       ),
     },
     {
       header: "Market Cap",
-      render: (row: Asset) => (
-        <span>${row.marketCap.toLocaleString("en-US")}</span>
-      ),
+      render: (row: IAsset) => <span>-</span>,
     },
     {
       header: "24h Volume",
-      render: (row: Asset) => (
-        <span>${row.volume24h.toLocaleString("en-US")}</span>
-      ),
+      render: (row: IAsset) => <span>-</span>,
     },
   ];
 
   const mobileColumns = [
     {
       header: "#",
-      render: (row: Asset) => (
+      render: (row: IAsset, index: number) => (
         <div className="flex items-center gap-2">
-          <span>{row.id}</span>
+          <span>{index + 1}</span>
         </div>
       ),
     },
     {
       header: "Name",
-      render: (row: Asset) => (
+      render: (row: IAsset) => (
         <div className="flex items-center gap-2">
-          <img src={row.logo} alt={row.name} className="w-8 h-8" />
+          <img
+            src={row.logo}
+            alt={row.asset_name}
+            className="w-8 h-8 rounded-full"
+          />
           <div className="flex flex-col">
-            <span>{row.name}</span>
-            <span className="text-xs font-light">${row.price.toFixed(2)}</span>
+            <span className="font-bold">{row.asset_symbol}</span>
+            <span className="text-xs font-medium">
+              {formatService.formatCurrency(row.price_per_share, row.currency)}
+            </span>
           </div>
         </div>
       ),
     },
     {
       header: "24h %",
-      render: (row: Asset) => (
+      render: (row: IAsset) => (
         <span
-          className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
+        // className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
         >
-          {row.change24h.toFixed(2)}%
+          -
         </span>
       ),
     },
@@ -204,14 +121,14 @@ export default function AllAssets() {
       <h2 className="text-lg md:text-xl text-left py-2">All Assets</h2>
       <div className="hidden md:block">
         <DataTable
-          data={assets}
+          data={data || []}
           columns={columns}
           noDataMessage="No data available."
         />
       </div>
       <div className="md:hidden">
         <DataTable
-          data={assets}
+          data={data || []}
           columns={mobileColumns}
           noDataMessage="No data available."
         />

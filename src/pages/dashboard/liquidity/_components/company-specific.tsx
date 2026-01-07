@@ -5,9 +5,10 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { liquidityService } from "@/api/liquidity.api";
 import { SearchableSelect } from "@/components/custom/searchable-select";
-import { useGetAssets } from "@/hooks/useAssets";
 import { useState } from "react";
 import type { IAsset } from "@/interfaces/asset.interface";
+import { useAssets } from "@/hooks/useAssets";
+import { CustomAlert } from "@/components/custom/custom-alert";
 
 type FormValues = {
   amount: number;
@@ -19,10 +20,11 @@ export default function CompanySpecific() {
     name: "",
     value: "",
   });
+  const [error, setError] = useState<string | null>(null);
 
   const [selectedAsset, setSelectedAsset] = useState<IAsset | null>(null);
 
-  const { data, isLoading } = useGetAssets({});
+  const { data, isLoading } = useAssets({});
 
   const {
     register,
@@ -39,6 +41,7 @@ export default function CompanySpecific() {
     },
     onError: (error) => {
       console.error(error);
+      setError(error.message);
       // toast.error("Failed to add liquidity");
     },
   });
@@ -54,16 +57,11 @@ export default function CompanySpecific() {
     mutateAsync(payload);
   };
 
-  console.log({ data, selectedAsset });
-
   const assets = data || [];
 
   return (
-    <div className="">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full flex flex-col gap-4"
-      >
+    <div className="w-full">
+      <form onSubmit={handleSubmit(onSubmit)} className=" flex flex-col gap-4">
         {/* Amount */}
         <div className="space-y-1">
           <Label className="text-muted-foreground text-sm">Amount</Label>
@@ -91,27 +89,23 @@ export default function CompanySpecific() {
             options={assets.map((asset: IAsset) => ({
               label: asset.asset_name,
               value: asset.asset_name,
-              icon: (
-                <img
-                  src={asset.logo}
-                  alt={asset.asset_name}
-                  className="w-4 h-4 rounded-full"
-                />
-              ),
+              image: asset.logo,
               obj: asset,
             }))}
             placeholder="Select Company"
             value={searchValue.name || ""}
             onChange={({ value, label, obj }) => {
-              console.log({ value, label, obj });
-              setSelectedAsset(obj);
+              setError(null);
+              console.log({ obj });
 
+              setSelectedAsset(obj);
               setSearchValue({ name: label, value });
             }}
             className="w-full py-6"
             cancelButton={false}
           />
         </div>
+        {error && <CustomAlert variant="error" message={error} />}
 
         <Button
           type="submit"

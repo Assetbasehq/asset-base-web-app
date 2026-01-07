@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useGetAssets } from "@/hooks/useAssets";
 import {
   RiArrowLeftLine,
   RiLayoutGridLine,
@@ -17,6 +16,7 @@ import countries from "@/data/countries";
 import { useUserWatchlist } from "@/hooks/useWatchlist";
 import SearchInput from "./_components/search-input";
 import LaunchpadAssets from "./_components/launchpad-assets";
+import { useAssets } from "@/hooks/useAssets";
 
 interface FilterOption {
   key: string;
@@ -62,7 +62,7 @@ export default function Launchpad() {
   const category = searchParams.get("category") || "";
   const asset_name = searchParams.get("asset_name") || "";
 
-  const { data, isLoading, isError } = useGetAssets({
+  const { data, isLoading, isError } = useAssets({
     type: type === "all" ? undefined : type,
     location: location === "" ? undefined : location,
     category: category === "" ? undefined : category,

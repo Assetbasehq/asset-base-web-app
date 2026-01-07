@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 export interface SelectOption {
   label: string;
   value: string;
-  icon?: React.ReactNode;
+  image?: string;
   disabled?: boolean;
   obj?: any;
 }
@@ -49,6 +49,8 @@ export function SearchableSelect({
 
   const selectedOption = options.find((opt) => opt.value === value);
 
+  console.log({ selectedOption });
+
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
@@ -69,9 +71,15 @@ export function SearchableSelect({
           >
             {icon && <span className="mr-2">{icon}</span>}
             <span className="flex items-center gap-2">
-              {selectedOption?.icon ? selectedOption.icon : null}
-              <span className="text-xs hidden sm:flex">
-                {selectedOption ? selectedOption.value : placeholder}
+              {selectedOption?.image ? (
+                <img
+                  src={selectedOption.image}
+                  alt={selectedOption.label}
+                  className="w-4 h-4 rounded-full"
+                />
+              ) : null}
+              <span className="text-xs">
+                {selectedOption ? selectedOption.value : placeholder}s
               </span>
             </span>
             {!selectedOption && (
@@ -121,7 +129,13 @@ export function SearchableSelect({
                       option.value === value ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {option.icon && <span className="">{option.icon}</span>}
+                  {option.image && (
+                    <img
+                      src={option.image}
+                      alt={option.label}
+                      className="w-4 h-4 rounded-full"
+                    />
+                  )}
                   {option.label}
                 </CommandItem>
               ))}
