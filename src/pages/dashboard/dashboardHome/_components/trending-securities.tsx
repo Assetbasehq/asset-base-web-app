@@ -26,7 +26,13 @@ export default function TrendingSecurities() {
         </Link>
       </CardHeader>
       <CardContent className="p-0">
-        <Securities data={data || []} isLoading={isLoading} isError={isError} />
+        <Securities
+          data={
+            data?.filter((asset) => asset.trading_type === "secondary") || []
+          }
+          isLoading={isLoading}
+          isError={isError}
+        />
       </CardContent>
     </Card>
   );
@@ -98,7 +104,7 @@ function Securities({
 function SecuritiesSkeleton() {
   return (
     <div className="flex gap-2 overflow-scroll w-full no-scrollbar">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((_, i) => (
         <div
           key={i}
           className=" bg-custom-light-bg flex gap-2 items-center justify-between rounded-lg p-2"

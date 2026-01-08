@@ -21,6 +21,7 @@ import { CustomAlert } from "@/components/custom/custom-alert";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { userService } from "@/api/user.api";
+import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 
 interface PasswordChangeModalProps {
   isOpen: boolean;
@@ -40,6 +41,8 @@ export default function PasswordChangeModal({
   token,
   onSuccess,
 }: PasswordChangeModalProps) {
+  const [isPasswordVisible, setPasswordVisible] = useState(true);
+  const [isConfirmPasswordVisible, setConfirmPasswordVisible] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
@@ -68,8 +71,6 @@ export default function PasswordChangeModal({
         setError(null);
       }, 2000);
     }
-
-    console.log({ data, token });
 
     mutateAsync({ password: data.password, token });
   };
@@ -112,12 +113,27 @@ export default function PasswordChangeModal({
                 <FormItem>
                   <Label>New Password</Label>
                   <FormControl>
-                    <Input
-                      type="password"
-                      className="py-6  capitalize"
-                      placeholder="**************"
-                      {...field}
-                    />
+                    <div className="flex items-center relative">
+                      <Input
+                        type={isPasswordVisible ? "password" : "text"}
+                        className="py-6  capitalize"
+                        placeholder="**************"
+                        {...field}
+                      />
+                      {isPasswordVisible ? (
+                        <RiEyeLine
+                          size={22}
+                          className="absolute right-3 cursor-pointer"
+                          onClick={() => setPasswordVisible(!isPasswordVisible)}
+                        />
+                      ) : (
+                        <RiEyeOffLine
+                          size={22}
+                          className="absolute right-3 cursor-pointer"
+                          onClick={() => setPasswordVisible(!isPasswordVisible)}
+                        />
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage className="text-end" />
                 </FormItem>
@@ -137,12 +153,31 @@ export default function PasswordChangeModal({
                 <FormItem>
                   <Label>Confirm New Password</Label>
                   <FormControl>
-                    <Input
-                      type="password"
-                      className="py-6  capitalize"
-                      placeholder="**************"
-                      {...field}
-                    />
+                    <div className="flex items-center relative">
+                      <Input
+                        type={isConfirmPasswordVisible ? "password" : "text"}
+                        className="py-6  capitalize"
+                        placeholder="**************"
+                        {...field}
+                      />
+                      {isConfirmPasswordVisible ? (
+                        <RiEyeLine
+                          size={22}
+                          className="absolute right-3 cursor-pointer"
+                          onClick={() =>
+                            setConfirmPasswordVisible(!isConfirmPasswordVisible)
+                          }
+                        />
+                      ) : (
+                        <RiEyeOffLine
+                          size={22}
+                          className="absolute right-3 cursor-pointer"
+                          onClick={() =>
+                            setConfirmPasswordVisible(!isConfirmPasswordVisible)
+                          }
+                        />
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage className="text-end" />
                 </FormItem>
@@ -153,8 +188,10 @@ export default function PasswordChangeModal({
 
             <ButtonLoader
               disabled={isPending}
+              isLoading={isPending}
               type="submit"
               className="w-full btn-secondary rounded-full mt-2 py-6"
+              loadingText="Please wait..."
             >
               RESET PASSWORD
             </ButtonLoader>

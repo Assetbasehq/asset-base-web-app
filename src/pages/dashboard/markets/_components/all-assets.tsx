@@ -1,8 +1,9 @@
-import assetBaseLogo from "@/assets/images/asset-base-logo.svg";
 import DataTable from "@/components/custom/data-table";
+import { Button } from "@/components/ui/button";
 import { useAssets } from "@/hooks/useAssets";
 import type { IAsset } from "@/interfaces/asset.interface";
 import { formatService } from "@/services/format-service";
+import { Link } from "react-router";
 
 export default function AllAssets() {
   const { data, isLoading, isError } = useAssets({});
@@ -75,6 +76,18 @@ export default function AllAssets() {
       header: "24h Volume",
       render: (row: IAsset) => <span>-</span>,
     },
+    {
+      header: "",
+      render: (row: IAsset) => (
+        <span
+        // className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
+        >
+          <Button variant="link" className="p-0 cursor-pointer">
+            <Link to={`/dashboard/assets/${row.slug}`}>View</Link>
+          </Button>
+        </span>
+      ),
+    },
   ];
 
   const mobileColumns = [
@@ -114,6 +127,18 @@ export default function AllAssets() {
         </span>
       ),
     },
+    {
+      header: "",
+      render: (row: IAsset) => (
+        <span
+        // className={`${row.change24h > 0 ? "text-green-400" : "text-red-400"}`}
+        >
+          <Button variant="link" className="p-0 cursor-pointer">
+            <Link to={`/dashboard/assets/${row.slug}`}>View</Link>
+          </Button>
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -121,14 +146,18 @@ export default function AllAssets() {
       <h2 className="text-lg md:text-xl text-left py-2">All Assets</h2>
       <div className="hidden md:block">
         <DataTable
-          data={data || []}
+          data={
+            data?.filter((asset) => asset.trading_type === "secondary") || []
+          }
           columns={columns}
           noDataMessage="No data available."
         />
       </div>
       <div className="md:hidden">
         <DataTable
-          data={data || []}
+          data={
+            data?.filter((asset) => asset.trading_type === "secondary") || []
+          }
           columns={mobileColumns}
           noDataMessage="No data available."
         />

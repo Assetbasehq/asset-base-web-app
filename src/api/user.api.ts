@@ -70,7 +70,7 @@ class UserService {
   };
   changePassword = async (payload: { token: string; password: string }) => {
     try {
-      const response = await axiosInstance.post(`/users/password`, payload);
+      const response = await axiosInstance.patch(`/users/password`, payload);
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
@@ -98,9 +98,9 @@ class UserService {
       handleAxiosError(error, "Something went wrong");
     }
   };
-  changePin = async (payload: { token: string; password: string }) => {
+  changePin = async (payload: { token: string; pin: string }) => {
     try {
-      const response = await axiosInstance.post(`/users/pin`, payload);
+      const response = await axiosInstance.patch(`/users/pin`, payload);
       return response.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");

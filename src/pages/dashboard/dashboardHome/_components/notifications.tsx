@@ -46,12 +46,17 @@ function NotificationsList({
             new Date(a.asset.created_at).getTime()
         )
         .map((notification, index: number) => {
+          const assetLink =
+            notification?.asset.trading_type === "primary"
+              ? `/dashboard/launchpad/${notification?.asset?.slug}`
+              : `/dashboard/assets/${notification?.asset?.slug}`;
+
           return (
             <div key={notification.asset.id}>
               {/* {index === 0 && <Separator className="my-2" />} */}
               <div className="flex items-center gap-2 w-full">
                 <img
-                  src={notification?.asset?.image_urls[0]}
+                  src={notification?.asset?.logo}
                   alt=""
                   className="w-8 h-8 rounded-full"
                 />
@@ -65,7 +70,7 @@ function NotificationsList({
                 </div>
 
                 <Link
-                  to={`/dashboard/assets/${notification?.asset?.id}`}
+                  to={assetLink}
                   className="text-xs text-custom-whit ml-auto"
                 >
                   <Button variant={"link"} className="text-xs cursor-pointer">

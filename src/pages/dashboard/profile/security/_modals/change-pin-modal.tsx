@@ -29,7 +29,7 @@ interface PasswordResetModalProps {
 
 interface FormValues {
   token: string;
-  verification_code: string;
+  pin: string;
 }
 
 export default function ChangePinModal({
@@ -45,12 +45,14 @@ export default function ChangePinModal({
   const form = useForm<FormValues>({
     defaultValues: {
       token: token || "",
-      verification_code: "",
+      pin: "",
     },
   });
 
+  const pin = form.watch("pin");
+
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: userService.authorizePasswordReset,
+    mutationFn: userService.changePin,
     onSuccess: () => {
       onSuccess();
     },
@@ -58,6 +60,28 @@ export default function ChangePinModal({
       setError(error.message);
     },
   });
+
+ const handleSubmit = async () => {
+  setError(null);
+
+  const pin = form.getValues("pin");
+
+  if (!pin || pin.length !== 6) {
+    setError("PIN must be 6 digits.");
+    return;
+  }
+
+  if (!token) {
+    setError("Invalid or missing token.");
+    return;
+  }
+
+  await mutateAsync({
+    token,
+    pin,
+  });
+};
+
 
   if (!isOpen) {
     return null;
@@ -71,11 +95,10 @@ export default function ChangePinModal({
       >
         <DialogHeader className="flex flex-col items-start justify-start gap-0">
           <DialogTitle className="flex items-start gap-2 text-xl text-start">
-            Confirm your email address
+            Please provide a new 6-digit PIN code
           </DialogTitle>
           <DialogDescription className="text-start">
-            We just emailed a one time password to {user?.email_address} Please
-            provide the code
+            This PIN will be used to authorize transactions on your account.
           </DialogDescription>
         </DialogHeader>
 
@@ -84,7 +107,7 @@ export default function ChangePinModal({
             {/* Enter PIN */}
             <FormField
               control={form.control}
-              name="verification_code"
+              name="pin"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -131,11 +154,12 @@ export default function ChangePinModal({
             {error && <CustomAlert message={error} variant="destructive" />}
 
             <ButtonLoader
-              type="submit"
-              disabled={isPending}
+              type="button"
+              disabled={isPending || pin.length !== 6}
               isLoading={isPending}
-              className="w-full"
+              className="w-full rounded-full py-5 btn-primary "
               loadingText="Please wait..."
+              onClick={handleSubmit}
             >
               Confirm
             </ButtonLoader>

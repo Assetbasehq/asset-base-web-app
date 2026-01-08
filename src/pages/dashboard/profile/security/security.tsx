@@ -62,7 +62,7 @@ export default function Security() {
     mutationFn: userService.RequestPinChange,
     onSuccess: (data) => {
       setToken(data?.token);
-      openModal("passwordReset");
+      openModal("pinRequest");
     },
     onError: (error) => {
       setError(error.message);
