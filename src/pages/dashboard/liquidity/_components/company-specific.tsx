@@ -2,20 +2,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { liquidityService } from "@/api/liquidity.api";
 import { SearchableSelect } from "@/components/custom/searchable-select";
 import { useState } from "react";
 import type { IAsset } from "@/interfaces/asset.interface";
 import { useAssets } from "@/hooks/useAssets";
 import { CustomAlert } from "@/components/custom/custom-alert";
+import { Loader } from "lucide-react";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { currencyToSymbol } from "@/services/currency-service";
 
 type FormValues = {
   amount: number;
   companyId: string;
 };
 
-export default function CompanySpecific() {
+export default function CompanySpecific({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
   const [searchValue, setSearchValue] = useState({
     name: "",
     value: "",
@@ -23,6 +30,8 @@ export default function CompanySpecific() {
   const [error, setError] = useState<string | null>(null);
 
   const [selectedAsset, setSelectedAsset] = useState<IAsset | null>(null);
+
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useAssets({});
 
@@ -36,8 +45,9 @@ export default function CompanySpecific() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: liquidityService.addLiquidity,
     onSuccess: () => {
+      onSuccess?.();
       reset();
-      // toast.success("Liquidity added successfully");
+      queryClient.invalidateQueries({ queryKey: ["user-provided-liquidity"] });
     },
     onError: (error) => {
       console.error(error);
@@ -47,6 +57,7 @@ export default function CompanySpecific() {
   });
 
   const onSubmit = (data: FormValues) => {
+    setError(null);
     const payload = {
       poolType: "COMPANY",
       web3ServiceId: selectedAsset?.web3_service_id || "",
@@ -65,15 +76,24 @@ export default function CompanySpecific() {
         {/* Amount */}
         <div className="space-y-1">
           <Label className="text-muted-foreground text-sm">Amount</Label>
-          <Input
-            type="number"
-            className="py-6"
-            placeholder="Amount to add"
-            {...register("amount", {
-              required: "Amount is required",
-              min: { value: 1, message: "Amount must be greater than 0" },
-            })}
-          />
+          <ButtonGroup className="w-full">
+            <Button
+              variant="outline"
+              disabled
+              className="w-[40px] font-medium py-6 rounded-l-sm"
+            >
+              {selectedAsset ? currencyToSymbol[selectedAsset.currency] : "-"}
+            </Button>
+            <Input
+              type="number"
+              className="py-6"
+              placeholder="Amount to add"
+              {...register("amount", {
+                required: "Amount is required",
+                min: { value: 1, message: "Amount must be greater than 0" },
+              })}
+            />
+          </ButtonGroup>
           {errors.amount && (
             <p className="text-sm text-red-500">{errors.amount.message}</p>
           )}
@@ -112,7 +132,13 @@ export default function CompanySpecific() {
           className="btn-primary py-6 rounded-full mt-auto"
           disabled={isPending}
         >
-          {isPending ? "PROCESSING..." : "ADD LIQUIDITY"}
+          {isPending ? (
+            <span className="flex items-center gap-2">
+              <Loader className="animate-spin" /> PROCESSING...
+            </span>
+          ) : (
+            "ADD LIQUIDITY"
+          )}{" "}
         </Button>
       </form>
     </div>

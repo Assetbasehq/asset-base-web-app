@@ -44,7 +44,7 @@ export default function WithdrawToCrypto() {
 
   const { amountToWithdraw, currency } = useOutletContext<WithdrawContext>();
 
-  const { data: supportedAssets } = useSupportedAssets({});
+  const { data: supportedAssets } = useSupportedAssets({ currency });
   const { data: supportedNetworks } = useSupportedNetworks({
     asset: selectedAsset ? selectedAsset?.symbol : undefined,
   });
@@ -307,11 +307,12 @@ export default function WithdrawToCrypto() {
               <p className="text-xs text-custom-grey">Select Network</p>
 
               <div className="flex flex-row flex-wrap overflow-x-auto gap-2 scrollbar-thin scrollbar-thumb-custom-grey/30 scrollbar-track-transparent">
-                {supportedNetworks?.map((net: any) => (
-                  <div
-                    key={net.chain}
-                    onClick={() => handleSelectNetwork(net)}
-                    className={`
+                {selectedAsset &&
+                  supportedNetworks?.map((net: any) => (
+                    <div
+                      key={net.chain}
+                      onClick={() => handleSelectNetwork(net)}
+                      className={`
                       flex items-center gap-3 px-4 py-2 rounded-md cursor-pointer
                       bg-custom-light-bg hover:bg-custom-light-bg/70 
                       ${
@@ -320,11 +321,11 @@ export default function WithdrawToCrypto() {
                           : ""
                       }
                     `}
-                  >
-                    <img src={net.logoUrl} className="w-6 h-6 rounded-full" />
-                    <span className="text-sm w-full">{net.name}</span>
-                  </div>
-                ))}
+                    >
+                      <img src={net.logoUrl} className="w-6 h-6 rounded-full" />
+                      <span className="text-sm w-full">{net.name}</span>
+                    </div>
+                  ))}
               </div>
             </div>
 

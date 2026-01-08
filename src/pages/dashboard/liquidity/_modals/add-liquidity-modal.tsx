@@ -15,12 +15,10 @@ const tabs = [
   {
     key: "COMPANY",
     label: "Company Specific",
-    component: <CompanySpecific />,
   },
   {
     key: "ASSETBASE",
     label: "Asset Base Pool",
-    component: <AssetBasePool />,
   },
 ];
 
@@ -86,7 +84,8 @@ export default function AddLiquidityModal({
 
           {/* Tab content */}
           <div className="mt-4 w-full">
-            {tabs.find((tab) => tab.key === active)?.component}
+            {active === "COMPANY" && <CompanySpecific onSuccess={onSuccess} />}
+            {active === "ASSETBASE" && <AssetBasePool onSuccess={onSuccess} />}
           </div>
         </DialogHeader>
       </DialogContent>

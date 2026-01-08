@@ -7,9 +7,7 @@ class LiquidityService {
     try {
       const response = await web3axiosInstance.get(`/liquidity`, { params });
 
-      console.log({ response });
-
-      return response.data;
+      return response.data.data;
     } catch (error) {
       handleAxiosError(error, "Something went wrong");
     }

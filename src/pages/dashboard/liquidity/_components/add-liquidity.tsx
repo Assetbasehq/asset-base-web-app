@@ -4,9 +4,11 @@ import gridLines from "@/assets/images/gradient-lines.svg";
 import { RiBox3Line } from "react-icons/ri";
 import { useState } from "react";
 import AddLiquidityModal from "../_modals/add-liquidity-modal";
+import SuccessModal from "@/components/modals/success-modal";
 
 export default function AddLiquidity() {
   const [isLiquidityModalOpen, setIsLiquidityModalOpen] = useState(false);
+  const [openSuccessModal, setIsOpenSuccessModal] = useState(false);
 
   return (
     <div
@@ -46,7 +48,21 @@ export default function AddLiquidity() {
       <AddLiquidityModal
         isOpen={isLiquidityModalOpen}
         onClose={() => setIsLiquidityModalOpen(false)}
-        onSuccess={() => setIsLiquidityModalOpen(false)}
+        onSuccess={() => {
+          setIsLiquidityModalOpen(false);
+          setIsOpenSuccessModal(true);
+        }}
+      />
+
+      <SuccessModal
+        isOpen={openSuccessModal}
+        onClose={() => {
+          setIsOpenSuccessModal(false);
+          setIsLiquidityModalOpen(false);
+        }}
+        title={`Liquidity Added`}
+        description={`You've successfully added your liquidity`}
+        buttonText={`Close`}
       />
     </div>
   );
