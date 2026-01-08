@@ -144,54 +144,63 @@ export const normalizeCurrencyInput = (input: string) => {
     formattedAmount: formatted,
   };
 };
-export const normalizeInput = (input: string) => {
-  const clean = input.replace(/,/g, "");
+type NormalizeOptions = {
+  decimals?: boolean; // allow decimals or not
+  maxDecimals?: number; // default: 2
+};
 
-  const cleanedAmount = clean.replace(/[^0-9.]/g, "");
+export const normalizeInput = (
+  input: string,
+  options: NormalizeOptions = {}
+) => {
+  const { decimals = true, maxDecimals = 2 } = options;
 
-  if (isNaN(Number(cleanedAmount))) {
-    return { amount: "", formattedAmount: "" };
+  if (!input) {
+    return { amount: 0, formattedAmount: "" };
   }
 
-  if (cleanedAmount === "0") {
-    return { amount: "", formattedAmount: "" };
+  // Remove commas and non-numeric characters
+  let cleaned = input.replace(/,/g, "").replace(/[^0-9.]/g, "");
+
+  // Reject multiple dots
+  const dotCount = (cleaned.match(/\./g) || []).length;
+  if (dotCount > 1) {
+    return { amount: 0, formattedAmount: "" };
   }
 
-  if (cleanedAmount === "") {
-    return { amount: "", formattedAmount: "" };
+  // If decimals not allowed, strip everything after dot
+  if (!decimals && cleaned.includes(".")) {
+    cleaned = cleaned.split(".")[0];
   }
 
-  if (cleanedAmount === ".") {
-    return { amount: "", formattedAmount: "" };
+  // Handle "." or "0."
+  if (cleaned === "." || cleaned === "") {
+    return { amount: 0, formattedAmount: cleaned };
   }
 
-  if (cleanedAmount.includes(".")) {
-    const [whole, decimal = ""] = cleanedAmount.split(".");
-    // Reject multiple dots
-    if (cleanedAmount.split(".").length > 2) {
-      return { amount: "", formattedAmount: "" };
-    }
+  let whole = cleaned;
+  let decimal = "";
 
-    // Limit decimals to 2
-    const safeDecimal = decimal.slice(0, 2);
-    const rawAmount = `${whole}.${safeDecimal}`;
-    const formattedWhole = formatService.formatWithCommas(Number(whole) || 0);
-    const formatted =
-      safeDecimal !== ""
-        ? `${formattedWhole}.${safeDecimal}`
-        : `${formattedWhole}${decimal === "" ? "." : ""}`;
-
-    return {
-      amount: rawAmount,
-      formattedAmount: formatted,
-    };
+  if (cleaned.includes(".")) {
+    [whole, decimal = ""] = cleaned.split(".");
+    decimal = decimal.slice(0, maxDecimals);
   }
-  // Pure integer
-  const rawAmount = String(Number(cleanedAmount) || 0);
-  const formatted = formatService.formatWithCommas(Number(cleanedAmount) || 0);
+
+  const numericValue = Number(decimal !== "" ? `${whole}.${decimal}` : whole);
+
+  if (Number.isNaN(numericValue)) {
+    return { amount: 0, formattedAmount: "" };
+  }
+
+  const formattedWhole = Number(whole || 0).toLocaleString();
+
+  const formattedAmount =
+    decimals && cleaned.includes(".")
+      ? `${formattedWhole}.${decimal}`
+      : formattedWhole;
 
   return {
-    amount: rawAmount,
-    formattedAmount: formatted,
+    amount: numericValue,
+    formattedAmount,
   };
 };

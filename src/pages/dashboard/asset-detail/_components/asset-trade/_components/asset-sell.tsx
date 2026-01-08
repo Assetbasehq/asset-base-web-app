@@ -33,6 +33,7 @@ import {
   useUserAssetBalance,
 } from "@/hooks/use-trade";
 import { tradeService } from "@/api/trade-service.api";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 type BuyFormValues = {
   orderType: "ask" | "bid" | "buy_limit_order" | "sell_limit_order" | string;
@@ -82,8 +83,6 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
     assetWeb3ServiceId: asset.web3_service_id,
   });
 
-  console.log({ userAssetBalanceData });
-
   const form = useForm<BuyFormValues>({
     defaultValues: {
       orderType: "market",
@@ -105,11 +104,6 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
       amountToBuy: quantity ? quantity.replaceAll(",", "") : "0",
     });
 
-  const totalAmount =
-    orderType === "limit" && price && shares
-      ? Number(price) * Number(shares)
-      : 0;
-
   // -------------------------
   // Mutations
   // -------------------------
@@ -130,9 +124,11 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
         });
 
         // invalidate asset market price, history and asset balance
-        queryClient.invalidateQueries({
-          queryKey: ["orders", "asset-market-price", "user-asset-balance"],
-        });
+        queryClient.invalidateQueries({ queryKey: ["orders"] });
+        queryClient.invalidateQueries({ queryKey: ["asset-market-price"] });
+        queryClient.invalidateQueries({ queryKey: ["user-asset-balance"] });
+        queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
+
         form.reset();
       },
       onError: (error) => {
@@ -154,15 +150,16 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
 
       setSuccessModal({
         isOpen: true,
-        title: `Sell order placed successfully`,
-        description: `You've successfully placed a sell order for ${quantity} shares of ${asset.asset_symbol}.`,
+        title: `Asset shares sold successfully`,
+        description: `You've successfully sold ${quantity} shares of ${asset.asset_symbol}.`,
         buttonText: "Close",
       });
 
       // invalidate asset market price, history and asset balance
-      queryClient.invalidateQueries({
-        queryKey: ["orders", "asset-market-price", "user-asset-balance"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["asset-market-price"] });
+      queryClient.invalidateQueries({ queryKey: ["user-asset-balance"] });
+      queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
 
       form.reset();
     },
@@ -191,18 +188,19 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
     const payload = {
       ...values,
       asset_id: asset.id,
+      number_of_shares: Number(
+        values.number_of_shares?.replaceAll(",", "") || 0
+      ),
       order_type: values.orderType === "limit" ? "ask" : "",
       pin,
     };
-
-    console.log({ payload });
 
     initiateLimitOrder(payload);
   };
 
   const isPriceAboveMarketPrice =
-    orderType === "limit" && price && asset.price_per_share
-      ? Number(price) < Number(asset.price_per_share)
+    orderType === "limit" && price && assetMarketPrice
+      ? Number(price) < Number(assetMarketPrice)
       : false;
 
   const userAssetBalance = userAssetBalanceData?.data
@@ -218,6 +216,11 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
       : "...";
 
   const quantityNumber = quantity ? parseFloat(quantity.replace(/,/g, "")) : 0;
+
+  const totalAmountToSell =
+    orderType === "limit" && price && shares
+      ? Number(price) * Number(shares.replaceAll(",", ""))
+      : 0;
 
   return (
     <div>
@@ -261,6 +264,13 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
             )}
           />
 
+          {!isUserAssetBalanceLoading && (
+            <CustomAlert
+              variant="warning"
+              message={`Available Shares: ${userAssetBalance.toFixed(2)}`}
+            />
+          )}
+
           {/* ----------------------------
             LIMIT ORDER FIELDS
           ----------------------------- */}
@@ -277,18 +287,30 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
                       Price per Share
                     </Label>
                     <FormControl>
-                      <Input
-                        className="w-full py-6"
-                        type="text"
-                        {...field}
-                        onChange={(e) => {
-                          const value = e.target.value;
+                      <ButtonGroup className="w-full">
+                        <Button
+                          variant="outline"
+                          disabled
+                          className="w-[40px] font-medium py-6 rounded-l-sm"
+                        >
+                          {currencyToSymbol[asset.currency]}{" "}
+                        </Button>
+                        <Input
+                          className="w-full py-6"
+                          type="text"
+                          {...field}
+                          onChange={(e) => {
+                            const value = e.target.value;
 
-                          const { formattedAmount } = normalizeInput(value);
+                            const { formattedAmount } = normalizeInput(value, {
+                              decimals: true,
+                              maxDecimals: 6,
+                            });
 
-                          field.onChange(formattedAmount);
-                        }}
-                      />
+                            field.onChange(formattedAmount);
+                          }}
+                        />
+                      </ButtonGroup>
                     </FormControl>
                     <FormMessage className="text-right" />
                   </FormItem>
@@ -336,23 +358,24 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
                 <Label className="text-muted-foreground text-sm">
                   Total Amount in {currencyToSymbol[asset.currency]}
                 </Label>
-                <Input
-                  className="w-full py-6 bg-muted cursor-not-allowed"
-                  value={formatService.formatCurrency(
-                    totalAmount,
-                    asset.currency
-                  )}
-                  disabled
-                />
+
+                <ButtonGroup className="w-full">
+                  <Button
+                    variant="outline"
+                    disabled
+                    className="w-[40px] font-medium py-6 rounded-l-sm"
+                  >
+                    {currencyToSymbol[asset.currency]}{" "}
+                  </Button>
+                  <Input
+                    className="w-full py-6"
+                    type="text"
+                    value={totalAmountToSell}
+                    disabled
+                  />
+                </ButtonGroup>
               </FormItem>
             </>
-          )}
-
-          {!isUserAssetBalanceLoading && (
-            <CustomAlert
-              variant="warning"
-              message={`Available Shares: ${userAssetBalance.toFixed(2)}`}
-            />
           )}
 
           {/* ----------------------------
@@ -376,7 +399,9 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
                       onChange={(e) => {
                         const value = e.target.value;
 
-                        const { formattedAmount } = normalizeInput(value);
+                        const { formattedAmount } = normalizeInput(value, {
+                          decimals: false,
+                        });
 
                         field.onChange(formattedAmount);
                       }}
@@ -388,12 +413,14 @@ export default function AssetSell({ asset }: { asset: IAsset }) {
             />
           )}
 
-          {/* {orderType === "market" && (
-            <CustomAlert
-              variant="warning"
-              message="Market orders are currently not available."
-            />
-          )} */}
+          {orderType === "limit" &&
+            userAssetBalance &&
+            userAssetBalance < totalAmountToSell && (
+              <CustomAlert
+                variant="warning"
+                message="Market orders are currently not available."
+              />
+            )}
 
           {orderType === "market" && !isQuantityLessThanZero && (
             <CustomAlert

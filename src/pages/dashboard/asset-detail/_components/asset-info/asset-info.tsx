@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import { usePriceChange } from "@/hooks/use-price-change";
 import { useAssetMarketPrice } from "@/hooks/use-trade";
 import type { IAsset } from "@/interfaces/asset.interface";
 import { cn } from "@/lib/utils";
@@ -36,6 +37,8 @@ export default function AssetInfo({
       ? assetMarketPriceData?.data?.buyingPrice
       : 0;
 
+  const priceDirection = usePriceChange(assetMarketPrice);
+
   console.log({ assetMarketPrice });
 
   return (
@@ -62,11 +65,20 @@ export default function AssetInfo({
           <div className="flex flex-col md:flex-row md:items-center justify-between">
             <div className="flex flex-col gap-2 mb-2 md:mb-0">
               <div className="flex items-center gap-2">
-                <p className="font-semibold text-xl sm:text-3xl text-custom-white-text flex items-center gap-2">
+                <div className="font-semibold text-xl sm:text-3xl text-custom-white-text flex items-center gap-2">
                   {isLoadingMarketPrice ? (
                     <Skeleton className="h-8 w-full rounded-md" />
                   ) : (
-                    <span className="font-semibold text-xl sm:text-3xl text-custom-white-text">
+                    <span
+                      className={cn(
+                        "font-semibold text-xl sm:text-3xl transition-colors duration-300",
+                        {
+                          "text-green-400": priceDirection === "up",
+                          "text-red-400": priceDirection === "down",
+                          "text-custom-white-text": priceDirection === null,
+                        }
+                      )}
+                    >
                       {formatService.formatCurrency(
                         assetMarketPrice,
                         asset.currency,
@@ -77,7 +89,7 @@ export default function AssetInfo({
                   <span>
                     {isError && <RiErrorWarningLine size={18} className="" />}
                   </span>
-                </p>
+                </div>
                 <small
                   className={cn("text-muted-foreground", {
                     // "text-green-400": asset.price_change_24hrs.includes("+"),

@@ -7,6 +7,7 @@ import {
   XCircle,
   AlertTriangle,
   AlertCircle,
+  OctagonAlert,
 } from "lucide-react";
 
 export type AlertVariant =
@@ -55,7 +56,7 @@ const variantIcons: Record<AlertVariant, React.ElementType> = {
   destructive: AlertTriangle,
   default: Info,
   success: CircleCheckBig,
-  info: XCircle,
+  info: OctagonAlert,
   warning: AlertTriangle,
 };
 

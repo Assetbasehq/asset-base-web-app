@@ -48,7 +48,7 @@ export function PinConfirmationModal({
   btnLoadingText = "Please wait...",
   isLoading = false,
 }: PinConfirmationModalProps) {
-  console.log({ error });
+  // console.log({ error });
 
   const [shakeKey, setShakeKey] = useState("no-error");
   const [pin, setPin] = useState("");

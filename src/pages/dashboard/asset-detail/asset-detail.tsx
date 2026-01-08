@@ -19,8 +19,6 @@ export default function AssetDetail() {
   const [isPro, setIsPro] = useState(false);
   const { asset_symbol } = useParams<{ asset_symbol: string }>();
 
-  console.log({ asset_symbol });
-
   const navigate = useNavigate();
   const location = useLocation();
   const segments = location.pathname.split("/").filter(Boolean);

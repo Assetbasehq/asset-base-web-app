@@ -31,6 +31,9 @@ import {
 } from "@/hooks/use-trade";
 import { tradeService } from "@/api/trade-service.api";
 import { formatService } from "@/services/format-service";
+import { useWallet } from "@/hooks/useWallet";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { number } from "motion/react";
 
 type BuyFormValues = {
   orderType: "ask" | "bid" | "buy_limit_order" | "sell_limit_order" | string;
@@ -48,7 +51,6 @@ type ModalState = {
 
 export default function AssetBuy({ asset }: { asset: IAsset }) {
   const [isPinModalOpen, setPinModalOpen] = useState(false);
-  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successModal, setSuccessModal] = useState<ModalState>({
     isOpen: false,
@@ -58,6 +60,10 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
   });
 
   const queryClient = useQueryClient();
+
+  const { data: wallet, isLoading: isWalletBalanceLoading } = useWallet({
+    currency: asset.currency,
+  });
 
   const {
     data: assetMarketPriceData,
@@ -71,8 +77,6 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
     !isLoadingMarketPrice && assetMarketPriceData
       ? assetMarketPriceData?.data?.buyingPrice
       : 0;
-
-  console.log({ assetMarketPrice });
 
   const form = useForm<BuyFormValues>({
     defaultValues: {
@@ -105,7 +109,7 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
   // -------------------------
   // Mutation
   // -------------------------
-  const { mutateAsync, isPending } = useMutation({
+  const { mutateAsync: InitiateLimitOrder, isPending } = useMutation({
     mutationFn: orderRequestService.makeOrderRequest,
 
     onSuccess: (data) => {
@@ -121,9 +125,10 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
       });
 
       // invalidate asset market price and history to update market price and order history
-      queryClient.invalidateQueries({
-        queryKey: ["orders", "asset-market-price"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["asset-market-price"] });
+      queryClient.invalidateQueries({ queryKey: ["user-asset-balance"] });
+      queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
 
       form.reset();
     },
@@ -146,13 +151,16 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
 
       setSuccessModal({
         isOpen: true,
-        title: `Buy order placed successfully`,
-        description: `You've successfully placed a buy order for ${quantity} shares of ${asset.asset_symbol}.`,
+        title: `Asset shares purchased successfully`,
+        description: `You've successfully purchased ${quantity} shares of ${asset.asset_symbol}.`,
         buttonText: "Close",
       });
 
       // invalidate asset to update available shares and order history
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["asset-market-price"] });
+      queryClient.invalidateQueries({ queryKey: ["user-asset-balance"] });
+      queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
 
       form.reset();
     },
@@ -169,6 +177,8 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
   const handlePinConfirm = async (pin: string) => {
     const values = form.getValues();
 
+    console.log({ values });
+
     if (orderType === "market") {
       initiateMarketOrder({
         type: "buy",
@@ -180,12 +190,15 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
 
     const payload = {
       ...values,
+      number_of_shares: Number(
+        values.number_of_shares?.replaceAll(",", "") || 0
+      ),
       asset_id: asset.id,
       order_type: values.orderType === "limit" ? "bid" : "",
       pin,
     };
 
-    mutateAsync(payload);
+    InitiateLimitOrder(payload);
   };
 
   const isPriceBelowMarketPrice =
@@ -200,6 +213,21 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
     !estimatedAmountLoading && estimatedAmountData
       ? formatService.formatCurrency(estimatedAmountData?.data?.paymentAmount)
       : "...";
+
+  const totalAmountToPay =
+    !estimatedAmountLoading && estimatedAmountData
+      ? estimatedAmountData?.data?.paymentAmount
+      : 0;
+
+  const isBlanceLessThanTotalAmount =
+    wallet && totalAmountToPay ? wallet.balance < totalAmountToPay : false;
+
+  const totalLimitOrderAmount =
+    orderType === "limit" && price && shares
+      ? Number(price) * Number(shares.replaceAll(",", ""))
+      : 0;
+
+  console.log({ isBlanceLessThanTotalAmount, wallet, totalAmountToPay });
 
   return (
     <div>
@@ -243,6 +271,16 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
             )}
           />
 
+          {!isWalletBalanceLoading && wallet && (
+            <CustomAlert
+              variant="info"
+              message={`Wallet Balance: ${formatService.formatCurrency(
+                wallet.balance,
+                asset.currency
+              )}`}
+            />
+          )}
+
           {/* ----------------------------
             LIMIT ORDER FIELDS
           ----------------------------- */}
@@ -266,7 +304,10 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                         onChange={(e) => {
                           const value = e.target.value;
 
-                          const { formattedAmount } = normalizeInput(value);
+                          const { formattedAmount } = normalizeInput(value, {
+                            decimals: true,
+                            maxDecimals: 6,
+                          });
 
                           field.onChange(formattedAmount);
                         }}
@@ -303,7 +344,10 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                         onChange={(e) => {
                           const value = e.target.value;
 
-                          const { formattedAmount } = normalizeInput(value);
+                          const { formattedAmount } = normalizeInput(value, {
+                            decimals: true,
+                            maxDecimals: 2,
+                          });
 
                           field.onChange(formattedAmount);
                         }}
@@ -319,14 +363,23 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
                 <FormLabel className="text-muted-foreground text-sm">
                   Total Amount in {currencyToSymbol[asset.currency]}
                 </FormLabel>
-                <Input
-                  className="w-full py-6 bg-muted cursor-not-allowed"
-                  value={formatService.formatCurrency(
-                    totalAmount,
-                    asset.currency
-                  )}
-                  disabled
-                />
+                <ButtonGroup className="w-full">
+                  <Button
+                    variant="outline"
+                    disabled
+                    className="w-[40px] font-medium py-6 rounded-l-sm"
+                  >
+                    {currencyToSymbol[asset.currency]}{" "}
+                  </Button>
+                  <Input
+                    className="w-full py-6"
+                    type="text"
+                    value={formatService.formatWithCommas(
+                      totalLimitOrderAmount
+                    )}
+                    disabled
+                  />
+                </ButtonGroup>
               </FormItem>
             </>
           )}
@@ -365,10 +418,28 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
           )}
 
           {/* {orderType === "market" && (
-            <CustomAlert
-              variant="warning"
-              message="Market orders are currently not available."
-            />
+            <FormItem>
+              <FormLabel className="text-muted-foreground text-sm">
+                Total Amount in {currencyToSymbol[asset.currency]}
+              </FormLabel>
+              <ButtonGroup className="w-full">
+                <Button
+                  variant="outline"
+                  disabled
+                  className="w-[40px] font-medium py-6 rounded-l-sm"
+                >
+                  {currencyToSymbol[asset.currency]}{" "}
+                </Button>
+                <Input
+                  className="w-full py-6"
+                  type="text"
+                  value={formatService.formatWithCommas(
+                    !isQuantityLessThanZero ? marketQuantityToBuy : 0
+                  )}
+                  disabled
+                />
+              </ButtonGroup>
+            </FormItem>
           )} */}
 
           {orderType === "market" && !isQuantityLessThanZero && (
@@ -378,12 +449,22 @@ export default function AssetBuy({ asset }: { asset: IAsset }) {
             />
           )}
 
+          {isBlanceLessThanTotalAmount && (
+            <CustomAlert
+              variant="error"
+              message="Insufficient wallet balance for this transaction."
+            />
+          )}
+
           {/* ----------------------------
             SUBMIT
           ----------------------------- */}
           <Button
             disabled={
-              isPending || isPriceBelowMarketPrice || isQuantityLessThanZero
+              isPending ||
+              isPriceBelowMarketPrice ||
+              isQuantityLessThanZero ||
+              isBlanceLessThanTotalAmount
             }
             className="w-full py-5 rounded-full text-custom-white bg-custom-ticker-green hover:bg-custom-ticker-green/90 cursor-pointer"
           >

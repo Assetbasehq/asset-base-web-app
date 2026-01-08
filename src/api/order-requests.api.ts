@@ -5,7 +5,7 @@ class OrderRequestService {
   makeOrderRequest = async (payload: {
     asset_id: string;
     price_per_share?: string;
-    number_of_shares?: string;
+    number_of_shares?: number;
     order_type: "ask" | "bid" | "buy_limit_order" | "sell_limit_order" | string;
     pin: string;
   }) => {

@@ -128,12 +128,16 @@ class FormatService {
    * Formats a number with commas (no currency symbol)
    * Example: 1234567 => "1,234,567"
    */
-  formatWithCommas(amount: number | null | undefined): string {
-    if (amount == null || isNaN(amount)) return "0";
+  formatWithCommas(amount: number | string | null | undefined): string {
+    if (amount == null || isNaN(Number(amount))) return "0";
+    const numericAmount =
+      typeof amount === "string"
+        ? parseFloat(amount.replace(/,/g, ""))
+        : amount;
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount);
+    }).format(numericAmount);
   }
 
   /**
